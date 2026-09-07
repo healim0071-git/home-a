@@ -55,7 +55,7 @@ sections:
           <span><strong>자율신경 FAQ 자동 발행</strong>: 주 2~3회 (오전 08:00~11:00 랜덤)</span>
           <span class="text-[#888888] mx-1">|</span>
           <span id="autoFaqNextScheduleText" class="text-[#1c6e78] font-semibold">다음 예정: 확인 중...</span>
-          <button type="button" onclick="triggerAutoFaqPublishManual()" class="ml-1 text-[11px] px-2 py-0.5 bg-white border border-[#badfe3] rounded hover:bg-[#eaf3f4] text-[#1c6e78] font-bold transition-colors shadow-2xs" title="스케줄 대기 없이 지금 즉시 1편 자동 발행">⚡ 즉시 1편 발행</button>
+          <button type="button" onclick="triggerAutoFaqPublishManual()" class="ml-1 text-xs px-2.5 py-1 bg-white border border-[#badfe3] rounded hover:bg-[#eaf3f4] text-[#1c6e78] font-bold transition-colors shadow-2xs" title="스케줄 대기 없이 지금 즉시 1편 자동 발행">⚡ 즉시 1편 발행</button>
         </div>
         <div class="board-actions">
         <button type="button" class="btn-write-post" onclick="openWriteModal('faq')">
@@ -126,7 +126,7 @@ sections:
         <span><strong>해아림TV 공식 채널</strong> 매일 00:00 자동 연동 활성화</span>
         <span class="text-[#888888] mx-1">|</span>
         <a href="https://www.youtube.com/@healimtv" target="_blank" rel="noopener noreferrer" class="text-[#1c6e78] font-bold hover:underline inline-flex items-center gap-1">@healimtv 바로가기 ↗</a>
-        <button type="button" onclick="syncHealimtvChannel(true)" class="ml-1 text-[11px] px-2 py-0.5 bg-white border border-[#badfe3] rounded hover:bg-[#eaf3f4] text-[#1c6e78] transition-colors" title="채널 최신 영상 즉시 새로고침">🔄 최신 동기화</button>
+        <button type="button" onclick="syncHealimtvChannel(true)" class="ml-1 text-xs px-2.5 py-1 bg-white border border-[#badfe3] rounded hover:bg-[#eaf3f4] text-[#1c6e78] transition-colors" title="채널 최신 영상 즉시 새로고침">🔄 최신 동기화</button>
         </div>
         <div class="board-actions">
         <button type="button" class="btn-write-post" onclick="openWriteModal('youtube')">
@@ -156,7 +156,7 @@ sections:
           <span><strong>자율신경 치료칼럼 자동 발행</strong>: 주 4~5회 (오전 08:00~11:00 랜덤)</span>
           <span class="text-[#888888] mx-1">|</span>
           <span id="autoColumnNextScheduleText" class="text-[#1c6e78] font-semibold">다음 예정: 확인 중...</span>
-          <button type="button" onclick="triggerAutoColumnPublishManual()" class="ml-1 text-[11px] px-2 py-0.5 bg-white border border-[#badfe3] rounded hover:bg-[#eaf3f4] text-[#1c6e78] font-bold transition-colors shadow-2xs" title="스케줄 대기 없이 지금 즉시 1편 자동 발행">⚡ 즉시 1편 발행</button>
+          <button type="button" onclick="triggerAutoColumnPublishManual()" class="ml-1 text-xs px-2.5 py-1 bg-white border border-[#badfe3] rounded hover:bg-[#eaf3f4] text-[#1c6e78] font-bold transition-colors shadow-2xs" title="스케줄 대기 없이 지금 즉시 1편 자동 발행">⚡ 즉시 1편 발행</button>
         </div>
         <div class="board-actions">
         <button type="button" class="btn-write-post" onclick="openWriteModal('columns')">
@@ -1211,7 +1211,7 @@ sections:
         list.forEach(function(item) {
         var cleanTitle = (item.title || '').replace(/^Q[\.:\s\-]+/i, '').replace(/\*\*(.*?)\*\*/g, '$1').replace(/__(.*?)__/g, '$1').trim();
         var hasAnyImage = item.image || (item.content && (item.content.indexOf('![') !== -1 || item.content.indexOf('<img') !== -1));
-        var photoBadge = hasAnyImage ? '<span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-[#f0f7f8] text-[#1c6e78] border border-[#badfe3] ml-1">📷 사진</span>' : '';
+        var photoBadge = hasAnyImage ? '<span class="text-xs font-bold px-1.5 py-0.5 rounded bg-[#f0f7f8] text-[#1c6e78] border border-[#badfe3] ml-1">📷 사진</span>' : '';
         var richContent = renderRichContent(item.content);
         var imageHtml = (item.image && richContent.indexOf(item.image) === -1) ? '<div class="my-3 rounded-lg overflow-hidden border border-[#badfe3] bg-[#f8fafb] max-w-md"><img src="' + item.image + '" alt="' + cleanTitle + '" class="max-h-80 w-auto object-contain rounded-lg" loading="lazy" onerror="this.onerror=null; this.parentElement.style.display=\'none\';" /></div>' : '';
 
@@ -1281,7 +1281,7 @@ sections:
         var html = '<div class="healim-grid-2">';
         list.forEach(function(item) {
         var hasAnyImage = item.image || (item.content && (item.content.indexOf('![') !== -1 || item.content.indexOf('<img') !== -1));
-        var photoBadge = hasAnyImage ? '<span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-[#eaf3f4] text-[#1c6e78] border border-[#badfe3]">📷 사진</span>' : '';
+        var photoBadge = hasAnyImage ? '<span class="text-xs font-bold px-1.5 py-0.5 rounded bg-[#eaf3f4] text-[#1c6e78] border border-[#badfe3]">📷 사진</span>' : '';
         var imageThumbHtml = item.image ? '<div class="my-2.5 rounded-lg overflow-hidden border border-[#edf2f4] bg-[#f8fafb] max-h-40 flex items-center justify-center"><img src="' + item.image + '" alt="' + (item.title || '') + '" class="max-h-40 w-full object-cover" /></div>' : '';
         var cleanSnippet = (item.content || '').replace(/<img[^>]*>/gi, '[사진]').replace(/!\[.*?\]\(.*?\)/g, '[사진]').replace(/<[^>]+>/g, '').replace(/[*_~`#]/g, '').trim();
         html += '<div class="healim-card white-bg text-left p-6 cursor-pointer" onclick="openDetailModal(\'reviews\', \'' + item.id + '\')">' +

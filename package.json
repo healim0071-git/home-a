@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "hugo server --disableFastRender",
     "build": "hugo --minify && pnpm run pagefind",
-    "pagefind": "pagefind --site public 2>/dev/null || true"
+    "pagefind": "pagefind --site public 2>/dev/null || true",
+    "doc:update": "node scripts/update_docs.js"
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.12",

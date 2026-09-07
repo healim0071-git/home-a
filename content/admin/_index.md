@@ -229,22 +229,22 @@ sections:
               <div class="admin-kpi-card">
                 <div class="text-xs font-semibold text-slate-500 mb-1">전체 등록 게시글</div>
                 <div class="text-2xl font-black text-[#0d3a42]" id="kpiTotalPosts">0</div>
-                <div class="text-[11px] text-emerald-600 font-medium mt-1">실시간 로컬 동기화됨</div>
+                <div class="text-xs text-emerald-600 font-medium mt-1">실시간 로컬 동기화됨</div>
               </div>
               <div class="admin-kpi-card">
                 <div class="text-xs font-semibold text-slate-500 mb-1">치료후기 (Reviews)</div>
                 <div class="text-2xl font-black text-[#0369a1]" id="kpiReviewsCount">0</div>
-                <div class="text-[11px] text-slate-400 mt-1">의료법 제56조 열람제한 적용</div>
+                <div class="text-xs text-slate-400 mt-1">의료법 제56조 열람제한 적용</div>
               </div>
               <div class="admin-kpi-card">
                 <div class="text-xs font-semibold text-slate-500 mb-1">AEO/FAQ 질문답변</div>
                 <div class="text-2xl font-black text-[#b45309]" id="kpiFaqCount">0</div>
-                <div class="text-[11px] text-slate-400 mt-1">AI 검색 인용 최적화</div>
+                <div class="text-xs text-slate-400 mt-1">AI 검색 인용 최적화</div>
               </div>
               <div class="admin-kpi-card">
                 <div class="text-xs font-semibold text-slate-500 mb-1">유튜브 & 전문칼럼</div>
                 <div class="text-2xl font-black text-[#6d28d9]" id="kpiMediaCount">0</div>
-                <div class="text-[11px] text-slate-400 mt-1">원장단 직접 등록 콘텐츠</div>
+                <div class="text-xs text-slate-400 mt-1">원장단 직접 등록 콘텐츠</div>
               </div>
             </div>
 
