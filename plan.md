@@ -769,3 +769,18 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
      - '객관적 검사' 및 '정밀' 제거 확인: PASS
      - 모바일 CSS 반응형 속성(clamp, nowrap, flex-wrap) 100% 컴파일 확인: PASS
 
+### 제9.28조 제작 매뉴얼·문제보고서 문서화 체계 수립 및 GitHub 원격 푸시 완료
+1. **요구사항 및 배경 분석**:
+   - **제작 매뉴얼 및 문제보고서 작성**: `doc/` 디렉토리 내에 프로젝트 아키텍처, 디자인 시스템 규격, 주요 페이지 구현 사양, 트러블슈팅 5종 분석, QA 체크리스트를 포함한 종합 문서 작성
+   - **문서 자동 업데이트 엔진 구축**: 작업 진행 시마다 문서 메타데이터, 타임스탬프, 폰트/인덴트 규격을 자동 검증·갱신하는 스크립트 구축
+   - **루트 README 연동**: 프로젝트 루트의 `README.md`에 `doc/manual.md` 및 `doc/troubleshooting.md` 바로가기 링크 허브 구축
+   - **GitHub 원격 저장소 푸시**: 로컬의 최신 커밋 이력을 원격 저장소(`https://github.com/healim0071-git/home-a.git`)의 `main` 브랜치로 전송
+2. **구현 내역**:
+   - **제작 매뉴얼 생성 ([`doc/manual.md`](file:///d:/autonerve/doc/manual.md))**: 기술 스택, 7대 메뉴 페이지 사양, 타이포그래피 최소 크기(모바일 12px / PC 13px), 8대 생활관리 수칙 등 기술
+   - **문제보고서 생성 ([`doc/troubleshooting.md`](file:///d:/autonerve/doc/troubleshooting.md))**: Goldmark 8칸 인덴트, 11px 폰트 박멸, PC 1줄 유지, 모바일 가로 스크롤 0px, Git 세션 격리 등 5대 이슈 원인 및 해결 기록
+   - **루트 README 생성 ([`README.md`](file:///d:/autonerve/README.md))**: 프로젝트 소개, 시스템 구성, doc 링크 테이블, 빠른 시작 가이드 작성
+   - **자동 업데이트 엔진 구현 ([`scripts/update_docs.js`](file:///d:/autonerve/scripts/update_docs.js))**: `package.json` 내 `doc:update` 명령어 연동, 상호 링크 무결성, 폰트 최소 크기 스캔, YAML 인덴트 점검 수행
+   - **GitHub 푸시 실행**: `git push -u origin main` 실행으로 원격 저장소 최신화 완료 (`294a767`)
+3. **검증 결과**:
+   - `git status`: `Your branch is up to date with 'origin/main'.` (동기화 100% 완료)
+   - `hugo --gc --minify`: 32개 페이지 정상 빌드 완료
