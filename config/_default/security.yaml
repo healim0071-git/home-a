@@ -1,0 +1,11 @@
+enableInlineShortcodes: false
+exec:
+  allow:
+    - '^(dart-)?sass$'
+    - '^go$'
+    - '^git$'
+    - '^node$'
+    - '^npm$'
+    - '^npx$'
+    - '^postcss$'
+    - '^tailwindcss$'

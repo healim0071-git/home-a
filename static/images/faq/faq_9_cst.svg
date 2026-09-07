@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f4f8f9"/>
+      <stop offset="100%" stop-color="#e9f3f4"/>
+    </linearGradient>
+    <linearGradient id="headGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0d3a42"/>
+      <stop offset="100%" stop-color="#1c6e78"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-3%" y="-3%" width="106%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="450" fill="url(#bgGrad)" rx="20"/>
+  <rect x="2" y="2" width="796" height="446" fill="none" stroke="#badfe3" stroke-width="2" rx="19"/>
+
+  <!-- Top Badge -->
+  <rect x="40" y="32" width="220" height="30" rx="15" fill="#1c6e78"/>
+  <text x="150" y="52" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" font-weight="700" fill="#ffffff">
+    경추 및 두개천골 교정
+  </text>
+  <text x="760" y="52" text-anchor="end" font-family="'Pretendard', sans-serif" font-size="13" font-weight="600" fill="#666666">
+    해아림한의원 자율신경 클리닉 FAQ
+  </text>
+
+  <!-- Title and Subtitle -->
+  <text x="40" y="98" font-family="'Pretendard', sans-serif" font-size="22" font-weight="800" fill="#0d3a42">
+    목·어깨 만성 긴장, 뒷목 뻐근함과 이명 해소
+  </text>
+  <text x="40" y="125" font-family="'Pretendard', sans-serif" font-size="13.5" font-weight="500" fill="#555555">
+    경추 1·2번과 후두골 주변 근육 경직이 제10뇌신경을 압박하는 기전
+  </text>
+
+  <!-- Left Box -->
+  <rect x="40" y="150" width="345" height="225" rx="14" fill="#ffffff" stroke="#e05252" stroke-width="1.5" filter="url(#cardShadow)"/>
+  <rect x="40" y="150" width="345" height="44" rx="14" fill="#fef2f2"/>
+  <rect x="40" y="184" width="345" height="10" fill="#fef2f2"/>
+  <text x="212" y="178" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="16" font-weight="700" fill="#e05252">
+    구조적 압박과 신경 전달 장애
+  </text>
+  <g transform="translate(60, 222)">
+    <text x="0" y="0" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 일자목, 거북목으로 인한 후두하삼각 긴장</text><text x="0" y="38" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 뇌척수액 순환 장애 및 뇌압 상승감</text><text x="0" y="76" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 찌릿한 후두 신경통, 삐- 소리 나는 이명</text>
+  </g>
+
+  <!-- Right Box -->
+  <rect x="415" y="150" width="345" height="225" rx="14" fill="#ffffff" stroke="#1c6e78" stroke-width="1.5" filter="url(#cardShadow)"/>
+  <rect x="415" y="150" width="345" height="44" rx="14" fill="#edf7f8"/>
+  <rect x="415" y="184" width="345" height="10" fill="#edf7f8"/>
+  <text x="587" y="178" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="16" font-weight="700" fill="#1c6e78">
+    두개천골요법(CST) &amp; 추나요법
+  </text>
+  <g transform="translate(435, 222)">
+    <text x="0" y="0" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 5g의 섬세한 압력으로 두개골 봉합선 이완</text><text x="0" y="38" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 미주신경 통로 확보 및 신경 압박 해소</text><text x="0" y="76" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 경추 교정을 통한 뇌혈류 맑음 회복</text>
+  </g>
+
+  <!-- Bottom CTA / Watermark Bar -->
+  <rect x="40" y="392" width="720" height="34" rx="17" fill="url(#headGrad)"/>
+  <text x="400" y="414" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" font-weight="700" fill="#ffffff">
+    🌿 해아림 특화 비수술 두개천골 추나 치료 ｜ 마음까지 헤아리는 해아림
+  </text>
+</svg>

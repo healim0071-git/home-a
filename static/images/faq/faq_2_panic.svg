@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f4f8f9"/>
+      <stop offset="100%" stop-color="#e9f3f4"/>
+    </linearGradient>
+    <linearGradient id="headGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0d3a42"/>
+      <stop offset="100%" stop-color="#1c6e78"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-3%" y="-3%" width="106%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="450" fill="url(#bgGrad)" rx="20"/>
+  <rect x="2" y="2" width="796" height="446" fill="none" stroke="#badfe3" stroke-width="2" rx="19"/>
+
+  <!-- Top Badge -->
+  <rect x="40" y="32" width="220" height="30" rx="15" fill="#1c6e78"/>
+  <text x="150" y="52" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" font-weight="700" fill="#ffffff">
+    신경정신과 감별 진단
+  </text>
+  <text x="760" y="52" text-anchor="end" font-family="'Pretendard', sans-serif" font-size="13" font-weight="600" fill="#666666">
+    해아림한의원 자율신경 클리닉 FAQ
+  </text>
+
+  <!-- Title and Subtitle -->
+  <text x="40" y="98" font-family="'Pretendard', sans-serif" font-size="22" font-weight="800" fill="#0d3a42">
+    자율신경실조증 vs 공황장애 핵심 비교
+  </text>
+  <text x="40" y="125" font-family="'Pretendard', sans-serif" font-size="13.5" font-weight="500" fill="#555555">
+    돌발적 발작(공황)과 24시간 잔잔한 신체 증상(자율신경실조)의 교감신경 감별
+  </text>
+
+  <!-- Left Box -->
+  <rect x="40" y="150" width="345" height="225" rx="14" fill="#ffffff" stroke="#d97706" stroke-width="1.5" filter="url(#cardShadow)"/>
+  <rect x="40" y="150" width="345" height="44" rx="14" fill="#fffbeb"/>
+  <rect x="40" y="184" width="345" height="10" fill="#fffbeb"/>
+  <text x="212" y="178" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="16" font-weight="700" fill="#d97706">
+    공황장애 (Panic Attack)
+  </text>
+  <g transform="translate(60, 222)">
+    <text x="0" y="0" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 극심한 죽음의 공포, 발작성 과호흡</text><text x="0" y="38" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 20~30분간 급격한 피크 후 완화</text><text x="0" y="76" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 특정 장소(터널, 엘리베이터) 공포</text>
+  </g>
+
+  <!-- Right Box -->
+  <rect x="415" y="150" width="345" height="225" rx="14" fill="#ffffff" stroke="#1c6e78" stroke-width="1.5" filter="url(#cardShadow)"/>
+  <rect x="415" y="150" width="345" height="44" rx="14" fill="#edf7f8"/>
+  <rect x="415" y="184" width="345" height="10" fill="#edf7f8"/>
+  <text x="587" y="178" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="16" font-weight="700" fill="#1c6e78">
+    자율신경실조증 (Dysautonomia)
+  </text>
+  <g transform="translate(435, 222)">
+    <text x="0" y="0" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 일상 전반 지속되는 두근거림, 어지럼</text><text x="0" y="38" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 소화불량, 상열감, 수족냉증 동반</text><text x="0" y="76" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 자율신경 항상성 저하가 근본 원인</text>
+  </g>
+
+  <!-- Bottom CTA / Watermark Bar -->
+  <rect x="40" y="392" width="720" height="34" rx="17" fill="url(#headGrad)"/>
+  <text x="400" y="414" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" font-weight="700" fill="#ffffff">
+    🌿 원인별 맞춤 뇌신경 이완 및 장부 기혈 균형 처방 ｜ 마음까지 헤아리는 해아림
+  </text>
+</svg>

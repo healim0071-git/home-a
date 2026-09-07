@@ -1,0 +1,271 @@
+{{ $currentPage := . }}
+<header id="site-header" class="header bg-white sticky top-0 z-30 shadow-xs">
+  
+  <!-- 1. Top Tier: Centered Healim Logo & Right Auth Links (healim-tic signature) -->
+  <div class="healim-top-bar max-w-7xl mx-auto px-4 sm:px-6">
+    <!-- Mobile Menu Button (Left on mobile) -->
+    <div class="lg:hidden flex items-center healim-mobile-nav-btn">
+      <input id="nav-toggle" type="checkbox" class="hidden" />
+      <label
+        for="nav-toggle"
+        class="cursor-pointer p-2 text-[#0d3a42] rounded-lg hover:bg-[#f2f6f7] transition-colors">
+        <svg id="show-button" class="h-6 w-6 fill-current block" viewBox="0 0 20 20">
+          <title>메뉴 열기</title>
+          <path d="M0 3h20v2H0V3z m0 6h20v2H0V9z m0 6h20v2H0V0z"></path>
+        </svg>
+        <svg id="hide-button" class="h-6 w-6 fill-current hidden" viewBox="0 0 20 20">
+          <title>메뉴 닫기</title>
+          <polygon
+            points="11 9 22 9 22 11 11 11 11 22 9 22 9 11 -2 11 -2 9 9 9 9 -2 11 -2"
+            transform="rotate(45 10 10)"></polygon>
+        </svg>
+      </label>
+    </div>
+
+    <!-- Centered Brand Logo -->
+    <div class="healim-top-logo">
+      <a href="{{ site.Home.RelPermalink }}" title="해아림한의원 자율신경실조증 클리닉" class="inline-flex items-center">
+        <img
+          fetchpriority="high"
+          decoding="async"
+          src="/images/healim_logo.png"
+          alt="해아림한의원"
+          class="h-10 sm:h-12 w-auto object-contain transition-transform hover:opacity-90"
+          style="image-rendering: -webkit-optimize-contrast;" />
+      </a>
+    </div>
+
+    <!-- Right Member Utility Links (로그인 / 회원가입) -->
+    <div class="healim-auth-links" id="healim-top-auth">
+      <a href="/login/" class="auth-btn-login">로그인</a>
+      <a href="/site_join_type_choice/" class="auth-btn-register">회원가입</a>
+    </div>
+  </div>
+
+  <!-- 2. Bottom Tier: Global Navigation Bar (healim-tic GNB) -->
+  <div class="healim-gnb-bar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <nav class="w-full">
+        <ul
+          id="nav-menu"
+          class="healim-gnb-list hidden lg:flex">
+          <!-- Mobile Drawer User Profile Card (Visible on mobile toggle) -->
+          <li class="mobile-menu-auth-profile lg:hidden" id="mobile-drawer-auth"></li>
+
+          {{ range site.Menus.main }}
+            {{ $menuURL := .URL | absLangURL }}
+            {{ $pageURL:= $currentPage.Permalink | absLangURL }}
+            {{ $active := eq $menuURL $pageURL }}
+            {{ $url := "" }}
+            {{- if findRE `^#` .URL -}}
+              {{- if not $.IsHome -}}
+                {{- $url = site.Home.RelPermalink -}}
+              {{- end }}
+              {{- $url = .URL -}}
+            {{- else -}}
+              {{- $url = .URL | relLangURL -}}
+            {{- end -}}
+            <li class="nav-item {{ if eq .Name "커뮤니티" }}has-community-dropdown group relative{{ end }}">
+              <a
+                class="healim-gnb-link {{ if $active }}active{{ end }}"
+                href="{{ $url }}">
+                {{ .Name }}
+              </a>
+              {{ if eq .Name "커뮤니티" }}
+              <!-- Desktop Dropdown Menu (healim-tic 1:1 rectangular box) -->
+              <ul class="healim-sub-dropdown">
+                <li><a href="/community/#faq">FAQ 자율신경치료 정보</a></li>
+                <li><a href="/community/#reviews">치료후기</a></li>
+                <li><a href="/community/#youtube">자율신경실조증 유튜브</a></li>
+                <li><a href="/community/#columns">자율신경실조증 치료 칼럼</a></li>
+              </ul>
+              {{ end }}
+            </li>
+          {{ end }}
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <script>
+  (function() {
+    function updateHealimTopAuth() {
+      var authBox = document.getElementById('healim-top-auth');
+      var drawerBox = document.getElementById('mobile-drawer-auth');
+      if (!authBox) return;
+      var rawUser = localStorage.getItem('healim_auth_user');
+      var currentPath = window.location.pathname + window.location.search + window.location.hash;
+      var encodedBackUrl = encodeURIComponent(currentPath);
+
+      if (rawUser) {
+        try {
+          var user = JSON.parse(rawUser);
+          var userName = user.name || user.id || '회원';
+          var isAdmin = (user.role === 'admin' || user.uid === 'healim0071' || user.grade === 'superadmin');
+
+          // Desktop top bar items
+          var adminBadgeDesktop = isAdmin ? '<span class="auth-admin-badge" style="background:#0d3a42; color:#f0d58a; font-size:11px; font-weight:700; padding:2px 7px; border-radius:4px; margin-right:6px;">👑 최고관리자</span>' : '';
+          var adminLinkDesktop = isAdmin ? '<a href="/admin/" class="auth-btn-admin" style="align-items:center; gap:3px; background:#f0f8fa; color:#1c6e78; border:1px solid #badfe3; font-weight:700; font-size:11px; padding:2px 8px; border-radius:4px; margin-right:8px; text-decoration:none;">⚙️ 관리자 대시보드</a>' : '';
+
+          // Mobile top bar compact items (No overlap guarantee)
+          var adminLinkMobile = isAdmin ? '<a href="/admin/" class="auth-btn-mobile-dash" style="color:#ffffff !important;">⚙️ 관리자</a>' : '<span class="auth-mobile-user" style="font-size:11.5px; color:#0d3a42; font-weight:600; white-space:nowrap;">' + userName + '님</span>';
+          var userNameMarkup = '<span class="auth-user-name"><strong>' + userName + '</strong> 님</span>';
+
+          authBox.innerHTML = adminBadgeDesktop + userNameMarkup + adminLinkDesktop + adminLinkMobile +
+            '<a href="javascript:void(0)" onclick="healimGlobalLogout()" class="auth-btn-logout">로그아웃</a>';
+
+          // Mobile Drawer Menu Profile Box
+          if (drawerBox) {
+            var drawerBadge = isAdmin ? '<span style="background:#0d3a42; color:#f0d58a; font-size:11px; font-weight:700; padding:2px 7px; border-radius:4px;">👑 최고관리자</span>' : '<span style="background:#eaf3f4; color:#1c6e78; font-size:11px; font-weight:700; padding:2px 7px; border-radius:4px;">회원</span>';
+            var drawerAdminBtn = isAdmin ? '<a href="/admin/" class="btn-drawer-admin" style="display:inline-flex; align-items:center; justify-content:center; gap:4px; background:#1c6e78; color:#fff !important; font-weight:700; font-size:12.5px; padding:7px 14px; border-radius:6px; text-decoration:none; box-shadow:0 2px 6px rgba(28,110,120,0.25);">⚙️ 관리자 대시보드 바로가기</a>' : '';
+            
+            drawerBox.innerHTML = '<div class="mobile-drawer-profile-card">' +
+              '<div class="mobile-drawer-user-info">' + drawerBadge + '<span class="drawer-user-greeting"><strong>' + userName + '</strong>님 환영합니다</span></div>' +
+              '<div class="mobile-drawer-actions">' + drawerAdminBtn +
+              '<a href="javascript:void(0)" onclick="healimGlobalLogout()" class="btn-drawer-logout" style="display:inline-flex; align-items:center; justify-content:center; background:#f2f6f7; color:#555 !important; font-weight:600; font-size:12px; padding:7px 12px; border-radius:6px; text-decoration:none; border:1px solid #d9e4e6;">로그아웃</a>' +
+              '</div></div>';
+          }
+          return;
+        } catch(e) {}
+      }
+
+      // Logged out guest state
+      authBox.innerHTML = '<a href="/login/?back_url=' + encodedBackUrl + '" class="auth-btn-login">로그인</a>' +
+        '<a href="/site_join_type_choice/?back_url=' + encodedBackUrl + '" class="auth-btn-register hidden sm:inline-flex">회원가입</a>';
+
+      if (drawerBox) {
+        drawerBox.innerHTML = '<div class="mobile-drawer-guest-card" style="display:flex; gap:8px; width:100%; padding:0.5rem 0;">' +
+          '<a href="/login/?back_url=' + encodedBackUrl + '" style="flex:1; text-align:center; background:#1c6e78; color:#fff !important; font-weight:700; font-size:13px; padding:8px 0; border-radius:6px; text-decoration:none; box-shadow:0 2px 6px rgba(28,110,120,0.2);">로그인</a>' +
+          '<a href="/site_join_type_choice/?back_url=' + encodedBackUrl + '" style="flex:1; text-align:center; background:#f2f6f7; color:#0d3a42 !important; font-weight:700; font-size:13px; padding:8px 0; border-radius:6px; text-decoration:none; border:1px solid #badfe3;">회원가입</a>' +
+          '</div>';
+      }
+    }
+
+    window.healimGlobalLogout = function() {
+      if (confirm('로그아웃 하시겠습니까?')) {
+        localStorage.removeItem('healim_auth_user');
+        window.location.reload();
+      }
+    };
+
+    function closeMobileMenu() {
+      var toggle = document.getElementById('nav-toggle');
+      var gnbBar = document.querySelector('.healim-gnb-bar');
+      var showBtn = document.getElementById('show-button');
+      var hideBtn = document.getElementById('hide-button');
+      if (toggle) toggle.checked = false;
+      if (gnbBar) gnbBar.classList.remove('mobile-open');
+      if (showBtn) showBtn.classList.remove('hidden');
+      if (hideBtn) hideBtn.classList.add('hidden');
+
+      var commItem = document.querySelector('.has-community-dropdown');
+      if (commItem) commItem.classList.remove('dropdown-active');
+    }
+    window.healimCloseMobileMenu = closeMobileMenu;
+
+    function initCommunityDropdown() {
+      var dropdownItem = document.querySelector('.has-community-dropdown');
+      if (!dropdownItem) return;
+      dropdownItem.addEventListener('mouseenter', function() {
+        if (window.innerWidth >= 1024) {
+          dropdownItem.classList.add('dropdown-active');
+        }
+      });
+      dropdownItem.addEventListener('mouseleave', function() {
+        if (window.innerWidth >= 1024) {
+          dropdownItem.classList.remove('dropdown-active');
+        }
+      });
+    }
+
+    function initMobileMenuToggle() {
+      var toggle = document.getElementById('nav-toggle');
+      var gnbBar = document.querySelector('.healim-gnb-bar');
+      var showBtn = document.getElementById('show-button');
+      var hideBtn = document.getElementById('hide-button');
+      if (!toggle) return;
+      toggle.addEventListener('change', function() {
+        if (toggle.checked) {
+          if (gnbBar) gnbBar.classList.add('mobile-open');
+          if (showBtn) showBtn.classList.add('hidden');
+          if (hideBtn) hideBtn.classList.remove('hidden');
+
+          // Auto-reveal submenu in Area C if on community page
+          var isCommunityPage = (window.location.pathname.replace(/\/$/, '') === '/community');
+          var commItem = document.querySelector('.has-community-dropdown');
+          if (isCommunityPage && commItem) {
+            commItem.classList.add('dropdown-active');
+          }
+        } else {
+          if (gnbBar) gnbBar.classList.remove('mobile-open');
+          if (showBtn) showBtn.classList.remove('hidden');
+          if (hideBtn) hideBtn.classList.add('hidden');
+          var commItem = document.querySelector('.has-community-dropdown');
+          if (commItem) commItem.classList.remove('dropdown-active');
+        }
+      });
+
+      // Handle submenu items (B: FAQ, 치료후기, 자율신경실조증 유튜브, 자율신경실조증 치료 칼럼)
+      var subLinks = document.querySelectorAll('.healim-sub-dropdown a');
+      subLinks.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          var href = link.getAttribute('href') || '';
+          var hashMatch = href.match(/#(faq|reviews|youtube|columns)/);
+          var isCommunityPage = (window.location.pathname.replace(/\/$/, '') === '/community');
+
+          if (isCommunityPage && hashMatch) {
+            e.preventDefault();
+            var tabName = hashMatch[1];
+            if (typeof window.switchCommunityTab === 'function') {
+              window.switchCommunityTab(tabName);
+            }
+            if (window.history && window.history.pushState) {
+              window.history.pushState(null, null, '#' + tabName);
+            } else {
+              window.location.hash = tabName;
+            }
+            var tabContainer = document.querySelector('.community-tabs-container') || document.getElementById('communityTabList');
+            if (tabContainer) {
+              tabContainer.scrollIntoView({ behavior: 'smooth' });
+            }
+          }
+
+          // Immediately close drawer so A and B disappear
+          closeMobileMenu();
+        });
+      });
+
+      // Handle main menu items (A)
+      var mainLinks = document.querySelectorAll('.healim-gnb-list > li > a.healim-gnb-link');
+      mainLinks.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          var isMobile = (window.innerWidth < 1024);
+          var parentLi = link.closest('.has-community-dropdown');
+
+          if (isMobile && parentLi) {
+            // Tapping "커뮤니티" on mobile toggles submenu B in area C
+            e.preventDefault();
+            parentLi.classList.toggle('dropdown-active');
+            return;
+          }
+
+          // For all other category links, close mobile drawer
+          closeMobileMenu();
+        });
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        updateHealimTopAuth();
+        initCommunityDropdown();
+        initMobileMenuToggle();
+      });
+    } else {
+      updateHealimTopAuth();
+      initCommunityDropdown();
+      initMobileMenuToggle();
+    }
+  })();
+  </script>
+</header>

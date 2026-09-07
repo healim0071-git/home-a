@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 340" width="100%" height="100%">
+  <defs>
+    <filter id="cstShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Background outer container -->
+  <rect width="760" height="340" fill="#f8fafb" rx="16" stroke="#c0d7dc" stroke-width="1.5"/>
+
+  <!-- Top Header Section (Centered at X: 380) -->
+  <text x="380" y="44" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="20" font-weight="700" fill="#0d3a42">
+    두개천골요법 (CST) &amp; 뇌신경 이완 메커니즘
+  </text>
+  <text x="380" y="70" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" fill="#555555">
+    두개골 미세 리듬 정상화와 뇌척수액(CSF) 순환 촉진을 통한 자율신경 중추 안정
+  </text>
+
+  <!-- Step 01 (X: 45 ~ 235, Left Margin: 45) -->
+  <g transform="translate(45, 95)" filter="url(#cstShadow)">
+    <rect width="190" height="210" rx="14" fill="#ffffff" stroke="#1c6e78" stroke-width="2"/>
+    <circle cx="95" cy="46" r="24" fill="#edf7f8" stroke="#1c6e78" stroke-width="1.5"/>
+    <text x="95" y="53" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="18" font-weight="800" fill="#1c6e78">01</text>
+    <text x="95" y="98" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="16" font-weight="700" fill="#0d3a42">두개골 긴장 이완</text>
+    <text x="95" y="128" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" fill="#555555">경막 및 후두부</text>
+    <text x="95" y="148" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" fill="#555555">미세 긴장 해소</text>
+    <rect x="18" y="168" width="154" height="28" rx="14" fill="#eaf4f5"/>
+    <text x="95" y="186" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="12" font-weight="700" fill="#1c6e78">중추신경 압박 경감</text>
+  </g>
+
+  <!-- Arrow 1 (Gap: 235 ~ 285, Center: 260) -->
+  <path d="M 248 200 L 268 200" stroke="#1c6e78" stroke-width="3.5" stroke-linecap="round"/>
+  <polygon points="274,200 263,194 263,206" fill="#1c6e78"/>
+
+  <!-- Step 02 (X: 285 ~ 475, Center: 380) -->
+  <g transform="translate(285, 95)" filter="url(#cstShadow)">
+    <rect width="190" height="210" rx="14" fill="#ffffff" stroke="#1c6e78" stroke-width="2"/>
+    <circle cx="95" cy="46" r="24" fill="#edf7f8" stroke="#1c6e78" stroke-width="1.5"/>
+    <text x="95" y="53" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="18" font-weight="800" fill="#1c6e78">02</text>
+    <text x="95" y="98" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="16" font-weight="700" fill="#0d3a42">뇌척수액 순환</text>
+    <text x="95" y="128" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" fill="#555555">뇌척수액(CSF)의</text>
+    <text x="95" y="148" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" fill="#555555">원활한 파동 촉진</text>
+    <rect x="18" y="168" width="154" height="28" rx="14" fill="#eaf4f5"/>
+    <text x="95" y="186" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="12" font-weight="700" fill="#1c6e78">뇌 대사 노폐물 배출</text>
+  </g>
+
+  <!-- Arrow 2 (Gap: 475 ~ 525, Center: 500) -->
+  <path d="M 488 200 L 508 200" stroke="#1c6e78" stroke-width="3.5" stroke-linecap="round"/>
+  <polygon points="514,200 503,194 503,206" fill="#1c6e78"/>
+
+  <!-- Step 03 (X: 525 ~ 715, Right Margin: 45) -->
+  <g transform="translate(525, 95)" filter="url(#cstShadow)">
+    <rect width="190" height="210" rx="14" fill="#ffffff" stroke="#1c6e78" stroke-width="2"/>
+    <circle cx="95" cy="46" r="24" fill="#edf7f8" stroke="#1c6e78" stroke-width="1.5"/>
+    <text x="95" y="53" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="18" font-weight="800" fill="#1c6e78">03</text>
+    <text x="95" y="98" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="16" font-weight="700" fill="#0d3a42">자율신경 중추 안정</text>
+    <text x="95" y="128" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" fill="#555555">시상하부 및 뇌간</text>
+    <text x="95" y="148" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" fill="#555555">자율신경 중추 회복</text>
+    <rect x="18" y="168" width="154" height="28" rx="14" fill="#eaf4f5"/>
+    <text x="95" y="186" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="12" font-weight="700" fill="#1c6e78">교감·부교감 평형</text>
+  </g>
+</svg>

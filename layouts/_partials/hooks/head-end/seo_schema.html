@@ -1,0 +1,114 @@
+{{/* Canonical URL & SEO / AEO Meta Tags */}}
+<link rel="canonical" href="{{ with .Params.canonical }}{{ . }}{{ else }}https://healim-autonomic.com{{ .RelPermalink }}{{ end }}" />
+<meta name="keywords" content="자율신경실조증, 자율신경계 검사, HRV 검사, 가슴 두근거림 치료, 어지럼증 한의원, 미주신경성실신, 해아림한의원, 신경정신과 한의원" />
+<meta name="author" content="해아림한의원 자율신경실조증 클리닉" />
+<meta property="og:locale" content="ko_KR" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="해아림한의원 자율신경실조증 전문 클리닉" />
+
+{{/* Google Fonts (Pretendard & Outfit) */}}
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+{{/* JSON-LD Structured Data: MedicalClinic, MedicalCondition, FAQPage, Physician */}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "MedicalClinic",
+      "@id": "https://healim-autonomic.com/#clinic",
+      "name": "해아림한의원",
+      "url": "https://healim-autonomic.com/",
+      "logo": "https://healim-autonomic.com/media/logo.png",
+      "description": "자율신경실조증 치료 16여년 임상 노하우의 전국 15개 네트워크 한의원",
+      "medicalSpecialty": "Psychiatric",
+      "telephone": "053-751-0071",
+      "areaServed": "KR",
+      "availableService": [
+        {
+          "@type": "MedicalTherapy",
+          "name": "자율신경실조증 1:1 맞춤 한방 치료"
+        },
+        {
+          "@type": "MedicalTest",
+          "name": "HRV(Heart Rate Variability) 자율신경계 정밀 검사"
+        },
+        {
+          "@type": "MedicalTest",
+          "name": "뇌기능 뇌파검사 및 스트레스 저항도 검사"
+        },
+        {
+          "@type": "MedicalTherapy",
+          "name": "뇌기능 활성화 및 뇌수용체 훈련"
+        }
+      ]
+    },
+    {
+      "@type": "MedicalCondition",
+      "@id": "https://healim-autonomic.com/autonomic-dysfunction/#condition",
+      "name": "자율신경실조증 (Dysautonomia)",
+      "alternateName": ["자율신경 불균형", "자율신경 기능이상"],
+      "possibleTreatment": [
+        {
+          "@type": "MedicalTherapy",
+          "name": "체질 맞춤 한약 처방 (교감신경 안정화 및 자율신경 조절력 회복)"
+        },
+        {
+          "@type": "MedicalTherapy",
+          "name": "뇌기능 활성화 & 뇌수용체 훈련"
+        },
+        {
+          "@type": "MedicalTherapy",
+          "name": "침구 및 경락 치료"
+        }
+      ],
+      "signOrSymptom": [
+        {"@type": "MedicalSymptom", "name": "가슴 두근거림 (심계항진)"},
+        {"@type": "MedicalSymptom", "name": "원인 모를 어지럼증 및 머리 멍함"},
+        {"@type": "MedicalSymptom", "name": "만성 신경성 소화불량 및 복부 팽만감"},
+        {"@type": "MedicalSymptom", "name": "수면장애 (입면장애, 빈번한 각성)"},
+        {"@type": "MedicalSymptom", "name": "이유 없는 불안감 및 호흡 답답함"},
+        {"@type": "MedicalSymptom", "name": "상충열 및 체온 조절 장애"},
+        {"@type": "MedicalSymptom", "name": "미주신경성실신 및 기립 시 아찔함"}
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://healim-autonomic.com/community/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "검사상 정상으로 나오는데 한방 치료로 개선이 가능한가요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "일반 병원 검사(내시경, 심전도, MRI 등)는 기질적 병변을 확인하는 검사로, 신경 조절 기능 저하인 자율신경실조증은 정상으로 나타날 수 있습니다. 해아림한의원은 HRV 정밀 검사를 통해 교감·부교감신경의 불균형을 객관적으로 측정하고 1:1 맞춤 한약과 뇌기능 조절 훈련으로 근본 균형을 회복시킵니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "치료 기간 및 경과는 어떻게 되나요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "개인의 유병 기간, 스트레스 저항도, 체질에 따라 차이가 있으나 보통 1~3개월 집중 치료를 통해 교감신경의 과항진을 안정시키고, 이후 재발 방지 및 자가 조절 능력 회복을 위한 유지 관리를 진행합니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "복용 중인 양약과 한약 치료를 병행할 수 있나요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "네, 병행 가능합니다. 신경안정제나 혈압약 등을 복용 중이더라도 복용 시간 간격을 조율하여 안전하게 처방하며, 자율신경 기능이 회복됨에 따라 의료진과의 상담을 통해 점진적인 약물 감량을 도모할 수 있습니다."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "Physician",
+      "@id": "https://healim-autonomic.com/#physician",
+      "name": "해아림한의원 전문 의료진",
+      "medicalSpecialty": "Psychiatric",
+      "description": "한방신경정신과 전문의, 한의학 박사 및 석사로 구성된 16여 년 임상 노하우의 의료진 네트워크"
+    }
+  ]
+}
+</script>

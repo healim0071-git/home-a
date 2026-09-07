@@ -1,0 +1,21 @@
+# Navigation Menus for Healim Clinic (healim-tic GNB layout)
+main:
+  - name: 해아림 자율신경 치료 클리닉 소개
+    url: /autonomic-clinic/
+    weight: 10
+  - name: 자율신경실조증이란?
+    url: /autonomic-dysfunction/
+    weight: 20
+  - name: 자율신경계이상 증상 특징
+    url: /autonomic-symptoms/
+    weight: 30
+  - name: 자율신경 원인 검사/진단
+    url: /autonomic-diagnosis/
+    weight: 40
+  - name: 자율신경 치료 방법/생활 관리
+    url: /autonomic-treatment/
+    weight: 50
+  - name: 커뮤니티
+    url: /community/
+    weight: 60
+

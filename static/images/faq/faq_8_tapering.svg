@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f4f8f9"/>
+      <stop offset="100%" stop-color="#e9f3f4"/>
+    </linearGradient>
+    <linearGradient id="headGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0d3a42"/>
+      <stop offset="100%" stop-color="#1c6e78"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-3%" y="-3%" width="106%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="450" fill="url(#bgGrad)" rx="20"/>
+  <rect x="2" y="2" width="796" height="446" fill="none" stroke="#badfe3" stroke-width="2" rx="19"/>
+
+  <!-- Top Badge -->
+  <rect x="40" y="32" width="220" height="30" rx="15" fill="#1c6e78"/>
+  <text x="150" y="52" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" font-weight="700" fill="#ffffff">
+    약물 상호작용 및 감량 플랜
+  </text>
+  <text x="760" y="52" text-anchor="end" font-family="'Pretendard', sans-serif" font-size="13" font-weight="600" fill="#666666">
+    해아림한의원 자율신경 클리닉 FAQ
+  </text>
+
+  <!-- Title and Subtitle -->
+  <text x="40" y="98" font-family="'Pretendard', sans-serif" font-size="22" font-weight="800" fill="#0d3a42">
+    신경안정제·수면제 복용 중 한약 병행 및 감량법
+  </text>
+  <text x="40" y="125" font-family="'Pretendard', sans-serif" font-size="13.5" font-weight="500" fill="#555555">
+    갑작스러운 중단은 반동 현상 유발: 1~2시간 시간 분리와 점진적 테이퍼링
+  </text>
+
+  <!-- Left Box -->
+  <rect x="40" y="150" width="345" height="225" rx="14" fill="#ffffff" stroke="#e05252" stroke-width="1.5" filter="url(#cardShadow)"/>
+  <rect x="40" y="150" width="345" height="44" rx="14" fill="#fef2f2"/>
+  <rect x="40" y="184" width="345" height="10" fill="#fef2f2"/>
+  <text x="212" y="178" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="16" font-weight="700" fill="#e05252">
+    양약 단독 장기 복용의 한계
+  </text>
+  <g transform="translate(60, 222)">
+    <text x="0" y="0" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 내성 발생 및 복용 용량 점차 증가</text><text x="0" y="38" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 약효 감소 시 불안/불면 급격 악화</text><text x="0" y="76" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 뇌 자체 자가 조절력 약화 가능성</text>
+  </g>
+
+  <!-- Right Box -->
+  <rect x="415" y="150" width="345" height="225" rx="14" fill="#ffffff" stroke="#1c6e78" stroke-width="1.5" filter="url(#cardShadow)"/>
+  <rect x="415" y="150" width="345" height="44" rx="14" fill="#edf7f8"/>
+  <rect x="415" y="184" width="345" height="10" fill="#edf7f8"/>
+  <text x="587" y="178" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="16" font-weight="700" fill="#1c6e78">
+    한방 병행 및 단계적 감량
+  </text>
+  <g transform="translate(435, 222)">
+    <text x="0" y="0" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 상호작용 방지를 위한 1~2시간 시차 복용</text><text x="0" y="38" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 자율신경 회복 정도에 맞춘 점진적 감량</text><text x="0" y="76" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 약물 의존성 없는 자립 신경계 완성</text>
+  </g>
+
+  <!-- Bottom CTA / Watermark Bar -->
+  <rect x="40" y="392" width="720" height="34" rx="17" fill="url(#headGrad)"/>
+  <text x="400" y="414" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" font-weight="700" fill="#ffffff">
+    🌿 해아림 의료진과 상담하는 안전한 테이퍼링 프로토콜 ｜ 마음까지 헤아리는 해아림
+  </text>
+</svg>

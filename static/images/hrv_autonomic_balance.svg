@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" width="100%" height="100%">
+  <defs>
+    <linearGradient id="sympGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e05252"/>
+      <stop offset="100%" stop-color="#b83232"/>
+    </linearGradient>
+    <linearGradient id="paraGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1c6e78"/>
+      <stop offset="100%" stop-color="#0d3a42"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="320" fill="#f8fafb" rx="16"/>
+  <rect x="2" y="2" width="596" height="316" fill="none" stroke="#e2e8ea" stroke-width="1.5" rx="15"/>
+
+  <!-- Header -->
+  <text x="300" y="38" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="18" font-weight="700" fill="#0d3a42">
+    자율신경계(HRV) 균형 조절 메커니즘 분석
+  </text>
+  <text x="300" y="58" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="12" fill="#666666">
+    교감신경(과항진 완화) ↔ 부교감신경(기능 회복)의 동적 밸런스
+  </text>
+
+  <!-- Left Box: 교감신경 (Sympathetic) -->
+  <rect x="30" y="80" width="250" height="180" rx="12" fill="#ffffff" stroke="#f0dada" stroke-width="2" filter="url(#cardShadow)"/>
+  <rect x="30" y="80" width="250" height="40" rx="12" fill="#fef2f2"/>
+  <rect x="30" y="110" width="250" height="10" fill="#fef2f2"/>
+  <text x="155" y="106" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15" font-weight="700" fill="#b83232">
+    교감신경 (과항진 상태)
+  </text>
+
+  <!-- Sympathetic Points -->
+  <text x="50" y="145" font-family="'Pretendard', sans-serif" font-size="13" font-weight="600" fill="#333333">🚨 주요 이상 반응</text>
+  <text x="50" y="170" font-family="'Pretendard', sans-serif" font-size="12" fill="#555555">• 심장 박동 급증 (가슴 두근거림)</text>
+  <text x="50" y="195" font-family="'Pretendard', sans-serif" font-size="12" fill="#555555">• 호흡 불안정 및 흉부 답답함</text>
+  <text x="50" y="220" font-family="'Pretendard', sans-serif" font-size="12" fill="#555555">• 만성 각성 상태, 수면 진입 장애</text>
+  <text x="50" y="245" font-family="'Pretendard', sans-serif" font-size="12" fill="#555555">• 말초혈관 수축 및 상충열 발생</text>
+
+  <!-- Right Box: 부교감신경 (Parasympathetic) -->
+  <rect x="320" y="80" width="250" height="180" rx="12" fill="#ffffff" stroke="#c8e4e8" stroke-width="2" filter="url(#cardShadow)"/>
+  <rect x="320" y="80" width="250" height="40" rx="12" fill="#edf7f8"/>
+  <rect x="320" y="110" width="250" height="10" fill="#edf7f8"/>
+  <text x="445" y="106" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15" font-weight="700" fill="#1c6e78">
+    부교감신경 (회복 및 이완)
+  </text>
+
+  <!-- Parasympathetic Points -->
+  <text x="340" y="145" font-family="'Pretendard', sans-serif" font-size="13" font-weight="600" fill="#333333">🌿 정상 회복 반응</text>
+  <text x="340" y="170" font-family="'Pretendard', sans-serif" font-size="12" fill="#555555">• 심박 안정화 및 호흡 편안함</text>
+  <text x="340" y="195" font-family="'Pretendard', sans-serif" font-size="12" fill="#555555">• 소화 흡수 및 장 연동운동 촉진</text>
+  <text x="340" y="220" font-family="'Pretendard', sans-serif" font-size="12" fill="#555555">• 숙면 및 신체 조직 자가 재생</text>
+  <text x="340" y="245" font-family="'Pretendard', sans-serif" font-size="12" fill="#555555">• 면역계 활성화 및 전신 이완</text>
+
+  <!-- Bottom Balance Bar -->
+  <rect x="30" y="275" width="540" height="28" rx="14" fill="#0d3a42"/>
+  <text x="300" y="294" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" font-weight="700" fill="#ffffff">
+    해아림 1:1 맞춤치료 목표: 교감신경 안정 + 부교감신경 강화 = 조화로운 평형 복원
+  </text>
+</svg>

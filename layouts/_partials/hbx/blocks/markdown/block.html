@@ -1,0 +1,24 @@
+{{/* Custom Hugo Blox Markdown Block: Matches B section container (max-w-7xl) on PC with full mobile responsiveness */}}
+{{ $page := .wcPage }}
+{{ $block := .wcBlock }}
+{{ $content := $block.content }}
+{{ if not (reflect.IsMap $content) }}{{ $content = dict }}{{ end }}
+{{ $title := "" }}
+{{ with index $content "title" }}{{ $title = printf "%v" . | emojify | $page.RenderString }}{{ end }}
+{{ $text := "" }}
+{{ with index $content "text" }}{{ $text = printf "%v" . | emojify | $page.RenderString | safeHTML }}{{ end }}
+
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+  {{ with $title }}
+  <div class="mb-6 text-3xl font-bold text-gray-900 dark:text-white text-center md:text-left">
+    {{ . }}
+  </div>
+  {{ end }}
+
+  {{ with $text }}
+  <div class="w-full">
+    {{ . }}
+  </div>
+  {{ end }}
+</div>
