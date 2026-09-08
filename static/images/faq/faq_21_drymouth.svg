@@ -20,7 +20,7 @@
   <!-- Top Badge -->
   <rect x="40" y="32" width="240" height="30" rx="15" fill="#1c6e78"/>
   <text x="160" y="52" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" font-weight="700" fill="#ffffff">
-    기상병 &amp; 기압 변화 자율신경
+    구강건조 &amp; 침샘 신경 실조
   </text>
   <text x="760" y="52" text-anchor="end" font-family="'Pretendard', sans-serif" font-size="13" font-weight="600" fill="#666666">
     해아림한의원 자율신경 클리닉 FAQ
@@ -28,10 +28,10 @@
 
   <!-- Title and Subtitle -->
   <text x="40" y="98" font-family="'Pretendard', sans-serif" font-size="21" font-weight="800" fill="#0d3a42">
-    흐린 날·비 오는 날 심해지는 두근거림과 어지럼
+    입안이 바짝 타들어가고 물로도 안 풀리는 갈증
   </text>
   <text x="40" y="125" font-family="'Pretendard', sans-serif" font-size="13" font-weight="500" fill="#555555">
-    저기압·고습도 환경에서 내이 압력 수용체와 교감신경계의 과민 반응
+    교감신경 과항진으로 침샘 장액 분비가 차단되어 발생하는 구강건조증 및 구강작열감
   </text>
 
   <!-- Left Box -->
@@ -39,12 +39,12 @@
   <rect x="40" y="150" width="345" height="44" rx="14" fill="#fef2f2"/>
   <rect x="40" y="184" width="345" height="10" fill="#fef2f2"/>
   <text x="212" y="178" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15.5" font-weight="700" fill="#e05252">
-    기상 변화의 신체 충격
+    구강건조의 신경 원인
   </text>
   <g transform="translate(60, 222)">
-    <text x="0" y="0" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 저기압으로 내이 림프액 팽창</text>
-    <text x="0" y="38" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 혈중 세로토닌 감소 및 뇌압 상승</text>
-    <text x="0" y="76" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 교감신경 사이렌 급발진</text>
+    <text x="0" y="0" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 턱밑샘·귀밑샘 부교감 신경 마비</text>
+    <text x="0" y="38" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 끈적끈적한 점액만 소량 분비</text>
+    <text x="0" y="76" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 혀 통증 및 미각 왜곡 동반</text>
   </g>
 
   <!-- Right Box -->
@@ -52,12 +52,12 @@
   <rect x="415" y="150" width="345" height="44" rx="14" fill="#edf7f8"/>
   <rect x="415" y="184" width="345" height="10" fill="#edf7f8"/>
   <text x="587" y="178" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15.5" font-weight="700" fill="#1c6e78">
-    해아림 기상병 대응 처방
+    해아림 진액 보충 치법
   </text>
   <g transform="translate(435, 222)">
-    <text x="0" y="0" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 기압 변화 완충 오령산·영계출감탕</text>
-    <text x="0" y="38" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 내이 미세 순환 촉진 CST 요법</text>
-    <text x="0" y="76" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 날씨 무관 자율신경 항상성 완성</text>
+    <text x="0" y="0" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 침샘 부교감 분비 촉진 생혈윤조탕</text>
+    <text x="0" y="38" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 혀와 구강의 화기(火氣) 청열 처방</text>
+    <text x="0" y="76" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 안면-삼차신경 긴장 이완 침치료</text>
   </g>
 
   <!-- Bottom CTA / Watermark Bar -->

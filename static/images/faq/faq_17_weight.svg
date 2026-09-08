@@ -20,7 +20,7 @@
   <!-- Top Badge -->
   <rect x="40" y="32" width="240" height="30" rx="15" fill="#1c6e78"/>
   <text x="160" y="52" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" font-weight="700" fill="#ffffff">
-    급격한 체중 변화 & 대사 장애
+    급격한 체중 변화 &amp; 대사 장애
   </text>
   <text x="760" y="52" text-anchor="end" font-family="'Pretendard', sans-serif" font-size="13" font-weight="600" fill="#666666">
     해아림한의원 자율신경 클리닉 FAQ

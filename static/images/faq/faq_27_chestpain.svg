@@ -20,7 +20,7 @@
   <!-- Top Badge -->
   <rect x="40" y="32" width="240" height="30" rx="15" fill="#1c6e78"/>
   <text x="160" y="52" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" font-weight="700" fill="#ffffff">
-    기상병 &amp; 기압 변화 자율신경
+    미세혈관 협심증 &amp; 신경성 흉통
   </text>
   <text x="760" y="52" text-anchor="end" font-family="'Pretendard', sans-serif" font-size="13" font-weight="600" fill="#666666">
     해아림한의원 자율신경 클리닉 FAQ
@@ -28,10 +28,10 @@
 
   <!-- Title and Subtitle -->
   <text x="40" y="98" font-family="'Pretendard', sans-serif" font-size="21" font-weight="800" fill="#0d3a42">
-    흐린 날·비 오는 날 심해지는 두근거림과 어지럼
+    조영술은 깨끗한데 가슴이 쥐어짜듯 뻐근한 흉통
   </text>
   <text x="40" y="125" font-family="'Pretendard', sans-serif" font-size="13" font-weight="500" fill="#555555">
-    저기압·고습도 환경에서 내이 압력 수용체와 교감신경계의 과민 반응
+    대혈관 막힘이 아닌 미세혈관의 신경성 연축(경련)과 흉부 교감신경절 흥분으로 인한 흉통
   </text>
 
   <!-- Left Box -->
@@ -39,12 +39,12 @@
   <rect x="40" y="150" width="345" height="44" rx="14" fill="#fef2f2"/>
   <rect x="40" y="184" width="345" height="10" fill="#fef2f2"/>
   <text x="212" y="178" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15.5" font-weight="700" fill="#e05252">
-    기상 변화의 신체 충격
+    심장내과 검사 정상
   </text>
   <g transform="translate(60, 222)">
-    <text x="0" y="0" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 저기압으로 내이 림프액 팽창</text>
-    <text x="0" y="38" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 혈중 세로토닌 감소 및 뇌압 상승</text>
-    <text x="0" y="76" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 교감신경 사이렌 급발진</text>
+    <text x="0" y="0" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 관상동맥 CT·조영술 혈관 깨끗</text>
+    <text x="0" y="38" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 협심증 약 복용 효과 불분명</text>
+    <text x="0" y="76" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 가슴 답답함과 통증은 지속</text>
   </g>
 
   <!-- Right Box -->
@@ -52,12 +52,12 @@
   <rect x="415" y="150" width="345" height="44" rx="14" fill="#edf7f8"/>
   <rect x="415" y="184" width="345" height="10" fill="#edf7f8"/>
   <text x="587" y="178" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15.5" font-weight="700" fill="#1c6e78">
-    해아림 기상병 대응 처방
+    해아림 심흉부 신경 이완
   </text>
   <g transform="translate(435, 222)">
-    <text x="0" y="0" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 기압 변화 완충 오령산·영계출감탕</text>
-    <text x="0" y="38" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 내이 미세 순환 촉진 CST 요법</text>
-    <text x="0" y="76" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 날씨 무관 자율신경 항상성 완성</text>
+    <text x="0" y="0" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 미세혈관 혈류 개선 과루해백·단삼</text>
+    <text x="0" y="38" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 흉추 1~4번 심장 신경절 이완 추나</text>
+    <text x="0" y="76" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 심장 과민 반응 완화 심포경 자극</text>
   </g>
 
   <!-- Bottom CTA / Watermark Bar -->
