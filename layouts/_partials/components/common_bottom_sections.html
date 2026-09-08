@@ -644,6 +644,13 @@
         }
       ];
 
+      // Expose default seed data lists to window for global access & auto engines
+      window.defaultFaqList = defaultFaqList;
+      window.defaultFaqData = window.defaultFaqData || defaultFaqList;
+      window.defaultReviewsList = defaultReviewsList;
+      window.defaultColumnsList = defaultColumnsList;
+      window.defaultYoutubeList = defaultYoutubeList;
+
       // 2. High-Precision Chronological Scoring Function (가장 최근 등록순 / 시간순 계산)
       function getItemTimeScore(item, index, totalLength) {
         if (!item) return 0;
@@ -683,23 +690,7 @@
         return scored.map(function(s) { return s.item; });
       }
 
-      // 4. Unique Merge Helper
-      function mergeUniqueItems(primaryList, secondaryList) {
-        var map = {};
-        var merged = [];
-        function pushItem(it) {
-          if (!it) return;
-          var key = it.id || it.title;
-          if (!key || map[key]) return;
-          map[key] = true;
-          merged.push(it);
-        }
-        if (Array.isArray(primaryList)) primaryList.forEach(pushItem);
-        if (Array.isArray(secondaryList)) secondaryList.forEach(pushItem);
-        return merged;
-      }
-
-      // 5. YouTube URL / ID Helper
+      // 4. YouTube URL / ID Helper
       function extractYoutubeId(url) {
         if (!url) return '';
         url = String(url).trim();
@@ -707,6 +698,49 @@
         var match = url.match(/(?:youtu\.be\/|(?:www\.|m\.)?(?:youtube|youtube-nocookie)\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([a-zA-Z0-9_-]{11})/);
         if (match && match[1]) return match[1];
         return '';
+      }
+
+      // 5. Strict Unique Merge Helper (Deduplicates by ID, Video ID, and Normalized Title)
+      function normalizeTitleForDeduplication(t) {
+        if (!t) return '';
+        return String(t)
+          .replace(/^Q[\.:\s\-]+/i, '')
+          .replace(/^칼럼[\.:\s\-]+/i, '')
+          .replace(/[\s\*\*_~\`#\?\uFF1F\.,\(\)\[\]:;\-]/g, '')
+          .trim()
+          .toLowerCase();
+      }
+
+      function mergeUniqueItems(primaryList, secondaryList) {
+        var seenIds = {};
+        var seenTitles = {};
+        var seenVids = {};
+        var merged = [];
+
+        function pushItem(it) {
+          if (!it) return;
+          var strId = it.id ? String(it.id).trim() : '';
+          if (strId && seenIds[strId]) return;
+
+          // Deduplicate YouTube by video ID if applicable
+          var vId = extractYoutubeId(it.videoEmbed || it.thumb || it.youtubeUrl || '');
+          if (vId && seenVids[vId]) return;
+
+          // Deduplicate by normalized title for FAQ, Columns, Reviews, YouTube
+          if (it.title) {
+            var normT = normalizeTitleForDeduplication(it.title);
+            if (normT && seenTitles[normT]) return;
+            if (normT) seenTitles[normT] = true;
+          }
+
+          if (strId) seenIds[strId] = true;
+          if (vId) seenVids[vId] = true;
+          merged.push(it);
+        }
+
+        if (Array.isArray(primaryList)) primaryList.forEach(pushItem);
+        if (Array.isArray(secondaryList)) secondaryList.forEach(pushItem);
+        return merged;
       }
 
       // 6. Title Formatter (특수문자 ** 및 Q. 중복 제거)

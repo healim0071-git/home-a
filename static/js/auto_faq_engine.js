@@ -405,7 +405,21 @@
         var raw = localStorage.getItem(sKey);
         if (raw) {
           var list = JSON.parse(raw) || [];
-          var filtered = list.filter(function(it) { return !isObsoleteMockFaq(it); });
+          var seenTitles = {};
+          var seenIds = {};
+          var filtered = [];
+          list.forEach(function(it) {
+            if (!it || isObsoleteMockFaq(it)) return;
+            var strId = it.id ? String(it.id).trim() : '';
+            if (strId && seenIds[strId]) return;
+            if (it.title) {
+              var normT = normalizeQuestionTitle(it.title);
+              if (normT && seenTitles[normT]) return;
+              if (normT) seenTitles[normT] = true;
+            }
+            if (strId) seenIds[strId] = true;
+            filtered.push(it);
+          });
           if (filtered.length !== list.length) {
             localStorage.setItem(sKey, JSON.stringify(filtered));
           }
@@ -470,9 +484,10 @@
       }
     } catch(e) {}
 
-    // 5) Fallback default FAQ data (from window if present)
-    if (window.defaultFaqData && Array.isArray(window.defaultFaqData)) {
-      window.defaultFaqData.forEach(function(it) {
+    // 5) Fallback default FAQ data (from window.defaultFaqData or window.defaultFaqList)
+    var fallbackFaq = window.defaultFaqData || window.defaultFaqList;
+    if (fallbackFaq && Array.isArray(fallbackFaq)) {
+      fallbackFaq.forEach(function(it) {
         if (it && it.title && !isObsoleteMockFaq(it)) {
           titles.add(normalizeQuestionTitle(it.title));
         }

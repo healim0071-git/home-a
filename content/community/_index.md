@@ -1039,6 +1039,12 @@ sections:
           }
         ];
 
+        window.defaultFaqData = defaultFaqData;
+        window.defaultFaqList = defaultFaqData;
+        window.defaultReviewsData = defaultReviewsData;
+        window.defaultYoutubeData = defaultYoutubeData;
+        window.defaultColumnsData = defaultColumnsData;
+
         // YouTube Helper Functions
         function extractYoutubeId(url) {
         if (!url) return '';

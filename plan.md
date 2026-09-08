@@ -1111,3 +1111,32 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
      - [치료후기 (Reviews)]: 세션 A와 세션 B 모두 테스트 글(`test`) 없이 6편의 공식 임상 후기가 동일한 순서로 100% 일치 (`count: 6 vs 6: true`, `titles identical: true`). 네이버 회원 로그인 시 후기 잠금 자동 해제 및 관리자 수정/삭제 버튼 은닉 정상 작동.
      - [실시간 검증 스크린샷]: `admin_columns_unified.png`, `naver_columns_unified.png`, `admin_reviews_unified.png`, `naver_reviews_unified.png` 캡처 완료.
    - **정적 빌드 검증 (`hugo --minify`)**: 32개 페이지 에러 0건 정상 빌드 완료.
+
+---
+
+### Milestone 9.41: 전 페이지 하단 FAQ 중복 게시글 오류 완벽 해결 및 엄격한 정규화 디둡(Deduplication) 구축
+- **작업 일시**: 2026-09-08
+- **문제 현상 및 원인 분석**:
+  - 모든 페이지 하단 공통 영역(`common_bottom_sections.html`)의 FAQ 목록 1번과 2번에 동일한 질문(`병원에서 온갖 검사를 다 받아도 정상이라는데...`)이 중복 표시되고, 5번 질문(`밤에 잠을 깊이 못 자고...`)이 밀려나는 현상 발생.
+  - 정작 커뮤니티 페이지(`/community/#faq`)에서는 해당 글이 1개만 정상 표시되는 불일치 확인.
+  - **원인**:
+    1. 하단 공통 영역 `mergeUniqueItems`에서 `key = it.id || it.title`로만 중복 검사를 수행하여, 자동 발행 글(`faq-auto-...`)과 기본 시드 글(`faq-1`)의 ID가 다른 경우 동일 질문 제목임에도 둘 다 통과되어 배열에 병합됨.
+    2. 시간순 정렬(`sortItemsByTime`) 시 두 글이 1위, 2위를 모두 차지하여 상위 5개 슬라이스 시 중복 노출되고 5번 질문이 밀려남.
+    3. 반면 커뮤니티 페이지(`getBoardData`)에서는 정규화된 제목 디둡(`seenTitles[normT]`)이 적용되어 1건만 정상 표시됨.
+    4. 전역 객체 `window.defaultFaqData` 및 `window.defaultFaqList`가 하단 섹션 및 커뮤니티 스크립트에서 전역으로 노출되지 않아 `auto_faq_engine.js`가 비-커뮤니티 페이지에서 기본 FAQ 제목을 인식하지 못함.
+- **해결 내역**:
+  1. **하단 공통 섹션(`common_bottom_sections.html`) 엄격한 디둡 알고리즘 탑재**:
+     - `mergeUniqueItems`를 ID(`seenIds`), 유튜브 영상ID(`seenVids`), 정규화된 제목(`seenTitles`) 3중 검증으로 전면 개편.
+     - `normalizeTitleForDeduplication`을 구현하여 `Q.`, 공백, 특수문자를 제거한 정규화 비교로 동일 질문 중복 혼입을 원천 차단.
+     - `window.defaultFaqList`, `window.defaultFaqData`, `window.defaultReviewsList`, `window.defaultColumnsList`, `window.defaultYoutubeList`를 전역 노출하여 모든 페이지에서 일관된 시드 데이터 공유.
+  2. **자동 발행 엔진(`auto_faq_engine.js`) 정제 및 동기화 강화**:
+     - `purgeObsoleteMockFaqFromStorage`에 정규화 제목 중복 정제 로직을 추가하여 스토리지 내 동일 제목 중복 글 자동 정리.
+     - `getExistingFaqTitles()`에서 `window.defaultFaqData` 및 `window.defaultFaqList` 모두 인식하도록 보강.
+  3. **커뮤니티 페이지(`content/community/_index.md`) 전역 데이터 노출**:
+     - `defaultFaqData`, `defaultColumnsData`, `defaultReviewsData`, `defaultYoutubeData`를 전역 `window` 객체에 바인딩.
+- **검증 결과**:
+  - **Chrome CDP 자동화 테스트 통과 (`scratch/verify_bottom_faq_no_duplicates.js`)**:
+    - 하단 공통 FAQ: 중복 글 주입 후에도 중복 0건, 5개 고유 질문 완벽 렌더링 확인 (1번~5번 질문 정상 노출).
+    - 커뮤니티 FAQ: 18편 전체 중복 0건 정상 표시 확인.
+    - 실시간 검증 스크린샷 캡처 완료 (`bottom_faq_no_duplicates_live.png`).
+  - **정적 빌드 검증 (`hugo --minify`)**: 32개 페이지 에러 0건 정상 빌드 완료.
