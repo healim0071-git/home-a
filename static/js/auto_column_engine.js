@@ -284,6 +284,11 @@
     currentColumns.unshift(newPost);
     try {
       localStorage.setItem(STORAGE_BOARD_KEY, JSON.stringify(currentColumns));
+      var customCols = [];
+      var rawC = localStorage.getItem('healim_custom_columns_posts');
+      if (rawC) customCols = JSON.parse(rawC) || [];
+      customCols.unshift(newPost);
+      localStorage.setItem('healim_custom_columns_posts', JSON.stringify(customCols));
     } catch(e) {}
 
     // Update state

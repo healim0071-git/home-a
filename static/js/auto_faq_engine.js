@@ -349,6 +349,11 @@
         currentFaqList.unshift(newPost);
         try {
           localStorage.setItem('healim_board_faq', JSON.stringify(currentFaqList));
+          var customList = [];
+          var rawC = localStorage.getItem('healim_custom_faq_posts');
+          if (rawC) customList = JSON.parse(rawC) || [];
+          customList.unshift(newPost);
+          localStorage.setItem('healim_custom_faq_posts', JSON.stringify(customList));
         } catch(e) {}
       }
 
