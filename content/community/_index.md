@@ -2671,21 +2671,15 @@ sections:
         }
 
         if (modalDialog) {
-          if (boardType === 'reviews') {
-            modalDialog.classList.add('modal-review-mode');
-          } else {
-            modalDialog.classList.remove('modal-review-mode');
-          }
+          modalDialog.classList.remove('modal-review-mode');
         }
 
         if (item.image) {
           if (imgArea && imgEl) {
             imgEl.src = item.image;
-            if (boardType === 'reviews') {
-              imgEl.className = 'w-full max-h-[380px] object-cover rounded-xl border border-[#badfe3] bg-[#f8fafb] healim-review-blurred-img';
-            } else {
-              imgEl.className = 'w-full max-h-[380px] object-contain rounded-xl border border-[#badfe3] bg-[#f8fafb]';
-            }
+            imgEl.className = 'w-full max-h-[420px] object-contain rounded-xl border border-[#badfe3] bg-[#f8fafb]';
+            imgEl.style.filter = 'none';
+            imgEl.style.transform = 'none';
             imgArea.style.display = 'block';
 
             var blurNotice = document.getElementById('detailModalBlurNotice');
@@ -2694,12 +2688,10 @@ sections:
                 blurNotice = document.createElement('div');
                 blurNotice.id = 'detailModalBlurNotice';
                 blurNotice.className = 'mt-2 text-xs text-[#1c6e78] font-semibold flex items-center justify-between bg-[#f0f7f8] px-3 py-1.5 rounded-lg border border-[#badfe3]';
-                blurNotice.innerHTML = '<span>🔒 의료법 제56조 준수 환자 개인정보 보호를 위해 흐림(블러) 처리된 사진입니다.</span>' +
-                  '<span class="text-[11px] text-[#888888]">마우스 오버 시 살짝 선명해집니다</span>';
                 imgArea.appendChild(blurNotice);
-              } else {
-                blurNotice.style.display = 'flex';
               }
+              blurNotice.innerHTML = '<span class="flex items-center gap-1.5"><span>🔒</span> <span>정회원 인증 열람: 의료법 제56조에 따라 로그인 회원에게 제공되는 원본 치료후기 사진입니다.</span></span>';
+              blurNotice.style.display = 'flex';
             } else if (blurNotice) {
               blurNotice.style.display = 'none';
             }
@@ -2801,7 +2793,11 @@ sections:
         var imgArea = document.getElementById('detailModalImageArea');
         var imgEl = document.getElementById('detailModalImage');
         if (imgArea) imgArea.style.display = 'none';
-        if (imgEl) imgEl.src = '';
+        if (imgEl) {
+          imgEl.src = '';
+          imgEl.style.filter = 'none';
+          imgEl.style.transform = 'none';
+        }
         var modalDialog = document.querySelector('#detailModalBackdrop .healim-modal-dialog');
         if (modalDialog) modalDialog.classList.remove('modal-review-mode');
         var blurNotice = document.getElementById('detailModalBlurNotice');
@@ -2821,10 +2817,14 @@ sections:
         window.openEditModal = function(boardType, postId) {
           var fallbackData = (boardType === 'faq' ? defaultFaqData : (boardType === 'reviews' ? defaultReviewsData : (boardType === 'youtube' ? defaultYoutubeData : defaultColumnsData)));
           var list = getBoardData(boardType, fallbackData);
-          var item = list.find(function(it) { return it.id === postId; });
+          var targetStrId = String(postId || '');
+          var item = list.find(function(it) { return String(it.id) === targetStrId; });
           if (!item && boardType === 'youtube') {
             var allYt = getCustomYoutubePosts().concat(getSyncedYoutubePosts()).concat(defaultYoutubeData);
-            item = allYt.find(function(it) { return it.id === postId; });
+            item = allYt.find(function(it) { return String(it.id) === targetStrId; });
+          }
+          if (!item && Array.isArray(fallbackData)) {
+            item = fallbackData.find(function(it) { return String(it.id) === targetStrId; });
           }
           if (!item) {
             alert('수정할 게시글 데이터를 찾을 수 없습니다.');

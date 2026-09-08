@@ -824,13 +824,17 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
        - 게시글 조회 식별자 안정화: 문자열/숫자 타입 불일치 방지(`String(it.id) === targetStrId`) 및 다계층 폴백(기본 시드, 커스텀 스토리지, 제목 매핑) 지원
        - 이미지 정규식 오류 방지: 대용량 Base64 이미지에 대한 안전 예외 처리
        - 전방위 클릭 이벤트 매핑: 카드 본체, 제목, 블러 이미지, `[전체 후기 보기 >]` 전용 버튼 어디를 클릭하더라도 상세 팝업이 100% 즉시 열리도록 바인딩
+     - **상세 팝업창 정회원 열람 시 첨부 사진 블러 해제 (Milestone 9.31)**:
+       - 목록 카드 썸네일은 의료법 보호를 위해 블러 유지(`filter: blur(5px);`)하되, 정회원/관리자 로그인 후 상세 팝업창 열람 시 첨부 사진 및 본문 인라인 사진을 100% 원본 선명하게 표시(`filter: none !important; transform: none !important;`)
+       - 상세 모달 내 `🔒 정회원 인증 열람: 의료법 제56조에 따라 로그인 회원에게 제공되는 원본 치료후기 사진입니다.` 신뢰 배지 탑재
 3. **검증 결과**:
-   - `hugo --minify`: 32개 페이지 정상 빌드 (1482ms)
+   - `hugo --minify`: 32개 페이지 정상 빌드 (1429ms)
    - Chrome CDP 자동화 테스트 통과:
-     - 기존 사진 미첨부 글(`test`)의 블러 사진 자동 렌더링: PASS (`scratch/cdp_reviews_grid.png`)
+     - 목록 카드 썸네일 블러 적용 유지 확인 (`filter: blur(5px)`): PASS
      - `[전체 후기 보기 >]` 버튼 클릭 시 모달 즉시 팝업: PASS (`scratch/live_modal_opened.png`)
-     - 카드 제목 및 본체 클릭 시 모달 팝업: PASS
-     - 상세 모달 내 블러 처리 및 법적 안내 배지 정상 노출: PASS
+     - 상세 모달 내 첨부 사진 블러 해제 (`imgFilter: 'none'`, `transform: 'none'`): PASS (`scratch/unblurred_modal_live.png`)
+     - 정회원 인증 배지 정상 노출: PASS
+
 
 
 

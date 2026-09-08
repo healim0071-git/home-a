@@ -2931,20 +2931,24 @@ section#section-markdown:first-of-type {
   transform: scale(1.02);
 }
 
-/* Modal review blurred image */
+/* Detail Modal Image: 로그인 회원 상세 열람 시 원본 선명하게(NO blur) 표시 */
+#detailModalBackdrop #detailModalImage,
+#detailModalBackdrop #detailModalContent img,
+#detailModalBackdrop .article-inline-img,
 .modal-review-mode #detailModalImage,
-.modal-review-mode #detailModalContent img,
-#tab-pane-reviews .article-inline-img {
-  filter: blur(5px);
-  transform: scale(1.03);
-  transition: filter 0.3s ease, transform 0.3s ease;
+.modal-review-mode #detailModalContent img {
+  filter: none !important;
+  transform: none !important;
+  transition: none !important;
 }
 
+#detailModalBackdrop #detailModalImage:hover,
+#detailModalBackdrop #detailModalContent img:hover,
+#detailModalBackdrop .article-inline-img:hover,
 .modal-review-mode #detailModalImage:hover,
-.modal-review-mode #detailModalContent img:hover,
-#tab-pane-reviews .article-inline-img:hover {
-  filter: blur(2.5px);
-  transform: scale(1.01);
+.modal-review-mode #detailModalContent img:hover {
+  filter: none !important;
+  transform: none !important;
 }
 
 
