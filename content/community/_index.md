@@ -1967,6 +1967,60 @@ sections:
         window.HealimUniversalSync = HealimUniversalSync;
 
         // LocalStorage Helper with Multi-Tier Merge (Guarantees zero data loss)
+        function getItemTimeScore(item, index, totalLength) {
+          if (!item) return 0;
+          var dateScore = 0;
+          if (item.date) {
+            var cleanDate = String(item.date).replace(/\./g, '-').trim();
+            var td = new Date(cleanDate).getTime();
+            if (!isNaN(td)) dateScore = td;
+          }
+          var idStr = String(item.id || '');
+          var idMatch = idStr.match(/(\d{10,14})/);
+          var idTimestamp = idMatch ? parseInt(idMatch[1], 10) : 0;
+
+          var subDayOffset = 0;
+          if (idTimestamp > 0) {
+            if (dateScore > 0 && idTimestamp >= dateScore && idTimestamp < dateScore + 86400000) {
+              return idTimestamp;
+            }
+            subDayOffset = idTimestamp % 86400000;
+          } else {
+            var ytMatch = idStr.match(/^yt-(\d+)$/i);
+            if (ytMatch) {
+              subDayOffset = 10000 - parseInt(ytMatch[1], 10);
+            } else {
+              var colIdx = item.colIndex || item.poolIndex || 0;
+              if (colIdx > 0) {
+                subDayOffset = colIdx;
+              } else {
+                subDayOffset = (totalLength - (index || 0));
+              }
+            }
+          }
+
+          if (dateScore > 0) {
+            return dateScore + subDayOffset;
+          }
+          if (idTimestamp > 0) return idTimestamp;
+          return subDayOffset;
+        }
+
+        function sortCommunityItemsByTime(items) {
+          if (!Array.isArray(items)) return [];
+          var total = items.length;
+          var scored = items.map(function(item, idx) {
+            return { item: item, score: getItemTimeScore(item, idx, total), origIdx: idx };
+          });
+          scored.sort(function(a, b) {
+            if (b.score !== a.score) return b.score - a.score;
+            return a.origIdx - b.origIdx;
+          });
+          return scored.map(function(s) { return s.item; });
+        }
+        window.sortCommunityItemsByTime = sortCommunityItemsByTime;
+        window.getItemTimeScore = getItemTimeScore;
+
         function getBoardData(key, fallback) {
         if (key === 'youtube') {
           var customPosts = getCustomYoutubePosts();
@@ -2010,6 +2064,7 @@ sections:
             } catch(e) {}
           }
 
+          merged = sortCommunityItemsByTime(merged);
           localStorage.setItem('healim_board_youtube', JSON.stringify(merged));
           return merged;
         }
@@ -2165,7 +2220,8 @@ sections:
           }
         } catch(e) {}
 
-        return merged;
+        merged = sortCommunityItemsByTime(merged);
+          return merged;
         }
 
         function saveBoardData(key, data) {
@@ -2404,7 +2460,7 @@ sections:
         }
         var container = document.getElementById('faqListContainer');
         if (!container) return;
-        var list = getBoardData('faq', defaultFaqData);
+        var list = sortCommunityItemsByTime(getBoardData('faq', defaultFaqData));
 
         if (list.length === 0) {
         container.innerHTML = '<div class="p-8 text-center text-gray-500 bg-white rounded-xl border border-gray-200">등록된 FAQ가 없습니다.</div>';
@@ -2483,7 +2539,7 @@ sections:
         if (gateLoginBtn) gateLoginBtn.href = '/login/?back_url=' + currentBackUrl;
         if (gateJoinBtn) gateJoinBtn.href = '/site_join_type_choice/?back_url=' + currentBackUrl;
 
-        var list = getBoardData('reviews', defaultReviewsData);
+        var list = sortCommunityItemsByTime(getBoardData('reviews', defaultReviewsData));
 
         if (isLoggedIn) {
         lockWrapper.classList.remove('is-locked');
@@ -2606,7 +2662,7 @@ sections:
         function renderYoutubeList() {
         var container = document.getElementById('youtubeListContainer');
         if (!container) return;
-        var list = getBoardData('youtube', defaultYoutubeData);
+        var list = sortCommunityItemsByTime(getBoardData('youtube', defaultYoutubeData));
 
         var totalItems = list.length;
         var totalPages = Math.ceil(totalItems / YOUTUBE_PAGE_SIZE) || 1;
@@ -2675,7 +2731,7 @@ sections:
         }
         var container = document.getElementById('columnListContainer');
         if (!container) return;
-        var list = getBoardData('columns', defaultColumnsData);
+        var list = sortCommunityItemsByTime(getBoardData('columns', defaultColumnsData));
         var isSuperAdmin = isHealimSuperAdmin();
 
         var colTh = document.getElementById('colManageTh');

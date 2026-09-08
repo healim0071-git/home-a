@@ -1380,3 +1380,40 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
 4. **검증 결과**:
    - `hugo --minify` 정적 빌드 0 에러 (1.6초) 정상 완료.
    - 크로스 브라우저 시뮬레이션 검증(`scratch/verify_faq_sync.js`): Chrome, Edge, Safari, 모바일 등 어떤 브라우저로 처음 접속해도 FAQ 상위 5개가 100% 동일하게(#22, #21, #20, #19, #1) 렌더링됨을 검증 완료.
+
+---
+
+### [2026-09-09] 마일스톤 9.50: 커뮤니티 4대 영역(FAQ·치료후기·유튜브·칼럼) 및 전 페이지 하단 공통 영역 전면 시간순 역순 정렬 (최신글 맨 위, 오래된글 맨 아래)
+
+1. **사용자 요청 사항**:
+   - "커뮤니티 4대 영역(FAQ·치료후기·유튜브·칼럼) 각영역에서 작성 글 배열순서는 최신글이 제일 먼저 보이게하고 제일 오래된글이 제일 마지막에 보이게 시간순으로 나열해주세요. 모든페이지 하단에 반복해서 보이는 FAQ·치료후기·유튜브·칼럼에서 각영역에서 글 배열되는 순서도요."
+
+2. **기존 상태 및 원인 분석**:
+   - **커뮤니티 페이지 (`content/community/_index.md`)**:
+     - `getBoardData(key, fallback)` 내부에서 로컬 스토리지, 볼트(Vault), 커스텀 글, 기본 시드 글을 병합(`merged`)한 후 **시간순 정렬(.sort) 과정이 누락**되어 있어, 글이 저장소에 추가된 순서나 시드 배열 순서대로 노출되는 문제 발생.
+     - 4대 탭 렌더링 함수(`renderFaqList`, `renderReviewsList`, `renderYoutubeList`, `renderColumnsList`)에서도 정렬되지 않은 원본 배열을 그대로 렌더링함.
+   - **전 페이지 하단 공통 영역 (`layouts/_partials/components/common_bottom_sections.html`)**:
+     - `getItemTimeScore()`가 13자리 밀리초 타임스탬프, 유튜브 영상 ID(`yt-1` ~ `yt-15`), 칼럼 인덱스(`colIndex`), 시드 번호 간 시간 점수를 정확하게 계량하지 못하여 특정 글의 정렬 순서가 꼬이는 현상 존재.
+     - 하단 공통 `defaultYoutubeList`에 3개 영상만 정의되어 있어 전체 15개 영상 목록의 시간순 연동이 미비했음.
+     - 하단 정적 HTML 카드(칼럼 등)가 최신 글이 아닌 과거 글(1번~3번)로 하드코딩되어 있어 자바스크립트 로딩 전 최신 글과 불일치.
+
+3. **작업 및 개선 내역**:
+   - **1) 커뮤니티 페이지 (`content/community/_index.md`) 정밀 시간 점수 계산 및 역순 정렬 엔진 탑재**:
+     - `getItemTimeScore(item, index, totalLength)` 및 `sortCommunityItemsByTime(items)` 함수 구축.
+     - `dateScore`(날짜 밀리초) + `subDayOffset`(당일 밀리초/ID 타임스탬프/인덱스 가중치)를 결합하여 작성 시점(밀리초) 기준으로 엄격한 내림차순 정렬 구현.
+     - `getBoardData()`의 모든 반환점(YouTube 및 FAQ·치료후기·칼럼)에 `merged = sortCommunityItemsByTime(merged);` 적용.
+     - 4대 탭 렌더링 함수(`renderFaqList`, `renderReviewsList`, `renderYoutubeList`, `renderColumnsList`)에 `sortCommunityItemsByTime()` 2중 정렬 적용.
+   - **2) 전 페이지 하단 공통 영역 (`common_bottom_sections.html`) 정밀 시간순 정렬 및 최신화**:
+     - `getItemTimeScore()`를 정밀화하여 최신 등록 글(ID에 타임스탬프 포함)이 100% 최우선 순위로 계산되도록 개선.
+     - `defaultYoutubeList`를 3개 -> 전체 15개 영상 전체로 확장.
+     - 하단 정적 HTML 카드(치료칼럼, 치료후기, FAQ, 유튜브)를 모두 최신 상위 글로 전면 교체 (치료칼럼: #23 이갈이, #22 골반통, #21 미각후각 상실).
+   - **3) 전역 커뮤니티 허브 데이터 정렬 일치화**:
+     - `data/healim_community_hub.json` 및 `static/data/healim_community_hub.json`의 4대 영역(faq, reviews, columns, youtube) 전체 배열을 최신순(내림차순)으로 영구 동기화.
+
+4. **검증 결과**:
+   - **자동화 종합 정렬 검증 (`scratch/verify_complete_sorting.js`)**:
+     - FAQ(22건), 치료후기(9건), 칼럼(23건), 유튜브(15건) 4대 영역 모두 1위 글이 최신 날짜/타임스탬프, 마지막 번호가 가장 오래된 날짜/타임스탬프로 완벽 정렬 확인.
+     - 새 글 등록 시뮬레이션: 임의의 위치에 신규 글(`Date.now()`) 삽입 시 4대 영역 모두 즉각 1순위(#1, 최상단)로 재배치됨을 100% 검증.
+     - 하단 공통 정적 HTML 카드 4대 영역 모두 최신 1위 글과 100% 일치 확인.
+   - **정적 빌드 검증 (`hugo --minify`)**: 32개 페이지 에러 0건 정상 빌드 완료.
+
