@@ -3892,6 +3892,46 @@ sections:
           });
         }
 
+        // Fetch Static Hub Data (/data/healim_community_hub.json) to synchronize latest published posts across all browsers
+        if (window.fetch) {
+          fetch('/data/healim_community_hub.json?t=' + Date.now(), { cache: 'no-cache' })
+            .then(function(res) {
+              if (!res.ok) throw new Error('Hub 404');
+              return res.json();
+            })
+            .then(function(json) {
+              var hub = json.data || json;
+              if (hub && typeof hub === 'object') {
+                var didUpdate = false;
+                ['faq', 'reviews', 'columns', 'youtube'].forEach(function(bKey) {
+                  if (Array.isArray(hub[bKey]) && hub[bKey].length > 0) {
+                    var vKey = 'healim_vault_all_posts_' + bKey;
+                    var rawV = localStorage.getItem(vKey);
+                    var localList = rawV ? (JSON.parse(rawV) || []) : [];
+                    var seen = {};
+                    var merged = [];
+                    localList.forEach(function(p) {
+                      if (p && p.id) { seen[String(p.id)] = true; merged.push(p); }
+                    });
+                    hub[bKey].forEach(function(p) {
+                      if (p && p.id && !seen[String(p.id)]) { seen[String(p.id)] = true; merged.push(p); }
+                    });
+                    localStorage.setItem(vKey, JSON.stringify(merged));
+                    localStorage.setItem('healim_board_' + bKey, JSON.stringify(merged));
+                    didUpdate = true;
+                  }
+                });
+                if (didUpdate) {
+                  var curHash = window.location.hash.replace('#', '') || 'faq';
+                  if (curHash === 'faq' || curHash === 'reviews' || curHash === 'youtube' || curHash === 'columns') {
+                    switchCommunityTab(curHash);
+                  }
+                }
+              }
+            })
+            .catch(function() {});
+        }
+
         // Trigger daily channel auto-sync (runs once per day, checks at/after 00:00)
         setTimeout(function() {
           syncHealimtvChannel(false);
@@ -3900,6 +3940,12 @@ sections:
         }
 
         window.addEventListener('hashchange', initTabFromHash);
+        window.addEventListener('healim-cloud-db-updated', function() {
+          var curHash = window.location.hash.replace('#', '') || 'faq';
+          if (curHash === 'faq' || curHash === 'reviews' || curHash === 'youtube' || curHash === 'columns') {
+            switchCommunityTab(curHash);
+          }
+        });
 
         if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initTabFromHash);
