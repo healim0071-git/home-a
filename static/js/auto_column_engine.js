@@ -331,6 +331,21 @@
   // Global exports
   window.checkAndRunAutoColumnPublish = checkAndRunAutoColumnPublish;
   window.triggerAutoColumnPublishManual = function() {
+    var rawUser = localStorage.getItem('healim_auth_user');
+    var isHealimAdmin = false;
+    if (rawUser) {
+      try {
+        var u = JSON.parse(rawUser);
+        if (u && (u.uid === 'healim0071' || (u.role === 'admin' && u.uid === 'healim0071') || u.grade === 'superadmin')) {
+          isHealimAdmin = true;
+        }
+      } catch(e) {}
+    }
+    if (!isHealimAdmin) {
+      alert('관리자(healim0071)로 로그인한 경우에만 수동 즉시 발행이 가능합니다.');
+      return;
+    }
+
     checkAndRunAutoColumnPublish(true);
   };
   window.getAutoColumnScheduleInfo = function() {

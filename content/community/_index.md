@@ -48,16 +48,16 @@ sections:
         TAB 1: FAQ 자율신경치료 정보
         ══════════════════════════════════════════════════════════════ -->
         <div id="tab-pane-faq" class="tab-pane-content">
-        <!-- Control Bar with Auto-Publishing Status -->
+        <!-- Control Bar with Auto-Publishing Status (healim0071 Admin Only) -->
         <div class="board-control-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
-        <div id="autoFaqStatusBadge" class="flex items-center gap-2 text-xs text-[#0d3a42] bg-[#f0f7f8] border border-[#badfe3] px-3.5 py-2 rounded-lg">
+        <div id="autoFaqStatusBadge" class="flex items-center gap-2 text-xs text-[#0d3a42] bg-[#f0f7f8] border border-[#badfe3] px-3.5 py-2 rounded-lg" style="display: none;">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span><strong>자율신경 FAQ 자동 발행</strong>: 주 2~3회 (오전 08:00~11:00 랜덤)</span>
           <span class="text-[#888888] mx-1">|</span>
           <span id="autoFaqNextScheduleText" class="text-[#1c6e78] font-semibold">다음 예정: 확인 중...</span>
           <button type="button" onclick="triggerAutoFaqPublishManual()" class="ml-1 text-xs px-2.5 py-1 bg-white border border-[#badfe3] rounded hover:bg-[#eaf3f4] text-[#1c6e78] font-bold transition-colors shadow-2xs" title="스케줄 대기 없이 지금 즉시 1편 자동 발행">⚡ 즉시 1편 발행</button>
         </div>
-        <div class="board-actions">
+        <div class="board-actions" style="margin-left: auto;">
         <button type="button" class="btn-write-post" onclick="openWriteModal('faq')">
         <span>✏️ FAQ작성</span>
         </button>
@@ -151,14 +151,14 @@ sections:
         ══════════════════════════════════════════════════════════════ -->
         <div id="tab-pane-columns" class="tab-pane-content hidden">
         <div class="board-control-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
-        <div id="autoColumnStatusBadge" class="flex items-center gap-2 text-xs text-[#0d3a42] bg-[#f0f7f8] border border-[#badfe3] px-3.5 py-2 rounded-lg">
+        <div id="autoColumnStatusBadge" class="flex items-center gap-2 text-xs text-[#0d3a42] bg-[#f0f7f8] border border-[#badfe3] px-3.5 py-2 rounded-lg" style="display: none;">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span><strong>자율신경 치료칼럼 자동 발행</strong>: 주 4~5회 (오전 08:00~11:00 랜덤)</span>
           <span class="text-[#888888] mx-1">|</span>
           <span id="autoColumnNextScheduleText" class="text-[#1c6e78] font-semibold">다음 예정: 확인 중...</span>
           <button type="button" onclick="triggerAutoColumnPublishManual()" class="ml-1 text-xs px-2.5 py-1 bg-white border border-[#badfe3] rounded hover:bg-[#eaf3f4] text-[#1c6e78] font-bold transition-colors shadow-2xs" title="스케줄 대기 없이 지금 즉시 1편 자동 발행">⚡ 즉시 1편 발행</button>
         </div>
-        <div class="board-actions">
+        <div class="board-actions" style="margin-left: auto;">
         <button type="button" class="btn-write-post" onclick="openWriteModal('columns')">
         <span>✍️ 칼럼 작성</span>
         </button>
@@ -1095,7 +1095,36 @@ sections:
           syncHealimtvChannel(false);
         }
         if (tabName === 'columns') renderColumnsList();
+
+        // Refresh admin auto badges visibility
+        updateAdminAutoBadgesVisibility();
         };
+
+        // --- Admin Auto Badges Visibility Control (healim0071 Only) ---
+        function updateAdminAutoBadgesVisibility() {
+          var isHealimAdmin = false;
+          var rawUser = localStorage.getItem('healim_auth_user');
+          if (rawUser) {
+            try {
+              var u = JSON.parse(rawUser);
+              if (u && (u.uid === 'healim0071' || (u.role === 'admin' && u.uid === 'healim0071') || u.grade === 'superadmin')) {
+                isHealimAdmin = true;
+              }
+            } catch(e) {}
+          }
+
+          var faqBadge = document.getElementById('autoFaqStatusBadge');
+          if (faqBadge) {
+            faqBadge.style.display = isHealimAdmin ? 'flex' : 'none';
+          }
+
+          var colBadge = document.getElementById('autoColumnStatusBadge');
+          if (colBadge) {
+            colBadge.style.display = isHealimAdmin ? 'flex' : 'none';
+          }
+        }
+        window.updateAdminAutoBadgesVisibility = updateAdminAutoBadgesVisibility;
+        window.addEventListener('storage', updateAdminAutoBadgesVisibility);
 
         // --- Rich Content Parser (Markdown + Inline Images + Videos) ---
         function renderRichContent(rawText) {
@@ -2503,6 +2532,9 @@ sections:
         } else {
         switchCommunityTab('faq');
         }
+
+        // Apply admin auto badges visibility check on load
+        updateAdminAutoBadgesVisibility();
 
         // Trigger daily channel auto-sync (runs once per day, checks at/after 00:00)
         setTimeout(function() {
