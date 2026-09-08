@@ -58,7 +58,7 @@ sections:
           <button type="button" onclick="triggerAutoFaqPublishManual()" class="ml-1 text-xs px-2.5 py-1 bg-white border border-[#badfe3] rounded hover:bg-[#eaf3f4] text-[#1c6e78] font-bold transition-colors shadow-2xs" title="스케줄 대기 없이 지금 즉시 1편 자동 발행">⚡ 즉시 1편 발행</button>
         </div>
         <div class="board-actions" style="margin-left: auto;">
-        <button type="button" class="btn-write-post" onclick="openWriteModal('faq')">
+        <button type="button" class="btn-write-post" id="btnWriteFaq" onclick="openWriteModal('faq')" style="display: none;">
         <span>✏️ FAQ작성</span>
         </button>
         </div>
@@ -78,10 +78,10 @@ sections:
         <div class="bg-[#f2f7f8] border border-[#cde3e6] p-4 rounded-xl mb-6 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs text-[#0d3a42]">
         <div class="flex items-center gap-2">
         <span class="font-bold px-2 py-0.5 bg-[#1c6e78] text-white rounded">의료법 제56조 준수</span>
-        <span>치료후기는 환자의 개인정보 보호 및 의료법령에 의거하여 정회원 로그인 후 열람 및 작성이 가능합니다.</span>
+        <span>치료후기는 환자의 개인정보 보호 및 의료법령에 의거하여 정회원 로그인 후 열람이 가능합니다.</span>
         </div>
         <div class="board-actions">
-        <button type="button" class="btn-write-post" onclick="checkAuthAndOpenWrite('reviews')">
+        <button type="button" class="btn-write-post" id="btnWriteReview" onclick="checkAuthAndOpenWrite('reviews')" style="display: none;">
         <span>✏️ 치료후기 작성</span>
         </button>
         </div>
@@ -129,7 +129,7 @@ sections:
         <button type="button" onclick="syncHealimtvChannel(true)" class="ml-1 text-xs px-2.5 py-1 bg-white border border-[#badfe3] rounded hover:bg-[#eaf3f4] text-[#1c6e78] transition-colors" title="채널 최신 영상 즉시 새로고침">🔄 최신 동기화</button>
         </div>
         <div class="board-actions">
-        <button type="button" class="btn-write-post" onclick="openWriteModal('youtube')">
+        <button type="button" class="btn-write-post" id="btnWriteYoutube" onclick="openWriteModal('youtube')" style="display: none;">
         <span>📹 영상 등록</span>
         </button>
         </div>
@@ -159,7 +159,7 @@ sections:
           <button type="button" onclick="triggerAutoColumnPublishManual()" class="ml-1 text-xs px-2.5 py-1 bg-white border border-[#badfe3] rounded hover:bg-[#eaf3f4] text-[#1c6e78] font-bold transition-colors shadow-2xs" title="스케줄 대기 없이 지금 즉시 1편 자동 발행">⚡ 즉시 1편 발행</button>
         </div>
         <div class="board-actions" style="margin-left: auto;">
-        <button type="button" class="btn-write-post" onclick="openWriteModal('columns')">
+        <button type="button" class="btn-write-post" id="btnWriteColumn" onclick="openWriteModal('columns')" style="display: none;">
         <span>✍️ 칼럼 작성</span>
         </button>
         </div>
@@ -175,7 +175,7 @@ sections:
         <th style="width: 17%; text-align: center;">작성자</th>
         <th style="width: 13%; text-align: center;">등록일</th>
         <th style="width: 8%; text-align: center;">조회</th>
-        <th style="width: 10%; text-align: center;">관리</th>
+        <th style="width: 10%; text-align: center; display: none;" id="colManageTh">관리</th>
         </tr>
         </thead>
         <tbody id="columnListContainer">
@@ -403,7 +403,7 @@ sections:
         </div>
         <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
         <div class="flex items-center gap-2">
-        <button type="button" id="btnDetailModalEdit" style="background:#1c6e78; color:white; padding:8px 14px; border-radius:6px; font-size:12px; font-weight:600; border:none; cursor:pointer;" onclick="handleEditCurrentPost()">✏️ 수정</button>
+        <button type="button" id="btnDetailModalEdit" style="display:none; background:#1c6e78; color:white; padding:8px 14px; border-radius:6px; font-size:12px; font-weight:600; border:none; cursor:pointer;" onclick="handleEditCurrentPost()">✏️ 수정</button>
         <button type="button" id="btnDetailModalDelete" style="display:none; background:#dc2626; color:white; padding:8px 14px; border-radius:6px; font-size:12px; font-weight:600; border:none; cursor:pointer;" onclick="handleDeleteCurrentPost()">🗑️ 최고관리자 권한 삭제</button>
         </div>
         <div>
@@ -1482,35 +1482,61 @@ sections:
         }
         if (tabName === 'columns') renderColumnsList();
 
-        // Refresh admin auto badges visibility
-        updateAdminAutoBadgesVisibility();
+        // Refresh admin permissions and auto badges visibility
+        updateCommunityPermissionsUI();
         };
 
-        // --- Admin Auto Badges Visibility Control (healim0071 Only) ---
-        function updateAdminAutoBadgesVisibility() {
-          var isHealimAdmin = false;
-          var rawUser = localStorage.getItem('healim_auth_user');
-          if (rawUser) {
-            try {
-              var u = JSON.parse(rawUser);
-              if (u && (u.uid === 'healim0071' || (u.role === 'admin' && u.uid === 'healim0071') || u.grade === 'superadmin')) {
-                isHealimAdmin = true;
-              }
-            } catch(e) {}
+        // --- Superadmin Permission & UI Engine (healim0071 Only) ---
+        function isHealimSuperAdmin() {
+          try {
+            var rawUser = localStorage.getItem('healim_auth_user');
+            if (!rawUser) return false;
+            var u = JSON.parse(rawUser);
+            return !!(u && (u.uid === 'healim0071' || (u.role === 'admin' && u.uid === 'healim0071')));
+          } catch(e) {
+            return false;
           }
+        }
+        window.isHealimSuperAdmin = isHealimSuperAdmin;
 
+        function updateCommunityPermissionsUI() {
+          var isHealimAdmin = isHealimSuperAdmin();
+
+          // 1. All Write Buttons across 4 tabs
+          var writeBtns = document.querySelectorAll('.btn-write-post');
+          writeBtns.forEach(function(btn) {
+            btn.style.display = isHealimAdmin ? 'inline-flex' : 'none';
+          });
+
+          // 2. Auto Publishing Status Badges (FAQ & Columns)
           var faqBadge = document.getElementById('autoFaqStatusBadge');
           if (faqBadge) {
             faqBadge.style.display = isHealimAdmin ? 'flex' : 'none';
           }
-
           var colBadge = document.getElementById('autoColumnStatusBadge');
           if (colBadge) {
             colBadge.style.display = isHealimAdmin ? 'flex' : 'none';
           }
+
+          // 3. Columns table "관리" header
+          var colTh = document.getElementById('colManageTh');
+          if (colTh) {
+            colTh.style.display = isHealimAdmin ? '' : 'none';
+          }
+
+          // 4. Detail Modal Edit & Delete buttons
+          var btnEdit = document.getElementById('btnDetailModalEdit');
+          if (btnEdit) {
+            btnEdit.style.display = isHealimAdmin ? 'inline-block' : 'none';
+          }
+          var btnDel = document.getElementById('btnDetailModalDelete');
+          if (btnDel) {
+            btnDel.style.display = isHealimAdmin ? 'inline-block' : 'none';
+          }
         }
-        window.updateAdminAutoBadgesVisibility = updateAdminAutoBadgesVisibility;
-        window.addEventListener('storage', updateAdminAutoBadgesVisibility);
+        window.updateCommunityPermissionsUI = updateCommunityPermissionsUI;
+        window.updateAdminAutoBadgesVisibility = updateCommunityPermissionsUI;
+        window.addEventListener('storage', updateCommunityPermissionsUI);
 
         // --- Rich Content Parser (Markdown + Inline Images + Videos) ---
         function renderRichContent(rawText) {
@@ -1623,12 +1649,20 @@ sections:
         }
 
         var html = '';
+        var isSuperAdmin = isHealimSuperAdmin();
         list.forEach(function(item) {
         var cleanTitle = (item.title || '').replace(/^Q[\.:\s\-]+/i, '').replace(/\*\*(.*?)\*\*/g, '$1').replace(/__(.*?)__/g, '$1').trim();
         var hasAnyImage = item.image || (item.content && (item.content.indexOf('![') !== -1 || item.content.indexOf('<img') !== -1));
         var photoBadge = hasAnyImage ? '<span class="text-xs font-bold px-1.5 py-0.5 rounded bg-[#f0f7f8] text-[#1c6e78] border border-[#badfe3] ml-1">📷 사진</span>' : '';
         var richContent = renderRichContent(item.content);
         var imageHtml = (item.image && richContent.indexOf(item.image) === -1) ? '<div class="my-3 rounded-lg overflow-hidden border border-[#badfe3] bg-[#f8fafb] max-w-md"><img src="' + item.image + '" alt="' + cleanTitle + '" class="max-h-80 w-auto object-contain rounded-lg" loading="lazy" onerror="this.onerror=null; this.parentElement.style.display=\'none\';" /></div>' : '';
+
+        var adminButtonsHtml = isSuperAdmin ? (
+          '<div class="flex items-center gap-1.5">' +
+          '<button type="button" class="px-2.5 py-1 text-xs font-semibold text-[#1c6e78] bg-[#eaf3f4] hover:bg-[#d8eaed] rounded-md transition-colors border border-[#badfe3]" onclick="event.stopPropagation(); openEditModal(\'faq\', \'' + item.id + '\')">✏️ 수정</button>' +
+          '<button type="button" class="px-2.5 py-1 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-md transition-colors border border-red-200" onclick="event.stopPropagation(); handleDeleteFaqDirect(\'' + item.id + '\')">🗑️ 삭제</button>' +
+          '</div>'
+        ) : '';
 
         html += '<details class="faq-item">' +
         '<summary>' +
@@ -1643,10 +1677,7 @@ sections:
         '<div class="faq-content-body py-1 text-sm text-[#333333] leading-relaxed">' + richContent + '</div>' +
         '<div class="mt-3 pt-2 border-t border-[#edf2f4] flex justify-between items-center text-xs text-[#888888]">' +
         '<div><span>작성자: ' + item.author + '</span> <span class="mx-1">|</span> <span>등록일: ' + item.date + '</span></div>' +
-        '<div class="flex items-center gap-1.5">' +
-        '<button type="button" class="px-2.5 py-1 text-xs font-semibold text-[#1c6e78] bg-[#eaf3f4] hover:bg-[#d8eaed] rounded-md transition-colors border border-[#badfe3]" onclick="event.stopPropagation(); openEditModal(\'faq\', \'' + item.id + '\')">✏️ 수정</button>' +
-        '<button type="button" class="px-2.5 py-1 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-md transition-colors border border-red-200" onclick="event.stopPropagation(); handleDeleteFaqDirect(\'' + item.id + '\')">🗑️ 삭제</button>' +
-        '</div>' +
+        adminButtonsHtml +
         '</div>' +
         '</div>' +
         '</details>';
@@ -1657,13 +1688,9 @@ sections:
 
         // --- 2. Reviews Render & Medical Gate ---
         window.checkAuthAndOpenWrite = function(tab) {
-        var rawUser = localStorage.getItem('healim_auth_user');
-        if (!rawUser) {
-        if (confirm('치료후기는 의료법 제56조에 따라 로그인 후 작성이 가능합니다.\n로그인 페이지로 이동하시겠습니까?')) {
-        var backUrl = encodeURIComponent('/community/#reviews');
-        window.location.href = '/login/?back_url=' + backUrl;
-        }
-        return;
+        if (!isHealimSuperAdmin()) {
+          alert('치료후기 등록 권한은 최고관리자(healim0071)에게만 있습니다.\n일반 회원은 열람 전용입니다.');
+          return;
         }
         openWriteModal(tab);
         };
@@ -1710,6 +1737,9 @@ sections:
           '</div>' +
           '</div>';
         var cleanSnippet = (item.content || '').replace(/<img[^>]*>/gi, '[사진]').replace(/!\[.*?\]\(.*?\)/g, '[사진]').replace(/<[^>]+>/g, '').replace(/[*_~`#]/g, '').trim();
+        var isSuperAdmin = isHealimSuperAdmin();
+        var editBtnHtml = isSuperAdmin ? '<button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors" onclick="event.stopPropagation(); openEditModal(\'reviews\', \'' + safeId + '\')">✏️ 수정</button>' : '';
+
         html += '<div class="healim-card white-bg text-left p-6 cursor-pointer" data-post-id="' + safeId + '" onclick="openDetailModal(\'reviews\', \'' + safeId + '\')">' +
         '<div class="flex justify-between items-center mb-2 w-full">' +
         '<div class="flex items-center gap-1.5"><span class="text-xs font-bold px-2 py-0.5 rounded bg-[#eaf3f4] text-[#1c6e78]">' + item.category + '</span>' + photoBadge + '</div>' +
@@ -1721,7 +1751,7 @@ sections:
         '<div class="mt-3 pt-3 border-t border-[#f0f4f5] flex justify-between items-center text-xs text-[#888888] w-full">' +
         '<span>등록일: ' + item.date + '</span>' +
         '<div class="flex items-center gap-2">' +
-        '<button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors" onclick="event.stopPropagation(); openEditModal(\'reviews\', \'' + safeId + '\')">✏️ 수정</button>' +
+        editBtnHtml +
         '<button type="button" class="px-2.5 py-1 text-xs font-bold text-[#1c6e78] bg-[#eaf3f4] hover:bg-[#d8eaed] rounded border border-[#badfe3] transition-all flex items-center gap-1 shadow-2xs cursor-pointer" onclick="event.stopPropagation(); openDetailModal(\'reviews\', \'' + safeId + '\')"><span>전체 후기 보기</span><span class="text-xs">&gt;</span></button>' +
         '</div>' +
         '</div>' +
@@ -1817,10 +1847,13 @@ sections:
         }
 
         var html = '';
+        var isSuperAdmin = isHealimSuperAdmin();
         pageItems.forEach(function(item, idx) {
         var globalIdx = startIndex + idx;
         var thumbUrl = getYoutubeThumbnail(item, globalIdx);
         var safeTitle = (item.title || '').replace(/"/g, '&quot;');
+        var editBtnHtml = isSuperAdmin ? '<button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors" onclick="event.stopPropagation(); openEditModal(\'youtube\', \'' + item.id + '\')">✏️ 수정</button>' : '';
+
         html += '<div class="youtube-card cursor-pointer" onclick="openDetailModal(\'youtube\', \'' + item.id + '\')">' +
         '<div class="youtube-thumb-wrapper">' +
         '<img src="' + thumbUrl + '" alt="' + safeTitle + '" class="youtube-thumb-img" style="margin: 0 !important; padding: 0 !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: top center !important;" loading="lazy" onerror="if(!this.dataset.fallback){this.dataset.fallback=\'1\';this.src=this.src.replace(\'maxresdefault.jpg\',\'mqdefault.jpg\');}else{this.onerror=null;this.src=\'https://img.youtube.com/vi/-Y_ITeHHpCo/maxresdefault.jpg\';}" />' +
@@ -1835,7 +1868,7 @@ sections:
         '<span>' + item.author + '</span>' +
         '<div class="flex items-center gap-2">' +
         '<span>조회수 ' + item.views + '회</span>' +
-        '<button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors" onclick="event.stopPropagation(); openEditModal(\'youtube\', \'' + item.id + '\')">✏️ 수정</button>' +
+        editBtnHtml +
         '</div>' +
         '</div>' +
         '</div>' +
@@ -1862,18 +1895,26 @@ sections:
         var container = document.getElementById('columnListContainer');
         if (!container) return;
         var list = getBoardData('columns', defaultColumnsData);
+        var isSuperAdmin = isHealimSuperAdmin();
+
+        var colTh = document.getElementById('colManageTh');
+        if (colTh) {
+          colTh.style.display = isSuperAdmin ? '' : 'none';
+        }
 
         var html = '';
         list.forEach(function(item, idx) {
         var hasAnyImage = item.image || (item.content && (item.content.indexOf('![') !== -1 || item.content.indexOf('<img') !== -1));
         var photoBadge = hasAnyImage ? ' <span class="text-[12px] text-[#1c6e78] font-bold" title="사진 첨부">📷</span>' : '';
+        var manageTd = isSuperAdmin ? ('<td style="text-align: center;"><button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors" onclick="event.stopPropagation(); openEditModal(\'columns\', \'' + item.id + '\')">✏️ 수정</button></td>') : '';
+
         html += '<tr onclick="openDetailModal(\'columns\', \'' + item.id + '\')">' +
         '<td style="text-align: center; color: #888888; font-size: 13px;">' + (list.length - idx) + '</td>' +
         '<td><span class="post-title-link">' + item.title + photoBadge + '</span></td>' +
         '<td style="text-align: center; font-size: 13px;">' + item.author + '</td>' +
         '<td style="text-align: center; color: #888888; font-size: 13px;">' + item.date + '</td>' +
         '<td style="text-align: center; color: #888888; font-size: 13px;">' + item.views + '</td>' +
-        '<td style="text-align: center;"><button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors" onclick="event.stopPropagation(); openEditModal(\'columns\', \'' + item.id + '\')">✏️ 수정</button></td>' +
+        manageTd +
         '</tr>';
         });
 
@@ -2321,6 +2362,10 @@ sections:
         };
 
         window.openWriteModal = function(boardType) {
+          if (!isHealimSuperAdmin()) {
+            alert('게시글 등록 권한은 최고관리자(healim0071)에게만 있습니다.\n일반 회원은 열람 전용입니다.');
+            return;
+          }
           var modal = document.getElementById('writeModalBackdrop');
           var titleEl = document.getElementById('writeModalTitle');
           var typeInput = document.getElementById('postBoardType');
@@ -2447,6 +2492,10 @@ sections:
 
         window.handlePostSubmit = function(e) {
           e.preventDefault();
+          if (!isHealimSuperAdmin()) {
+            alert('게시글 등록 및 수정 권한은 최고관리자(healim0071)에게만 있습니다.');
+            return;
+          }
           var editId = document.getElementById('postEditId') ? document.getElementById('postEditId').value.trim() : '';
           var boardType = document.getElementById('postBoardType').value;
           var category = (boardType === 'youtube') ? '영상' : ((boardType === 'columns') ? '칼럼' : ((boardType === 'reviews') ? '치료후기' : 'FAQ'));
@@ -2788,13 +2837,14 @@ sections:
           contentEl.innerHTML = renderRichContent(displayContent);
         }
 
+        var isSuperAdmin = isHealimSuperAdmin();
         var btnDel = document.getElementById('btnDetailModalDelete');
         if (btnDel) {
-        btnDel.style.display = isAdminUser ? 'inline-block' : 'none';
+          btnDel.style.display = isSuperAdmin ? 'inline-block' : 'none';
         }
         var btnEdit = document.getElementById('btnDetailModalEdit');
         if (btnEdit) {
-        btnEdit.style.display = 'inline-block';
+          btnEdit.style.display = isSuperAdmin ? 'inline-block' : 'none';
         }
 
         var ytArea = document.getElementById('detailModalYoutubeArea');
@@ -2819,6 +2869,10 @@ sections:
         };
 
         window.handleDeleteCurrentPost = function() {
+        if (!isHealimSuperAdmin()) {
+          alert('게시글 삭제 권한은 최고관리자(healim0071)에게만 있습니다.');
+          return;
+        }
         if (!currentDetailBoardType || !currentDetailPostId) return;
         if (!confirm('👑 최고관리자 권한으로 이 게시글을 영구 삭제하시겠습니까?\n삭제 후에는 복구할 수 없습니다.')) return;
         var list = getBoardData(currentDetailBoardType, []);
@@ -2880,11 +2934,19 @@ sections:
 
         // --- 7. Post Editing Engine & FAQ Direct Delete Engine ---
         window.handleEditCurrentPost = function() {
+          if (!isHealimSuperAdmin()) {
+            alert('게시글 수정 권한은 최고관리자(healim0071)에게만 있습니다.');
+            return;
+          }
           if (!currentDetailBoardType || !currentDetailPostId) return;
           openEditModal(currentDetailBoardType, currentDetailPostId);
         };
 
         window.openEditModal = function(boardType, postId) {
+          if (!isHealimSuperAdmin()) {
+            alert('게시글 수정 권한은 최고관리자(healim0071)에게만 있습니다.');
+            return;
+          }
           var fallbackData = (boardType === 'faq' ? defaultFaqData : (boardType === 'reviews' ? defaultReviewsData : (boardType === 'youtube' ? defaultYoutubeData : defaultColumnsData)));
           var list = getBoardData(boardType, fallbackData);
           var targetStrId = String(postId || '');
@@ -2901,26 +2963,7 @@ sections:
             return;
           }
 
-          var isAdminUser = false;
-          var rawUser = localStorage.getItem('healim_auth_user');
-          if (rawUser) {
-            try {
-              var u = JSON.parse(rawUser);
-              if (u.role === 'admin' || u.uid === 'healim0071' || u.grade === 'superadmin') {
-                isAdminUser = true;
-              }
-            } catch(e) {}
-          }
-
-          // If post has a password and user is not admin, verify password
-          if (!isAdminUser && item.password) {
-            var inputPwd = prompt('게시글 작성 시 등록한 비밀번호를 입력해주세요:');
-            if (inputPwd === null) return;
-            if (inputPwd !== item.password && inputPwd !== 'healim0071') {
-              alert('비밀번호가 일치하지 않습니다.');
-              return;
-            }
-          }
+          var isAdminUser = true;
 
           // Open write modal for this boardType
           openWriteModal(boardType);
@@ -3007,38 +3050,16 @@ sections:
         };
 
         window.handleDeleteFaqDirect = function(faqId) {
-          var isAdminUser = false;
-          var rawUser = localStorage.getItem('healim_auth_user');
-          if (rawUser) {
-            try {
-              var u = JSON.parse(rawUser);
-              if (u.role === 'admin' || u.uid === 'healim0071' || u.grade === 'superadmin') {
-                isAdminUser = true;
-              }
-            } catch(e) {}
+          if (!isHealimSuperAdmin()) {
+            alert('FAQ 삭제 권한은 최고관리자(healim0071)에게만 있습니다.');
+            return;
           }
 
           var list = getBoardData('faq', defaultFaqData);
           var item = list.find(function(it) { return it.id === faqId; });
           if (!item) return;
 
-          if (!isAdminUser && item.password) {
-            var inputPwd = prompt('게시글 작성 시 등록한 비밀번호를 입력해주세요:');
-            if (inputPwd === null) return;
-            if (inputPwd !== item.password && inputPwd !== 'healim0071') {
-              alert('비밀번호가 일치하지 않습니다.');
-              return;
-            }
-          } else if (!isAdminUser && !item.password) {
-            var entered = prompt('FAQ 삭제를 위해 관리자 비밀번호를 입력해주세요:');
-            if (entered === null) return;
-            if (entered !== 'healim0071') {
-              alert('관리자 비밀번호가 일치하지 않습니다.');
-              return;
-            }
-          }
-
-          if (!confirm('정말 이 FAQ를 삭제하시겠습니까?')) return;
+          if (!confirm('정말 이 FAQ를 영구 삭제하시겠습니까?')) return;
 
           addDeletedPostId('faq', faqId);
           var customPosts = getCustomUserPosts('faq').filter(function(it) { return String(it.id) !== String(faqId); });

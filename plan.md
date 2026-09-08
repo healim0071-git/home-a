@@ -838,7 +838,39 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
      - 최신 자동발행 FAQ 및 치료칼럼(`현대인의 보이지 않는 병...`) 최상단 보존 확인: PASS
      - 브라우저 새로고침 및 재로드 후에도 데이터 100% 유지 확인: PASS
      - 상세 모달 열람 시 선명한 원본 사진 및 인증 배지 유지: PASS
-
-
-
-
+### 제9.33조 커뮤니티 4대 카테고리 권한 체계 확립 (관리자 healim0071 등록·수정·삭제 독점 및 일반회원 열람 전용화)
+1. **요구사항 및 배경 분석**:
+   - 커뮤니티 4개 카테고리(FAQ, 치료후기, 유튜브동영상, 치료칼럼)의 **등록, 수정, 삭제** 권한을 관리자 아이디 `healim0071`에게만 독점 부여.
+   - 카카오, 네이버 간편 로그인 또는 사이트 일반 회원가입 계정으로 로그인한 경우:
+     - 글 작성 불가 (상단 작성 버튼 미노출 및 진입 차단)
+     - 글 수정 불가 (목록 카드, 테이블, 상세 팝업 내 '✏️ 수정' 버튼 일체 은닉 및 조작 차단)
+     - 글 삭제 불가 (FAQ '🗑️ 삭제' 및 상세 팝업 '🗑️ 최고관리자 권한 삭제' 버튼 일체 은닉 및 조작 차단)
+     - 순수 읽기 및 열람 기능만 제공 (치료후기 상세 팝업 및 원본 선명 사진 열람은 유지)
+2. **구현 내역**:
+   - **권한 판별 및 UI 동기화 엔진 (`isHealimSuperAdmin`, `updateCommunityPermissionsUI`)**:
+     - 로컬 스토리지 인증 세션(`healim_auth_user`)의 `uid`가 `healim0071`인 경우에만 최고관리자 권한을 승인.
+     - 4개 탭 상단 글작성 버튼(`#btnWriteFaq`, `#btnWriteReview`, `#btnWriteYoutube`, `#btnWriteColumn`)을 HTML 기본 `display: none;` 처리하고, `healim0071` 로그인 시에만 `inline-flex`로 동적 전환.
+     - FAQ 및 치료칼럼 자동 발행 상태 배지(`#autoFaqStatusBadge`, `#autoColumnStatusBadge`)는 `healim0071`에게만 표시.
+   - **카테고리별 목록 및 테이블 수정/삭제 버튼 은닉**:
+     - **FAQ 목록 (`renderFaqList`)**: 일반 회원에게는 질문/답변/작성자/등록일만 표시하고, '✏️ 수정' 및 '🗑️ 삭제' 버튼 영역 완전 제거.
+     - **치료후기 목록 (`renderReviewsList`)**: 일반 회원에게는 '전체 후기 보기 >' 버튼만 제공하고, '✏️ 수정' 버튼 제거.
+     - **유튜브 목록 (`renderYoutubeList`)**: 일반 회원에게는 조회수 메타만 제공하고, '✏️ 수정' 버튼 제거.
+     - **치료칼럼 테이블 (`renderColumnsList`)**: 일반 회원 접속 시 '관리' 컬럼 헤더(`#colManageTh`) 및 각 행의 '✏️ 수정' 셀을 렌더링에서 완전 제외.
+   - **통합 상세 팝업 모달 (`openDetailModal`) 권한 제어**:
+     - `btnDetailModalEdit` ('✏️ 수정') 및 `btnDetailModalDelete` ('🗑️ 최고관리자 권한 삭제')를 일반 회원 접속 시 `display: none`으로 숨김 처리.
+     - 일반 회원은 오직 본문 및 원본 치료후기 사진 열람과 '닫기' 버튼만 조작 가능.
+   - **JS 함수 레벨 방어 가드 (Client-side Security Guard)**:
+     - `openWriteModal`, `openEditModal`, `handlePostSubmit`, `handleDeleteCurrentPost`, `handleDeleteFaqDirect` 등 등록/수정/삭제 함수 실행 시 `!isHealimSuperAdmin()` 체크를 통해 비인가 사용자의 임의 호출을 100% 차단.
+3. **검증 결과**:
+   - **Chrome CDP 자동화 테스트 100% 통과 (`scratch/verify_community_perms.js`)**:
+     - 일반 회원(`kakao_user_1234`) 로그인 검증:
+       - 4개 탭 상단 글작성 버튼 모두 은닉 (`display: 'none'`): PASS
+       - FAQ 목록 내 수정/삭제 버튼 전무 (`hasEditButtonInList: false, hasDeleteButtonInList: false`): PASS
+       - 치료후기 목록 및 상세 팝업 내 수정/삭제 버튼 전무 (`editDisplay: 'none', delDisplay: 'none'`): PASS
+       - 치료후기 상세 팝업 열람 및 원본 선명 사진 표시 정상 작동 (`imageFilter: 'none'`): PASS
+       - 유튜브 카드 내 수정 버튼 전무 (`hasEditButtonOnCards: false`): PASS
+       - 칼럼 테이블 내 '관리' 헤더 및 수정 버튼 전무 (`colManageThDisplay: 'none', hasEditButtonInTable: false`): PASS
+       - 직접 스크립트 실행 호출 4종 모두 안내 메시지와 함께 완벽 차단 (`writeBlocked: true, editBlocked: true, deleteBlocked: true, faqDeleteBlocked: true`): PASS
+     - 최고관리자(`healim0071`) 로그인 검증:
+       - 4개 탭 상단 글작성 버튼, FAQ 수정/삭제 버튼, 후기 수정 버튼, 칼럼 '관리' 헤더 및 수정 버튼, 유튜브 수정 버튼, 상세 모달 수정/삭제 버튼 모두 100% 정상 노출 및 동작: PASS
+   - `hugo --minify`: 32개 페이지 정상 빌드 완료 (1398ms).
