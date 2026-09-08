@@ -803,8 +803,28 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
      - 사용자가 새로고침하거나 사이트 소스코드가 업데이트되어도 삭제되지 않은 글은 영구 유지되며, 관리자가 삭제한 글만 영구 은닉 처리
    - **자동발행 엔진 연동 (`static/js/auto_faq_engine.js`, `static/js/auto_column_engine.js`)**:
      - 자동 발행 시에도 `healim_custom_faq_posts` 및 `healim_custom_columns_posts`에 동시 기록하여 안정성 극대화
+### 제9.30조 치료후기 사진 의료법 준수 블러(Blur) 처리 및 무사진 등록 시 자동 후기사진 매핑 엔진 구축
+1. **요구사항 및 배경 분석**:
+   - **치료후기 사진 블러(흐림) 처리 필수화**: 의료법 제56조(환자 개인정보 및 진료기록 보호)에 의거하여 환자가 직접 작성한 후기에 첨부된 사진(자필 설문지, 사진 등)은 반드시 블러 처리되어 노출되어야 함.
+   - **사진 미첨부 시 자동 대체 사진 매핑**: 사용자가 치료후기 작성 시 사진을 첨부하지 않더라도, 카드 영역이 텅 비어 보이지 않도록 준비된 의료법 준수 블러 후기 사진 6종 중 하나를 자동 배정하여 시각적 완성도와 신뢰도를 극대화.
+   - **기존 작성글(`test` 등) 소급 적용**: 이미 사진 없이 등록되었던 기존 후기글도 로드 시 자동으로 블러 후기 사진이 매핑되어 카드 레이아웃 균일성 보장.
+2. **구현 내역**:
+   - **의료법 준수 블러 CSS 시스템 (`assets/css/custom.css`)**:
+     - `.healim-review-blurred-img`, `.bottom-review-blurred-img`: `filter: blur(5px); transform: scale(1.05);` 기본 적용
+     - 마우스 호버 시 `filter: blur(2.5px);`로 부드럽게 완화되어 상호작용 제공
+     - 상세 모달 내 `.modal-review-mode` 및 본문 인라인 이미지 블러 필터 연동
+   - **커뮤니티 후기 렌더링 및 자동 매핑 엔진 (`content/community/_index.md`)**:
+     - `defaultBlurredReviewImages` 6종(`/images/reviews/review_1.jpg` ~ `review_6.jpg`) 기반 해시 매핑 엔진 구현
+     - 후기 등록/수정 시(`handlePostSubmit`): 첨부 사진 또는 본문 인라인 사진이 없을 경우 무작위 또는 고유 식별자 기반으로 블러 후기 사진 자동 배정
+     - 후기 목록 렌더링 시(`renderReviewsList`): 사진이 누락된 기존 글도 감지 즉시 블러 후기 사진 및 `🔒 의료법 보호 흐림처리` 오버레이 배지 탑재
+     - 상세 모달(`openDetailModal`): 치료후기 사진 열람 시 블러 처리와 함께 `🔒 의료법 제56조 준수 환자 개인정보 보호를 위해 흐림(블러) 처리된 사진입니다.` 안내 배지 출력
+     - 작성 모달(`openWriteModal`): 치료후기 탭 선택 시 사진 블러 자동 처리 및 미첨부 시 자동 배정 안내문 표시
 3. **검증 결과**:
-   - `hugo --minify`: 32개 페이지 오류 없이 1369ms 컴파일 완료
-   - 데이터 보존 시뮬레이션(캐시 삭제, 신규 후기 등록, 관리자 삭제, 리셋 테스트): 100% 통과
-   - GitHub `main` 브랜치 원격 푸시 완료 (`c8674ca`)
+   - `hugo --minify`: 32개 페이지 정상 빌드 (1575ms)
+   - Chrome CDP 자동화 테스트 5단계 100% 통과:
+     - 기존 사진 미첨부 글(`test`)의 블러 사진 자동 렌더링: PASS (`scratch/cdp_reviews_grid.png`)
+     - 사진 미첨부 신규 글 작성 시 블러 사진 자동 매핑: PASS
+     - 커스텀 사진 첨부 시 사진 보존 및 블러 처리: PASS
+     - 상세 모달 내 블러 처리 및 법적 안내 배지 출력: PASS (`scratch/cdp_detail_modal_blurred.png`)
+
 

@@ -1209,6 +1209,38 @@ sections:
           } catch(e) {}
         }
 
+        // ─────────────────────────────────────────────────────────────
+        // Blurred Review Images Helpers (Medical Law Privacy Protection)
+        // ─────────────────────────────────────────────────────────────
+        var defaultBlurredReviewImages = [
+          '/images/reviews/review_1.jpg',
+          '/images/reviews/review_2.jpg',
+          '/images/reviews/review_3.jpg',
+          '/images/reviews/review_4.jpg',
+          '/images/reviews/review_5.jpg',
+          '/images/reviews/review_6.jpg'
+        ];
+
+        function getReviewFallbackImage(seedKey) {
+          var hash = 0;
+          var str = String(seedKey || Math.random());
+          for (var i = 0; i < str.length; i++) {
+            hash = ((hash << 5) - hash) + str.charCodeAt(i);
+            hash |= 0;
+          }
+          var idx = Math.abs(hash) % defaultBlurredReviewImages.length;
+          return defaultBlurredReviewImages[idx];
+        }
+
+        function extractFirstImageFromContent(content) {
+          if (!content) return null;
+          var imgMatch = content.match(/<img[^>]+src=["']([^"']+)["']/i);
+          if (imgMatch && imgMatch[1]) return imgMatch[1];
+          var mdMatch = content.match(/!\[.*?\]\(([^)]+)\)/);
+          if (mdMatch && mdMatch[1]) return mdMatch[1];
+          return null;
+        }
+
         // LocalStorage Helper with Multi-Tier Merge (Guarantees zero data loss)
         function getBoardData(key, fallback) {
         if (key === 'youtube') {
@@ -1297,6 +1329,31 @@ sections:
               }
             }
           });
+        }
+
+        // Ensure reviews always have a blurred image (medical compliance fallback)
+        if (key === 'reviews') {
+          var reviewsImageUpdated = false;
+          merged.forEach(function(item, idx) {
+            if (!item.image) {
+              var foundImg = extractFirstImageFromContent(item.content);
+              item.image = foundImg || getReviewFallbackImage(item.id || item.title || idx);
+              reviewsImageUpdated = true;
+            }
+          });
+          if (reviewsImageUpdated) {
+            try {
+              var cList = getCustomUserPosts('reviews');
+              var cMod = false;
+              cList.forEach(function(c) {
+                if (!c.image) {
+                  var m = merged.find(function(it) { return it.id === c.id; });
+                  if (m && m.image) { c.image = m.image; cMod = true; }
+                }
+              });
+              if (cMod) saveCustomUserPosts('reviews', cList);
+            } catch(e) {}
+          }
         }
 
         try {
@@ -1586,10 +1643,20 @@ sections:
         }
 
         var html = '<div class="healim-grid-2">';
-        list.forEach(function(item) {
-        var hasAnyImage = item.image || (item.content && (item.content.indexOf('![') !== -1 || item.content.indexOf('<img') !== -1));
-        var photoBadge = hasAnyImage ? '<span class="text-xs font-bold px-1.5 py-0.5 rounded bg-[#eaf3f4] text-[#1c6e78] border border-[#badfe3]">📷 사진</span>' : '';
-        var imageThumbHtml = item.image ? '<div class="my-2.5 rounded-lg overflow-hidden border border-[#edf2f4] bg-[#f8fafb] max-h-40 flex items-center justify-center"><img src="' + item.image + '" alt="' + (item.title || '') + '" class="max-h-40 w-full object-cover" /></div>' : '';
+        list.forEach(function(item, idx) {
+        var reviewImg = item.image;
+        if (!reviewImg) {
+          var extracted = extractFirstImageFromContent(item.content);
+          reviewImg = extracted || getReviewFallbackImage(item.id || item.title || idx);
+          item.image = reviewImg;
+        }
+        var photoBadge = '<span class="text-xs font-bold px-1.5 py-0.5 rounded bg-[#eaf3f4] text-[#1c6e78] border border-[#badfe3]">📷 사진</span>';
+        var imageThumbHtml = '<div class="relative my-2.5 rounded-lg overflow-hidden border border-[#edf2f4] bg-[#f8fafb] max-h-40 flex items-center justify-center">' +
+          '<img src="' + reviewImg + '" alt="' + (item.title || '치료후기 사진') + '" class="healim-review-blurred-img max-h-40 w-full object-cover" loading="lazy" />' +
+          '<div class="absolute top-2 left-2 bg-[#0d3a42]/80 backdrop-blur-xs text-white text-[10px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-xs pointer-events-none">' +
+          '<span>🔒</span> <span>의료법 보호 흐림처리</span>' +
+          '</div>' +
+          '</div>';
         var cleanSnippet = (item.content || '').replace(/<img[^>]*>/gi, '[사진]').replace(/!\[.*?\]\(.*?\)/g, '[사진]').replace(/<[^>]+>/g, '').replace(/[*_~`#]/g, '').trim();
         html += '<div class="healim-card white-bg text-left p-6 cursor-pointer" onclick="openDetailModal(\'reviews\', \'' + item.id + '\')">' +
         '<div class="flex justify-between items-center mb-2 w-full">' +
@@ -2275,6 +2342,20 @@ sections:
             titleEl.textContent = '치료후기' + (isSuperAdmin ? ' 👑' : '');
             if (catInput) catInput.value = '치료후기';
             if (youtubeGroup) youtubeGroup.style.display = 'none';
+            var reviewHelp = document.getElementById('reviewWriteBlurNoticeHelp');
+            if (!reviewHelp && imageGroup) {
+              reviewHelp = document.createElement('div');
+              reviewHelp.id = 'reviewWriteBlurNoticeHelp';
+              reviewHelp.className = 'w-full text-xs text-[#1c6e78] mt-1.5 font-medium flex items-center gap-1 bg-[#f0f7f8] p-2 rounded-lg border border-[#badfe3]';
+              reviewHelp.innerHTML = '<span>🔒</span> <span>치료후기 사진은 의료법 제56조에 따라 자동으로 <strong>블러(흐림) 처리</strong>됩니다. 사진을 넣지 않으시면 의료법 준수 후기 사진이 자동 적용됩니다.</span>';
+              imageGroup.parentNode.insertBefore(reviewHelp, imageGroup.nextSibling);
+            } else if (reviewHelp) {
+              reviewHelp.style.display = 'flex';
+            }
+          }
+          if (boardType !== 'reviews') {
+            var reviewHelpOther = document.getElementById('reviewWriteBlurNoticeHelp');
+            if (reviewHelpOther) reviewHelpOther.style.display = 'none';
           } else if (boardType === 'faq') {
             if (secretGroup) secretGroup.style.display = 'flex';
             titleEl.textContent = 'FAQ' + (isSuperAdmin ? ' 👑' : '');
@@ -2354,6 +2435,13 @@ sections:
             var targetIdx = list.findIndex(function(it) { return it.id === editId; });
             var existingItem = targetIdx !== -1 ? list[targetIdx] : null;
 
+            var inlineImg = extractFirstImageFromContent(content);
+            var attachedImg = currentAttachedImageDataUrl || window.currentAttachedImageDataUrl || '';
+            var finalImage = attachedImg || inlineImg || (existingItem ? existingItem.image : null);
+            if (!finalImage && boardType === 'reviews') {
+              finalImage = getReviewFallbackImage(editId || Date.now());
+            }
+
             var updatedPost = {
               id: editId,
               category: existingItem && existingItem.category ? existingItem.category : category,
@@ -2363,7 +2451,7 @@ sections:
               views: (customViewsInput && customViewsInput.value.trim()) ? initialViews : (existingItem ? (existingItem.views || 1) : initialViews),
               title: (isSecret ? '🔒 ' : '') + title,
               content: content,
-              image: currentAttachedImageDataUrl || (existingItem ? existingItem.image : null)
+              image: finalImage
             };
 
             if (boardType === 'youtube') {
@@ -2440,6 +2528,13 @@ sections:
           // ──────────────────────────────────────────
           // CREATE MODE: Add new post
           // ──────────────────────────────────────────
+          var inlineImg = extractFirstImageFromContent(content);
+          var attachedImg = currentAttachedImageDataUrl || window.currentAttachedImageDataUrl || '';
+          var finalImage = attachedImg || inlineImg || null;
+          if (!finalImage && boardType === 'reviews') {
+            finalImage = getReviewFallbackImage(Date.now() + '_' + Math.random());
+          }
+
           var newPost = {
             id: boardType + '-' + Date.now(),
             category: category,
@@ -2449,7 +2544,7 @@ sections:
             views: initialViews,
             title: (isSecret ? '🔒 ' : '') + title,
             content: content,
-            image: currentAttachedImageDataUrl || null
+            image: finalImage
           };
 
           if (boardType === 'youtube') {
@@ -2471,6 +2566,11 @@ sections:
           }
 
           if (boardType !== 'youtube') {
+            var customPosts = getCustomUserPosts(boardType);
+            customPosts = customPosts.filter(function(p) { return p.id !== newPost.id; });
+            customPosts.unshift(newPost);
+            saveCustomUserPosts(boardType, customPosts);
+
             var currentList = getBoardData(boardType, []);
             currentList.unshift(newPost);
             saveBoardData(boardType, currentList);
@@ -2542,10 +2642,44 @@ sections:
         var imgEl = document.getElementById('detailModalImage');
         var displayContent = item.content || '';
 
+        var modalDialog = document.querySelector('#detailModalBackdrop .healim-modal-dialog');
+        if (boardType === 'reviews' && !item.image) {
+          item.image = extractFirstImageFromContent(item.content) || getReviewFallbackImage(item.id || item.title);
+        }
+
+        if (modalDialog) {
+          if (boardType === 'reviews') {
+            modalDialog.classList.add('modal-review-mode');
+          } else {
+            modalDialog.classList.remove('modal-review-mode');
+          }
+        }
+
         if (item.image) {
           if (imgArea && imgEl) {
             imgEl.src = item.image;
+            if (boardType === 'reviews') {
+              imgEl.className = 'w-full max-h-[380px] object-cover rounded-xl border border-[#badfe3] bg-[#f8fafb] healim-review-blurred-img';
+            } else {
+              imgEl.className = 'w-full max-h-[380px] object-contain rounded-xl border border-[#badfe3] bg-[#f8fafb]';
+            }
             imgArea.style.display = 'block';
+
+            var blurNotice = document.getElementById('detailModalBlurNotice');
+            if (boardType === 'reviews') {
+              if (!blurNotice) {
+                blurNotice = document.createElement('div');
+                blurNotice.id = 'detailModalBlurNotice';
+                blurNotice.className = 'mt-2 text-xs text-[#1c6e78] font-semibold flex items-center justify-between bg-[#f0f7f8] px-3 py-1.5 rounded-lg border border-[#badfe3]';
+                blurNotice.innerHTML = '<span>🔒 의료법 제56조 준수 환자 개인정보 보호를 위해 흐림(블러) 처리된 사진입니다.</span>' +
+                  '<span class="text-[11px] text-[#888888]">마우스 오버 시 살짝 선명해집니다</span>';
+                imgArea.appendChild(blurNotice);
+              } else {
+                blurNotice.style.display = 'flex';
+              }
+            } else if (blurNotice) {
+              blurNotice.style.display = 'none';
+            }
           }
           // Deduplicate: If content starts with or contains the exact same image, remove it from content
           var escapedImg = item.image.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -2556,6 +2690,8 @@ sections:
         } else {
           if (imgArea) imgArea.style.display = 'none';
           if (imgEl) imgEl.src = '';
+          var blurNotice = document.getElementById('detailModalBlurNotice');
+          if (blurNotice) blurNotice.style.display = 'none';
         }
 
         document.getElementById('detailModalContent').innerHTML = renderRichContent(displayContent);
@@ -2629,6 +2765,10 @@ sections:
         var imgEl = document.getElementById('detailModalImage');
         if (imgArea) imgArea.style.display = 'none';
         if (imgEl) imgEl.src = '';
+        var modalDialog = document.querySelector('#detailModalBackdrop .healim-modal-dialog');
+        if (modalDialog) modalDialog.classList.remove('modal-review-mode');
+        var blurNotice = document.getElementById('detailModalBlurNotice');
+        if (blurNotice) blurNotice.style.display = 'none';
         var contentEl = document.getElementById('detailModalContent');
         if (contentEl) contentEl.innerHTML = '';
         currentDetailBoardType = '';
