@@ -156,7 +156,7 @@ sections:
           <span><strong>자율신경 치료칼럼 자동 발행</strong>: 주 4~5회 (오전 08:00~11:00 랜덤)</span>
           <span class="text-[#888888] mx-1">|</span>
           <span id="autoColumnNextScheduleText" class="text-[#1c6e78] font-semibold">다음 예정: 확인 중...</span>
-          <button type="button" onclick="triggerAutoColumnPublishManual()" class="ml-1 text-xs px-2.5 py-1 bg-white border border-[#badfe3] rounded hover:bg-[#eaf3f4] text-[#1c6e78] font-bold transition-colors shadow-2xs" title="스케줄 대기 없이 지금 즉시 1편 자동 발행">⚡ 즉시 1편 발행</button>
+          <button type="button" id="btnTriggerColumnPublish" onclick="triggerAutoColumnPublishManual()" class="ml-1 text-xs px-2.5 py-1 bg-white border border-[#badfe3] rounded hover:bg-[#eaf3f4] text-[#1c6e78] font-bold transition-colors shadow-2xs" title="스케줄 대기 없이 지금 즉시 1편 자동 발행">⚡ 즉시 1편 발행</button>
         </div>
         <div class="board-actions" style="margin-left: auto;">
         <button type="button" class="btn-write-post" id="btnWriteColumn" onclick="openWriteModal('columns')" style="display: none;">
@@ -1363,8 +1363,8 @@ sections:
           if (deletedIds.indexOf(strId) !== -1) return; // Administrator explicitly deleted
           if (seenIds[strId]) return;
 
-          // FAQ 질문 중복 원천 차단: 질문 제목이 기존 글과 동일한 경우 중복 등록 방지
-          if (key === 'faq' && item.title) {
+          // FAQ 질문 및 칼럼 제목 중복 원천 차단: 질문/칼럼 제목이 기존 글과 동일한 경우 중복 등록 방지
+          if ((key === 'faq' || key === 'columns') && item.title) {
             var normTitle = normalizePostTitle(item.title);
             if (normTitle) {
               if (seenTitles[normTitle]) return;

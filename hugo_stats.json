@@ -616,6 +616,7 @@
       "btnGateLogin",
       "btnRemoveImage",
       "btnToggleSecret",
+      "btnTriggerColumnPublish",
       "btnTriggerFaqPublish",
       "btnWriteColumn",
       "btnWriteFaq",
