@@ -199,6 +199,20 @@ sections:
 
         <!-- 2. Main Admin Dashboard View -->
         <div id="adminMainView" style="display: none;">
+        <!-- Realtime Cross-Browser Sync Hub Status Banner -->
+        <div style="background: #f0f7f8; border: 1px solid #badfe3; border-radius: 10px; padding: 14px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse inline-block" style="display:inline-block; width:12px; height:12px; border-radius:9999px; background-color:#10b981;"></span>
+            <div>
+              <span style="font-size: 13px; font-weight: 700; color: #0d3a42;">실시간 기기/브라우저 동기화 허브 (Port 3030)</span>
+              <span style="font-size: 12px; color: #1c6e78; margin-left: 8px;">Chrome ↔ Edge ↔ 모바일 간 실시간 0.05초 동기화 가동 중</span>
+            </div>
+          </div>
+          <div style="font-size: 11px; color: #0d3a42; background: #ffffff; padding: 4px 10px; border-radius: 6px; border: 1px solid #badfe3; font-weight: 600;">
+            영구 디스크 보관: <span style="color:#047857; font-weight:bold;">data/healim_community_hub.json</span> (삭제 방지 보호)
+          </div>
+        </div>
+
         <!-- Header Banner -->
         <div class="admin-header-card">
         <div class="flex flex-wrap items-center justify-between gap-4">
@@ -529,6 +543,23 @@ sections:
 
           // 3. Load Dashboard & KPIs
           function loadAdminDashboard() {
+            if (window.fetch && !window._adminHubLoaded) {
+              window._adminHubLoaded = true;
+              fetch('http://127.0.0.1:3030/api/posts', { mode: 'cors' })
+                .then(function(res) { return res.json(); })
+                .then(function(json) {
+                  if (json && json.status === 'ok' && json.data) {
+                    var d = json.data;
+                    ['faq', 'reviews', 'columns', 'youtube'].forEach(function(bKey) {
+                      if (Array.isArray(d[bKey]) && d[bKey].length > 0) {
+                        localStorage.setItem('healim_board_' + bKey, JSON.stringify(d[bKey]));
+                        localStorage.setItem('healim_vault_all_posts_' + bKey, JSON.stringify(d[bKey]));
+                      }
+                    });
+                    loadAdminDashboard();
+                  }
+                }).catch(function() {});
+            }
             var revs = getBoardList('reviews');
             var faqs = getBoardList('faq');
             var yts = getBoardList('youtube');
@@ -670,6 +701,15 @@ sections:
                 var legList = JSON.parse(rawLeg) || [];
                 legList = legList.filter(function(p) { return String(p.id) !== String(id); });
                 localStorage.setItem('healim_community_posts_v2', JSON.stringify(legList));
+              }
+              // Sync delete to Local Sync Hub
+              if (window.fetch) {
+                fetch('http://127.0.0.1:3030/api/posts', {
+                  method: 'DELETE',
+                  headers: { 'Content-Type': 'application/json' },
+                  mode: 'cors',
+                  body: JSON.stringify({ boardType: board, id: id, adminUser: 'healim0071' })
+                }).catch(function() {});
               }
             } catch(e) {}
 

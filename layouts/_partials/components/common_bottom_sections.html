@@ -849,7 +849,7 @@
           if (rawFaq) {
             try { storedFaq = JSON.parse(rawFaq) || []; } catch(e) {}
           }
-          storedFaq = storedFaq.filter(function(it) { return !isObsoleteFaqTitle(it.title); });
+          storedFaq = storedFaq.filter(function(it) { return !isObsoleteFaqTitle(it.title, it); });
           var legacyFaq = legacyPosts.filter(function(p) {
             return (p.type === 'faq' || p.category === 'FAQ' || (p.id && String(p.id).startsWith('faq-'))) && !isObsoleteFaqTitle(p.title);
           });
@@ -909,7 +909,7 @@
           if (rawRev) {
             try { storedRev = JSON.parse(rawRev) || []; } catch(e) {}
           }
-          storedRev = storedRev.filter(function(it) { return !isObsoleteReviewTitle(it.title); });
+          storedRev = storedRev.filter(function(it) { return !isObsoleteReviewTitle(it.title, it); });
           var legacyRev = legacyPosts.filter(function(p) {
             return (p.type === 'reviews' || p.category === '치료후기' || (p.id && String(p.id).startsWith('rev-'))) && !isObsoleteReviewTitle(p.title);
           });
@@ -967,7 +967,7 @@
           if (rawCol) {
             try { storedCol = JSON.parse(rawCol) || []; } catch(e) {}
           }
-          storedCol = storedCol.filter(function(it) { return !isObsoleteColumnTitle(it.title); });
+          storedCol = storedCol.filter(function(it) { return !isObsoleteColumnTitle(it.title, it); });
           var legacyCol = legacyPosts.filter(function(p) {
             return (p.type === 'columns' || p.category === '칼럼' || (p.id && String(p.id).startsWith('col-'))) && !isObsoleteColumnTitle(p.title);
           });
@@ -1085,10 +1085,36 @@
 
       window.syncBottomSections = syncBottomCommunity;
 
+      function fetchRemoteSyncIfAvailable() {
+        if (!window.fetch) return;
+        var isLocal = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+        if (!isLocal) return;
+        fetch('http://127.0.0.1:3030/api/posts', { mode: 'cors' })
+          .then(function(res) { return res.json(); })
+          .then(function(json) {
+            if (json && json.status === 'ok' && json.data) {
+              var data = json.data;
+              var didUpdate = false;
+              ['faq', 'reviews', 'columns', 'youtube'].forEach(function(bKey) {
+                if (Array.isArray(data[bKey]) && data[bKey].length > 0) {
+                  localStorage.setItem('healim_board_' + bKey, JSON.stringify(data[bKey]));
+                  didUpdate = true;
+                }
+              });
+              if (didUpdate) syncBottomCommunity();
+            }
+          })
+          .catch(function() {});
+      }
+
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', syncBottomCommunity);
+        document.addEventListener('DOMContentLoaded', function() {
+          syncBottomCommunity();
+          setTimeout(fetchRemoteSyncIfAvailable, 100);
+        });
       } else {
         syncBottomCommunity();
+        setTimeout(fetchRemoteSyncIfAvailable, 100);
       }
 
       window.addEventListener('storage', syncBottomCommunity);

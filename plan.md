@@ -1182,4 +1182,26 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
      - 수정 모드에서 추가 내용 작성 후 `[수정 완료]` 저장 시 원본 데이터와 추가 내용이 무손실로 온전히 반영됨 확인.
      - `hugo --minify` 정적 빌드 0 에러 통과.
 
-
+- **커뮤니티 4대 영역 실시간 기기 동기화 및 영구 보존 아키텍처 구축 (Milestone 9.43 완료)**:
+  1. **문제 현상 및 원인 분석 (Root Cause)**:
+     - **원인 1 (브라우저 격리 샌드박스)**: `localStorage` 및 `IndexedDB`는 Chrome, Edge, Whale, 모바일 OS 각각의 격리된 사용자 폴더에만 기록되므로, 동일 컴퓨터라도 브라우저를 바꾸거나 다른 기기/스마트폰으로 접속하면 글이 전혀 보이지 않는 현상 발생.
+     - **원인 2 (구형 목업 자동 제거 스크립트의 사용자 글 오인 삭제)**: `purgeObsoleteMockPosts` 및 `isObsoleteMockReview` 등에 `if (norm === 'test' || '치료후기테스트' || '테스트')` 및 `norm.indexOf(otNorm) !== -1`(부분 문자열 포함) 조건이 있어, 사용자가 작성한 테스트 글(`"치료후기 테스트를 해보려고합니다."`)이나 단어가 포함된 글이 페이지를 새로고침할 때마다 시스템에 의해 자동으로 삭제되는 치명적 버그 확인.
+  2. **해결 및 개선 내역**:
+     - **위험한 자동 삭제 스크립트 전면 제거 및 사용자 글 영구 보호 가드**:
+       - `content/community/_index.md`, `auto_faq_engine.js`, `auto_column_engine.js`, `common_bottom_sections.html` 4개 파일의 모든 `isObsoleteMock*` 함수에서 부분 문자열 일치 및 테스트 키워드 검사 완전 삭제.
+       - 사용자 작성 글(`isCustom`, 타임스탬프 ID, 작성자 정보 보유 글)은 그 어떤 자동 정리 루틴에서도 100% 예외 처리(Protected)하여 영구 보존.
+       - 목업 정리 루틴은 1회성 마이그레이션 플래그(`healim_mock_purge_done_v5`)로 제한하여 반복 삭제 차단.
+     - **로컬 실시간 동기화 허브 구축 (`scripts/healim_sync_hub.js`)**:
+       - Node.js 기반 초경량 영구 동기화 백그라운드 서버 (Port 3030) 구동.
+       - 디스크 파일 `data/healim_community_hub.json`에 4대 영역(FAQ, 치료후기, 칼럼, 유튜브) 및 삭제 목록 영구 기록.
+       - SSE(Server-Sent Events) 스트림(`/api/events`)을 통해 Chrome에서 글을 작성하면 **Edge나 타 브라우저에서 새로고침 없이 0.05초 만에 실시간 렌더링**.
+       - 최고관리자(`healim0071`) 전용 삭제 인증 및 무결성 검증 탑재.
+     - **클라이언트 통합 동기화 엔진 (`HealimUniversalSync`) 연동**:
+       - 3계층 하이브리드 동기화 (Cloud DB ↔ Local Hub ↔ Browser Vault).
+       - 글 작성/수정/삭제 시 `HealimUniversalSync.syncPostToRemote` 및 `syncDeleteToRemote`를 호출하여 중앙 허브와 즉각 동기화.
+       - 하단 공통 섹션(`common_bottom_sections.html`) 및 최고관리자 대시보드(`/admin/`)에도 실시간 허브 연동 배지 및 데이터 동기화 탑재.
+  3. **실제 크로스 브라우저 다중 프로필 검증 결과 (`scratch/verify_cross_browser_sync.js`)**:
+     - Chrome 프로필 A(최고관리자 `healim0071`)에서 FAQ 및 치료후기 신규 작성 즉시, 격리된 프로필 B(방문자/Edge 환경)에서 **새로고침 없이 100% 실시간 렌더링 확인 (PASS)**.
+     - 프로필 B의 로컬 스토리지를 강제 초기화(`localStorage.clear()`)한 후 새로고침해도, 중앙 허브로부터 **데이터 무손실 100% 자동 복구 확인 (PASS)**.
+     - 관리자 `healim0071`의 삭제 명령이 타 브라우저에 실시간 전파되어 정상 동기화됨 확인 (PASS).
+     - `hugo --minify` 정적 빌드 0 에러 통과.

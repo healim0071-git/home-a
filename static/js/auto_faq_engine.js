@@ -656,16 +656,20 @@
 
   function isObsoleteMockFaq(item) {
     if (!item || !item.title) return false;
+    if (item.isCustom) return false;
+    var strId = String(item.id || '');
+    if (/^faq-\d{8,}/.test(strId)) return false;
     var norm = normalizeQuestionTitle(item.title);
     return OBSOLETE_FAQ_TITLES.some(function(ot) {
       var otNorm = normalizeQuestionTitle(ot);
-      return norm === otNorm || norm.indexOf(otNorm) !== -1;
+      return norm === otNorm;
     });
   }
 
   function purgeObsoleteMockFaqFromStorage() {
     try {
-      ['healim_board_faq', 'healim_vault_all_posts_faq', 'healim_custom_faq_posts'].forEach(function(sKey) {
+      if (localStorage.getItem('healim_faq_purge_v5_done')) return;
+      ['healim_board_faq', 'healim_vault_all_posts_faq'].forEach(function(sKey) {
         var raw = localStorage.getItem(sKey);
         if (raw) {
           var list = JSON.parse(raw) || [];
@@ -673,7 +677,8 @@
           var seenIds = {};
           var filtered = [];
           list.forEach(function(it) {
-            if (!it || isObsoleteMockFaq(it)) return;
+            if (!it) return;
+            if (isObsoleteMockFaq(it)) return;
             var strId = it.id ? String(it.id).trim() : '';
             if (strId && seenIds[strId]) return;
             if (it.title) {
@@ -689,6 +694,7 @@
           }
         }
       });
+      localStorage.setItem('healim_faq_purge_v5_done', 'true');
     } catch(e) {}
   }
   purgeObsoleteMockFaqFromStorage();

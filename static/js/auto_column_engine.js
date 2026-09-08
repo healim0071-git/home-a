@@ -300,12 +300,15 @@
 
   function isObsoleteMockColumn(item) {
     if (!item) return false;
+    if (item.isCustom) return false;
+    var strId = String(item.id || '');
+    if (/^col(umns)?-\d{8,}/.test(strId)) return false;
     if (item.id === 'col-auto-latest') return true;
     if (!item.title) return false;
     var norm = normalizeColumnTitle(item.title);
     return OBSOLETE_COLUMN_TITLES.some(function(ot) {
       var otNorm = normalizeColumnTitle(ot);
-      return norm === otNorm || norm.indexOf(otNorm) !== -1;
+      return norm === otNorm;
     });
   }
 
@@ -368,7 +371,8 @@
 
   function purgeObsoleteColumnsStorage() {
     try {
-      ['healim_board_columns', 'healim_vault_all_posts_columns', 'healim_custom_columns_posts'].forEach(function(sKey) {
+      if (localStorage.getItem('healim_col_purge_v5_done')) return;
+      ['healim_board_columns', 'healim_vault_all_posts_columns'].forEach(function(sKey) {
         var raw = localStorage.getItem(sKey);
         if (raw) {
           var list = JSON.parse(raw);
@@ -383,6 +387,7 @@
           }
         }
       });
+      localStorage.setItem('healim_col_purge_v5_done', 'true');
     } catch(e) {}
   }
   purgeObsoleteColumnsStorage();

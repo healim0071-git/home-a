@@ -1365,6 +1365,9 @@ sections:
         // ─────────────────────────────────────────────────────────────
         // Obsolete Initial Mock Data Purge & Migration Helper
         // ─────────────────────────────────────────────────────────────
+        // ─────────────────────────────────────────────────────────────
+        // Obsolete Initial Mock Data Purge & Migration Helper
+        // ─────────────────────────────────────────────────────────────
         var OBSOLETE_FAQ_TITLES = [
           '검사상 정상으로 나오는데 한방 치료로 개선이 가능한가요?',
           '치료 기간 및 호전 경과는 보통 어떻게 되나요?',
@@ -1375,6 +1378,9 @@ sections:
 
         function isObsoleteMockFaq(item) {
           if (!item || !item.title) return false;
+          if (item.isCustom) return false;
+          var strId = String(item.id || '');
+          if (/^faq-\d{8,}/.test(strId)) return false;
           var norm = String(item.title)
             .replace(/^Q[\.:\s\-]+/i, '')
             .replace(/[\s\*\*_~\`#\?\uFF1F\.,\(\)\[\]:;\-]/g, '')
@@ -1384,7 +1390,7 @@ sections:
               .replace(/^Q[\.:\s\-]+/i, '')
               .replace(/[\s\*\*_~\`#\?\uFF1F\.,\(\)\[\]:;\-]/g, '')
               .toLowerCase();
-            return norm === otNorm || norm.indexOf(otNorm) !== -1;
+            return norm === otNorm;
           });
         }
 
@@ -1398,6 +1404,9 @@ sections:
 
         function isObsoleteMockColumn(item) {
           if (!item) return false;
+          if (item.isCustom) return false;
+          var strId = String(item.id || '');
+          if (/^col(umns)?-\d{8,}/.test(strId)) return false;
           if (item.id === 'col-auto-latest') return true;
           if (!item.title) return false;
           var norm = String(item.title)
@@ -1409,12 +1418,11 @@ sections:
               .replace(/^칼럼[\.:\s\-]+/i, '')
               .replace(/[\s\*\*_~\`#\?\uFF1F\.,\(\)\[\]:;\-]/g, '')
               .toLowerCase();
-            return norm === otNorm || norm.indexOf(otNorm) !== -1;
+            return norm === otNorm;
           });
         }
 
         var OBSOLETE_REVIEW_TITLES = [
-          'test',
           '원인 모를 가슴 두근거림과 어지럼증, 3개월 치료 후 일상 복귀',
           '매일 밤 괴롭히던 불면과 만성 위장장애, 신경계 안정 찾았습니다',
           '공황인 줄 알았던 과호흡과 식은땀, 자율신경 교정으로 극복',
@@ -1423,22 +1431,25 @@ sections:
 
         function isObsoleteMockReview(item) {
           if (!item) return false;
-          if (item.id === 'rev-test') return true;
+          if (item.isCustom) return false;
+          var strId = String(item.id || '');
+          if (/^rev(iews)?-\d{8,}/.test(strId)) return false;
+          if (item.id === 'rev-test') return false; // Never delete test reviews
           if (!item.title) return false;
           var norm = String(item.title)
             .replace(/[\s\*\*_~\`#\?\uFF1F\.,\(\)\[\]:;\-]/g, '')
             .toLowerCase();
-          if (norm === 'test' || norm === '치료후기테스트' || norm === '테스트') return true;
           return OBSOLETE_REVIEW_TITLES.some(function(ot) {
             var otNorm = ot
               .replace(/[\s\*\*_~\`#\?\uFF1F\.,\(\)\[\]:;\-]/g, '')
               .toLowerCase();
-            return norm === otNorm || norm.indexOf(otNorm) !== -1;
+            return norm === otNorm;
           });
         }
 
         function purgeObsoleteMockPosts() {
           try {
+            if (localStorage.getItem('healim_mock_purge_done_v5')) return;
             ['faq', 'columns', 'reviews'].forEach(function(bKey) {
               var isObsoleteFn = (bKey === 'faq' ? isObsoleteMockFaq : (bKey === 'columns' ? isObsoleteMockColumn : isObsoleteMockReview));
 
@@ -1458,38 +1469,8 @@ sections:
                 var bList = (JSON.parse(rawB) || []).filter(function(it) { return !isObsoleteFn(it); });
                 localStorage.setItem(bStorageKey, JSON.stringify(bList));
               }
-
-              var cKey = 'healim_custom_' + bKey + '_posts';
-              var rawC = localStorage.getItem(cKey);
-              if (rawC) {
-                var cList = (JSON.parse(rawC) || []).filter(function(it) { return !isObsoleteFn(it); });
-                localStorage.setItem(cKey, JSON.stringify(cList));
-              }
-
-              if (typeof HealimPermanentDB !== 'undefined' && HealimPermanentDB.restoreVault) {
-                HealimPermanentDB.restoreVault(bKey, function(idbList) {
-                  if (Array.isArray(idbList) && idbList.length > 0) {
-                    var filteredIdb = idbList.filter(function(it) { return !isObsoleteFn(it); });
-                    if (filteredIdb.length !== idbList.length) {
-                      HealimPermanentDB.saveVault(bKey, filteredIdb);
-                    }
-                  }
-                });
-              }
             });
-
-            var lKey = 'healim_community_posts_v2';
-            var rawL = localStorage.getItem(lKey);
-            if (rawL) {
-              var lList = (JSON.parse(rawL) || []).filter(function(it) {
-                if (!it) return false;
-                if (it.type === 'faq' || it.category === 'FAQ' || (it.id && String(it.id).startsWith('faq-'))) return !isObsoleteMockFaq(it);
-                if (it.type === 'columns' || it.category === '칼럼' || (it.id && String(it.id).startsWith('col-'))) return !isObsoleteMockColumn(it);
-                if (it.type === 'reviews' || it.category === '치료후기' || (it.id && String(it.id).startsWith('rev-'))) return !isObsoleteMockReview(it);
-                return true;
-              });
-              localStorage.setItem(lKey, JSON.stringify(lList));
-            }
+            localStorage.setItem('healim_mock_purge_done_v5', 'true');
           } catch(e) {}
         }
         purgeObsoleteMockPosts();
@@ -1569,6 +1550,264 @@ sections:
           return null;
         }
 
+        // ─────────────────────────────────────────────────────────────
+        // Healim Universal Realtime Sync Engine (Cross-Browser & Multi-Device)
+        // ─────────────────────────────────────────────────────────────
+        var HealimUniversalSync = (function() {
+          var isLocal = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+          var hubPort = '3030';
+          var hubHost = isLocal ? 'http://127.0.0.1:' + hubPort : (window.location.protocol + '//' + window.location.hostname + ':' + hubPort);
+          var sseSource = null;
+          var hasConnectedHub = false;
+          var inMemoryHubData = { faq: [], reviews: [], columns: [], youtube: [], deleted_ids: [] };
+          var isSyncing = false;
+
+          function getHubUrl(p) {
+            return hubHost + p;
+          }
+
+          function pullFromHub(onDone) {
+            if (!window.fetch) return;
+            fetch(getHubUrl('/api/posts'), { mode: 'cors' })
+              .then(function(res) {
+                if (!res.ok) throw new Error('Hub offline');
+                return res.json();
+              })
+              .then(function(json) {
+                if (json && json.status === 'ok' && json.data) {
+                  hasConnectedHub = true;
+                  inMemoryHubData = json.data;
+                  applyHubData(json.data);
+
+                  // If hub has 0 custom posts, but local has custom posts, seed the hub!
+                  checkAndSeedHub(json.data);
+
+                  if (onDone) onDone(true, json.data);
+                }
+              })
+              .catch(function(err) {
+                if (onDone) onDone(false, err);
+              });
+          }
+
+          function checkAndSeedHub(data) {
+            var boards = ['faq', 'reviews', 'columns', 'youtube'];
+            boards.forEach(function(bKey) {
+              if (!data[bKey] || data[bKey].length === 0) {
+                var localCustom = getCustomUserPosts(bKey);
+                if (bKey === 'youtube') localCustom = getCustomYoutubePosts();
+                if (Array.isArray(localCustom) && localCustom.length > 0) {
+                  localCustom.forEach(function(p) {
+                    syncPostToRemote(bKey, p, 'create');
+                  });
+                }
+              }
+            });
+          }
+
+          function applyHubData(data) {
+            if (!data) return;
+            var boards = ['faq', 'reviews', 'columns', 'youtube'];
+            var didChange = false;
+
+            if (Array.isArray(data.deleted_ids)) {
+              data.deleted_ids.forEach(function(did) {
+                boards.forEach(function(bKey) {
+                  addDeletedPostId(bKey, did);
+                });
+              });
+            }
+
+            boards.forEach(function(bKey) {
+              if (Array.isArray(data[bKey]) && data[bKey].length > 0) {
+                var remoteList = data[bKey];
+                var vKey = 'healim_vault_all_posts_' + bKey;
+                var rawV = localStorage.getItem(vKey);
+                var localList = rawV ? (JSON.parse(rawV) || []) : [];
+                var merged = [];
+                var seenIds = {};
+
+                remoteList.forEach(function(p) {
+                  if (p && p.id && !isDeletedPostId(bKey, p.id)) {
+                    seenIds[String(p.id)] = true;
+                    merged.push(p);
+                  }
+                });
+
+                localList.forEach(function(p) {
+                  if (p && p.id && !seenIds[String(p.id)] && !isDeletedPostId(bKey, p.id)) {
+                    seenIds[String(p.id)] = true;
+                    merged.push(p);
+                  }
+                });
+
+                localStorage.setItem(vKey, JSON.stringify(merged));
+                localStorage.setItem('healim_board_' + bKey, JSON.stringify(merged));
+                if (typeof HealimPermanentDB !== 'undefined' && HealimPermanentDB.saveVault) {
+                  HealimPermanentDB.saveVault(bKey, merged);
+                }
+
+                // Also update custom posts tier so getCustomUserPosts has it
+                var cKey = (bKey === 'youtube') ? 'healim_custom_youtube_posts' : ('healim_custom_' + bKey + '_posts');
+                localStorage.setItem(cKey, JSON.stringify(merged.filter(function(p) { return p.isCustom || String(p.id).indexOf(bKey + '-') === 0; })));
+
+                didChange = true;
+              }
+            });
+
+            if (didChange) {
+              try {
+                if (activeTab === 'faq') renderFaqList();
+                else if (activeTab === 'reviews') renderReviewsList();
+                else if (activeTab === 'columns') renderColumnsList();
+                else if (activeTab === 'youtube') renderYoutubeList();
+                window.dispatchEvent(new CustomEvent('healim-community-updated', { detail: { source: 'hub-sync' } }));
+              } catch(e) {}
+            }
+          }
+
+          function startEventStream() {
+            if (typeof EventSource === 'undefined') return;
+            try {
+              if (sseSource) sseSource.close();
+              sseSource = new EventSource(getHubUrl('/api/events'));
+              sseSource.onmessage = function(e) {
+                try {
+                  var evt = JSON.parse(e.data);
+                  if (evt.type === 'update' && evt.boardType && evt.post) {
+                    handleRemoteUpdate(evt.boardType, evt.post, evt.action);
+                  } else if (evt.type === 'delete' && evt.boardType && evt.id) {
+                    handleRemoteDelete(evt.boardType, evt.id);
+                  }
+                } catch(err) {}
+              };
+              sseSource.onerror = function() {};
+            } catch(e) {}
+          }
+
+          function handleRemoteUpdate(boardType, post, action) {
+            if (!boardType || !post || !post.id) return;
+            var vKey = 'healim_vault_all_posts_' + boardType;
+            var list = JSON.parse(localStorage.getItem(vKey) || '[]');
+            var idx = list.findIndex(function(p) { return String(p.id) === String(post.id); });
+            if (idx !== -1) {
+              list[idx] = post;
+            } else {
+              list.unshift(post);
+            }
+            localStorage.setItem(vKey, JSON.stringify(list));
+            localStorage.setItem('healim_board_' + boardType, JSON.stringify(list));
+            if (typeof HealimPermanentDB !== 'undefined' && HealimPermanentDB.saveVault) {
+              HealimPermanentDB.saveVault(boardType, list);
+            }
+
+            var cKey = (boardType === 'youtube') ? 'healim_custom_youtube_posts' : ('healim_custom_' + boardType + '_posts');
+            var cList = JSON.parse(localStorage.getItem(cKey) || '[]');
+            var cIdx = cList.findIndex(function(p) { return String(p.id) === String(post.id); });
+            if (cIdx !== -1) { cList[cIdx] = post; } else { cList.unshift(post); }
+            localStorage.setItem(cKey, JSON.stringify(cList));
+
+            try {
+              if (activeTab === boardType) {
+                if (boardType === 'faq') renderFaqList();
+                else if (boardType === 'reviews') renderReviewsList();
+                else if (boardType === 'columns') renderColumnsList();
+                else if (boardType === 'youtube') renderYoutubeList();
+              }
+              window.dispatchEvent(new CustomEvent('healim-community-updated', { detail: { boardType: boardType, post: post, action: action, source: 'sse' } }));
+            } catch(e) {}
+          }
+
+          function handleRemoteDelete(boardType, id) {
+            if (!boardType || !id) return;
+            addDeletedPostId(boardType, id);
+            var vKey = 'healim_vault_all_posts_' + boardType;
+            var list = JSON.parse(localStorage.getItem(vKey) || '[]').filter(function(p) { return String(p.id) !== String(id); });
+            localStorage.setItem(vKey, JSON.stringify(list));
+            localStorage.setItem('healim_board_' + boardType, JSON.stringify(list));
+            if (typeof HealimPermanentDB !== 'undefined' && HealimPermanentDB.saveVault) {
+              HealimPermanentDB.saveVault(boardType, list);
+            }
+            try {
+              if (activeTab === boardType) {
+                if (boardType === 'faq') renderFaqList();
+                else if (boardType === 'reviews') renderReviewsList();
+                else if (boardType === 'columns') renderColumnsList();
+                else if (boardType === 'youtube') renderYoutubeList();
+              }
+              window.dispatchEvent(new CustomEvent('healim-community-updated', { detail: { boardType: boardType, id: id, action: 'delete', source: 'sse' } }));
+            } catch(e) {}
+          }
+
+          function syncPostToRemote(boardType, post, action) {
+            if (window.fetch) {
+              fetch(getHubUrl('/api/posts'), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                mode: 'cors',
+                body: JSON.stringify({ boardType: boardType, post: post, action: action || 'create' })
+              }).catch(function() {});
+            }
+            syncPostToCloudDB(boardType, post, action);
+          }
+
+          function syncDeleteToRemote(boardType, id) {
+            if (window.fetch) {
+              fetch(getHubUrl('/api/posts'), {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                mode: 'cors',
+                body: JSON.stringify({ boardType: boardType, id: id, adminUser: 'healim0071' })
+              }).catch(function() {});
+            }
+            syncDeleteToCloudDB(boardType, id);
+          }
+
+          function syncPostToCloudDB(boardType, post, action) {
+            try {
+              var cloudUrl = localStorage.getItem('healim_cloud_db_url') || window.HEALIM_CLOUD_DB_URL;
+              if (!cloudUrl) return;
+              var endpoint = cloudUrl.replace(/\/+$/, '') + '/posts/' + boardType + '/' + encodeURIComponent(post.id) + '.json';
+              fetch(endpoint, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(post)
+              }).catch(function() {});
+            } catch(e) {}
+          }
+
+          function syncDeleteToCloudDB(boardType, id) {
+            try {
+              var cloudUrl = localStorage.getItem('healim_cloud_db_url') || window.HEALIM_CLOUD_DB_URL;
+              if (!cloudUrl) return;
+              var endpoint = cloudUrl.replace(/\/+$/, '') + '/posts/' + boardType + '/' + encodeURIComponent(id) + '.json';
+              fetch(endpoint, { method: 'DELETE' }).catch(function() {});
+              var delEndpoint = cloudUrl.replace(/\/+$/, '') + '/deleted_ids/' + encodeURIComponent(id) + '.json';
+              fetch(delEndpoint, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: id, deletedAt: Date.now() }) }).catch(function() {});
+            } catch(e) {}
+          }
+
+          function init() {
+            pullFromHub(function(success) {
+              if (success) {
+                startEventStream();
+              }
+            });
+            setInterval(function() {
+              pullFromHub();
+            }, 8000);
+          }
+
+          return {
+            init: init,
+            pullFromHub: pullFromHub,
+            syncPostToRemote: syncPostToRemote,
+            syncDeleteToRemote: syncDeleteToRemote,
+            getInMemoryHubData: function() { return inMemoryHubData; }
+          };
+        })();
+        window.HealimUniversalSync = HealimUniversalSync;
+
         // LocalStorage Helper with Multi-Tier Merge (Guarantees zero data loss)
         function getBoardData(key, fallback) {
         if (key === 'youtube') {
@@ -1647,17 +1886,14 @@ sections:
 
         if (key === 'faq') {
           vaultList = vaultList.filter(function(it) { return !isObsoleteMockFaq(it); });
-          customList = customList.filter(function(it) { return !isObsoleteMockFaq(it); });
           storedList = storedList.filter(function(it) { return !isObsoleteMockFaq(it); });
           legacyList = legacyList.filter(function(it) { return !isObsoleteMockFaq(it); });
         } else if (key === 'columns') {
           vaultList = vaultList.filter(function(it) { return !isObsoleteMockColumn(it); });
-          customList = customList.filter(function(it) { return !isObsoleteMockColumn(it); });
           storedList = storedList.filter(function(it) { return !isObsoleteMockColumn(it); });
           legacyList = legacyList.filter(function(it) { return !isObsoleteMockColumn(it); });
         } else if (key === 'reviews') {
           vaultList = vaultList.filter(function(it) { return !isObsoleteMockReview(it); });
-          customList = customList.filter(function(it) { return !isObsoleteMockReview(it); });
           storedList = storedList.filter(function(it) { return !isObsoleteMockReview(it); });
           legacyList = legacyList.filter(function(it) { return !isObsoleteMockReview(it); });
         }
@@ -3027,6 +3263,9 @@ sections:
             switchCommunityTab(boardType);
 
             try {
+              if (window.HealimUniversalSync && window.HealimUniversalSync.syncPostToRemote) {
+                window.HealimUniversalSync.syncPostToRemote(boardType, updatedPost, 'edit');
+              }
               window.dispatchEvent(new CustomEvent('healim-community-updated', { detail: { boardType: boardType, post: updatedPost, action: 'edit' } }));
             } catch(e) {}
             return;
@@ -3113,6 +3352,9 @@ sections:
           switchCommunityTab(boardType);
 
           try {
+            if (window.HealimUniversalSync && window.HealimUniversalSync.syncPostToRemote) {
+              window.HealimUniversalSync.syncPostToRemote(boardType, newPost, 'create');
+            }
             window.dispatchEvent(new CustomEvent('healim-community-updated', { detail: { boardType: boardType, post: newPost, action: 'create' } }));
           } catch(e) {}
         };
@@ -3316,10 +3558,15 @@ sections:
             saveSyncedYoutubePosts(syncedYt);
           }
 
-          // 2. Permanent Blacklist
+          // 2. Permanent Blacklist & Remote Sync Hub Delete
           if (typeof addDeletedPostId === 'function') {
             addDeletedPostId(boardType, strId);
           }
+          try {
+            if (window.HealimUniversalSync && window.HealimUniversalSync.syncDeleteToRemote) {
+              window.HealimUniversalSync.syncDeleteToRemote(boardType, strId);
+            }
+          } catch(e) {}
 
           // 3. Remove from custom user posts
           var customPosts = getCustomUserPosts(boardType).filter(function(it) { return String(it.id) !== strId; });
@@ -3567,6 +3814,10 @@ sections:
 
         // Hash Navigation Initialization
         function initTabFromHash() {
+        if (window.HealimUniversalSync && window.HealimUniversalSync.init && !window._healimUniversalSyncInited) {
+          window._healimUniversalSyncInited = true;
+          window.HealimUniversalSync.init();
+        }
         if (typeof purgeObsoleteMockPosts === 'function') purgeObsoleteMockPosts();
         var hash = window.location.hash.replace('#', '');
         if (hash === 'faq' || hash === 'reviews' || hash === 'youtube' || hash === 'columns') {
