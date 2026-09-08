@@ -490,6 +490,7 @@
     <!-- Dynamic LocalStorage Community Sync & Chronological Sorting Engine -->
     <script src="/js/auto_faq_engine.js"></script>
     <script src="/js/auto_column_engine.js"></script>
+    <script src="/js/healim_cloud_db.js"></script>
     <script>
     (function() {
       // 1. Default Seed Data Libraries for Fallback and Merge
@@ -1189,7 +1190,11 @@
 
       window.addEventListener('storage', syncBottomCommunity);
       window.addEventListener('healim-community-updated', syncBottomCommunity);
+      window.addEventListener('healim-cloud-db-updated', syncBottomCommunity);
       window.addEventListener('pageshow', syncBottomCommunity);
+      if (window.HealimCloudDB && window.HealimCloudDB.onUpdate) {
+        window.HealimCloudDB.onUpdate(function() { syncBottomCommunity(); });
+      }
     })();
     </script>
 

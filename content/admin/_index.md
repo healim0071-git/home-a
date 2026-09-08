@@ -199,17 +199,22 @@ sections:
 
         <!-- 2. Main Admin Dashboard View -->
         <div id="adminMainView" style="display: none;">
-        <!-- Realtime Cross-Browser Sync Hub Status Banner -->
-        <div style="background: #f0f7f8; border: 1px solid #badfe3; border-radius: 10px; padding: 14px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+        <!-- Realtime Cloud Database Sync Hub Status Banner -->
+        <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px; padding: 14px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
           <div style="display: flex; align-items: center; gap: 10px;">
-            <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse inline-block" style="display:inline-block; width:12px; height:12px; border-radius:9999px; background-color:#10b981;"></span>
+            <span style="display:inline-block; width:12px; height:12px; border-radius:9999px; background-color:#10b981; box-shadow: 0 0 8px rgba(16,185,129,0.6);" class="animate-pulse"></span>
             <div>
-              <span style="font-size: 13px; font-weight: 700; color: #0d3a42;">실시간 기기/브라우저 동기화 허브 (Port 3030)</span>
-              <span style="font-size: 12px; color: #1c6e78; margin-left: 8px;">Chrome ↔ Edge ↔ 모바일 간 실시간 0.05초 동기화 가동 중</span>
+              <span style="font-size: 13px; font-weight: 700; color: #065f46;">실시간 클라우드 DB 연동 허브 (전 세계 실시간 0.1초 동기화)</span>
+              <span style="font-size: 12px; color: #047857; margin-left: 8px;">Chrome ↔ Edge ↔ 모바일 간 실시간 무지연 동기화 가동 중</span>
             </div>
           </div>
-          <div style="font-size: 11px; color: #0d3a42; background: #ffffff; padding: 4px 10px; border-radius: 6px; border: 1px solid #badfe3; font-weight: 600;">
-            영구 디스크 보관: <span style="color:#047857; font-weight:bold;">data/healim_community_hub.json</span> (삭제 방지 보호)
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <button id="btnCloudDbMigrate" onclick="handleCloudDbMigrate()" style="font-size: 12px; font-weight: 700; color: #ffffff; background: #059669; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s;" onmouseover="this.style.background='#047857'" onmouseout="this.style.background='#059669'">
+              ☁️ 클라우드로 전체 동기화
+            </button>
+            <div style="font-size: 11px; color: #065f46; background: #ffffff; padding: 6px 12px; border-radius: 6px; border: 1px solid #a7f3d0; font-weight: 600;">
+              정적 백업 허브: <span style="color:#047857; font-weight:bold;">static/data/healim_community_hub.json</span>
+            </div>
           </div>
         </div>
 
@@ -344,6 +349,69 @@ sections:
         </div>
         </div>
 
+        <!-- Cloud Database Configuration Section -->
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 22px 24px; margin-bottom: 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 18px;">☁️</span>
+                <h2 style="font-size: 15px; font-weight: 700; color: #0d3a42; margin: 0;">실시간 클라우드 DB (Firebase / Supabase) 연동 관리</h2>
+                <span id="cloudDbStatusBadge" style="font-size: 11px; font-weight: 700; background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 9999px;">3단계 하이브리드 안전망 가동 중</span>
+              </div>
+              <p style="font-size: 12px; color: #64748b; margin: 4px 0 0 0;">
+                무료 Firebase Realtime DB 또는 Supabase 주소를 연동하면 Chrome, Edge, 모바일 간에 글 등록/수정/삭제가 0.1초 만에 자동 동기화됩니다. 미연동 시에도 정적 웹 허브와 로컬 볼트로 100% 안전 보존됩니다.
+              </p>
+            </div>
+            <div>
+              <button type="button" onclick="toggleCloudDbGuide()" style="font-size: 12px; font-weight: 600; color: #1c6e78; background: #edf7f8; border: 1px solid #c2e2e5; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                <span>📖 [초간단 1분] 무료 Firebase Realtime DB 생성 가이드</span>
+                <span id="cloudGuideToggleArrow">▼</span>
+              </button>
+            </div>
+          </div>
+          <!-- Collapsible 1-Minute Guide -->
+          <div id="cloudDbGuideBox" style="display: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 20px; font-size: 12px; color: #334155; line-height: 1.6;">
+            <div style="font-weight: 700; color: #0d3a42; font-size: 13px; margin-bottom: 8px;">
+              💡 100% 무료 Google Firebase Realtime Database 1분 생성 방법 (비용 0원)
+            </div>
+            <ol style="margin: 0; padding-left: 18px; line-height: 1.8;">
+              <li><a href="https://console.firebase.google.com" target="_blank" style="color: #0284c7; text-decoration: underline; font-weight: 600;">console.firebase.google.com</a> 접속 후 구글 계정으로 로그인합니다.</li>
+              <li><strong>[프로젝트 만들기]</strong> 클릭 후 프로젝트 이름(예: <code>healim-autonerve</code>) 입력하고 [계속]을 누릅니다.</li>
+              <li>좌측 사이드바 메뉴에서 <strong>[빌드] &gt; [Realtime Database]</strong>를 선택하고 <strong>[데이터베이스 만들기]</strong>를 클릭합니다. (위치: 미국 또는 싱가포르)</li>
+              <li>보안 규칙 단계에서 <strong>[테스트 모드에서 시작]</strong> (또는 규칙 탭에서 <code>".read": true, ".write": true</code>)을 선택하고 [사용 설정]을 클릭합니다.</li>
+              <li>데이터베이스 생성 후 상단에 표시되는 <strong>REST URL</strong> (예: <code>https://프로젝트명-default-rtdb.firebaseio.com</code>)을 복사하여 아래 입력창에 붙여넣고 <strong>[저장]</strong>을 클릭합니다.</li>
+            </ol>
+            <div style="margin-top: 10px; font-size: 11px; color: #047857; font-weight: 600;">
+              ✓ 등록 후 [☁️ 현재 글 클라우드로 전체 동기화]를 한 번만 누르시면 기존 작성된 모든 글이 클라우드 DB에 즉각 복제되어 전 세계 모든 방문자 기기에 즉각 배포됩니다.
+            </div>
+          </div>
+          <!-- Input Fields Form -->
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 6px;">
+                Firebase / Supabase REST DB URL (Cloud Database Endpoint)
+              </label>
+              <input type="text" id="adminCloudDbUrl" placeholder="예: https://healim-autonerve-default-rtdb.firebaseio.com" style="width: 100%; font-size: 12px; font-family: monospace; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; box-sizing: border-box; outline: none;" />
+            </div>
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin-top: 6px;">
+              <div style="font-size: 11px; color: #64748b;">
+                현재 엔드포인트: <code id="lblCurrentCloudEndpoint" style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: #0d3a42;">-</code>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <button type="button" onclick="resetAdminCloudDbConfig()" style="font-size: 12px; font-weight: 600; color: #64748b; background: #f1f5f9; border: 1px solid #cbd5e1; padding: 7px 14px; border-radius: 6px; cursor: pointer;">
+                  기본값 복구
+                </button>
+                <button type="button" onclick="saveAdminCloudDbConfig()" style="font-size: 12px; font-weight: 700; color: #ffffff; background: #1c6e78; border: none; padding: 7px 18px; border-radius: 6px; cursor: pointer; transition: background 0.15s;">
+                  💾 DB 주소 저장
+                </button>
+                <button type="button" onclick="handleCloudDbMigrate()" style="font-size: 12px; font-weight: 700; color: #ffffff; background: #059669; border: none; padding: 7px 18px; border-radius: 6px; cursor: pointer; transition: background 0.15s;">
+                  ☁️ 현재 글 클라우드로 전체 동기화
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Table & Filter Header -->
         <div class="admin-table-container">
         <div class="admin-table-header">
@@ -422,6 +490,7 @@ sections:
         </div>
         </div>
 
+        <script src="/js/healim_cloud_db.js"></script>
         <script>
         (function() {
           var currentActiveTab = 'all';
@@ -543,22 +612,21 @@ sections:
 
           // 3. Load Dashboard & KPIs
           function loadAdminDashboard() {
-            if (window.fetch && !window._adminHubLoaded) {
+            if (!window._adminHubLoaded) {
               window._adminHubLoaded = true;
-              fetch('http://127.0.0.1:3030/api/posts', { mode: 'cors' })
-                .then(function(res) { return res.json(); })
-                .then(function(json) {
-                  if (json && json.status === 'ok' && json.data) {
-                    var d = json.data;
+              if (window.HealimCloudDB && typeof window.HealimCloudDB.fetchFromCloud === 'function') {
+                window.HealimCloudDB.fetchFromCloud().then(function(cloudData) {
+                  if (cloudData) {
                     ['faq', 'reviews', 'columns', 'youtube'].forEach(function(bKey) {
-                      if (Array.isArray(d[bKey]) && d[bKey].length > 0) {
-                        localStorage.setItem('healim_board_' + bKey, JSON.stringify(d[bKey]));
-                        localStorage.setItem('healim_vault_all_posts_' + bKey, JSON.stringify(d[bKey]));
+                      if (Array.isArray(cloudData[bKey]) && cloudData[bKey].length > 0) {
+                        localStorage.setItem('healim_board_' + bKey, JSON.stringify(cloudData[bKey]));
+                        localStorage.setItem('healim_vault_all_posts_' + bKey, JSON.stringify(cloudData[bKey]));
                       }
                     });
                     loadAdminDashboard();
                   }
                 }).catch(function() {});
+              }
             }
             var revs = getBoardList('reviews');
             var faqs = getBoardList('faq');
@@ -578,6 +646,7 @@ sections:
             document.getElementById('tabCountColumns').textContent = cols.length;
 
             loadAdminSnsConfig();
+            loadAdminCloudDbConfig();
             renderAdminTable();
           }
 
@@ -702,7 +771,10 @@ sections:
                 legList = legList.filter(function(p) { return String(p.id) !== String(id); });
                 localStorage.setItem('healim_community_posts_v2', JSON.stringify(legList));
               }
-              // Sync delete to Local Sync Hub
+              // Sync delete to Cloud DB Hub & Local Sync Hub
+              if (window.HealimCloudDB && typeof window.HealimCloudDB.deletePost === 'function') {
+                window.HealimCloudDB.deletePost(board, id);
+              }
               if (window.fetch) {
                 fetch('http://127.0.0.1:3030/api/posts', {
                   method: 'DELETE',
@@ -726,6 +798,36 @@ sections:
             alert('게시판 캐시가 안전하게 재동기화되었습니다.');
             window.location.href = '/community/';
           };
+
+          window.handleCloudDbMigrate = async function() {
+            var btn = document.getElementById('btnCloudDbMigrate');
+            if (btn) {
+              btn.disabled = true;
+              btn.textContent = '⏳ 동기화 중...';
+            }
+            try {
+              if (window.HealimCloudDB && typeof window.HealimCloudDB.migrateLocalToCloud === 'function') {
+                var ok = await window.HealimCloudDB.migrateLocalToCloud();
+                if (ok) {
+                  alert('✅ 현재 브라우저의 모든 게시글이 클라우드 실시간 DB에 안전하게 동기화되었습니다!\n이제 어떤 브라우저나 스마트폰으로 접속해도 동일하게 즉각 표시됩니다.');
+                } else {
+                  alert('⚠️ 클라우드 동기화 중 일부 오류가 발생했습니다. 네트워크 상태를 확인 후 다시 시도해주세요.');
+                }
+              }
+            } catch(e) {
+              console.error('Migration error:', e);
+              alert('동기화 처리 중 오류가 발생했습니다: ' + (e.message || e));
+            }
+            if (btn) {
+              btn.disabled = false;
+              btn.textContent = '☁️ 클라우드로 전체 동기화';
+            }
+            loadAdminDashboard();
+          };
+
+          window.addEventListener('healim-cloud-db-updated', function(e) {
+            loadAdminDashboard();
+          });
 
           window.openAdminCreateModal = function() {
             window.location.href = '/community/#write';
@@ -796,6 +898,68 @@ sections:
               localStorage.removeItem('healim_sns_config');
               loadAdminSnsConfig();
               alert('SNS API 설정이 초기화되었습니다.');
+            }
+          };
+
+          // Cloud Database Configuration Handler
+          window.toggleCloudDbGuide = function() {
+            var box = document.getElementById('cloudDbGuideBox');
+            var arrow = document.getElementById('cloudGuideToggleArrow');
+            if (!box) return;
+            if (box.style.display === 'none') {
+              box.style.display = 'block';
+              if (arrow) arrow.textContent = '▲';
+            } else {
+              box.style.display = 'none';
+              if (arrow) arrow.textContent = '▼';
+            }
+          };
+
+          window.loadAdminCloudDbConfig = function() {
+            try {
+              var input = document.getElementById('adminCloudDbUrl');
+              var lbl = document.getElementById('lblCurrentCloudEndpoint');
+              var badge = document.getElementById('cloudDbStatusBadge');
+              var currentUrl = (window.HealimCloudDB && window.HealimCloudDB.getBaseUrl) ? window.HealimCloudDB.getBaseUrl() : 'https://healim-autonerve-default-rtdb.firebaseio.com';
+              if (input) input.value = localStorage.getItem('healim_cloud_db_custom_url') || '';
+              if (lbl) lbl.textContent = currentUrl;
+              if (badge) {
+                var custom = localStorage.getItem('healim_cloud_db_custom_url');
+                if (custom) {
+                  badge.textContent = '사용자 지정 실시간 클라우드 DB 연동 중';
+                  badge.style.background = '#dcfce7';
+                  badge.style.color = '#15803d';
+                } else {
+                  badge.textContent = '3단계 하이브리드 안전망 가동 중';
+                  badge.style.background = '#e0f2fe';
+                  badge.style.color = '#0369a1';
+                }
+              }
+            } catch(e) {}
+          };
+
+          window.saveAdminCloudDbConfig = function() {
+            var urlInput = document.getElementById('adminCloudDbUrl');
+            var val = (urlInput ? urlInput.value : '').trim();
+            if (window.HealimCloudDB && window.HealimCloudDB.setCustomUrl) {
+              window.HealimCloudDB.setCustomUrl(val);
+            } else {
+              if (val) localStorage.setItem('healim_cloud_db_custom_url', val);
+              else localStorage.removeItem('healim_cloud_db_custom_url');
+            }
+            alert('클라우드 데이터베이스 설정이 저장되었습니다.\n실시간 동기화 채널이 재연결됩니다.');
+            loadAdminCloudDbConfig();
+          };
+
+          window.resetAdminCloudDbConfig = function() {
+            if (confirm('클라우드 데이터베이스 설정을 기본값으로 초기화하시겠습니까?')) {
+              if (window.HealimCloudDB && window.HealimCloudDB.setCustomUrl) {
+                window.HealimCloudDB.setCustomUrl('');
+              } else {
+                localStorage.removeItem('healim_cloud_db_custom_url');
+              }
+              loadAdminCloudDbConfig();
+              alert('클라우드 데이터베이스 설정이 초기화되었습니다.');
             }
           };
 

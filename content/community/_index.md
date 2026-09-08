@@ -420,6 +420,7 @@ sections:
         ══════════════════════════════════════════════════════════════ -->
         <script src="/js/auto_faq_engine.js"></script>
         <script src="/js/auto_column_engine.js"></script>
+        <script src="/js/healim_cloud_db.js"></script>
         <script>
         (function() {
         // --- Seed Data ---
@@ -1789,7 +1790,10 @@ sections:
           }
 
           function syncPostToRemote(boardType, post, action) {
-            if (window.fetch) {
+            if (window.HealimCloudDB && window.HealimCloudDB.savePost) {
+              window.HealimCloudDB.savePost(boardType, post);
+            }
+            if (isLocal && window.fetch) {
               fetch(getHubUrl('/api/posts'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1797,11 +1801,13 @@ sections:
                 body: JSON.stringify({ boardType: boardType, post: post, action: action || 'create' })
               }).catch(function() {});
             }
-            syncPostToCloudDB(boardType, post, action);
           }
 
           function syncDeleteToRemote(boardType, id) {
-            if (window.fetch) {
+            if (window.HealimCloudDB && window.HealimCloudDB.deletePost) {
+              window.HealimCloudDB.deletePost(boardType, id);
+            }
+            if (isLocal && window.fetch) {
               fetch(getHubUrl('/api/posts'), {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
@@ -1809,31 +1815,6 @@ sections:
                 body: JSON.stringify({ boardType: boardType, id: id, adminUser: 'healim0071' })
               }).catch(function() {});
             }
-            syncDeleteToCloudDB(boardType, id);
-          }
-
-          function syncPostToCloudDB(boardType, post, action) {
-            try {
-              var cloudUrl = localStorage.getItem('healim_cloud_db_url') || window.HEALIM_CLOUD_DB_URL;
-              if (!cloudUrl) return;
-              var endpoint = cloudUrl.replace(/\/+$/, '') + '/posts/' + boardType + '/' + encodeURIComponent(post.id) + '.json';
-              fetch(endpoint, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(post)
-              }).catch(function() {});
-            } catch(e) {}
-          }
-
-          function syncDeleteToCloudDB(boardType, id) {
-            try {
-              var cloudUrl = localStorage.getItem('healim_cloud_db_url') || window.HEALIM_CLOUD_DB_URL;
-              if (!cloudUrl) return;
-              var endpoint = cloudUrl.replace(/\/+$/, '') + '/posts/' + boardType + '/' + encodeURIComponent(id) + '.json';
-              fetch(endpoint, { method: 'DELETE' }).catch(function() {});
-              var delEndpoint = cloudUrl.replace(/\/+$/, '') + '/deleted_ids/' + encodeURIComponent(id) + '.json';
-              fetch(delEndpoint, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: id, deletedAt: Date.now() }) }).catch(function() {});
-            } catch(e) {}
           }
 
           function init() {
@@ -1842,9 +1823,19 @@ sections:
                 startEventStream();
               }
             });
+            if (window.HealimCloudDB && window.HealimCloudDB.onUpdate) {
+              window.HealimCloudDB.onUpdate(function(reason, payload) {
+                try {
+                  if (activeTab === 'faq') renderFaqList();
+                  else if (activeTab === 'reviews') renderReviewsList();
+                  else if (activeTab === 'columns') renderColumnsList();
+                  else if (activeTab === 'youtube') renderYoutubeList();
+                } catch(e) {}
+              });
+            }
             setInterval(function() {
               pullFromHub();
-            }, 8000);
+            }, 10000);
           }
 
           return {
