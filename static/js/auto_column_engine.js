@@ -451,7 +451,7 @@
     var initialState = {
       lastPublishedTime: 0,
       nextScheduledTime: nextSchedule.getTime(),
-      poolIndex: 0
+      poolIndex: 23
     };
     saveAutoColumnState(initialState);
     return initialState;
