@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#08242a" />
+      <stop offset="40%" stop-color="#0d3a42" />
+      <stop offset="100%" stop-color="#1c6e78" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.12)" />
+      <stop offset="100%" stop-color="rgba(255,255,255,0.03)" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="25" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="1200" height="675" fill="url(#bgGrad)" />
+
+  <!-- Decorative Medical Grid -->
+  <g opacity="0.07" stroke="#badfe3" stroke-width="1">
+    <line x1="0" y1="135" x2="1200" y2="135" />
+    <line x1="0" y1="270" x2="1200" y2="270" />
+    <line x1="0" y1="405" x2="1200" y2="405" />
+    <line x1="0" y1="540" x2="1200" y2="540" />
+    <line x1="240" y1="0" x2="240" y2="675" />
+    <line x1="480" y1="0" x2="480" y2="675" />
+    <line x1="720" y1="0" x2="720" y2="675" />
+    <line x1="960" y1="0" x2="960" y2="675" />
+  </g>
+
+  <!-- Organic Glowing Rings -->
+  <circle cx="1000" cy="180" r="260" fill="#fb923c" opacity="0.12" filter="url(#glow)" />
+  <circle cx="150" cy="520" r="180" fill="#badfe3" opacity="0.08" filter="url(#glow)" />
+
+  <!-- Dynamic Sinusoidal Wave (Autonomic Rhythm) -->
+  <path d="M0,337 Q150,220 300,337 T600,337 T900,337 T1200,337" fill="none" stroke="#fb923c" stroke-width="3" opacity="0.35" />
+  <path d="M0,337 Q150,450 300,337 T600,337 T900,337 T1200,337" fill="none" stroke="#badfe3" stroke-width="1.5" opacity="0.2" stroke-dasharray="6 6" />
+
+  <!-- Central Glassmorphism Card -->
+  <rect x="90" y="85" width="1020" height="505" rx="24" fill="url(#cardGrad)" stroke="rgba(186,223,227,0.35)" stroke-width="1.5" />
+
+  <!-- Top Badge -->
+  <rect x="140" y="135" width="250" height="44" rx="22" fill="rgba(46,162,176,0.25)" stroke="#2ea2b0" stroke-width="1.2" />
+  <text x="165" y="163" font-family="'Pretendard', 'Noto Sans KR', sans-serif" font-size="16" font-weight="bold" fill="#badfe3" letter-spacing="1.5">HEALIM CLINICAL COLUMN</text>
+
+  <!-- Number Tag -->
+  <text x="1040" y="165" text-anchor="end" font-family="'Pretendard', sans-serif" font-size="24" font-weight="900" fill="rgba(186,223,227,0.6)">#27</text>
+
+  <!-- Central Medical Visual Icon Sphere -->
+  <g transform="translate(880, 340)">
+    <circle cx="0" cy="0" r="90" fill="rgba(13,58,66,0.85)" stroke="#badfe3" stroke-width="2.5" />
+    <circle cx="0" cy="0" r="76" fill="none" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="5 4" />
+    <text x="0" y="18" text-anchor="middle" font-size="56">⚡</text>
+  </g>
+
+  <!-- Typography Content -->
+  <text x="140" y="265" font-family="'Pretendard', 'Noto Sans KR', sans-serif" font-size="34" font-weight="800" fill="#ffffff" letter-spacing="-0.5">
+    덜컥 내려앉는 심장 조기수축(기외수축)
+  </text>
+  <text x="140" y="335" font-family="'Pretendard', 'Noto Sans KR', sans-serif" font-size="21" font-weight="400" fill="#badfe3" letter-spacing="-0.2">
+    심장 기질적 이상 없는 교감신경성 이소성 박동의 한방 치료
+  </text>
+
+  <!-- Bottom Medical Footer Spec -->
+  <line x1="140" y1="470" x2="1040" y2="470" stroke="rgba(186,223,227,0.25)" stroke-width="1" />
+  
+  <text x="140" y="520" font-family="'Pretendard', 'Noto Sans KR', sans-serif" font-size="18" font-weight="600" fill="#ffffff">
+    해아림한의원 한방신경정신과 원장단
+  </text>
+  <text x="140" y="548" font-family="'Pretendard', sans-serif" font-size="14" font-weight="400" fill="#badfe3" opacity="0.8">
+    뇌신경계 생체 항상성 회복 및 자율신경 불균형 1:1 통합 임상 치료
+  </text>
+
+  <rect x="840" y="498" width="200" height="42" rx="10" fill="#2ea2b0" />
+  <text x="940" y="525" text-anchor="middle" font-family="'Pretendard', 'Noto Sans KR', sans-serif" font-size="15" font-weight="bold" fill="#08242a">전문의 칼럼 전문보기 &gt;</text>
+</svg>
