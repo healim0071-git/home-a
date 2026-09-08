@@ -175,7 +175,7 @@ sections:
         <th style="width: 17%; text-align: center;">작성자</th>
         <th style="width: 13%; text-align: center;">등록일</th>
         <th style="width: 8%; text-align: center;">조회</th>
-        <th style="width: 10%; text-align: center; display: none;" id="colManageTh">관리</th>
+        <th style="width: 130px; text-align: center; display: none;" id="colManageTh">관리</th>
         </tr>
         </thead>
         <tbody id="columnListContainer">
@@ -1432,6 +1432,10 @@ sections:
         window.defaultFaqData = defaultFaqData;
         window.defaultColumnsData = defaultColumnsData;
         window.defaultReviewsData = defaultReviewsData;
+        window.renderFaqList = function() { renderFaqList(); };
+        window.renderReviewsList = function() { renderReviewsList(); };
+        window.renderYoutubeList = function() { renderYoutubeList(); };
+        window.renderColumnsList = function() { renderColumnsList(); };
 
         // Active States
         var activeTab = 'faq';
@@ -1651,31 +1655,40 @@ sections:
         var html = '';
         var isSuperAdmin = isHealimSuperAdmin();
         list.forEach(function(item) {
+        var safeFaqId = String(item.id || '').replace(/'/g, "\\'");
         var cleanTitle = (item.title || '').replace(/^Q[\.:\s\-]+/i, '').replace(/\*\*(.*?)\*\*/g, '$1').replace(/__(.*?)__/g, '$1').trim();
         var hasAnyImage = item.image || (item.content && (item.content.indexOf('![') !== -1 || item.content.indexOf('<img') !== -1));
-        var photoBadge = hasAnyImage ? '<span class="text-xs font-bold px-1.5 py-0.5 rounded bg-[#f0f7f8] text-[#1c6e78] border border-[#badfe3] ml-1">📷 사진</span>' : '';
+        var photoBadge = hasAnyImage ? '<span class="text-xs font-bold px-1.5 py-0.5 rounded bg-[#f0f7f8] text-[#1c6e78] border border-[#badfe3] ml-1 shrink-0">📷 사진</span>' : '';
         var richContent = renderRichContent(item.content);
         var imageHtml = (item.image && richContent.indexOf(item.image) === -1) ? '<div class="my-3 rounded-lg overflow-hidden border border-[#badfe3] bg-[#f8fafb] max-w-md"><img src="' + item.image + '" alt="' + cleanTitle + '" class="max-h-80 w-auto object-contain rounded-lg" loading="lazy" onerror="this.onerror=null; this.parentElement.style.display=\'none\';" /></div>' : '';
 
         var adminButtonsHtml = isSuperAdmin ? (
           '<div class="flex items-center gap-1.5">' +
-          '<button type="button" class="px-2.5 py-1 text-xs font-semibold text-[#1c6e78] bg-[#eaf3f4] hover:bg-[#d8eaed] rounded-md transition-colors border border-[#badfe3]" onclick="event.stopPropagation(); openEditModal(\'faq\', \'' + item.id + '\')">✏️ 수정</button>' +
-          '<button type="button" class="px-2.5 py-1 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-md transition-colors border border-red-200" onclick="event.stopPropagation(); handleDeleteFaqDirect(\'' + item.id + '\')">🗑️ 삭제</button>' +
+          '<button type="button" class="px-2.5 py-1 text-xs font-semibold text-[#1c6e78] bg-[#eaf3f4] hover:bg-[#d8eaed] rounded-md transition-colors border border-[#badfe3] cursor-pointer" onclick="event.stopPropagation(); openEditModal(\'faq\', \'' + safeFaqId + '\')">✏️ 수정</button>' +
+          '<button type="button" class="px-2.5 py-1 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-md transition-colors border border-red-200 cursor-pointer" onclick="event.stopPropagation(); handleDeletePostDirect(\'faq\', \'' + safeFaqId + '\')">🗑️ 삭제</button>' +
           '</div>'
+        ) : '';
+
+        var summaryAdminBtns = isSuperAdmin ? (
+          '<span class="inline-flex items-center gap-1.5 ml-auto mr-3 shrink-0">' +
+          '<button type="button" class="px-2 py-0.5 text-xs font-semibold text-[#1c6e78] bg-[#eaf3f4] hover:bg-[#d8eaed] rounded border border-[#badfe3] transition-colors cursor-pointer" onclick="event.stopPropagation(); event.preventDefault(); openEditModal(\'faq\', \'' + safeFaqId + '\')">✏️ 수정</button>' +
+          '<button type="button" class="px-2 py-0.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded border border-red-200 transition-colors cursor-pointer" onclick="event.stopPropagation(); event.preventDefault(); handleDeletePostDirect(\'faq\', \'' + safeFaqId + '\')">🗑️ 삭제</button>' +
+          '</span>'
         ) : '';
 
         html += '<details class="faq-item">' +
         '<summary>' +
-        '<span class="flex items-center gap-2 text-left">' +
-        '<span class="text-sm font-extrabold text-[#1c6e78]">Q.</span>' +
+        '<span class="flex items-center gap-2 text-left flex-1 min-w-0 pr-2">' +
+        '<span class="text-sm font-extrabold text-[#1c6e78] shrink-0">Q.</span>' +
         photoBadge +
         '<span class="font-bold text-[#0d3a42]">' + cleanTitle + '</span>' +
         '</span>' +
+        summaryAdminBtns +
         '</summary>' +
         '<div class="faq-answer">' +
         imageHtml +
         '<div class="faq-content-body py-1 text-sm text-[#333333] leading-relaxed">' + richContent + '</div>' +
-        '<div class="mt-3 pt-2 border-t border-[#edf2f4] flex justify-between items-center text-xs text-[#888888]">' +
+        '<div class="mt-3 pt-2 border-t border-[#edf2f4] flex justify-between items-center text-xs text-[#888888] flex-wrap gap-2">' +
         '<div><span>작성자: ' + item.author + '</span> <span class="mx-1">|</span> <span>등록일: ' + item.date + '</span></div>' +
         adminButtonsHtml +
         '</div>' +
@@ -1738,7 +1751,10 @@ sections:
           '</div>';
         var cleanSnippet = (item.content || '').replace(/<img[^>]*>/gi, '[사진]').replace(/!\[.*?\]\(.*?\)/g, '[사진]').replace(/<[^>]+>/g, '').replace(/[*_~`#]/g, '').trim();
         var isSuperAdmin = isHealimSuperAdmin();
-        var editBtnHtml = isSuperAdmin ? '<button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors" onclick="event.stopPropagation(); openEditModal(\'reviews\', \'' + safeId + '\')">✏️ 수정</button>' : '';
+        var adminBtnsHtml = isSuperAdmin ? (
+          '<button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors cursor-pointer" onclick="event.stopPropagation(); openEditModal(\'reviews\', \'' + safeId + '\')">✏️ 수정</button>' +
+          '<button type="button" class="px-2 py-0.5 text-xs text-red-600 bg-red-50 hover:bg-red-100 font-semibold rounded border border-red-200 transition-colors cursor-pointer" onclick="event.stopPropagation(); handleDeletePostDirect(\'reviews\', \'' + safeId + '\')">🗑️ 삭제</button>'
+        ) : '';
 
         html += '<div class="healim-card white-bg text-left p-6 cursor-pointer" data-post-id="' + safeId + '" onclick="openDetailModal(\'reviews\', \'' + safeId + '\')">' +
         '<div class="flex justify-between items-center mb-2 w-full">' +
@@ -1748,10 +1764,10 @@ sections:
         '<h3 class="font-bold text-[#0d3a42] text-sm mb-2 hover:text-[#1c6e78] transition-colors cursor-pointer" onclick="event.stopPropagation(); openDetailModal(\'reviews\', \'' + safeId + '\')">' + item.title + '</h3>' +
         imageThumbHtml +
         '<p class="text-xs text-[#555555] leading-relaxed line-clamp-3">' + cleanSnippet + '</p>' +
-        '<div class="mt-3 pt-3 border-t border-[#f0f4f5] flex justify-between items-center text-xs text-[#888888] w-full">' +
+        '<div class="mt-3 pt-3 border-t border-[#f0f4f5] flex justify-between items-center text-xs text-[#888888] w-full flex-wrap gap-2">' +
         '<span>등록일: ' + item.date + '</span>' +
-        '<div class="flex items-center gap-2">' +
-        editBtnHtml +
+        '<div class="flex items-center gap-1.5 ml-auto">' +
+        adminBtnsHtml +
         '<button type="button" class="px-2.5 py-1 text-xs font-bold text-[#1c6e78] bg-[#eaf3f4] hover:bg-[#d8eaed] rounded border border-[#badfe3] transition-all flex items-center gap-1 shadow-2xs cursor-pointer" onclick="event.stopPropagation(); openDetailModal(\'reviews\', \'' + safeId + '\')"><span>전체 후기 보기</span><span class="text-xs">&gt;</span></button>' +
         '</div>' +
         '</div>' +
@@ -1852,9 +1868,13 @@ sections:
         var globalIdx = startIndex + idx;
         var thumbUrl = getYoutubeThumbnail(item, globalIdx);
         var safeTitle = (item.title || '').replace(/"/g, '&quot;');
-        var editBtnHtml = isSuperAdmin ? '<button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors" onclick="event.stopPropagation(); openEditModal(\'youtube\', \'' + item.id + '\')">✏️ 수정</button>' : '';
+        var safeYtId = String(item.id || '').replace(/'/g, "\\'");
+        var adminBtnsHtml = isSuperAdmin ? (
+          '<button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors cursor-pointer" onclick="event.stopPropagation(); openEditModal(\'youtube\', \'' + safeYtId + '\')">✏️ 수정</button>' +
+          '<button type="button" class="px-2 py-0.5 text-xs text-red-600 bg-red-50 hover:bg-red-100 font-semibold rounded border border-red-200 transition-colors cursor-pointer" onclick="event.stopPropagation(); handleDeletePostDirect(\'youtube\', \'' + safeYtId + '\')">🗑️ 삭제</button>'
+        ) : '';
 
-        html += '<div class="youtube-card cursor-pointer" onclick="openDetailModal(\'youtube\', \'' + item.id + '\')">' +
+        html += '<div class="youtube-card cursor-pointer" onclick="openDetailModal(\'youtube\', \'' + safeYtId + '\')">' +
         '<div class="youtube-thumb-wrapper">' +
         '<img src="' + thumbUrl + '" alt="' + safeTitle + '" class="youtube-thumb-img" style="margin: 0 !important; padding: 0 !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: top center !important;" loading="lazy" onerror="if(!this.dataset.fallback){this.dataset.fallback=\'1\';this.src=this.src.replace(\'maxresdefault.jpg\',\'mqdefault.jpg\');}else{this.onerror=null;this.src=\'https://img.youtube.com/vi/-Y_ITeHHpCo/maxresdefault.jpg\';}" />' +
         '<div class="youtube-play-icon">' +
@@ -1864,11 +1884,11 @@ sections:
         '<div class="youtube-card-body">' +
         '<h3 class="youtube-title">' + item.title + '</h3>' +
         '<p class="youtube-desc">' + item.content + '</p>' +
-        '<div class="youtube-meta flex justify-between items-center">' +
+        '<div class="youtube-meta flex justify-between items-center flex-wrap gap-1.5">' +
         '<span>' + item.author + '</span>' +
-        '<div class="flex items-center gap-2">' +
+        '<div class="flex items-center gap-1.5">' +
         '<span>조회수 ' + item.views + '회</span>' +
-        editBtnHtml +
+        adminBtnsHtml +
         '</div>' +
         '</div>' +
         '</div>' +
@@ -1904,11 +1924,19 @@ sections:
 
         var html = '';
         list.forEach(function(item, idx) {
+        var safeColId = String(item.id || ('col-' + idx)).replace(/'/g, "\\'");
         var hasAnyImage = item.image || (item.content && (item.content.indexOf('![') !== -1 || item.content.indexOf('<img') !== -1));
         var photoBadge = hasAnyImage ? ' <span class="text-[12px] text-[#1c6e78] font-bold" title="사진 첨부">📷</span>' : '';
-        var manageTd = isSuperAdmin ? ('<td style="text-align: center;"><button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors" onclick="event.stopPropagation(); openEditModal(\'columns\', \'' + item.id + '\')">✏️ 수정</button></td>') : '';
+        var manageTd = isSuperAdmin ? (
+          '<td style="text-align: center; white-space: nowrap;">' +
+          '<div class="inline-flex items-center justify-center gap-1.5">' +
+          '<button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors cursor-pointer" onclick="event.stopPropagation(); openEditModal(\'columns\', \'' + safeColId + '\')">✏️ 수정</button>' +
+          '<button type="button" class="px-2 py-0.5 text-xs text-red-600 bg-red-50 hover:bg-red-100 font-semibold rounded border border-red-200 transition-colors cursor-pointer" onclick="event.stopPropagation(); handleDeletePostDirect(\'columns\', \'' + safeColId + '\')">🗑️ 삭제</button>' +
+          '</div>' +
+          '</td>'
+        ) : '';
 
-        html += '<tr onclick="openDetailModal(\'columns\', \'' + item.id + '\')">' +
+        html += '<tr onclick="openDetailModal(\'columns\', \'' + safeColId + '\')">' +
         '<td style="text-align: center; color: #888888; font-size: 13px;">' + (list.length - idx) + '</td>' +
         '<td><span class="post-title-link">' + item.title + photoBadge + '</span></td>' +
         '<td style="text-align: center; font-size: 13px;">' + item.author + '</td>' +
@@ -2710,6 +2738,8 @@ sections:
         };
 
         // --- 6. Detail Modal Logic ---
+        var currentDetailBoardType = '';
+        var currentDetailPostId = '';
         window.openDetailModal = function(boardType, postId) {
         currentDetailBoardType = boardType;
         currentDetailPostId = postId;
@@ -2868,42 +2898,93 @@ sections:
         }
         };
 
-        window.handleDeleteCurrentPost = function() {
-        if (!isHealimSuperAdmin()) {
-          alert('게시글 삭제 권한은 최고관리자(healim0071)에게만 있습니다.');
-          return;
-        }
-        if (!currentDetailBoardType || !currentDetailPostId) return;
-        if (!confirm('👑 최고관리자 권한으로 이 게시글을 영구 삭제하시겠습니까?\n삭제 후에는 복구할 수 없습니다.')) return;
-        var list = getBoardData(currentDetailBoardType, []);
-
-        if (currentDetailBoardType === 'youtube') {
-          var targetItem = list.find(function(it) { return it.id === currentDetailPostId; });
-          var vId = targetItem ? extractYoutubeId(targetItem.videoEmbed || targetItem.thumb || targetItem.youtubeUrl || '') : null;
-          if (!vId && currentDetailPostId.indexOf('yt-synced-') === 0) {
-            vId = currentDetailPostId.replace('yt-synced-', '');
+        window.handleDeletePostDirect = function(boardType, postId) {
+          if (!isHealimSuperAdmin()) {
+            alert('게시글 삭제 권한은 최고관리자(healim0071)에게만 있습니다.');
+            return;
           }
-          addDeletedYoutubeId(vId, currentDetailPostId);
+          if (!boardType || !postId) return;
 
-          var customPosts = getCustomYoutubePosts().filter(function(it) { return it.id !== currentDetailPostId; });
-          saveCustomYoutubePosts(customPosts);
-          var syncedPosts = getSyncedYoutubePosts().filter(function(it) { return it.id !== currentDetailPostId; });
-          saveSyncedYoutubePosts(syncedPosts);
-        }
+          var boardNames = {
+            faq: '자율신경 FAQ',
+            reviews: '치료후기',
+            youtube: '유튜브 영상',
+            columns: '치료 칼럼'
+          };
+          var boardName = boardNames[boardType] || '게시글';
 
-        addDeletedPostId(currentDetailBoardType, currentDetailPostId);
-          var customPosts = getCustomUserPosts(currentDetailBoardType).filter(function(it) { return it.id !== currentDetailPostId; });
-          saveCustomUserPosts(currentDetailBoardType, customPosts);
-          var filtered = list.filter(function(it) { return it.id !== currentDetailPostId; });
-        saveBoardData(currentDetailBoardType, filtered);
+          if (!confirm('👑 최고관리자 권한으로 해당 ' + boardName + ' 글을 영구 삭제하시겠습니까?\n삭제 후에는 복구할 수 없습니다.')) {
+            return;
+          }
 
-        alert('게시글이 영구 삭제되었습니다. 삭제된 영상은 향후 자동 연동 시에도 다시 등록되지 않습니다.');
-        closeDetailModal();
-        switchCommunityTab(currentDetailBoardType);
+          var strId = String(postId);
 
-        try {
-          window.dispatchEvent(new CustomEvent('healim-community-updated', { detail: { boardType: currentDetailBoardType, action: 'delete' } }));
-        } catch(e) {}
+          // 1. YouTube specific blacklist & storage handling
+          if (boardType === 'youtube') {
+            var allYt = getCustomYoutubePosts().concat(getSyncedYoutubePosts()).concat(defaultYoutubeData);
+            var targetItem = allYt.find(function(it) { return String(it.id) === strId; });
+            var vId = targetItem ? extractYoutubeId(targetItem.videoEmbed || targetItem.thumb || targetItem.youtubeUrl || '') : null;
+            if (!vId && strId.indexOf('yt-synced-') === 0) {
+              vId = strId.replace('yt-synced-', '');
+            }
+            if (typeof addDeletedYoutubeId === 'function') {
+              addDeletedYoutubeId(vId, strId);
+            }
+            var customYt = getCustomYoutubePosts().filter(function(it) { return String(it.id) !== strId; });
+            saveCustomYoutubePosts(customYt);
+            var syncedYt = getSyncedYoutubePosts().filter(function(it) { return String(it.id) !== strId; });
+            saveSyncedYoutubePosts(syncedYt);
+          }
+
+          // 2. Permanent Blacklist
+          if (typeof addDeletedPostId === 'function') {
+            addDeletedPostId(boardType, strId);
+          }
+
+          // 3. Remove from custom user posts
+          var customPosts = getCustomUserPosts(boardType).filter(function(it) { return String(it.id) !== strId; });
+          saveCustomUserPosts(boardType, customPosts);
+
+          // 4. Remove from active board cache
+          var fallback = (boardType === 'faq' ? defaultFaqData : (boardType === 'reviews' ? defaultReviewsData : (boardType === 'youtube' ? defaultYoutubeData : defaultColumnsData)));
+          var currentList = getBoardData(boardType, fallback);
+          var filtered = currentList.filter(function(it) { return String(it.id) !== strId; });
+          saveBoardData(boardType, filtered);
+
+          // 5. Legacy storage sync
+          try {
+            var rawLeg = localStorage.getItem('healim_community_posts_v2');
+            if (rawLeg) {
+              var legList = JSON.parse(rawLeg) || [];
+              legList = legList.filter(function(p) { return String(p.id) !== strId; });
+              localStorage.setItem('healim_community_posts_v2', JSON.stringify(legList));
+            }
+          } catch(e) {}
+
+          // 6. Close detail modal if open
+          if (currentDetailPostId && String(currentDetailPostId) === strId) {
+            closeDetailModal();
+          }
+
+          // 7. Re-render active view
+          if (boardType === 'faq') renderFaqList();
+          else if (boardType === 'reviews') renderReviewsList();
+          else if (boardType === 'youtube') renderYoutubeList();
+          else if (boardType === 'columns') renderColumnsList();
+
+          // 8. Dispatch global update event
+          try {
+            window.dispatchEvent(new CustomEvent('healim-community-updated', {
+              detail: { boardType: boardType, action: 'delete', postId: strId }
+            }));
+          } catch(e) {}
+
+          alert(boardName + ' 글이 영구 삭제되었습니다.');
+        };
+
+        window.handleDeleteCurrentPost = function() {
+          if (!currentDetailBoardType || !currentDetailPostId) return;
+          handleDeletePostDirect(currentDetailBoardType, currentDetailPostId);
         };
 
         window.closeDetailModal = function() {
@@ -3050,38 +3131,7 @@ sections:
         };
 
         window.handleDeleteFaqDirect = function(faqId) {
-          if (!isHealimSuperAdmin()) {
-            alert('FAQ 삭제 권한은 최고관리자(healim0071)에게만 있습니다.');
-            return;
-          }
-
-          var list = getBoardData('faq', defaultFaqData);
-          var item = list.find(function(it) { return it.id === faqId; });
-          if (!item) return;
-
-          if (!confirm('정말 이 FAQ를 영구 삭제하시겠습니까?')) return;
-
-          addDeletedPostId('faq', faqId);
-          var customPosts = getCustomUserPosts('faq').filter(function(it) { return String(it.id) !== String(faqId); });
-          saveCustomUserPosts('faq', customPosts);
-
-          var filtered = list.filter(function(it) { return String(it.id) !== String(faqId); });
-          saveBoardData('faq', filtered);
-
-          try {
-            var rawLeg = localStorage.getItem('healim_community_posts_v2');
-            if (rawLeg) {
-              var legList = JSON.parse(rawLeg) || [];
-              legList = legList.filter(function(p) { return String(p.id) !== String(faqId); });
-              localStorage.setItem('healim_community_posts_v2', JSON.stringify(legList));
-            }
-          } catch(e) {}
-
-          renderFaqList();
-          try {
-            window.dispatchEvent(new CustomEvent('healim-community-updated', { detail: { boardType: 'faq', action: 'delete' } }));
-          } catch(e) {}
-          alert('FAQ가 삭제되었습니다.');
+          handleDeletePostDirect('faq', faqId);
         };
 
         // Hash Navigation Initialization
