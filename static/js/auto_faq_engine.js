@@ -373,14 +373,47 @@
   // ──────────────────────────────────────────────────────────
   // 2. 질문 제목 정규화 및 기존 게시글 중복 방지 검사 헬퍼
   // ──────────────────────────────────────────────────────────
+  var OBSOLETE_FAQ_TITLES = [
+    '검사상 정상으로 나오는데 한방 치료로 개선이 가능한가요?',
+    '치료 기간 및 호전 경과는 보통 어떻게 되나요?',
+    '복용 중인 양약(신경안정제, 수면제, 혈압약 등)과 한약 치료를 병행할 수 있나요?',
+    '교감신경 항진증과 부교감신경 저하의 차이점은 무엇인가요?',
+    '재발을 방지하려면 치료 후 어떤 관리가 필요한가요?'
+  ];
+
   function normalizeQuestionTitle(t) {
     if (!t) return '';
     return String(t)
-      .replace(/^Q[.:s-]+/i, '')
-      .replace(/[s*_~`#?？.,()[]]/g, '')
+      .replace(/^Q[\.:\s\-]+/i, '')
+      .replace(/[\s\*\*_~\`#\?\uFF1F\.,\(\)\[\]:;\-]/g, '')
       .trim()
       .toLowerCase();
   }
+
+  function isObsoleteMockFaq(item) {
+    if (!item || !item.title) return false;
+    var norm = normalizeQuestionTitle(item.title);
+    return OBSOLETE_FAQ_TITLES.some(function(ot) {
+      var otNorm = normalizeQuestionTitle(ot);
+      return norm === otNorm || norm.indexOf(otNorm) !== -1;
+    });
+  }
+
+  function purgeObsoleteMockFaqFromStorage() {
+    try {
+      ['healim_board_faq', 'healim_vault_all_posts_faq', 'healim_custom_faq_posts'].forEach(function(sKey) {
+        var raw = localStorage.getItem(sKey);
+        if (raw) {
+          var list = JSON.parse(raw) || [];
+          var filtered = list.filter(function(it) { return !isObsoleteMockFaq(it); });
+          if (filtered.length !== list.length) {
+            localStorage.setItem(sKey, JSON.stringify(filtered));
+          }
+        }
+      });
+    } catch(e) {}
+  }
+  purgeObsoleteMockFaqFromStorage();
 
   function getExistingFaqTitles() {
     var titles = new Set();
@@ -391,37 +424,58 @@
       if (raw) {
         var list = JSON.parse(raw) || [];
         list.forEach(function(it) {
-          if (it && it.title) titles.add(normalizeQuestionTitle(it.title));
+          if (it && it.title && !isObsoleteMockFaq(it)) {
+            titles.add(normalizeQuestionTitle(it.title));
+          }
         });
       }
     } catch(e) {}
 
-    // 2) Custom user posts storage
+    // 2) Permanent vault storage
+    try {
+      var rawV = localStorage.getItem('healim_vault_all_posts_faq');
+      if (rawV) {
+        var listV = JSON.parse(rawV) || [];
+        listV.forEach(function(it) {
+          if (it && it.title && !isObsoleteMockFaq(it)) {
+            titles.add(normalizeQuestionTitle(it.title));
+          }
+        });
+      }
+    } catch(e) {}
+
+    // 3) Custom user posts storage
     try {
       var rawC = localStorage.getItem('healim_custom_faq_posts');
       if (rawC) {
         var listC = JSON.parse(rawC) || [];
         listC.forEach(function(it) {
-          if (it && it.title) titles.add(normalizeQuestionTitle(it.title));
+          if (it && it.title && !isObsoleteMockFaq(it)) {
+            titles.add(normalizeQuestionTitle(it.title));
+          }
         });
       }
     } catch(e) {}
 
-    // 3) Legacy community posts storage
+    // 4) Legacy community posts storage
     try {
       var rawLeg = localStorage.getItem('healim_community_posts_v2');
       if (rawLeg) {
         var legList = JSON.parse(rawLeg) || [];
         legList.forEach(function(it) {
-          if (it && it.title) titles.add(normalizeQuestionTitle(it.title));
+          if (it && it.title && !isObsoleteMockFaq(it)) {
+            titles.add(normalizeQuestionTitle(it.title));
+          }
         });
       }
     } catch(e) {}
 
-    // 4) Fallback default FAQ data (from window if present)
+    // 5) Fallback default FAQ data (from window if present)
     if (window.defaultFaqData && Array.isArray(window.defaultFaqData)) {
       window.defaultFaqData.forEach(function(it) {
-        if (it && it.title) titles.add(normalizeQuestionTitle(it.title));
+        if (it && it.title && !isObsoleteMockFaq(it)) {
+          titles.add(normalizeQuestionTitle(it.title));
+        }
       });
     }
 

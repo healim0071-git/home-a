@@ -423,17 +423,6 @@ sections:
         // --- Seed Data ---
         var defaultFaqData = [
           {
-            "id": "faq-auto-latest",
-            "category": "자율신경FAQ",
-            "author": "해아림한의원",
-            "date": "2026.09.08",
-            "views": 320,
-            "image": "/images/faq/faq_13_vision.svg",
-            "title": "자율신경실조증 환자인데 왜 시야가 흐려지고 눈이 침침하며 건조할까요? 안과 검사는 정상입니다.",
-            "content": "스마트폰이나 책을 보지 않아도 눈이 뻑뻑하고 모래가 들어간 것처럼 따가우며, 사물이 겹쳐 보이거나 시야가 뿌옇게 흐려져 안과를 찾으시는 분들이 많습니다. 안과 정밀 검사상 각막염이나 녹내장, 백내장, 시신경 손상 등 아무런 기질적 병변이 없음에도 불구하고 눈이 몹시 피로하고 침침하다면 이는 **'안구 주변 자율신경망의 미세 조절 부조화'** 때문입니다.\n\n우리 눈의 동공 크기와 초점(모양체근), 그리고 눈물 분비는 교감신경과 부교감신경의 정밀한 오케스트라 조율을 받습니다. 먼 곳을 보거나 위험을 감지할 때는 교감신경이 동공을 확대시키고, 편안한 상태에서 독서를 하거나 쉴 때는 부교감신경이 동공을 수축시키며 눈물샘을 자극해 눈 표면을 촉촉하게 적셔줍니다. 하지만 자율신경실조증으로 교감신경이 만성 과항진 상태에 놓이게 되면, 눈동자는 과도하게 긴장하여 빛에 극도로 과민해지는 눈부심(광선 공포증)이 발생하고, 반대로 눈물을 분비해야 하는 부교감신경 신호는 차단되어 극심한 안구건조증이 유발됩니다.\n\n여기에 후두골과 상부 경추(경추 1·2번)가 만성 스트레스로 굳어지면, 눈으로 올라가는 안동맥(Ophthalmic Artery)의 혈류량이 일시적으로 급감하여 모양체근에 산소 공급이 부족해집니다. 이로 인해 렌즈의 두께를 조절하는 초점 반응 속도가 현저히 느려지며 시야가 뿌옇게 번져 보이는 것입니다. 인공눈물이나 안약은 표면만 일시적으로 적실 뿐, 눈물샘을 통제하는 자율신경 스위치를 켜지 못합니다.\n\n해아림한의원에서는 후두하근과 측두골 주변의 긴장을 섬세하게 해소하는 두개천골요법(CST)을 통해 안와 신경과 뇌 혈류의 통로를 시원하게 열어줍니다. 이와 함께 간화(肝火)를 식히고 눈 주변 기혈 순환을 촉진하는 결명자, 국화, 구기자, 작약 등의 청간명목(淸肝明目) 한약을 체질에 맞게 처방하여 눈물샘의 자가 분비 능력을 복원하고 맑고 선명한 시야를 되찾아 드립니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)",
-            "isAutoPublished": true
-          },
-          {
             "id": "faq-1",
             "category": "원인/진단",
             "author": "해아림한의원",
@@ -614,6 +603,7 @@ sections:
             "content": "\"한약을 먹고 침을 맞은 날부터 온몸에 힘이 쭉 빠지고 하루 종일 졸음이 쏟아져요. 치료가 저랑 안 맞는 건가요?\" 자율신경 치료를 시작하신 환자분들께서 초기에 가장 많이 문의하시는 질문 중 하나입니다. 결론부터 말씀드리면, 이는 치료가 잘못된 것이 아니라 오랜 기간 비상근무 중이던 신경계가 마침내 긴장을 풀고 치유 모드로 들어섰음을 알리는 **'매우 긍정적인 부교감신경 반등 신호(Rebound Parasympathetic Activation)'**입니다.\n\n자율신경실조증 환자의 뇌와 신체는 지난 수개월, 수년 동안 마치 전쟁터 한가운데 있는 것처럼 교감신경의 아드레날린을 쥐어짜 내며 버텨온 '가짜 각성 상태'였습니다. 몸은 이미 배터리가 방전되어 탈진 직전인데도, 뇌가 위험 신호를 끄지 못해 억지로 눈을 부릅뜨고 심장을 뛰게 했던 것입니다.\n\n이때 해아림한의원의 맞춤 한약과 침구 치료, 두개천골요법이 과항진된 교감신경의 사이렌을 끄고 부교감신경(미주신경)의 이완 스위치를 켜주면, 그동안 각성 호르몬 뒤에 숨어 있던 신체의 본래 만성 피로와 수면 부채가 수면 위로 한꺼번에 드러나게 됩니다. 뇌는 손상된 신경 시냅스를 복구하고 축적된 대사 노폐물(베타 아밀로이드 등)을 청소하기 위해 인체에 \"지금 모든 활동을 멈추고 잠을 자야 해!\"라는 강력한 휴식 명령을 내립니다.\n\n이러한 나른함과 깊은 졸음은 대개 치료 시작 후 **3일에서 1주일 정도 집중적으로 나타난 뒤 점차 사라지며**, 이 시기가 지나면 아침에 일어났을 때 머리가 맑고 몸이 깃털처럼 가벼워지는 진짜 활력을 체감하시게 됩니다. 치료 초기의 졸음은 신체가 스스로 치유를 시작했다는 최고의 훈장이므로, 이때는 무리하게 버티지 마시고 몸이 원하는 대로 충분한 수면과 휴식을 취해 주시는 것이 빠른 완치로 가는 지름길입니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)"
           }
         ];
+        window.defaultFaqData = defaultFaqData;
 
         var defaultReviewsData = [
           {
@@ -1386,6 +1376,80 @@ sections:
         window.HealimPermanentDB = HealimPermanentDB;
 
         // ─────────────────────────────────────────────────────────────
+        // Obsolete Initial Mock FAQ Purge & Migration Helper
+        // ─────────────────────────────────────────────────────────────
+        var OBSOLETE_FAQ_TITLES = [
+          '검사상 정상으로 나오는데 한방 치료로 개선이 가능한가요?',
+          '치료 기간 및 호전 경과는 보통 어떻게 되나요?',
+          '복용 중인 양약(신경안정제, 수면제, 혈압약 등)과 한약 치료를 병행할 수 있나요?',
+          '교감신경 항진증과 부교감신경 저하의 차이점은 무엇인가요?',
+          '재발을 방지하려면 치료 후 어떤 관리가 필요한가요?'
+        ];
+
+        function isObsoleteMockFaq(item) {
+          if (!item || !item.title) return false;
+          var norm = String(item.title)
+            .replace(/^Q[\.:\s\-]+/i, '')
+            .replace(/[\s\*\*_~\`#\?\uFF1F\.,\(\)\[\]:;\-]/g, '')
+            .toLowerCase();
+          return OBSOLETE_FAQ_TITLES.some(function(ot) {
+            var otNorm = ot
+              .replace(/^Q[\.:\s\-]+/i, '')
+              .replace(/[\s\*\*_~\`#\?\uFF1F\.,\(\)\[\]:;\-]/g, '')
+              .toLowerCase();
+            return norm === otNorm || norm.indexOf(otNorm) !== -1;
+          });
+        }
+
+        function purgeObsoleteMockFaqPosts() {
+          try {
+            var vKey = 'healim_vault_all_posts_faq';
+            var rawV = localStorage.getItem(vKey);
+            if (rawV) {
+              var vList = (JSON.parse(rawV) || []).filter(function(it) { return !isObsoleteMockFaq(it); });
+              localStorage.setItem(vKey, JSON.stringify(vList));
+              if (typeof HealimPermanentDB !== 'undefined' && HealimPermanentDB.saveVault) {
+                HealimPermanentDB.saveVault('faq', vList);
+              }
+            }
+            var bKey = 'healim_board_faq';
+            var rawB = localStorage.getItem(bKey);
+            if (rawB) {
+              var bList = (JSON.parse(rawB) || []).filter(function(it) { return !isObsoleteMockFaq(it); });
+              localStorage.setItem(bKey, JSON.stringify(bList));
+            }
+            var cKey = 'healim_custom_faq_posts';
+            var rawC = localStorage.getItem(cKey);
+            if (rawC) {
+              var cList = (JSON.parse(rawC) || []).filter(function(it) { return !isObsoleteMockFaq(it); });
+              localStorage.setItem(cKey, JSON.stringify(cList));
+            }
+            var lKey = 'healim_community_posts_v2';
+            var rawL = localStorage.getItem(lKey);
+            if (rawL) {
+              var lList = (JSON.parse(rawL) || []).filter(function(it) {
+                if (it.type === 'faq' || it.category === 'FAQ' || (it.id && String(it.id).startsWith('faq-'))) {
+                  return !isObsoleteMockFaq(it);
+                }
+                return true;
+              });
+              localStorage.setItem(lKey, JSON.stringify(lList));
+            }
+            if (typeof HealimPermanentDB !== 'undefined' && HealimPermanentDB.restoreVault) {
+              HealimPermanentDB.restoreVault('faq', function(idbList) {
+                if (Array.isArray(idbList) && idbList.length > 0) {
+                  var filteredIdb = idbList.filter(function(it) { return !isObsoleteMockFaq(it); });
+                  if (filteredIdb.length !== idbList.length) {
+                    HealimPermanentDB.saveVault('faq', filteredIdb);
+                  }
+                }
+              });
+            }
+          } catch(e) {}
+        }
+        purgeObsoleteMockFaqPosts();
+
+        // ─────────────────────────────────────────────────────────────
         // Permanent Persistence & Multi-Tier Deletion Tracker
         // ─────────────────────────────────────────────────────────────
         function getDeletedPostIds(key) {
@@ -1534,14 +1598,35 @@ sections:
           } catch(e) {}
         }
 
+        if (key === 'faq') {
+          vaultList = vaultList.filter(function(it) { return !isObsoleteMockFaq(it); });
+          customList = customList.filter(function(it) { return !isObsoleteMockFaq(it); });
+          storedList = storedList.filter(function(it) { return !isObsoleteMockFaq(it); });
+          legacyList = legacyList.filter(function(it) { return !isObsoleteMockFaq(it); });
+        }
+
         var merged = [];
         var seenIds = {};
+        var seenTitles = {};
 
         function addPostItem(item) {
           if (!item || !item.id) return;
+          if (key === 'faq' && isObsoleteMockFaq(item)) return;
           var strId = String(item.id);
           if (deletedIds.indexOf(strId) !== -1) return; // Only explicitly deleted by healim0071 admin
           if (seenIds[strId]) return;
+
+          // Normalized title duplicate prevention for FAQ and Columns
+          if (item.title && (key === 'faq' || key === 'columns')) {
+            var normT = String(item.title)
+              .replace(/^Q[\.:\s\-]+/i, '')
+              .replace(/^칼럼[\.:\s\-]+/i, '')
+              .replace(/[\s\*\*_~\`#\?\uFF1F\.,\(\)\[\]:;\-]/g, '')
+              .trim()
+              .toLowerCase();
+            if (normT && seenTitles[normT]) return;
+            seenTitles[normT] = true;
+          }
 
           seenIds[strId] = true;
           merged.push(item);
@@ -1562,6 +1647,13 @@ sections:
         // 5. Complete permanent clinical library & seed data (fallback)
         if (Array.isArray(fallback)) {
           fallback.forEach(addPostItem);
+        }
+
+        if (key === 'faq') {
+          merged = merged.filter(function(it) { return !isObsoleteMockFaq(it); });
+          try {
+            localStorage.setItem('healim_board_faq', JSON.stringify(merged));
+          } catch(e) {}
         }
 
         // Ensure images from fallback are preserved
@@ -1842,6 +1934,7 @@ sections:
         };
 
         function renderFaqList() {
+        purgeObsoleteMockFaqPosts();
         if (typeof window.checkAndRunAutoFaqPublish === 'function') {
           window.checkAndRunAutoFaqPublish(false);
         }
@@ -3360,6 +3453,7 @@ sections:
 
         // Hash Navigation Initialization
         function initTabFromHash() {
+        purgeObsoleteMockFaqPosts();
         var hash = window.location.hash.replace('#', '');
         if (hash === 'faq' || hash === 'reviews' || hash === 'youtube' || hash === 'columns') {
         switchCommunityTab(hash);
@@ -3378,6 +3472,9 @@ sections:
           ['faq', 'reviews', 'columns', 'youtube'].forEach(function(bKey) {
             HealimPermanentDB.restoreVault(bKey, function(vaultList) {
               if (vaultList && vaultList.length > 0) {
+                if (bKey === 'faq') {
+                  vaultList = vaultList.filter(function(it) { return !isObsoleteMockFaq(it); });
+                }
                 var curRaw = localStorage.getItem('healim_vault_all_posts_' + bKey);
                 var curList = curRaw ? JSON.parse(curRaw) : [];
                 if (curList.length < vaultList.length) {

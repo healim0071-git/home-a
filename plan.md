@@ -1035,3 +1035,42 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
      - [Test 5] 실시간 렌더링 스크린샷 캡처: `ironclad_columns_live.png`, `ironclad_faq_live.png`
    - **정적 빌드 검증 (`hugo --minify`)**: 32개 페이지 에러 0건 정상 빌드 완료.
 
+
+### 제9.39조 관리자(A)와 네이버회원(B) 간 FAQ 목록 불일치 오류 원인 규명 및 구형 목업 데이터 영구 정제·단일화 구축
+1. **문제 현상 및 원인 분석**:
+   - **문제 현상**: 관리자 아이디(`healim0071`)로 로그인한 화면(A)과 네이버 회원으로 로그인한 화면(B)에서 `Ctrl + F5`를 여러 번 눌러 강력 새로고침을 하였음에도 불구하고 서로 다른 FAQ 목록이 노출되는 결함 발생.
+     - A(관리자): 초기 개발 시점의 5개 구형 임시 목업 질문("검사상 정상으로 나오는데 한방 치료로 개선이 가능한가요?", "치료 기간 및 호전 경과는 보통 어떻게 되나요?" 등)이 상단에 노출됨.
+     - B(네이버 회원): 신규 18대 전문 임상 질문 풀("자율신경실조증과 공황장애의 차이점은 무엇인가요?", "병원에서 온갖 검사를 다 받아도 정상이라는데..." 등)이 노출됨.
+   - **근본 원인 규명**:
+     - **원인 1 (브라우저 간 스토리지 잔존 불일치)**: 관리자 브라우저 세션(A)은 프로젝트 초기부터 사용되어 로컬 스토리지(`localStorage`) 및 `IndexedDB`에 초기 커밋 시점의 5대 구형 목업 글(`faq-1` ~ `faq-5`)이 영구 금고(`healim_vault_all_posts_faq`, `healim_board_faq`)에 저장되어 있었음. 반면 네이버 로그인 세션(B)은 별도 프로필/시크릿 창에서 접속하여 구형 데이터가 없는 상태에서 18대 공식 임상 시드를 로드함.
+     - **원인 2 (무손실 금고의 ID 충돌 선점 현상)**: `getBoardData`는 제9.38조에 의해 영구 금고 데이터를 최우선으로 보존(`seenIds[item.id] = true`)함. 세션 A의 로컬 스토리지에 구형 질문들이 `id: "faq-1"` 등으로 저장되어 있었기 때문에, 신규 18대 공식 임상 질문의 `faq-1` ~ `faq-5`가 "이미 존재하는 ID"로 판별되어 화면에 진입하지 못하고 구형 질문이 영구 유지됨.
+     - **원인 3 (Ctrl+F5의 브라우저 스토리지 보존 특성)**: `Ctrl + F5`는 브라우저의 HTTP 네트워크 캐시만 우회할 뿐, `localStorage` 및 `IndexedDB`에 저장된 클라이언트 영구 데이터는 삭제하지 않으므로 세션 A에서 구형 글이 계속해서 유지됨.
+     - **원인 4 (하단 공통 섹션 및 SEO 스키마 내 구형 데이터 잔재)**: `common_bottom_sections.html` 및 `seo_schema.html` 일부에 구형 목업 FAQ 5종 데이터가 정적으로 남아 있어 동기화 과정에서 구형 데이터가 재유입될 가능성이 잔존함.
+2. **해결 및 개선 내역**:
+   - **구형 목업 FAQ 영구 정제 엔진 탑재 (`purgeObsoleteMockFaqPosts`)**:
+     - 5대 구형 목업 제목 정규화 감지기(`isObsoleteMockFaq`) 구축:
+       - `검사상 정상으로 나오는데 한방 치료로 개선이 가능한가요?`
+       - `치료 기간 및 호전 경과는 보통 어떻게 되나요?`
+       - `복용 중인 양약(신경안정제, 수면제, 혈압약 등)과 한약 치료를 병행할 수 있나요?`
+       - `교감신경 항진증과 부교감신경 저하의 차이점은 무엇인가요?`
+       - `재발을 방지하려면 치료 후 어떤 관리가 필요한가요?`
+     - 페이지 접속 및 탭 전환 시 (`initTabFromHash`, `renderFaqList`), `healim_vault_all_posts_faq`, `healim_board_faq`, `healim_custom_faq_posts`, `healim_community_posts_v2`, 그리고 `IndexedDB` 내에 잠복해 있던 구형 목업 FAQ 데이터를 100% 자동 검출하여 영구 삭제 및 정제 처리.
+     - 최고관리자가 직접 작성한 고유 게시글은 제목이 구형 5종과 일치하지 않는 한 영구 보존 원칙에 따라 100% 안전 유지.
+   - **`getBoardData('faq')` 영구 금고 다계층 필터링 및 제목 디둡 강화**:
+     - `vaultList`, `customList`, `storedList`, `legacyList` 로드 시 `isObsoleteMockFaq` 필터를 즉시 적용하여 구형 목업 데이터가 `seenIds`를 선점하는 현상 원천 방지.
+     - 정규화된 제목 기반 중복 방지(`seenTitles`)를 탑재하여 ID가 다르더라도 동일한 질문 내용이 중복 렌더링되지 않도록 보장.
+     - 병합 완료 후 정제된 목록을 `healim_board_faq`에 즉시 동기화 저장.
+   - **FAQ 자동 발행 엔진(`auto_faq_engine.js`) 정규화 및 스토리지 연동 정밀화**:
+     - `window.defaultFaqData` 전역 노출을 통해 자동 발행 엔진이 18대 공식 시드 데이터를 즉시 인지하도록 개선.
+     - `normalizeQuestionTitle`의 정규식 문자 클래스 탈출 문자 버그 수정.
+     - `getExistingFaqTitles()`에서 `healim_vault_all_posts_faq`도 함께 조회하며, 구형 목업 제목은 등록 목록에서 배제하여 공식 임상 질문이 정상 발행 및 순환되도록 보장.
+   - **SEO 스키마 및 하단 공통 영역 정합성 동기화**:
+     - `seo_schema.html`: FAQ 스키마 `mainEntity` 질문 3종을 공식 임상 질문으로 전면 교체.
+     - `common_bottom_sections.html`: 정적 아코디언 및 `defaultFaqList` 5종을 공식 임상 질문(SVG 이미지 포함)으로 교체하고, `isObsoleteFaqTitle` 필터 탑재.
+3. **검증 결과**:
+   - **Chrome CDP 기반 세션 A(관리자) vs 세션 B(네이버 회원) 정합성 자동화 검증 100% 통과 (`scratch/verify_faq_unification.js`)**:
+     - [Test 1 - 세션 A 관리자]: 구형 목업 데이터 5종을 강제 주입한 후 새로고침 시뮬레이션 -> 구형 데이터 100% 자동 정제(`hasObsolete: false`), 공식 임상 FAQ 18편 100% 정상 렌더링, 최고관리자 전용 UI(발행 배지, 작성 버튼, 수정/삭제 버튼) 정상 노출 확인: PASS
+     - [Test 2 - 세션 B 네이버 회원]: 네이버 회원 로그인 상태에서 새로고침 -> 공식 임상 FAQ 18편 100% 정상 렌더링, 관리자 전용 UI 비노출(일반 회원 뷰) 정상 확인: PASS
+     - [Test 3 - A vs B 일치도 비교]: A 세션과 B 세션의 FAQ 18편 전체 제목 및 순서 100% 완전 일치(100% IDENTICAL, 0 mismatches) 확인: PASS
+     - 실시간 스크린샷 캡처: `admin_faq_unified.png`, `naver_faq_unified.png`
+   - **정적 빌드 검증 (`hugo --minify`)**: 32개 페이지 에러 0건 정상 빌드 완료.
