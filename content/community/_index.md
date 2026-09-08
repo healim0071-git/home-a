@@ -607,16 +607,6 @@ sections:
 
         var defaultReviewsData = [
           {
-            "id": "rev-test",
-            "category": "치료후기",
-            "author": "해아림한의원",
-            "date": "2026.09.08",
-            "views": 25,
-            "image": "/images/reviews/review_1.jpg",
-            "title": "test",
-            "content": "test[사진]test입니다\n\n치료후기 테스트 게시글입니다."
-          },
-          {
             "id": "rev-1",
             "category": "가슴두근거림 & 공황",
             "author": "30대 직장인 김OO 님",
@@ -847,17 +837,6 @@ sections:
         ];
 
         var defaultColumnsData = [
-          {
-            "id": "col-auto-latest",
-            "category": "칼럼",
-            "author": "한방신경정신과 전문의",
-            "date": "2026.09.08",
-            "views": 410,
-            "image": "/images/columns/column_2_gut_brain.svg",
-            "title": "현대인의 보이지 않는 병, 자율신경 불균형과 뇌-장-신경 축(Gut-Brain Axis)",
-            "content": "진료실 문을 열고 들어오시는 환자분들 중에는 잔뜩 상기된 얼굴로 서류 뭉치를 내미시는 분들이 유독 많습니다. 대학병원 응급실과 심장내과를 전전하며 심전도, 24시간 홀터 모니터링, 심장 초음파, 조영제 관상동맥 CT까지 수백만 원에 달하는 정밀 검사를 모두 마쳤지만, 의료진으로부터 돌아온 답은 한결같이 \"심장은 매우 건강하니 신경정신과나 가보라\"는 허탈한 통보였다는 것입니다. 당사자는 숨이 턱 끝까지 차오르고 심장이 1분에 140회씩 요동치며 이대로 죽는 것은 아닌가 하는 극심한 공포와 질식감에 시달리는데, 기계 판독 결과는 '이상 없음'이라는 이 기막힌 간극 앞에서 환자분들은 분통을 터뜨리거나 깊은 고립감에 빠지곤 합니다.\n\n이러한 현상이 발생하는 결정적인 이유는 소화와 심장 박동이 단순히 개별 장기 하나에서 일어나는 기계적 과정이 아니라, 뇌간(Brainstem)에서 출발하여 전신을 지배하는 제10뇌신경, 즉 미주신경(Vagus Nerve)의 지휘 아래 작동하는 고도의 신경학적 협응 반응이기 때문입니다.\n\n해아림한의원에서는 뇌-장-신경 축을 안정시키는 1:1 맞춤 청심안신 한약과 두개천골요법, 침구 치료를 통해 무너진 자율신경의 항상성을 근본적으로 되살려 드립니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)",
-            "isAutoPublished": true
-          },
           {
             "id": "col-1",
             "category": "칼럼",
@@ -1376,7 +1355,7 @@ sections:
         window.HealimPermanentDB = HealimPermanentDB;
 
         // ─────────────────────────────────────────────────────────────
-        // Obsolete Initial Mock FAQ Purge & Migration Helper
+        // Obsolete Initial Mock Data Purge & Migration Helper
         // ─────────────────────────────────────────────────────────────
         var OBSOLETE_FAQ_TITLES = [
           '검사상 정상으로 나오는데 한방 치료로 개선이 가능한가요?',
@@ -1401,53 +1380,113 @@ sections:
           });
         }
 
-        function purgeObsoleteMockFaqPosts() {
+        var OBSOLETE_COLUMN_TITLES = [
+          '현대인의 보이지 않는 병, 자율신경 불균형과 장-뇌 축(Gut-Brain Axis)',
+          '현대인의 보이지 않는 병, 자율신경 불균형과 뇌-장-신경 축(Gut-Brain Axis)',
+          '두개천골요법(CST)이 뇌척수액 순환 및 미주신경 활성에 미치는 임상적 고찰',
+          '스트레스 호르몬과 바이오피드백: 자율신경 회복 식습관과 수면 리듬 설계법',
+          '스트레스 저항도를 높이는 자율신경 회복 식습관과 수면 리듬 설계법'
+        ];
+
+        function isObsoleteMockColumn(item) {
+          if (!item) return false;
+          if (item.id === 'col-auto-latest') return true;
+          if (!item.title) return false;
+          var norm = String(item.title)
+            .replace(/^칼럼[\.:\s\-]+/i, '')
+            .replace(/[\s\*\*_~\`#\?\uFF1F\.,\(\)\[\]:;\-]/g, '')
+            .toLowerCase();
+          return OBSOLETE_COLUMN_TITLES.some(function(ot) {
+            var otNorm = ot
+              .replace(/^칼럼[\.:\s\-]+/i, '')
+              .replace(/[\s\*\*_~\`#\?\uFF1F\.,\(\)\[\]:;\-]/g, '')
+              .toLowerCase();
+            return norm === otNorm || norm.indexOf(otNorm) !== -1;
+          });
+        }
+
+        var OBSOLETE_REVIEW_TITLES = [
+          'test',
+          '원인 모를 가슴 두근거림과 어지럼증, 3개월 치료 후 일상 복귀',
+          '매일 밤 괴롭히던 불면과 만성 위장장애, 신경계 안정 찾았습니다',
+          '공황인 줄 알았던 과호흡과 식은땀, 자율신경 교정으로 극복',
+          '시도 때도 없는 상열감과 손발 차가움이 균형을 되찾았습니다'
+        ];
+
+        function isObsoleteMockReview(item) {
+          if (!item) return false;
+          if (item.id === 'rev-test') return true;
+          if (!item.title) return false;
+          var norm = String(item.title)
+            .replace(/[\s\*\*_~\`#\?\uFF1F\.,\(\)\[\]:;\-]/g, '')
+            .toLowerCase();
+          if (norm === 'test' || norm === '치료후기테스트' || norm === '테스트') return true;
+          return OBSOLETE_REVIEW_TITLES.some(function(ot) {
+            var otNorm = ot
+              .replace(/[\s\*\*_~\`#\?\uFF1F\.,\(\)\[\]:;\-]/g, '')
+              .toLowerCase();
+            return norm === otNorm || norm.indexOf(otNorm) !== -1;
+          });
+        }
+
+        function purgeObsoleteMockPosts() {
           try {
-            var vKey = 'healim_vault_all_posts_faq';
-            var rawV = localStorage.getItem(vKey);
-            if (rawV) {
-              var vList = (JSON.parse(rawV) || []).filter(function(it) { return !isObsoleteMockFaq(it); });
-              localStorage.setItem(vKey, JSON.stringify(vList));
-              if (typeof HealimPermanentDB !== 'undefined' && HealimPermanentDB.saveVault) {
-                HealimPermanentDB.saveVault('faq', vList);
+            ['faq', 'columns', 'reviews'].forEach(function(bKey) {
+              var isObsoleteFn = (bKey === 'faq' ? isObsoleteMockFaq : (bKey === 'columns' ? isObsoleteMockColumn : isObsoleteMockReview));
+
+              var vKey = 'healim_vault_all_posts_' + bKey;
+              var rawV = localStorage.getItem(vKey);
+              if (rawV) {
+                var vList = (JSON.parse(rawV) || []).filter(function(it) { return !isObsoleteFn(it); });
+                localStorage.setItem(vKey, JSON.stringify(vList));
+                if (typeof HealimPermanentDB !== 'undefined' && HealimPermanentDB.saveVault) {
+                  HealimPermanentDB.saveVault(bKey, vList);
+                }
               }
-            }
-            var bKey = 'healim_board_faq';
-            var rawB = localStorage.getItem(bKey);
-            if (rawB) {
-              var bList = (JSON.parse(rawB) || []).filter(function(it) { return !isObsoleteMockFaq(it); });
-              localStorage.setItem(bKey, JSON.stringify(bList));
-            }
-            var cKey = 'healim_custom_faq_posts';
-            var rawC = localStorage.getItem(cKey);
-            if (rawC) {
-              var cList = (JSON.parse(rawC) || []).filter(function(it) { return !isObsoleteMockFaq(it); });
-              localStorage.setItem(cKey, JSON.stringify(cList));
-            }
+
+              var bStorageKey = 'healim_board_' + bKey;
+              var rawB = localStorage.getItem(bStorageKey);
+              if (rawB) {
+                var bList = (JSON.parse(rawB) || []).filter(function(it) { return !isObsoleteFn(it); });
+                localStorage.setItem(bStorageKey, JSON.stringify(bList));
+              }
+
+              var cKey = 'healim_custom_' + bKey + '_posts';
+              var rawC = localStorage.getItem(cKey);
+              if (rawC) {
+                var cList = (JSON.parse(rawC) || []).filter(function(it) { return !isObsoleteFn(it); });
+                localStorage.setItem(cKey, JSON.stringify(cList));
+              }
+
+              if (typeof HealimPermanentDB !== 'undefined' && HealimPermanentDB.restoreVault) {
+                HealimPermanentDB.restoreVault(bKey, function(idbList) {
+                  if (Array.isArray(idbList) && idbList.length > 0) {
+                    var filteredIdb = idbList.filter(function(it) { return !isObsoleteFn(it); });
+                    if (filteredIdb.length !== idbList.length) {
+                      HealimPermanentDB.saveVault(bKey, filteredIdb);
+                    }
+                  }
+                });
+              }
+            });
+
             var lKey = 'healim_community_posts_v2';
             var rawL = localStorage.getItem(lKey);
             if (rawL) {
               var lList = (JSON.parse(rawL) || []).filter(function(it) {
-                if (it.type === 'faq' || it.category === 'FAQ' || (it.id && String(it.id).startsWith('faq-'))) {
-                  return !isObsoleteMockFaq(it);
-                }
+                if (!it) return false;
+                if (it.type === 'faq' || it.category === 'FAQ' || (it.id && String(it.id).startsWith('faq-'))) return !isObsoleteMockFaq(it);
+                if (it.type === 'columns' || it.category === '칼럼' || (it.id && String(it.id).startsWith('col-'))) return !isObsoleteMockColumn(it);
+                if (it.type === 'reviews' || it.category === '치료후기' || (it.id && String(it.id).startsWith('rev-'))) return !isObsoleteMockReview(it);
                 return true;
               });
               localStorage.setItem(lKey, JSON.stringify(lList));
             }
-            if (typeof HealimPermanentDB !== 'undefined' && HealimPermanentDB.restoreVault) {
-              HealimPermanentDB.restoreVault('faq', function(idbList) {
-                if (Array.isArray(idbList) && idbList.length > 0) {
-                  var filteredIdb = idbList.filter(function(it) { return !isObsoleteMockFaq(it); });
-                  if (filteredIdb.length !== idbList.length) {
-                    HealimPermanentDB.saveVault('faq', filteredIdb);
-                  }
-                }
-              });
-            }
           } catch(e) {}
         }
-        purgeObsoleteMockFaqPosts();
+        purgeObsoleteMockPosts();
+        window.purgeObsoleteMockFaqPosts = purgeObsoleteMockPosts;
+        window.purgeObsoleteMockPosts = purgeObsoleteMockPosts;
 
         // ─────────────────────────────────────────────────────────────
         // Permanent Persistence & Multi-Tier Deletion Tracker
@@ -1603,6 +1642,16 @@ sections:
           customList = customList.filter(function(it) { return !isObsoleteMockFaq(it); });
           storedList = storedList.filter(function(it) { return !isObsoleteMockFaq(it); });
           legacyList = legacyList.filter(function(it) { return !isObsoleteMockFaq(it); });
+        } else if (key === 'columns') {
+          vaultList = vaultList.filter(function(it) { return !isObsoleteMockColumn(it); });
+          customList = customList.filter(function(it) { return !isObsoleteMockColumn(it); });
+          storedList = storedList.filter(function(it) { return !isObsoleteMockColumn(it); });
+          legacyList = legacyList.filter(function(it) { return !isObsoleteMockColumn(it); });
+        } else if (key === 'reviews') {
+          vaultList = vaultList.filter(function(it) { return !isObsoleteMockReview(it); });
+          customList = customList.filter(function(it) { return !isObsoleteMockReview(it); });
+          storedList = storedList.filter(function(it) { return !isObsoleteMockReview(it); });
+          legacyList = legacyList.filter(function(it) { return !isObsoleteMockReview(it); });
         }
 
         var merged = [];
@@ -1612,12 +1661,15 @@ sections:
         function addPostItem(item) {
           if (!item || !item.id) return;
           if (key === 'faq' && isObsoleteMockFaq(item)) return;
+          if (key === 'columns' && isObsoleteMockColumn(item)) return;
+          if (key === 'reviews' && isObsoleteMockReview(item)) return;
+
           var strId = String(item.id);
           if (deletedIds.indexOf(strId) !== -1) return; // Only explicitly deleted by healim0071 admin
           if (seenIds[strId]) return;
 
-          // Normalized title duplicate prevention for FAQ and Columns
-          if (item.title && (key === 'faq' || key === 'columns')) {
+          // Normalized title duplicate prevention for FAQ, Columns, Reviews
+          if (item.title && (key === 'faq' || key === 'columns' || key === 'reviews')) {
             var normT = String(item.title)
               .replace(/^Q[\.:\s\-]+/i, '')
               .replace(/^칼럼[\.:\s\-]+/i, '')
@@ -1653,6 +1705,16 @@ sections:
           merged = merged.filter(function(it) { return !isObsoleteMockFaq(it); });
           try {
             localStorage.setItem('healim_board_faq', JSON.stringify(merged));
+          } catch(e) {}
+        } else if (key === 'columns') {
+          merged = merged.filter(function(it) { return !isObsoleteMockColumn(it); });
+          try {
+            localStorage.setItem('healim_board_columns', JSON.stringify(merged));
+          } catch(e) {}
+        } else if (key === 'reviews') {
+          merged = merged.filter(function(it) { return !isObsoleteMockReview(it); });
+          try {
+            localStorage.setItem('healim_board_reviews', JSON.stringify(merged));
           } catch(e) {}
         }
 
@@ -2004,6 +2066,7 @@ sections:
         };
 
         function renderReviewsList() {
+        if (typeof purgeObsoleteMockPosts === 'function') purgeObsoleteMockPosts();
         var lockWrapper = document.getElementById('reviewLockWrapper');
         var overlay = document.getElementById('reviewGateOverlay');
         var container = document.getElementById('reviewListContainer');
@@ -2204,6 +2267,7 @@ sections:
         };
 
         function renderColumnsList() {
+        if (typeof purgeObsoleteMockPosts === 'function') purgeObsoleteMockPosts();
         if (typeof window.checkAndRunAutoColumnPublish === 'function') {
           window.checkAndRunAutoColumnPublish(false);
         }
@@ -3453,7 +3517,7 @@ sections:
 
         // Hash Navigation Initialization
         function initTabFromHash() {
-        purgeObsoleteMockFaqPosts();
+        if (typeof purgeObsoleteMockPosts === 'function') purgeObsoleteMockPosts();
         var hash = window.location.hash.replace('#', '');
         if (hash === 'faq' || hash === 'reviews' || hash === 'youtube' || hash === 'columns') {
         switchCommunityTab(hash);
@@ -3474,6 +3538,10 @@ sections:
               if (vaultList && vaultList.length > 0) {
                 if (bKey === 'faq') {
                   vaultList = vaultList.filter(function(it) { return !isObsoleteMockFaq(it); });
+                } else if (bKey === 'columns') {
+                  vaultList = vaultList.filter(function(it) { return !isObsoleteMockColumn(it); });
+                } else if (bKey === 'reviews') {
+                  vaultList = vaultList.filter(function(it) { return !isObsoleteMockReview(it); });
                 }
                 var curRaw = localStorage.getItem('healim_vault_all_posts_' + bKey);
                 var curList = curRaw ? JSON.parse(curRaw) : [];

@@ -1074,3 +1074,40 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
      - [Test 3 - A vs B 일치도 비교]: A 세션과 B 세션의 FAQ 18편 전체 제목 및 순서 100% 완전 일치(100% IDENTICAL, 0 mismatches) 확인: PASS
      - 실시간 스크린샷 캡처: `admin_faq_unified.png`, `naver_faq_unified.png`
    - **정적 빌드 검증 (`hugo --minify`)**: 32개 페이지 에러 0건 정상 빌드 완료.
+
+---
+
+### [제9.40조] 커뮤니티 칼럼 및 치료후기 관리자(A) vs 회원(B) 목록 불일치 근본 해결 및 데이터 무결성 통합 (Milestone 9.40)
+1. **문제 상황 및 근본 원인 분석**:
+   - **사용자 제보**: 이전 FAQ에서 발생했던 현상(최고관리자 `healim0071` 로그인 세션 A와 네이버 로그인 세션 B 간의 게시글 목록 불일치)이 **치료 칼럼(`columns`)**과 **치료후기(`reviews`)**에서도 동일하게 발생함.
+   - **칼럼 원인**:
+     - 과거 초기 개발 버전(`8eca8c0`) 당시 삽입되었던 3편의 구형 목업 칼럼(`현대인의 보이지 않는 병, 자율신경 불균형과 장-뇌 축`, `두개천골요법(CST)이...`, `스트레스 호르몬과 바이오피드백...`)이 관리자 세션 A의 로컬스토리지 및 IndexedDB 금고에 `col-1`, `col-2`, `col-3`으로 영구 보존되어 있었음.
+     - `getBoardData`의 무손실 금고 보호 로직이 이를 먼저 로드하여 `seenIds['col-1'] = true`로 선점함으로써, 신규 20대 전문 임상 칼럼의 `col-1` ~ `col-3` 진입을 차단하고 구형 칼럼을 표시함.
+     - 또한 `defaultColumnsData`에 `col-auto-latest` 임시 항목이 중복으로 선행 배치되어 있었음.
+   - **치료후기 원인**:
+     - `defaultReviewsData`의 최상단에 테스트용 목업 글(`rev-test`, 제목: `test`)이 잔류하여 노출되고 있었음.
+     - `common_bottom_sections.html`의 하단 공통 영역에 4편의 구형 목업 후기 제목(`원인 모를 가슴 두근거림...`, `매일 밤 괴롭히던 불면...` 등)이 하드코딩되어 있어 상호 연동 시 구형 데이터가 혼입되는 원인이 됨.
+2. **해결 조치 및 기술적 구현**:
+   - **`content/community/_index.md` 데이터 및 필터 엔진 강화**:
+     - `defaultReviewsData`에서 `rev-test`("test") 완전 삭제 -> 6대 공식 임상 후기(`rev-1` ~ `rev-6`)로 시작.
+     - `defaultColumnsData`에서 `col-auto-latest` 완전 삭제 -> 20대 공식 임상 칼럼(`col-1` ~ `col-20`)으로 시작.
+     - `OBSOLETE_COLUMN_TITLES`, `isObsoleteMockColumn(item)`, `OBSOLETE_REVIEW_TITLES`, `isObsoleteMockReview(item)` 정규화 감지 필터 구축.
+     - `purgeObsoleteMockPosts()`를 `faq`, `columns`, `reviews` 3대 카테고리 전체로 확장하여, `healim_vault_all_posts_*`, `healim_board_*`, `healim_custom_*`, `healim_community_posts_v2`, `IndexedDB`에 잠복해 있던 구형 목업 칼럼 및 테스트 후기 데이터를 100% 자동 검출 및 영구 정제.
+     - `renderColumnsList()` 및 `renderReviewsList()` 진입 시 `purgeObsoleteMockPosts()`를 최우선 호출.
+     - `HealimPermanentDB.restoreVault`에서 `columns`와 `reviews` 복구 시에도 `isObsoleteMockColumn`, `isObsoleteMockReview`를 적용하여 구형 데이터의 부활 원천 차단.
+     - `getBoardData`에서 `columns`와 `reviews`의 `vaultList`, `customList`, `storedList`, `legacyList` 로드 시 구형 감지기를 적용하고, 정규화된 제목 디둡(`seenTitles`)을 적용하여 중복 방지.
+   - **칼럼 자동 발행 엔진(`static/js/auto_column_engine.js`) 정규화 및 스토리지 정제**:
+     - `OBSOLETE_COLUMN_TITLES` 및 `isObsoleteMockColumn(item)` 탑재.
+     - `getExistingColumnTitles()`에서 `window.defaultColumnsData`와 `healim_vault_all_posts_columns`를 조회하며, 구형 목업 칼럼은 기존 등록 목록에서 배제.
+     - 엔진 초기화 시 `purgeObsoleteColumnsStorage()`를 즉시 실행하여 로컬 스토리지 내 구형 칼럼 정제.
+   - **하단 공통 섹션(`layouts/_partials/components/common_bottom_sections.html`) 전면 동기화**:
+     - 정적 칼럼 카드 3종 및 `defaultColumnsList` 3종을 20대 공식 임상 칼럼 최상위 3편(단일 SVG 일러스트 탑재)으로 전면 교체.
+     - `defaultReviewsList` 6종을 커뮤니티의 6대 공식 임상 치료후기와 1:1 완벽 일치하도록 동기화.
+     - `syncBottomCommunity()` 내에 `isObsoleteReviewTitle`, `isObsoleteColumnTitle` 필터를 추가하여 구형 후기/칼럼이 하단 영역에 노출되지 않도록 차단.
+     - 칼럼 기본 이미지 폴백을 구형 PNG 대신 모던 SVG(`column_1_palpitation.svg`)로 통일.
+3. **검증 결과**:
+   - **Chrome CDP 세션 A(관리자) vs 세션 B(네이버 회원) 전 카테고리 교차 검증 100% 통과 (`scratch/verify_all_unification.js`)**:
+     - [칼럼 (Columns)]: 세션 A(구형 목업 주입 관리자)와 세션 B(네이버 회원) 모두 20편의 공식 전문 임상 칼럼이 동일한 순서로 100% 일치 (`count: 20 vs 20: true`, `titles identical: true`). 관리자 전용 수정/삭제/발행 UI 분리 정상 작동.
+     - [치료후기 (Reviews)]: 세션 A와 세션 B 모두 테스트 글(`test`) 없이 6편의 공식 임상 후기가 동일한 순서로 100% 일치 (`count: 6 vs 6: true`, `titles identical: true`). 네이버 회원 로그인 시 후기 잠금 자동 해제 및 관리자 수정/삭제 버튼 은닉 정상 작동.
+     - [실시간 검증 스크린샷]: `admin_columns_unified.png`, `naver_columns_unified.png`, `admin_reviews_unified.png`, `naver_reviews_unified.png` 캡처 완료.
+   - **정적 빌드 검증 (`hugo --minify`)**: 32개 페이지 에러 0건 정상 빌드 완료.

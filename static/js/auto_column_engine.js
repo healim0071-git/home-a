@@ -200,46 +200,102 @@
       .toLowerCase();
   }
 
+  var OBSOLETE_COLUMN_TITLES = [
+    '현대인의 보이지 않는 병, 자율신경 불균형과 장-뇌 축(Gut-Brain Axis)',
+    '현대인의 보이지 않는 병, 자율신경 불균형과 뇌-장-신경 축(Gut-Brain Axis)',
+    '두개천골요법(CST)이 뇌척수액 순환 및 미주신경 활성에 미치는 임상적 고찰',
+    '스트레스 호르몬과 바이오피드백: 자율신경 회복 식습관과 수면 리듬 설계법',
+    '스트레스 저항도를 높이는 자율신경 회복 식습관과 수면 리듬 설계법'
+  ];
+
+  function isObsoleteMockColumn(item) {
+    if (!item) return false;
+    if (item.id === 'col-auto-latest') return true;
+    if (!item.title) return false;
+    var norm = normalizeColumnTitle(item.title);
+    return OBSOLETE_COLUMN_TITLES.some(function(ot) {
+      var otNorm = normalizeColumnTitle(ot);
+      return norm === otNorm || norm.indexOf(otNorm) !== -1;
+    });
+  }
+
   function getExistingColumnTitles() {
     var titles = new Set();
+
+    function addTitle(it) {
+      if (!it || !it.title) return;
+      if (isObsoleteMockColumn(it)) return;
+      titles.add(normalizeColumnTitle(it.title));
+    }
 
     // 1) Active columns board storage
     try {
       var raw = localStorage.getItem(STORAGE_BOARD_KEY);
       if (raw) {
         var list = JSON.parse(raw) || [];
-        list.forEach(function(it) {
-          if (it && it.title) titles.add(normalizeColumnTitle(it.title));
-        });
+        list.forEach(addTitle);
       }
     } catch(e) {}
 
-    // 2) Custom user posts storage
+    // 2) Permanent vault storage
+    try {
+      var rawV = localStorage.getItem('healim_vault_all_posts_columns');
+      if (rawV) {
+        var listV = JSON.parse(rawV) || [];
+        listV.forEach(addTitle);
+      }
+    } catch(e) {}
+
+    // 3) Custom user posts storage
     try {
       var rawC = localStorage.getItem('healim_custom_columns_posts');
       if (rawC) {
         var listC = JSON.parse(rawC) || [];
-        listC.forEach(function(it) {
-          if (it && it.title) titles.add(normalizeColumnTitle(it.title));
-        });
+        listC.forEach(addTitle);
       }
     } catch(e) {}
 
-    // 3) Legacy community posts storage
+    // 4) Legacy community posts storage
     try {
       var rawLeg = localStorage.getItem('healim_community_posts_v2');
       if (rawLeg) {
         var legList = JSON.parse(rawLeg) || [];
         legList.forEach(function(it) {
           if (it && (it.type === 'columns' || it.category === '칼럼' || (it.id && String(it.id).startsWith('col-')))) {
-            if (it.title) titles.add(normalizeColumnTitle(it.title));
+            addTitle(it);
           }
         });
       }
     } catch(e) {}
 
+    // 5) Default columns seed data if exposed
+    if (typeof window !== 'undefined' && Array.isArray(window.defaultColumnsData)) {
+      window.defaultColumnsData.forEach(addTitle);
+    }
+
     return titles;
   }
+
+  function purgeObsoleteColumnsStorage() {
+    try {
+      ['healim_board_columns', 'healim_vault_all_posts_columns', 'healim_custom_columns_posts'].forEach(function(sKey) {
+        var raw = localStorage.getItem(sKey);
+        if (raw) {
+          var list = JSON.parse(raw);
+          if (Array.isArray(list)) {
+            var filtered = list.filter(function(it) { return !isObsoleteMockColumn(it); });
+            if (filtered.length !== list.length) {
+              localStorage.setItem(sKey, JSON.stringify(filtered));
+              if (sKey === 'healim_vault_all_posts_columns' && typeof window !== 'undefined' && window.HealimPermanentDB && window.HealimPermanentDB.saveVault) {
+                window.HealimPermanentDB.saveVault('columns', filtered);
+              }
+            }
+          }
+        }
+      });
+    } catch(e) {}
+  }
+  purgeObsoleteColumnsStorage();
 
   // Sanitize any existing stored posts to remove duplicate leading images
   function sanitizeStoredPosts() {
