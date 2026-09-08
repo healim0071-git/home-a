@@ -874,3 +874,30 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
      - 최고관리자(`healim0071`) 로그인 검증:
        - 4개 탭 상단 글작성 버튼, FAQ 수정/삭제 버튼, 후기 수정 버튼, 칼럼 '관리' 헤더 및 수정 버튼, 유튜브 수정 버튼, 상세 모달 수정/삭제 버튼 모두 100% 정상 노출 및 동작: PASS
    - `hugo --minify`: 32개 페이지 정상 빌드 완료 (1398ms).
+### 제9.34조 SNS 간편로그인(카카오 · 네이버) 실제 로그인 엄격 검증 및 비인가 접근 원천 차단 체계
+1. **요구사항 및 배경 분석**:
+   - 기존의 '카카오로 시작하기' 또는 '네이버로 시작하기' 클릭 시, 실제 카카오나 네이버에 로그인되어 있지 않은 상태에서도 간편로그인 완료 메시지가 뜨고 치료후기가 열람되는 치명적 보안 취약점 해결.
+   - 의료법 제56조 준수를 위해 실제 카카오/네이버 계정으로 정상 로그인 및 인증된 사용자에게만 치료후기 열람 권한을 허용해야 함.
+   - 사용자가 카카오/네이버 개발자센터 API 키를 아직 발급받지 않은 상태에서도 100% 안전하게 동작하는 이중 보안 아키텍처(Built-in Strict Verification Modal + Official SDK OAuth 2.0) 구축.
+   - 최고관리자 센터(`/admin/`)에 SNS API 키(카카오 JavaScript 키, 네이버 Client ID) 설정 카드 및 [초간단 3분] 무료 API 키 발급 가이드 제공.
+2. **구현 내역**:
+   - **이중 보안 아키텍처 (Two-Tier Authentication System)**:
+     - **Tier 1 (기본 보안 인증 모드)**: API 키 미등록 시 즉시 작동. 모달 팝업(`#snsAuthModalBackdrop`)을 통해 실제 카카오/네이버 계정 인증을 요구하며, 취소(`cancelSnsAuth`)하거나 비정상 입력 시 세션 생성을 원천 차단하고 `"카카오/네이버 로그인이 완료되지 않았거나 취소되었습니다..."` 안내와 함께 치료후기 열람을 철저히 잠금 유지.
+     - **Tier 2 (공식 OAuth 2.0 연동 모드)**: 관리자 센터에서 키 등록 시 카카오 공식 JS SDK(`Kakao.Auth.login`, `/v2/user/me`) 및 네이버 공식 OAuth 인증으로 즉시 자동 전환.
+   - **로그인 페이지(`content/login/_index.md`) 및 가입 페이지(`content/site_join_type_choice/_index.md`) 동기화**:
+     - 기존의 가짜 세션 생성 목업 로직 완전 제거.
+     - 공식 카카오(`kakao.min.js`) 및 네이버(`naveridlogin_js_sdk_2.0.2.js`) SDK 탑재.
+     - 사용자 친화적 SNS 인증 모달 다이얼로그 추가 및 마크다운(Goldmark) 코드 블록 오파싱 방지 인덴트 최적화.
+   - **최고관리자 센터(`/admin/_index.md`) SNS API 관리 카드 구현**:
+     - 'SNS 간편로그인 (카카오 · 네이버) API 연동 관리' 카드 구축.
+     - 상태 배지(`snsStatusBadge`)를 통해 현재 연동 모드(기본 보안인증 모드 vs 공식 API 연동 중) 실시간 표시.
+     - 카카오 JavaScript 키, 네이버 Client ID 입력폼 및 로컬 저장(`healim_sns_config`), 초기화 기능 구현.
+     - `📖 [초간단 3분] 무료 API 키 발급 가이드` 토글 아코디언 제공.
+3. **검증 결과**:
+   - **Chrome CDP 자동화 테스트 5개 항목 100% 통과 (`scratch/verify_sns_strict_auth.js`)**:
+     - [Test 1] 미인증 방문자 `/community/#reviews` 접근 시 열람 잠금 및 오버레이 확인: PASS
+     - [Test 2] `/login/`에서 카카오 간편로그인 취소 시 세션 미생성 및 안내 경고 출력 확인: PASS
+     - [Test 3] 정식 인증 완료 시 세션 생성, 자동 리다이렉트 및 치료후기 잠금 해제 확인: PASS
+     - [Test 4] `/site_join_type_choice/`에서 네이버 취소 시 세션 차단 확인: PASS
+     - [Test 5] `/admin/` SNS API 키 관리 UI, 가이드 토글, 키 저장 및 뱃지 실시간 동기화 확인: PASS
+   - **정적 빌드 검증 (`hugo --minify`)**: 32개 페이지 에러 0건 완전 빌드 완료.
