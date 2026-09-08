@@ -796,8 +796,14 @@
     var initState = {
       lastPublishedTime: 0,
       nextScheduledTime: next.getTime(),
-      publishedPoolIds: [],
-      poolIndex: 0
+      publishedPoolIds: [
+        'pool-faq-1', 'pool-faq-2', 'pool-faq-3', 'pool-faq-4', 'pool-faq-5',
+        'pool-faq-6', 'pool-faq-7', 'pool-faq-8', 'pool-faq-9', 'pool-faq-10',
+        'pool-faq-11', 'pool-faq-12', 'pool-faq-13', 'pool-faq-14', 'pool-faq-15',
+        'pool-faq-16', 'pool-faq-17', 'pool-faq-18', 'pool-faq-19', 'pool-faq-20',
+        'pool-faq-21', 'pool-faq-22'
+      ],
+      poolIndex: 22
     };
     saveAutoFaqState(initState);
     return initState;

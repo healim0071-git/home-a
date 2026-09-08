@@ -1349,4 +1349,34 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
    - `hugo --minify` 정적 빌드 0 에러 (1.4초) 정상 완료.
    - 시뮬레이션 검증(`scratch/verify_simulation.js`): Chrome, Edge, Safari, Mobile 등 저장소가 비어 있는 신규 브라우저나 기존 브라우저 모두에서 상위 3개 치료후기와 상위 3개 치료칼럼이 100% 동일하게 렌더링됨을 수학적으로 검증.
 
+---
 
+### [2026-09-09] 마일스톤 9.49: 자주 묻는 질문(FAQ) 브라우저 간 불일치 100% 원천 해결 & 22대 임상 문답 전역 기준선 동기화
+
+1. **사용자 요청 사항**:
+   - "faq도 같은 상황이야. 방금 한 작업 faq에도 적용해서 수정해줘."
+   - 치료후기 및 치료칼럼과 마찬가지로 자주 묻는 질문(AEO/FAQ) 또한 Chrome, Edge, Mobile 브라우저 간 표시되는 질문 개수와 순서가 서로 다르게 나오는 현상을 동일하게 전역 기준선으로 일치화 요청.
+
+2. **근본 원인 분석**:
+   - **원인 1 (공통 하단 FAQ 목록 축소 누락)**: `layouts/_partials/components/common_bottom_sections.html`의 `defaultFaqList`에 7개 항목만 등록되어 있어, 신규 접속 브라우저(Edge, 모바일 등)에서는 상위 5개 질문 목록이 크롬과 다르게 왜곡 노출됨.
+   - **원인 2 (커뮤니티 및 허브 데이터 시차)**: `content/community/_index.md` 및 `healim_community_hub.json`에 20개 항목만 존재하여, 크롬에서 자동 발행 엔진을 통해 생성된 최신 2개 질문(#22 기립성 저혈압/어지럼, #21 구강건조증)이 다른 브라우저에서는 누락됨.
+   - **원인 3 (자동 발행 엔진 초기 인덱스 불일치)**: `static/js/auto_faq_engine.js`의 `initState`가 `poolIndex: 0`으로 설정되어 있어, 신규 브라우저 방문 시 0번부터 시작하여 브라우저별 파편화가 발생함.
+
+3. **작업 및 개선 내역**:
+   - **22대 공식 FAQ 전역 기준선 완전 통합 (역순 최신순 정렬)**:
+     - 1순위: **#22** "앉아 있거나 누워 있다가 일어설 때 눈앞이 캄캄해지고 핑 돕니다. 빈혈약으로 안 낫는데 자율신경 검사가 필요한가요?" (`2026.09.09`, `/images/faq/faq_22_orthostatic.svg`)
+     - 2순위: **#21** "입안이 바짝 말라 혀가 타는 듯 아프고 물을 마셔도 갈증이 가시지 않습니다. 구강건조증도 자율신경과 연관이 있나요?" (`2026.09.09`, `/images/faq/faq_21_drymouth.svg`)
+     - 3순위: **#20** "아침에 눈을 뜨자마자 심장이 쿵쾅거리고 불안하며 머리가 무겁습니다. 아침 기상 시 유독 심해지는 이유는 무엇인가요?" (`2026.09.09`, `/images/faq/faq_20_morning.svg`)
+     - 4순위: **#19** "목에 뭔가 걸린 듯 답답하고 헛기침이 계속 나옵니다. 이비인후과 내시경은 정상인데 매핵기나 자율신경 이상인가요?" (`2026.09.09`, `/images/faq/faq_19_globus.svg`, 사용자 작성 ID `faq-1788878924543` 연동)
+     - 5순위~22순위: #1번부터 #18번까지의 임상 FAQ (2026.09.06 ~ 2026.07.18 순차 정렬)
+   - **대상 파일 일괄 표준화**:
+     1. `data/healim_community_hub.json` & `static/data/healim_community_hub.json`: 전역 허브에 22개 전체 FAQ 역순 최신순 영구 반영.
+     2. `layouts/_partials/components/common_bottom_sections.html`:
+        - `defaultFaqList` 7건 -> 22건 전체 영구 탑재.
+        - 정적 HTML 아코디언 상위 5건을 #22, #21, #20, #19, #1로 최신화하여 자바스크립트 로딩 전에도 동일 화면 보장.
+     3. `content/community/_index.md`: `defaultFaqData`를 22건 전체 영구 탑재.
+     4. `static/js/auto_faq_engine.js`: `poolIndex: 22` 설정 및 초기 publishedPoolIds 22개 등록으로 브라우저별 파편화 원천 방지.
+
+4. **검증 결과**:
+   - `hugo --minify` 정적 빌드 0 에러 (1.6초) 정상 완료.
+   - 크로스 브라우저 시뮬레이션 검증(`scratch/verify_faq_sync.js`): Chrome, Edge, Safari, 모바일 등 어떤 브라우저로 처음 접속해도 FAQ 상위 5개가 100% 동일하게(#22, #21, #20, #19, #1) 렌더링됨을 검증 완료.
