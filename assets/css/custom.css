@@ -1968,21 +1968,24 @@ section#section-markdown:first-of-type {
 .healim-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(3px);
-  z-index: 100;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 99999 !important;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1rem;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.25s ease;
+  pointer-events: none;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
 }
 
 .healim-modal-backdrop.is-open {
-  opacity: 1;
-  visibility: visible;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: flex !important;
+  pointer-events: auto !important;
 }
 
 .healim-modal-dialog {
@@ -1992,14 +1995,16 @@ section#section-markdown:first-of-type {
   max-width: 620px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.35);
   transform: translateY(20px) scale(0.97);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   padding: 1.75rem;
+  z-index: 100000 !important;
+  position: relative;
 }
 
 .healim-modal-backdrop.is-open .healim-modal-dialog {
-  transform: translateY(0) scale(1);
+  transform: translateY(0) scale(1) !important;
 }
 
 .healim-modal-header {

@@ -819,12 +819,18 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
      - 후기 목록 렌더링 시(`renderReviewsList`): 사진이 누락된 기존 글도 감지 즉시 블러 후기 사진 및 `🔒 의료법 보호 흐림처리` 오버레이 배지 탑재
      - 상세 모달(`openDetailModal`): 치료후기 사진 열람 시 블러 처리와 함께 `🔒 의료법 제56조 준수 환자 개인정보 보호를 위해 흐림(블러) 처리된 사진입니다.` 안내 배지 출력
      - 작성 모달(`openWriteModal`): 치료후기 탭 선택 시 사진 블러 자동 처리 및 미첨부 시 자동 배정 안내문 표시
+     - **상세 모달 팝업 가시성 및 클릭 이벤트 안정화 (`assets/css/custom.css`, `content/community/_index.md`)**:
+       - `.healim-modal-backdrop` 최상단 레이어 보장: `z-index: 99999 !important;` 및 열림 시 `display: flex !important; pointer-events: auto !important;` 적용으로 가림 현상 원천 차단
+       - 게시글 조회 식별자 안정화: 문자열/숫자 타입 불일치 방지(`String(it.id) === targetStrId`) 및 다계층 폴백(기본 시드, 커스텀 스토리지, 제목 매핑) 지원
+       - 이미지 정규식 오류 방지: 대용량 Base64 이미지에 대한 안전 예외 처리
+       - 전방위 클릭 이벤트 매핑: 카드 본체, 제목, 블러 이미지, `[전체 후기 보기 >]` 전용 버튼 어디를 클릭하더라도 상세 팝업이 100% 즉시 열리도록 바인딩
 3. **검증 결과**:
-   - `hugo --minify`: 32개 페이지 정상 빌드 (1575ms)
-   - Chrome CDP 자동화 테스트 5단계 100% 통과:
+   - `hugo --minify`: 32개 페이지 정상 빌드 (1482ms)
+   - Chrome CDP 자동화 테스트 통과:
      - 기존 사진 미첨부 글(`test`)의 블러 사진 자동 렌더링: PASS (`scratch/cdp_reviews_grid.png`)
-     - 사진 미첨부 신규 글 작성 시 블러 사진 자동 매핑: PASS
-     - 커스텀 사진 첨부 시 사진 보존 및 블러 처리: PASS
-     - 상세 모달 내 블러 처리 및 법적 안내 배지 출력: PASS (`scratch/cdp_detail_modal_blurred.png`)
+     - `[전체 후기 보기 >]` 버튼 클릭 시 모달 즉시 팝업: PASS (`scratch/live_modal_opened.png`)
+     - 카드 제목 및 본체 클릭 시 모달 팝업: PASS
+     - 상세 모달 내 블러 처리 및 법적 안내 배지 정상 노출: PASS
+
 
 

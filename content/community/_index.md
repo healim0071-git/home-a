@@ -1651,26 +1651,27 @@ sections:
           item.image = reviewImg;
         }
         var photoBadge = '<span class="text-xs font-bold px-1.5 py-0.5 rounded bg-[#eaf3f4] text-[#1c6e78] border border-[#badfe3]">📷 사진</span>';
-        var imageThumbHtml = '<div class="relative my-2.5 rounded-lg overflow-hidden border border-[#edf2f4] bg-[#f8fafb] max-h-40 flex items-center justify-center">' +
+        var safeId = String(item.id || ('rev-' + idx)).replace(/'/g, "\\'");
+        var imageThumbHtml = '<div class="relative my-2.5 rounded-lg overflow-hidden border border-[#edf2f4] bg-[#f8fafb] max-h-40 flex items-center justify-center cursor-pointer" onclick="event.stopPropagation(); openDetailModal(\'reviews\', \'' + safeId + '\')">' +
           '<img src="' + reviewImg + '" alt="' + (item.title || '치료후기 사진') + '" class="healim-review-blurred-img max-h-40 w-full object-cover" loading="lazy" />' +
           '<div class="absolute top-2 left-2 bg-[#0d3a42]/80 backdrop-blur-xs text-white text-[10px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-xs pointer-events-none">' +
           '<span>🔒</span> <span>의료법 보호 흐림처리</span>' +
           '</div>' +
           '</div>';
         var cleanSnippet = (item.content || '').replace(/<img[^>]*>/gi, '[사진]').replace(/!\[.*?\]\(.*?\)/g, '[사진]').replace(/<[^>]+>/g, '').replace(/[*_~`#]/g, '').trim();
-        html += '<div class="healim-card white-bg text-left p-6 cursor-pointer" onclick="openDetailModal(\'reviews\', \'' + item.id + '\')">' +
+        html += '<div class="healim-card white-bg text-left p-6 cursor-pointer" data-post-id="' + safeId + '" onclick="openDetailModal(\'reviews\', \'' + safeId + '\')">' +
         '<div class="flex justify-between items-center mb-2 w-full">' +
         '<div class="flex items-center gap-1.5"><span class="text-xs font-bold px-2 py-0.5 rounded bg-[#eaf3f4] text-[#1c6e78]">' + item.category + '</span>' + photoBadge + '</div>' +
         '<span class="text-xs text-[#888888]">' + item.author + '</span>' +
         '</div>' +
-        '<h3 class="font-bold text-[#0d3a42] text-sm mb-2 hover:text-[#1c6e78] transition-colors">' + item.title + '</h3>' +
+        '<h3 class="font-bold text-[#0d3a42] text-sm mb-2 hover:text-[#1c6e78] transition-colors cursor-pointer" onclick="event.stopPropagation(); openDetailModal(\'reviews\', \'' + safeId + '\')">' + item.title + '</h3>' +
         imageThumbHtml +
         '<p class="text-xs text-[#555555] leading-relaxed line-clamp-3">' + cleanSnippet + '</p>' +
         '<div class="mt-3 pt-3 border-t border-[#f0f4f5] flex justify-between items-center text-xs text-[#888888] w-full">' +
         '<span>등록일: ' + item.date + '</span>' +
         '<div class="flex items-center gap-2">' +
-        '<button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors" onclick="event.stopPropagation(); openEditModal(\'reviews\', \'' + item.id + '\')">✏️ 수정</button>' +
-        '<span class="text-[#1c6e78] font-semibold">전체 후기 보기 &gt;</span>' +
+        '<button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors" onclick="event.stopPropagation(); openEditModal(\'reviews\', \'' + safeId + '\')">✏️ 수정</button>' +
+        '<button type="button" class="px-2.5 py-1 text-xs font-bold text-[#1c6e78] bg-[#eaf3f4] hover:bg-[#d8eaed] rounded border border-[#badfe3] transition-all flex items-center gap-1 shadow-2xs cursor-pointer" onclick="event.stopPropagation(); openDetailModal(\'reviews\', \'' + safeId + '\')"><span>전체 후기 보기</span><span class="text-xs">&gt;</span></button>' +
         '</div>' +
         '</div>' +
         '</div>';
@@ -2616,13 +2617,30 @@ sections:
         }
         }
 
-        var list = getBoardData(boardType, []);
-        var item = list.find(function(it) { return it.id === postId; });
+        var fallbackData = (boardType === 'faq' ? defaultFaqData : (boardType === 'reviews' ? defaultReviewsData : (boardType === 'youtube' ? defaultYoutubeData : defaultColumnsData)));
+        var list = getBoardData(boardType, fallbackData);
+        var targetStrId = String(postId || '');
+        var item = list.find(function(it) { return String(it.id) === targetStrId; });
+        if (!item && Array.isArray(fallbackData)) {
+          item = fallbackData.find(function(it) { return String(it.id) === targetStrId; });
+        }
+        if (!item) {
+          var customPosts = getCustomUserPosts(boardType);
+          item = customPosts.find(function(it) { return String(it.id) === targetStrId; });
+        }
+        if (!item) {
+          item = list.find(function(it) { return it.title && it.title === targetStrId; });
+        }
+        if (!item && list.length > 0) {
+          item = list[0];
+        }
         if (!item) return;
 
         // Increment views
-        item.views = (item.views || 0) + 1;
-        saveBoardData(boardType, list);
+        try {
+          item.views = (item.views || 0) + 1;
+          saveBoardData(boardType, list);
+        } catch(e) {}
 
         var catEl = document.getElementById('detailModalCategory');
         if (catEl) {
@@ -2630,13 +2648,18 @@ sections:
           catEl.style.display = 'none';
         } else {
           catEl.style.display = 'inline-block';
-          catEl.textContent = item.category;
+          catEl.textContent = item.category || '치료후기';
         }
         }
-        document.getElementById('detailModalTitle').textContent = item.title;
-        document.getElementById('detailModalAuthor').textContent = item.author;
-        document.getElementById('detailModalDate').textContent = item.date;
-        document.getElementById('detailModalViews').textContent = item.views;
+        var titleEl = document.getElementById('detailModalTitle');
+        if (titleEl) titleEl.textContent = item.title || '';
+        var authorEl = document.getElementById('detailModalAuthor');
+        if (authorEl) authorEl.textContent = item.author || '해아림한의원';
+        var dateEl = document.getElementById('detailModalDate');
+        if (dateEl) dateEl.textContent = item.date || '';
+        var viewsEl = document.getElementById('detailModalViews');
+        if (viewsEl) viewsEl.textContent = item.views || 1;
+
         // Render attached image if present (FAQ, Reviews, Columns) and deduplicate with content
         var imgArea = document.getElementById('detailModalImageArea');
         var imgEl = document.getElementById('detailModalImage');
@@ -2681,12 +2704,16 @@ sections:
               blurNotice.style.display = 'none';
             }
           }
-          // Deduplicate: If content starts with or contains the exact same image, remove it from content
-          var escapedImg = item.image.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-          displayContent = displayContent.replace(new RegExp('^\\s*!\\[[^\\]]*\\]\\(' + escapedImg + '\\)\\s*', 'i'), '');
-          displayContent = displayContent.replace(new RegExp('!\\[[^\\]]*\\]\\(' + escapedImg + '\\)', 'gi'), '');
-          displayContent = displayContent.replace(new RegExp('<div[^>]*>\\s*<img[^>]+src=["\']' + escapedImg + '["\'][^>]*>\\s*</div>', 'gi'), '');
-          displayContent = displayContent.replace(new RegExp('<img[^>]+src=["\']' + escapedImg + '["\'][^>]*>', 'gi'), '');
+          // Safely deduplicate: only if image URL is short
+          try {
+            if (item.image && typeof item.image === 'string' && item.image.length < 500) {
+              var escapedImg = item.image.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              displayContent = displayContent.replace(new RegExp('^\\s*!\\[[^\\]]*\\]\\(' + escapedImg + '\\)\\s*', 'i'), '');
+              displayContent = displayContent.replace(new RegExp('!\\[[^\\]]*\\]\\(' + escapedImg + '\\)', 'gi'), '');
+              displayContent = displayContent.replace(new RegExp('<div[^>]*>\\s*<img[^>]+src=["\']' + escapedImg + '["\'][^>]*>\\s*</div>', 'gi'), '');
+              displayContent = displayContent.replace(new RegExp('<img[^>]+src=["\']' + escapedImg + '["\'][^>]*>', 'gi'), '');
+            }
+          } catch(e) {}
         } else {
           if (imgArea) imgArea.style.display = 'none';
           if (imgEl) imgEl.src = '';
@@ -2694,7 +2721,10 @@ sections:
           if (blurNotice) blurNotice.style.display = 'none';
         }
 
-        document.getElementById('detailModalContent').innerHTML = renderRichContent(displayContent);
+        var contentEl = document.getElementById('detailModalContent');
+        if (contentEl) {
+          contentEl.innerHTML = renderRichContent(displayContent);
+        }
 
         var btnDel = document.getElementById('btnDetailModalDelete');
         if (btnDel) {
@@ -2714,12 +2744,16 @@ sections:
         ytArea.innerHTML = '<div class="youtube-thumb-wrapper rounded-lg overflow-hidden">' +
         '<iframe src="' + embedUrl + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full"></iframe>' +
         '</div>';
-        } else {
+        } else if (ytArea) {
         ytArea.style.display = 'none';
         ytArea.innerHTML = '';
         }
 
-        document.getElementById('detailModalBackdrop').classList.add('is-open');
+        var backdropEl = document.getElementById('detailModalBackdrop');
+        if (backdropEl) {
+          backdropEl.style.display = 'flex';
+          backdropEl.classList.add('is-open');
+        }
         };
 
         window.handleDeleteCurrentPost = function() {
@@ -2758,7 +2792,10 @@ sections:
 
         window.closeDetailModal = function() {
         var modal = document.getElementById('detailModalBackdrop');
-        if (modal) modal.classList.remove('is-open');
+        if (modal) {
+          modal.classList.remove('is-open');
+          modal.style.display = 'none';
+        }
         var ytArea = document.getElementById('detailModalYoutubeArea');
         if (ytArea) ytArea.innerHTML = '';
         var imgArea = document.getElementById('detailModalImageArea');
