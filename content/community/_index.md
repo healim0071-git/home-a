@@ -425,6 +425,26 @@ sections:
         // --- Seed Data ---
         var defaultFaqData = [
           {
+            "id": "faq-20",
+            "category": "수면/기상리듬",
+            "author": "해아림한의원",
+            "date": "2026.09.09",
+            "views": 185,
+            "image": "/images/faq/faq_20_morning.svg",
+            "title": "아침에 눈을 뜨자마자 심장이 쿵쾅거리고 불안하며 머리가 무겁습니다. 아침 기상 시 유독 심해지는 이유는 무엇인가요?",
+            "content": "밤새 자고 일어났는데도 몸이 천근만근 무겁고, 눈을 뜨자마자 심장이 분당 100회 이상 미친 듯이 뛰기 시작해요. 머릿속에 안개 낀 것처럼 멍하고 정체 모를 공포와 불안이 밀려와 하루를 시작하기가 두렵습니다.\n\n자율신경실조증 환자분들 중 상당수가 하루 중 '아침 눈뜰 때' 가장 극심한 두근거림과 불안을 호소하십니다. 상식적으로는 밤새 쉬었으니 아침에 가장 편안해야 할 것 같지만, 인체의 생체 시계와 신경-호르몬 축을 살펴보면 아침 기상 시간은 신경계에 가장 취약한 **'급격한 전환 구간'**입니다.\n\n인체는 기상하기 직전부터 잠에서 깨어나 활동할 수 있도록 부신에서 스트레스 호르몬인 코르티솔을 급격히 분비하는 **'코르티솔 각성 반응(CAR: Cortisol Awakening Response)'**을 일으킵니다. 건강한 상태에서는 코르티솔이 적절히 올라가며 기분 좋은 활력을 주지만, 자율신경계가 무너진 환자는 뇌 시상하부-뇌하수체-부신(HPA 축)이 과민 반응을 일으켜 코르티솔과 노르아드레날린을 폭발적으로 뿜어냅니다.\n\n동시에 밤사이 수면을 유지하던 부교감신경에서 주간 활동 모드인 교감신경으로의 스위치 전환이 부드럽게 이루어지지 못하고, 교감신경이 급발진하듯 폭주하게 됩니다. 이로 인해 기상 직후 심박수 급등, 혈압 상승, 손발 식은땀, 가슴 조임, 그리고 뇌로 가는 산소 공급 부족에 따른 '모닝 브레인 포그(Brain Fog)'가 동반됩니다.\n\n해아림한의원에서는 과각성된 HPA 축을 안정시키고 심장의 열을 내려주는 **천왕보심단(天王補心丹), 산조인탕(酸棗仁湯), 계지가용골모려탕(桂枝加龍骨牡蠣湯)**을 통해 아침의 불필요한 교감신경 서지(Surge)를 부드럽게 완충합니다. 또한 아침 기상 직후 암막 커튼을 열어 햇볕을 10분간 쬐고 복식 호흡을 실천하는 생체 리듬 재동기화 프로토콜을 코칭하여, 편안하고 상쾌한 아침 기상을 되찾아 드립니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)"
+          },
+          {
+            "id": "faq-19",
+            "category": "호흡/인후부",
+            "author": "해아림한의원",
+            "date": "2026.09.09",
+            "views": 172,
+            "image": "/images/faq/faq_19_globus.svg",
+            "title": "목에 뭔가 걸린 듯 답답하고 헛기침이 계속 나옵니다. 이비인후과 내시경은 정상인데 매핵기나 자율신경 이상인가요?",
+            "content": "목 이물감(매핵기)과 자율신경계 과흥분은 긴밀히 연결되어 있습니다. 이비인후과 내시경에서 이상이 없는데도 목에 가래나 솜뭉치가 걸린 듯한 이물감이 지속되고 헛기침이 멎지 않는다면, 교감신경 항진으로 인한 인후부 점막 건조 및 식도 괄약근 긴장(매핵기/자율신경 이상)일 가능성이 높습니다. 해아림한의원의 1:1 맞춤 한약과 두개천골요법(CST)으로 자율신경 균형을 바로잡으면 빠르고 안전하게 호전됩니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)"
+          },
+          {
             "id": "faq-1",
             "category": "원인/진단",
             "author": "해아림한의원",
@@ -608,6 +628,16 @@ sections:
         window.defaultFaqData = defaultFaqData;
 
         var defaultReviewsData = [
+          {
+            "id": "reviews-1788878779980",
+            "category": "치료후기",
+            "author": "해아림한의원",
+            "date": "2026.09.09",
+            "views": 1,
+            "image": "/images/reviews/review_1.jpg",
+            "title": "테스트를 해보려고합니다.",
+            "content": "치료후기 테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를..."
+          },
           {
             "id": "rev-1",
             "category": "가슴두근거림 & 공황",
@@ -1568,25 +1598,44 @@ sections:
 
           function pullFromHub(onDone) {
             if (!window.fetch) return;
-            fetch(getHubUrl('/api/posts'), { mode: 'cors' })
+            // 1. Fetch static hub data from web server (production-ready cross-browser)
+            fetch('/data/healim_community_hub.json?t=' + Date.now(), { cache: 'no-cache' })
               .then(function(res) {
-                if (!res.ok) throw new Error('Hub offline');
+                if (!res.ok) throw new Error('Static hub offline');
                 return res.json();
               })
               .then(function(json) {
-                if (json && json.status === 'ok' && json.data) {
+                if (json) {
+                  var data = json.data || json;
                   hasConnectedHub = true;
-                  inMemoryHubData = json.data;
-                  applyHubData(json.data);
-
-                  // If hub has 0 custom posts, but local has custom posts, seed the hub!
-                  checkAndSeedHub(json.data);
-
-                  if (onDone) onDone(true, json.data);
+                  inMemoryHubData = data;
+                  applyHubData(data);
+                  checkAndSeedHub(data);
+                  if (onDone) onDone(true, data);
                 }
               })
               .catch(function(err) {
-                if (onDone) onDone(false, err);
+                if (isLocal) {
+                  fetch(getHubUrl('/api/posts'), { mode: 'cors' })
+                    .then(function(res) {
+                      if (!res.ok) throw new Error('Hub offline');
+                      return res.json();
+                    })
+                    .then(function(json) {
+                      if (json && json.status === 'ok' && json.data) {
+                        hasConnectedHub = true;
+                        inMemoryHubData = json.data;
+                        applyHubData(json.data);
+                        checkAndSeedHub(json.data);
+                        if (onDone) onDone(true, json.data);
+                      }
+                    })
+                    .catch(function(e) {
+                      if (onDone) onDone(false, e);
+                    });
+                } else {
+                  if (onDone) onDone(false, err);
+                }
               });
           }
 
