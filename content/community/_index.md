@@ -1858,7 +1858,7 @@ sections:
             var rawUser = localStorage.getItem('healim_auth_user');
             if (!rawUser) return false;
             var u = JSON.parse(rawUser);
-            return !!(u && (u.uid === 'healim0071' || (u.role === 'admin' && u.uid === 'healim0071')));
+            return !!(u && (u.uid === 'healim0071' || u.id === 'healim0071' || (u.role === 'admin' && (u.uid === 'healim0071' || u.id === 'healim0071')) || u.grade === 'superadmin' || u.role === 'superadmin'));
           } catch(e) {
             return false;
           }

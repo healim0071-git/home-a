@@ -577,17 +577,23 @@
         }
       }
 
-      // 만약 풀 내의 모든 질문이 이미 등록되어 있는 경우 -> 절대 중복 발행하지 않고 안전 스킵
+      // Load current FAQ board to determine total existing count
+      var currentFaqList = [];
+      try {
+        var raw = localStorage.getItem('healim_board_faq');
+        if (raw) currentFaqList = JSON.parse(raw) || [];
+      } catch(e) {}
+      if (currentFaqList.length === 0 && (window.defaultFaqData || window.defaultFaqList)) {
+        currentFaqList = (window.defaultFaqData || window.defaultFaqList).slice();
+      }
+
+      var isCycleEdition = false;
       if (!candidatePoolItem) {
-        console.warn('[Auto-FAQ Engine] 모든 임상 FAQ 질문이 이미 게시판에 존재하여 중복 방지를 위해 발행을 스킵합니다.');
-        var nextD = calculateNextScheduleTime(new Date());
-        state.nextScheduledTime = nextD.getTime();
-        saveAutoFaqState(state);
-        updateAutoFaqStatusUI(state);
-        if (forceImmediate && typeof window.alert === 'function') {
-          alert('안내: 준비된 임상 FAQ 질문이 이미 모두 등록되어 있어, 기존 글과의 중복 방지를 위해 추가 발행되지 않았습니다.');
-        }
-        return null;
+        // 모든 18개 기본 임상 질문이 이미 등록되어 있는 경우:
+        // 중단하지 않고, 심층 임상 질의응답 회차(에디션)로 무제한 연속 발행!
+        isCycleEdition = true;
+        chosenIndex = state.poolIndex % poolLength;
+        candidatePoolItem = window.autoFaqContentPool[chosenIndex];
       }
 
       var poolItem = candidatePoolItem;
@@ -595,25 +601,26 @@
       var pDate = new Date(pubTimestamp);
       var dateStr = pDate.getFullYear() + '.' + String(pDate.getMonth() + 1).padStart(2, '0') + '.' + String(pDate.getDate()).padStart(2, '0');
 
+      var faqTitle = poolItem.title;
+      var faqContent = poolItem.content;
+      if (isCycleEdition) {
+        var nextEdition = (currentFaqList.length + 1);
+        faqTitle = '[심층 FAQ ' + nextEdition + '문] ' + poolItem.title;
+        faqContent = '> 💡 **[해아림 자율신경실조증 심층 질의응답 제' + nextEdition + '호]**\n> 본 FAQ는 환자분들의 이해와 빠른 쾌유를 돕기 위해 해아림한의원 원장단이 지속적으로 연재하는 심층 임상 Q&A입니다.\n\n' + poolItem.content;
+      }
+
       var newPost = {
         id: 'faq-auto-' + pubTimestamp,
         category: '자율신경FAQ',
         author: '해아림한의원',
         date: dateStr,
         views: Math.floor(Math.random() * 80) + 140,
-        title: poolItem.title,
+        title: faqTitle,
         image: poolItem.image,
-        content: poolItem.content,
+        content: faqContent,
         isAutoPublished: true,
         poolId: poolItem.id
       };
-
-      // healim_board_faq 로드
-      var currentFaqList = [];
-      try {
-        var raw = localStorage.getItem('healim_board_faq');
-        if (raw) currentFaqList = JSON.parse(raw) || [];
-      } catch(e) {}
 
       // 최종 이중 중복 검사
       var normCandidate = normalizeQuestionTitle(newPost.title);
@@ -621,8 +628,11 @@
         return it.id === newPost.id || normalizeQuestionTitle(it.title) === normCandidate;
       });
 
-      if (!exists) {
-        currentFaqList.unshift(newPost);
+      if (exists) {
+        newPost.title = faqTitle + ' (' + dateStr + ')';
+      }
+
+      currentFaqList.unshift(newPost);
         try {
           localStorage.setItem('healim_board_faq', JSON.stringify(currentFaqList));
 
@@ -652,7 +662,6 @@
           legList.unshift(newPost);
           localStorage.setItem('healim_community_posts_v2', JSON.stringify(legList));
         } catch(e) {}
-      }
 
       // 상태 전진 (선택된 인덱스 다음으로)
       state.lastPublishedTime = pubTimestamp;

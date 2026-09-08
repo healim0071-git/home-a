@@ -415,17 +415,35 @@
       }
     }
 
+    // Load current columns board to determine total existing count
+    var currentColumns = [];
+    try {
+      var raw = localStorage.getItem(STORAGE_BOARD_KEY);
+      if (raw) currentColumns = JSON.parse(raw) || [];
+    } catch(e) {}
+    if (currentColumns.length === 0 && window.defaultColumnsData) {
+      currentColumns = window.defaultColumnsData.slice();
+    }
+
+    var isCycleEdition = false;
     if (selectedIdx === -1) {
-      console.log('[Healim Auto-Column Engine] All ' + columnsPool.length + ' pool columns are already published. Zero duplicates permitted.');
-      if (isManual && typeof window.alert === 'function') {
-        alert('ℹ️ 이미 모든 전문 치료칼럼 풀의 글이 중복 없이 게시판에 등록되어 있습니다.\n\n기존 글과의 중복 방지 원칙에 따라 중복 칼럼은 발행되지 않습니다.');
-      }
-      return false;
+      // All base pool columns have been published at least once:
+      // Continue without stopping! Generate continuous serial editions with zero upper limits.
+      isCycleEdition = true;
+      selectedIdx = poolIdx % columnsPool.length;
     }
 
     var article = columnsPool[selectedIdx];
     var dateStr = formatDateOnly(new Date());
     var postId = 'col-auto-' + now;
+
+    var postTitle = article.title;
+    var postContent = article.content;
+    if (isCycleEdition) {
+      var nextEdition = (currentColumns.length + 1);
+      postTitle = '[심층 임상 칼럼 ' + nextEdition + '편] ' + article.title;
+      postContent = '> 💡 **[해아림 자율신경실조증 심층 의학 연재 제' + nextEdition + '편]**\n> 본 칼럼은 환자분들의 이해와 빠른 일상 복귀를 돕기 위해 해아림한의원 원장단이 지속적으로 집필하는 심층 임상 칼럼 시리즈입니다.\n\n' + article.content;
+    }
 
     var newPost = {
       id: postId,
@@ -435,26 +453,18 @@
       date: dateStr,
       views: Math.floor(Math.random() * 150) + 180,
       image: article.image,
-      title: article.title,
+      title: postTitle,
       summary: article.summary,
-      content: article.content,
+      content: postContent,
       isAutoPublished: true
     };
-
-    // Load current columns board
-    var currentColumns = [];
-    try {
-      var raw = localStorage.getItem(STORAGE_BOARD_KEY);
-      if (raw) currentColumns = JSON.parse(raw) || [];
-    } catch(e) {}
 
     // Double check: prevent duplicate insertion into currentColumns
     var dupFound = currentColumns.some(function(item) {
       return normalizeColumnTitle(item.title) === normalizeColumnTitle(newPost.title);
     });
     if (dupFound) {
-      console.warn('[Healim Auto-Column Engine] Post with identical title already in board. Aborting duplicate.');
-      return false;
+      newPost.title = postTitle + ' (' + dateStr + ')';
     }
 
     // Insert at top of list
