@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f4f8f9"/>
+      <stop offset="100%" stop-color="#e9f3f4"/>
+    </linearGradient>
+    <linearGradient id="headGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0d3a42"/>
+      <stop offset="100%" stop-color="#1c6e78"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-3%" y="-3%" width="106%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="450" fill="url(#bgGrad)" rx="20"/>
+  <rect x="2" y="2" width="796" height="446" fill="none" stroke="#badfe3" stroke-width="2" rx="19"/>
+
+  <!-- Top Badge -->
+  <rect x="40" y="32" width="240" height="30" rx="15" fill="#1c6e78"/>
+  <text x="160" y="52" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" font-weight="700" fill="#ffffff">
+    시야 흐림 & 안구 건조 감별
+  </text>
+  <text x="760" y="52" text-anchor="end" font-family="'Pretendard', sans-serif" font-size="13" font-weight="600" fill="#666666">
+    해아림한의원 자율신경 클리닉 FAQ
+  </text>
+
+  <!-- Title and Subtitle -->
+  <text x="40" y="98" font-family="'Pretendard', sans-serif" font-size="21" font-weight="800" fill="#0d3a42">
+    동공 조절 장애와 안구 건조의 자율신경 기전
+  </text>
+  <text x="40" y="125" font-family="'Pretendard', sans-serif" font-size="13" font-weight="500" fill="#555555">
+    안과 검사는 정상이지만 동공 괄약근과 눈물샘 지배 신경 불균형으로 발생하는 시각 피로
+  </text>
+
+  <!-- Left Box -->
+  <rect x="40" y="150" width="345" height="225" rx="14" fill="#ffffff" stroke="#e05252" stroke-width="1.5" filter="url(#cardShadow)"/>
+  <rect x="40" y="150" width="345" height="44" rx="14" fill="#fef2f2"/>
+  <rect x="40" y="184" width="345" height="10" fill="#fef2f2"/>
+  <text x="212" y="178" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15.5" font-weight="700" fill="#e05252">
+    일반 안과 검사
+  </text>
+  <g transform="translate(60, 222)">
+    <text x="0" y="0" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 각막, 망막, 안압 검사 정상</text>
+    <text x="0" y="38" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 안구 자체의 기질적 질환 없음</text>
+    <text x="0" y="76" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 인공눈물 처방 한계</text>
+  </g>
+
+  <!-- Right Box -->
+  <rect x="415" y="150" width="345" height="225" rx="14" fill="#ffffff" stroke="#1c6e78" stroke-width="1.5" filter="url(#cardShadow)"/>
+  <rect x="415" y="150" width="345" height="44" rx="14" fill="#edf7f8"/>
+  <rect x="415" y="184" width="345" height="10" fill="#edf7f8"/>
+  <text x="587" y="178" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="15.5" font-weight="700" fill="#1c6e78">
+    해아림 자율신경 치료
+  </text>
+  <g transform="translate(435, 222)">
+    <text x="0" y="0" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 동공 괄약근·모양체근 미주신경 회복</text>
+    <text x="0" y="38" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 후두하근 이완으로 뇌 혈류 확보</text>
+    <text x="0" y="76" font-family="'Pretendard', sans-serif" font-size="13.5" fill="#333333" font-weight="500">• 눈물샘 부교감 분비 촉진 한약</text>
+  </g>
+
+  <!-- Bottom CTA / Watermark Bar -->
+  <rect x="40" y="392" width="720" height="34" rx="17" fill="url(#headGrad)"/>
+  <text x="400" y="414" text-anchor="middle" font-family="'Pretendard', sans-serif" font-size="13" font-weight="700" fill="#ffffff">
+    해아림한의원 네트워크 전국 15개 지점 | 1:1 맞춤 자율신경 클리닉
+  </text>
+</svg>

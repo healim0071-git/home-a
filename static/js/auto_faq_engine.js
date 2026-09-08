@@ -1,25 +1,26 @@
 /**
  * auto_faq_engine.js
- * 해아림한의원 자율신경실조증 FAQ 자동 발행 엔진 & 12대 임상 콘텐츠 풀
+ * 해아림한의원 자율신경실조증 FAQ 자동 발행 엔진 & 18대 임상 콘텐츠 풀
  * 
  * [요구사항 명세]
- * 1. 질문: 자율신경실조증/이상증상 다빈도 환자 질문 순환
- * 2. 분량: 질문에 대한 답변 1,000자 내외
+ * 1. 질문: 자율신경실조증/이상증상 다빈도 환자 질문 순환 (18대 고품질 임상 질문 풀)
+ * 2. 분량: 질문에 대한 답변 1,000자 내외의 깊이 있는 전문 한방신경정신과 해설
  * 3. 구성: 상단 썸네일 사진 + 본문 1000자 내외 답변 + 하단 3대 링크(줄바꿔서 1줄씩 띄움)
  *    - [자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)
  *    - [자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)
  *    - [전국 지점 안내](https://www.healim.com)
  * 4. 주기: 매주 2~3개 글, 오전 8시 ~ 11시 사이 랜덤 시간 자동 발행
+ * 5. 중복 방지: 질문글은 기존에 작성되어 있는 글(시드, 수동작성, 기발행글)과 절대로 중복되지 않도록 엄격 검사
  */
 
 (function() {
   'use strict';
 
   // ──────────────────────────────────────────────────────────
-  // 1. 자율신경실조증 환자 다빈도 질문 12대 고품질 콘텐츠 풀 (Content Pool)
+  // 1. 자율신경실조증 환자 다빈도 질문 18대 고품질 콘텐츠 풀 (Content Pool)
   // ──────────────────────────────────────────────────────────
   window.autoFaqContentPool = [
-    {
+{
       id: 'pool-faq-1',
       title: '병원에서 온갖 검사를 다 받아도 정상이라는데, 왜 어지럽고 가슴이 답답할까요? 자율신경실조증 검사로 알 수 있나요?',
       image: '/images/faq/faq_1_exam.svg',
@@ -252,10 +253,183 @@
 
 [전국 지점 안내](https://www.healim.com)`
     }
-  ];
+  ,
+    {
+      id: 'pool-faq-13',
+      title: '자율신경실조증 환자인데 왜 시야가 흐려지고 눈이 침침하며 건조할까요? 안과 검사는 정상입니다.',
+      image: '/images/faq/faq_13_vision.svg',
+      summary: '동공 괄약근과 모양체근의 자율신경 조절 장애, 안구 건조 및 시야 흐림의 한방 치료 원리',
+      content: `스마트폰이나 책을 보지 않아도 눈이 뻑뻑하고 모래가 들어간 것처럼 따가우며, 사물이 겹쳐 보이거나 시야가 뿌옇게 흐려져 안과를 찾으시는 분들이 많습니다. 안과 정밀 검사상 각막염이나 녹내장, 백내장, 시신경 손상 등 아무런 기질적 병변이 없음에도 불구하고 눈이 몹시 피로하고 침침하다면 이는 **'안구 주변 자율신경망의 미세 조절 부조화'** 때문입니다.
+
+우리 눈의 동공 크기와 초점(모양체근), 그리고 눈물 분비는 교감신경과 부교감신경의 정밀한 오케스트라 조율을 받습니다. 먼 곳을 보거나 위험을 감지할 때는 교감신경이 동공을 확대시키고, 편안한 상태에서 독서를 하거나 쉴 때는 부교감신경이 동공을 수축시키며 눈물샘을 자극해 눈 표면을 촉촉하게 적셔줍니다. 하지만 자율신경실조증으로 교감신경이 만성 과항진 상태에 놓이게 되면, 눈동자는 과도하게 긴장하여 빛에 극도로 과민해지는 눈부심(광선 공포증)이 발생하고, 반대로 눈물을 분비해야 하는 부교감신경 신호는 차단되어 극심한 안구건조증이 유발됩니다.
+
+여기에 후두골과 상부 경추(경추 1·2번)가 만성 스트레스로 굳어지면, 눈으로 올라가는 안동맥(Ophthalmic Artery)의 혈류량이 일시적으로 급감하여 모양체근에 산소 공급이 부족해집니다. 이로 인해 렌즈의 두께를 조절하는 초점 반응 속도가 현저히 느려지며 시야가 뿌옇게 번져 보이는 것입니다. 인공눈물이나 안약은 표면만 일시적으로 적실 뿐, 눈물샘을 통제하는 자율신경 스위치를 켜지 못합니다.
+
+해아림한의원에서는 후두하근과 측두골 주변의 긴장을 섬세하게 해소하는 두개천골요법(CST)을 통해 안와 신경과 뇌 혈류의 통로를 시원하게 열어줍니다. 이와 함께 간화(肝火)를 식히고 눈 주변 기혈 순환을 촉진하는 결명자, 국화, 구기자, 작약 등의 청간명목(淸肝明目) 한약을 체질에 맞게 처방하여 눈물샘의 자가 분비 능력을 복원하고 맑고 선명한 시야를 되찾아 드립니다.
+
+[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)
+
+[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)
+
+[전국 지점 안내](https://www.healim.com)`
+    },
+    {
+      id: 'pool-faq-14',
+      title: '날씨가 흐리거나 비가 오면 가슴 두근거림과 어지럼증, 관절통이 심해집니다. 기상병과 자율신경의 관계는?',
+      image: '/images/faq/faq_14_weather.svg',
+      summary: '저기압·고습도 환경에서 내이 압력 수용체와 교감신경계의 과민 반응, 기상병 한방 처방',
+      content: `"비가 오기 전날이면 어김없이 머리가 깨질 듯 아프고, 가슴이 쿵쾅거리며 몸이 물에 젖은 솜처럼 무거워져요." 일기예보보다 몸이 먼저 날씨 변화를 알아맞히는 분들이 계십니다. 이를 의학적으로 **'기상병(Weather Sensitivity / Meteoropathy)'**이라 부르며, 그 뿌리에는 외부 기압 변화에 유연하게 대처하지 못하는 자율신경계 조절 장애가 자리 잡고 있습니다.
+
+건강한 인체는 외부 기압이 떨어지거나 습도가 올라가도 자율신경계가 혈관 내 압력을 즉각 재조정하여 전신 항상성을 일정하게 유지합니다. 하지만 자율신경실조증 환자는 귓속 내이(달팽이관과 전정기관)에 위치한 기압 수용체(Baroreceptor)가 극도로 예민해져 있습니다. 저기압이 다가오면 내이 림프액이 팽창하면서 전정신경을 통해 뇌간으로 "비상사태! 기압이 급변하고 있다!"는 오경보를 발송합니다.
+
+이 자극을 받은 교감신경은 과도하게 아드레날린을 분비하여 심박수를 급증시키고 말초 혈관을 수축시켜 두통과 가슴 두근거림, 혈압 변동을 촉발합니다. 동시에 체내 수분 대사가 정체되면서 세포 사이사이에 잉여 수분이 괴는 '수독(水毒)' 현상이 발생하여 관절통과 전신 부종, 어지럼증이 한꺼번에 쏟아져 나옵니다. 진통제나 신경안정제로는 매번 바뀌는 날씨의 물리적 압력 충격을 막아낼 수 없습니다.
+
+해아림한의원에서는 체내에 정체된 불필요한 수분과 노폐물을 밖으로 배출하고 내이의 수분 밸런스를 조절하는 오령산(五苓散), 영계출감탕(苓桂朮甘湯) 계열의 맞춤 탕약을 처방합니다. 이와 함께 경추 자율신경절을 안정시키는 약침 치료를 병행하여 외부 기압이나 날씨가 아무리 요동쳐도 신체 내부의 신경망이 흔들림 없이 편안한 균형을 유지할 수 있도록 치료합니다.
+
+[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)
+
+[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)
+
+[전국 지점 안내](https://www.healim.com)`
+    },
+    {
+      id: 'pool-faq-15',
+      title: '자율신경실조증 치료 중 술(알코올)이나 담배는 얼마나 위험한가요? 단 한 잔도 마시면 안 되나요?',
+      image: '/images/faq/faq_15_alcohol.svg',
+      summary: '알코올의 일시적 마취와 야간 반동성 교감신경 폭풍, 니코틴 혈관 수축으로 인한 자율신경 쇼크',
+      content: `불안하고 가슴이 두근거릴 때 "맥주 한 캔 마시니 긴장이 풀리고 잠이 오더라"며 음주를 수면제 대신 삼으시는 분들이 계십니다. 결론부터 말씀드리면, **자율신경실조증 환자에게 술과 담배는 신경계 회복을 원점으로 되돌리는 가장 치명적인 독소**입니다.
+
+알코올은 섭취 직후 뇌의 억제성 신경전달물질(GABA)을 자극하여 뇌를 마취시키므로 일시적으로 불안이 사라지고 졸음이 오는 것처럼 느껴집니다. 하지만 알코올이 간에서 아세트알데하이드로 분해되는 새벽 시간이 되면, 억눌려 있던 뇌 신경계가 극단적으로 튀어 오르는 **'야간 반동성 교감신경 폭풍(Rebound Sympathetic Storm)'**이 발생합니다. 그 결과 새벽 2~3시에 심장이 미친 듯이 뛰며 숨이 막혀 깨어나고, 식은땀과 공황발작에 가까운 공포를 겪게 됩니다. 또한 깊은 수면(서파 수면)을 완전히 박탈하여 뇌 피로도를 극대화합니다.
+
+담배의 주성분인 니코틴 역시 혈류로 흡수되는 즉시 부신을 자극하여 에피네프린을 대량 방출시킵니다. 전신 미세 혈관을 강력하게 수축시켜 뇌와 심장으로 가는 혈류를 30% 이상 차단하며, 심박수를 분당 15~20회 이상 강제로 끌어올립니다. 자율신경실조증 환자의 혈관은 이미 교감신경 흥분으로 수축되어 있는데, 여기에 니코틴이 더해지면 혈관 경련성 어지럼증과 흉통, 수족냉증이 급격히 악화됩니다.
+
+해아림한의원에서는 치료 과정에서 간의 알코올 해독 능력을 돕고 신경 수용체의 민감도를 낮추는 청간안신(淸肝安神) 처방을 적용하여 금주·금연 과정에서 나타나는 금단 불안과 초조감을 부드럽게 완화해 드립니다. 깨끗한 신경계 밭이 마련되어야 맞춤 한약과 침구 치료의 효과가 온전히 발휘될 수 있습니다.
+
+[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)
+
+[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)
+
+[전국 지점 안내](https://www.healim.com)`
+    },
+    {
+      id: 'pool-faq-16',
+      title: '생리 전후(PMS)나 갱년기만 되면 자율신경실조증 증상이 폭발하듯 심해집니다. 호르몬과의 상관관계는?',
+      image: '/images/faq/faq_16_hormone.svg',
+      summary: '에스트로겐 급감과 뇌 시상하부 신경전달물질 교란, 여성 자율신경실조증 통합 치료 솔루션',
+      content: `"평소에는 그럭저럭 견딜 만하다가도, 생리 시작 3~5일 전만 되면 가슴 두근거림과 불안증이 극에 달하고 불면증이 찾아와요.", "갱년기 안면홍조인 줄 알았는데 숨이 차고 어지러워서 외출을 못 하겠어요." 여성 자율신경실조증 환자분들의 대다수가 생리 주기 및 갱년기 폐경 전후로 급격한 증상 악화를 경험하십니다.
+
+이는 뇌의 자율신경 최고 사령탑인 **'시상하부(Hypothalamus)'가 여성호르몬 분비 축(HPA/HPG 축)과 정확히 동일한 뇌 부위에 위치**하기 때문입니다. 여성호르몬인 에스트로겐은 뇌에서 행복 호르몬인 세로토닌과 부교감신경의 아세틸콜린 분비를 돕는 뇌신경 보호막 역할을 합니다. 하지만 배란 후 생리 직전이나 갱년기 완경기에 에스트로겐 수치가 가파르게 곤두박질치면, 시상하부의 신경전달물질 밸런스가 한순간에 붕괴됩니다.
+
+편도체의 불안 제어 역치가 바닥으로 떨어지고 체온 조절 중추가 오작동하면서, 안면홍조, 식은땀, 가슴 두근거림, 감정 기복, 극심한 피로가 연쇄적으로 폭발합니다. 산부인과에서 호르몬제를 투여해도 신체화 신경 증상이 가라앉지 않는 이유는, 호르몬 결핍 자체보다 이미 취약해져 있던 자율신경계 조절망이 호르몬 변동의 파도를 이겨내지 못하고 탈진했기 때문입니다.
+
+해아림한의원에서는 간(肝)의 울체된 기운을 소통시키고 자궁과 골반강의 어혈을 제거하는 시호소간산(柴胡疎肝散), 가미소요산(加味逍遙散)을 기본으로 하여 충임맥(衝任脈)의 기혈을 보강하는 맞춤 한약을 처방합니다. 호르몬의 주기적 썰물에도 뇌신경이 충격을 받지 않도록 자율신경 회복력을 탄탄히 길러줌으로써, 생리 주기와 갱년기에도 평온하고 안정된 일상을 영위할 수 있도록 치료합니다.
+
+[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)
+
+[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)
+
+[전국 지점 안내](https://www.healim.com)`
+    },
+    {
+      id: 'pool-faq-17',
+      title: '자율신경실조증을 앓고 나서 살이 5~10kg 빠지거나 반대로 심하게 붓고 찝니다. 체중 변화도 신경 문제인가요?',
+      image: '/images/faq/faq_17_weight.svg',
+      summary: '교감신경 과항진의 극단적 이화작용(소모)과 부신 피로로 인한 수분 정체 기전',
+      content: `"밥을 먹어도 살이 쑥쑥 빠져서 뼈만 남았어요.", "반대로 거의 먹지도 않는데 온몸이 퉁퉁 붓고 살이 쪄서 거울 보기가 무서워요." 자율신경실조증을 앓으시는 분들 중에는 체중이 급격히 줄어들거나, 반대로 비정상적으로 불어나는 대사 이상을 겪으시는 분들이 대단히 많습니다. 갑상선 검사나 당뇨 검사에서 정상임에도 이러한 체중 왜곡이 일어나는 이유는 무엇일까요?
+
+체중의 증감은 자율신경계가 지배하는 기초대사율과 신경 내분비 호르몬의 직접적인 결과물입니다. 첫 번째 유형인 **'급격한 체중 감소'**는 교감신경의 만성 과항진으로 인해 인체가 24시간 내내 풀가동되는 엔진처럼 에너지를 과도하게 불태우는 **'이화작용(Catabolism) 폭주'** 상태입니다. 위장관 연동운동이 멈춰 영양소 흡수가 차단되는 동시에, 코르티솔과 에피네프린이 근육과 체지방을 강제로 분해하여 소모하므로 몇 달 만에 5~10kg이 순식간에 빠지는 극심한 쇠약에 빠집니다.
+
+반면 두 번째 유형인 **'체중 증가 및 부종'**은 만성 스트레스로 인해 부신이 지쳐 떨어지는 **'부신 피로(Adrenal Burnout)'** 상태입니다. 알도스테론과 코르티솔의 분비 리듬이 교란되면서 신장이 수분과 나트륨을 배출하지 못하고 체내에 정체시키며, 림프 순환이 마비되어 조금만 먹어도 하체와 얼굴이 퉁퉁 붓고 살로 고착화됩니다. 여기에 위장의 미주신경 기능 저하로 장내 유익균이 사멸하면서 대사 속도가 현저히 떨어지게 됩니다.
+
+해아림한의원에서는 체중이 급감한 환자분께는 비위의 흡수력을 살리고 신경계의 진액을 보충하는 보중익기탕(補中益氣湯), 귀비탕(歸脾湯)을, 부종과 체중 증가를 겪는 환자분께는 림프 순환과 수분 대사를 촉진하는 온담탕(溫膽湯), 방기황기탕(防己黃耆湯)을 체질별로 맞춤 처방합니다. 자율신경의 조절 스위치가 정상화되면 인체 대사율이 최적의 밸런스를 되찾아 건강한 본래 체중으로 자연스럽게 복원됩니다.
+
+[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)
+
+[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)
+
+[전국 지점 안내](https://www.healim.com)`
+    },
+    {
+      id: 'pool-faq-18',
+      title: '한약 복용이나 침 치료 후 몸이 나른하고 졸음이 쏟아집니다. 치료가 잘못된 건가요, 명현반응인가요?',
+      image: '/images/faq/faq_18_recovery.svg',
+      summary: '만성 과각성 교감신경 차단 후 부교감신경 이완 스위치가 켜지며 나타나는 생체 충전 회복 징후',
+      content: `"한약을 먹고 침을 맞은 날부터 온몸에 힘이 쭉 빠지고 하루 종일 졸음이 쏟아져요. 치료가 저랑 안 맞는 건가요?" 자율신경 치료를 시작하신 환자분들께서 초기에 가장 많이 문의하시는 질문 중 하나입니다. 결론부터 말씀드리면, 이는 치료가 잘못된 것이 아니라 오랜 기간 비상근무 중이던 신경계가 마침내 긴장을 풀고 치유 모드로 들어섰음을 알리는 **'매우 긍정적인 부교감신경 반등 신호(Rebound Parasympathetic Activation)'**입니다.
+
+자율신경실조증 환자의 뇌와 신체는 지난 수개월, 수년 동안 마치 전쟁터 한가운데 있는 것처럼 교감신경의 아드레날린을 쥐어짜 내며 버텨온 '가짜 각성 상태'였습니다. 몸은 이미 배터리가 방전되어 탈진 직전인데도, 뇌가 위험 신호를 끄지 못해 억지로 눈을 부릅뜨고 심장을 뛰게 했던 것입니다.
+
+이때 해아림한의원의 맞춤 한약과 침구 치료, 두개천골요법이 과항진된 교감신경의 사이렌을 끄고 부교감신경(미주신경)의 이완 스위치를 켜주면, 그동안 각성 호르몬 뒤에 숨어 있던 신체의 본래 만성 피로와 수면 부채가 수면 위로 한꺼번에 드러나게 됩니다. 뇌는 손상된 신경 시냅스를 복구하고 축적된 대사 노폐물(베타 아밀로이드 등)을 청소하기 위해 인체에 "지금 모든 활동을 멈추고 잠을 자야 해!"라는 강력한 휴식 명령을 내립니다.
+
+이러한 나른함과 깊은 졸음은 대개 치료 시작 후 **3일에서 1주일 정도 집중적으로 나타난 뒤 점차 사라지며**, 이 시기가 지나면 아침에 일어났을 때 머리가 맑고 몸이 깃털처럼 가벼워지는 진짜 활력을 체감하시게 됩니다. 치료 초기의 졸음은 신체가 스스로 치유를 시작했다는 최고의 훈장이므로, 이때는 무리하게 버티지 마시고 몸이 원하는 대로 충분한 수면과 휴식을 취해 주시는 것이 빠른 완치로 가는 지름길입니다.
+
+[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)
+
+[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)
+
+[전국 지점 안내](https://www.healim.com)`
+    }
+];
 
   // ──────────────────────────────────────────────────────────
-  // 2. 자동 발행 스케줄러 계산 엔진 (주 2~3회, 08:00~11:00 랜덤)
+  // 2. 질문 제목 정규화 및 기존 게시글 중복 방지 검사 헬퍼
+  // ──────────────────────────────────────────────────────────
+  function normalizeQuestionTitle(t) {
+    if (!t) return '';
+    return String(t)
+      .replace(/^Q[.:s-]+/i, '')
+      .replace(/[s*_~`#?？.,()[]]/g, '')
+      .trim()
+      .toLowerCase();
+  }
+
+  function getExistingFaqTitles() {
+    var titles = new Set();
+
+    // 1) Active board storage
+    try {
+      var raw = localStorage.getItem('healim_board_faq');
+      if (raw) {
+        var list = JSON.parse(raw) || [];
+        list.forEach(function(it) {
+          if (it && it.title) titles.add(normalizeQuestionTitle(it.title));
+        });
+      }
+    } catch(e) {}
+
+    // 2) Custom user posts storage
+    try {
+      var rawC = localStorage.getItem('healim_custom_faq_posts');
+      if (rawC) {
+        var listC = JSON.parse(rawC) || [];
+        listC.forEach(function(it) {
+          if (it && it.title) titles.add(normalizeQuestionTitle(it.title));
+        });
+      }
+    } catch(e) {}
+
+    // 3) Legacy community posts storage
+    try {
+      var rawLeg = localStorage.getItem('healim_community_posts_v2');
+      if (rawLeg) {
+        var legList = JSON.parse(rawLeg) || [];
+        legList.forEach(function(it) {
+          if (it && it.title) titles.add(normalizeQuestionTitle(it.title));
+        });
+      }
+    } catch(e) {}
+
+    // 4) Fallback default FAQ data (from window if present)
+    if (window.defaultFaqData && Array.isArray(window.defaultFaqData)) {
+      window.defaultFaqData.forEach(function(it) {
+        if (it && it.title) titles.add(normalizeQuestionTitle(it.title));
+      });
+    }
+
+    return titles;
+  }
+
+  // ──────────────────────────────────────────────────────────
+  // 3. 자동 발행 스케줄러 계산 엔진 (주 2~3회, 08:00~11:00 랜덤)
   // ──────────────────────────────────────────────────────────
   function calculateNextScheduleTime(baseDate) {
     var d = new Date((baseDate || new Date()).getTime());
@@ -308,7 +482,7 @@
   }
 
   // ──────────────────────────────────────────────────────────
-  // 3. 자동 발행 실행 핸들러 (도래 시점 자동 발행 또는 관리자 즉시 발행)
+  // 4. 자동 발행 실행 핸들러 (엄격한 질문 중복 방지 알고리즘 탑재)
   // ──────────────────────────────────────────────────────────
   function checkAndRunAutoFaqPublish(forceImmediate) {
     if (!window.autoFaqContentPool || window.autoFaqContentPool.length === 0) return null;
@@ -316,7 +490,38 @@
     var now = Date.now();
 
     if (forceImmediate || now >= state.nextScheduledTime) {
-      var poolItem = window.autoFaqContentPool[state.poolIndex % window.autoFaqContentPool.length];
+      var existingTitles = getExistingFaqTitles();
+      var poolLength = window.autoFaqContentPool.length;
+      var candidatePoolItem = null;
+      var chosenIndex = -1;
+
+      // Pool 순환 탐색: 기존에 작성되어 있는 글과 질문 제목이 중복되지 않는 첫 번째 아이템 선정
+      for (var i = 0; i < poolLength; i++) {
+        var testIdx = (state.poolIndex + i) % poolLength;
+        var pItem = window.autoFaqContentPool[testIdx];
+        var normTitle = normalizeQuestionTitle(pItem.title);
+
+        if (!existingTitles.has(normTitle)) {
+          candidatePoolItem = pItem;
+          chosenIndex = testIdx;
+          break;
+        }
+      }
+
+      // 만약 풀 내의 모든 질문이 이미 등록되어 있는 경우 -> 절대 중복 발행하지 않고 안전 스킵
+      if (!candidatePoolItem) {
+        console.warn('[Auto-FAQ Engine] 모든 임상 FAQ 질문이 이미 게시판에 존재하여 중복 방지를 위해 발행을 스킵합니다.');
+        var nextD = calculateNextScheduleTime(new Date());
+        state.nextScheduledTime = nextD.getTime();
+        saveAutoFaqState(state);
+        updateAutoFaqStatusUI(state);
+        if (forceImmediate && typeof window.alert === 'function') {
+          alert('안내: 준비된 임상 FAQ 질문이 이미 모두 등록되어 있어, 기존 글과의 중복 방지를 위해 추가 발행되지 않았습니다.');
+        }
+        return null;
+      }
+
+      var poolItem = candidatePoolItem;
       var pubTimestamp = forceImmediate ? now : state.nextScheduledTime;
       var pDate = new Date(pubTimestamp);
       var dateStr = pDate.getFullYear() + '.' + String(pDate.getMonth() + 1).padStart(2, '0') + '.' + String(pDate.getDate()).padStart(2, '0');
@@ -334,17 +539,19 @@
         poolId: poolItem.id
       };
 
-      // healim_board_faq 저장
+      // healim_board_faq 로드
       var currentFaqList = [];
       try {
         var raw = localStorage.getItem('healim_board_faq');
         if (raw) currentFaqList = JSON.parse(raw) || [];
       } catch(e) {}
 
-      // 중복 체크
+      // 최종 이중 중복 검사
+      var normCandidate = normalizeQuestionTitle(newPost.title);
       var exists = currentFaqList.some(function(it) {
-        return it.id === newPost.id || (it.poolId && it.poolId === newPost.poolId && it.date === newPost.date);
+        return it.id === newPost.id || normalizeQuestionTitle(it.title) === normCandidate;
       });
+
       if (!exists) {
         currentFaqList.unshift(newPost);
         try {
@@ -352,24 +559,24 @@
           var customList = [];
           var rawC = localStorage.getItem('healim_custom_faq_posts');
           if (rawC) customList = JSON.parse(rawC) || [];
-          customList = customList.filter(function(p) { return p.id !== newPost.id; });
+          customList = customList.filter(function(p) { return p.id !== newPost.id && normalizeQuestionTitle(p.title) !== normCandidate; });
           customList.unshift(newPost);
           localStorage.setItem('healim_custom_faq_posts', JSON.stringify(customList));
 
           var rawLeg = localStorage.getItem('healim_community_posts_v2');
           var legList = rawLeg ? (JSON.parse(rawLeg) || []) : [];
-          legList = legList.filter(function(p) { return p.id !== newPost.id; });
+          legList = legList.filter(function(p) { return p.id !== newPost.id && normalizeQuestionTitle(p.title) !== normCandidate; });
           legList.unshift(newPost);
           localStorage.setItem('healim_community_posts_v2', JSON.stringify(legList));
         } catch(e) {}
       }
 
-      // 상태 전진
+      // 상태 전진 (선택된 인덱스 다음으로)
       state.lastPublishedTime = pubTimestamp;
       if (state.publishedPoolIds.indexOf(poolItem.id) === -1) {
         state.publishedPoolIds.push(poolItem.id);
       }
-      state.poolIndex = (state.poolIndex + 1) % window.autoFaqContentPool.length;
+      state.poolIndex = (chosenIndex + 1) % poolLength;
       var nextDate = calculateNextScheduleTime(new Date(pubTimestamp));
       state.nextScheduledTime = nextDate.getTime();
       saveAutoFaqState(state);
@@ -401,13 +608,18 @@
   window.formatScheduleTime = formatScheduleTime;
 
   window.triggerAutoFaqPublishManual = function() {
-    var rawUser = localStorage.getItem('healim_auth_user');
     var isHealimAdmin = false;
-    if (rawUser) {
+    if (typeof window.isHealimSuperAdmin === 'function') {
+      isHealimAdmin = window.isHealimSuperAdmin();
+    }
+    if (!isHealimAdmin) {
       try {
-        var u = JSON.parse(rawUser);
-        if (u && (u.uid === 'healim0071' || (u.role === 'admin' && u.uid === 'healim0071') || u.grade === 'superadmin')) {
-          isHealimAdmin = true;
+        var rawUser = localStorage.getItem('healim_auth_user');
+        if (rawUser) {
+          var u = JSON.parse(rawUser);
+          if (u && (u.uid === 'healim0071' || u.id === 'healim0071' || (u.role === 'admin' && (u.uid === 'healim0071' || u.id === 'healim0071')) || u.grade === 'superadmin' || u.role === 'superadmin')) {
+            isHealimAdmin = true;
+          }
         }
       } catch(e) {}
     }
@@ -418,11 +630,12 @@
 
     var published = checkAndRunAutoFaqPublish(true);
     if (published) {
-      alert('자율신경 FAQ 신규 글이 자동 발행되었습니다!\n\n제목: ' + published.title + '\n발행일자: ' + published.date + '\n\n목록 맨 상단에 배치되었습니다.');
+      alert('⚡ [자율신경 FAQ 신규 글 자동 발행 완료]\n\n' +
+            '제목: ' + published.title + '\n' +
+            '발행일자: ' + published.date + '\n\n' +
+            '기존 작성 글과 중복되지 않는 새로운 고유 질문으로 목록 최상단에 발행되었습니다.');
       if (typeof renderFaqList === 'function') renderFaqList();
       if (typeof syncBottomCommunity === 'function') syncBottomCommunity();
-    } else {
-      alert('FAQ 자동 발행 처리되었습니다.');
     }
   };
 

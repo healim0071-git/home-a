@@ -55,7 +55,7 @@ sections:
           <span><strong>자율신경 FAQ 자동 발행</strong>: 주 2~3회 (오전 08:00~11:00 랜덤)</span>
           <span class="text-[#888888] mx-1">|</span>
           <span id="autoFaqNextScheduleText" class="text-[#1c6e78] font-semibold">다음 예정: 확인 중...</span>
-          <button type="button" onclick="triggerAutoFaqPublishManual()" class="ml-1 text-xs px-2.5 py-1 bg-white border border-[#badfe3] rounded hover:bg-[#eaf3f4] text-[#1c6e78] font-bold transition-colors shadow-2xs" title="스케줄 대기 없이 지금 즉시 1편 자동 발행">⚡ 즉시 1편 발행</button>
+          <button type="button" id="btnTriggerFaqPublish" onclick="triggerAutoFaqPublishManual()" class="ml-1 text-xs px-2.5 py-1 bg-white border border-[#badfe3] rounded hover:bg-[#eaf3f4] text-[#1c6e78] font-bold transition-colors shadow-2xs" title="스케줄 대기 없이 지금 즉시 1편 자동 발행">⚡ 즉시 1편 발행</button>
         </div>
         <div class="board-actions" style="margin-left: auto;">
         <button type="button" class="btn-write-post" id="btnWriteFaq" onclick="openWriteModal('faq')" style="display: none;">
@@ -428,9 +428,9 @@ sections:
             "author": "해아림한의원",
             "date": "2026.09.08",
             "views": 320,
-            "image": "/images/faq/faq_1_exam.svg",
-            "title": "병원에서 온갖 검사를 다 받아도 정상이라는데, 왜 어지럽고 가슴이 답답할까요? 자율신경실조증 검사로 알 수 있나요?",
-            "content": "병원에서 위내시경, 심전도, 뇌 MRI, 혈액검사까지 모두 받았는데도 \"아무 이상이 없으니 신경성입니다\"라는 말만 듣고 답답해하시는 분들이 많습니다. 몸은 숨이 차고 어지러우며 가슴이 쿵쾅거리는데, 검사 기계에는 정상으로 나오는 이유는 무엇일까요?\n\n일반 병원 검사는 장기의 구조적 파괴, 종양, 궤양, 뇌출혈 같은 '기질적 손상'을 찾는 검사입니다. 반면 자율신경실조증은 장기 자체의 고장이 아니라, 장기들의 속도와 균형을 조절하는 **'자율신경 조절망의 기능적 오작동'**입니다.\n\n해아림한의원에서는 이러한 기능적 불균형을 객관적으로 시각화하기 위해 **HRV(심박변이도) 검사와 정밀 뇌기능 뇌파(QEEG) 검사**를 시행합니다. 심장 박동 사이의 미세한 시간 간격 변화를 분석하여 교감신경과 부교감신경의 활성도, 신체 피로도, 심신 활력도를 측정하고, 뇌파 분석을 통해 중추신경계의 스트레스 저항도와 각성 수준을 파악합니다. 검사상 보이지 않던 증상의 실체를 객관적인 데이터로 확인하고, 과각성된 뇌신경을 안정시키며 약화된 부교감신경을 회복시키는 1:1 맞춤 한약과 두개천골요법(CST)을 통해 신체 본래의 자가 회복력을 되찾아 드립니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)",
+            "image": "/images/faq/faq_13_vision.svg",
+            "title": "자율신경실조증 환자인데 왜 시야가 흐려지고 눈이 침침하며 건조할까요? 안과 검사는 정상입니다.",
+            "content": "스마트폰이나 책을 보지 않아도 눈이 뻑뻑하고 모래가 들어간 것처럼 따가우며, 사물이 겹쳐 보이거나 시야가 뿌옇게 흐려져 안과를 찾으시는 분들이 많습니다. 안과 정밀 검사상 각막염이나 녹내장, 백내장, 시신경 손상 등 아무런 기질적 병변이 없음에도 불구하고 눈이 몹시 피로하고 침침하다면 이는 **'안구 주변 자율신경망의 미세 조절 부조화'** 때문입니다.\n\n우리 눈의 동공 크기와 초점(모양체근), 그리고 눈물 분비는 교감신경과 부교감신경의 정밀한 오케스트라 조율을 받습니다. 먼 곳을 보거나 위험을 감지할 때는 교감신경이 동공을 확대시키고, 편안한 상태에서 독서를 하거나 쉴 때는 부교감신경이 동공을 수축시키며 눈물샘을 자극해 눈 표면을 촉촉하게 적셔줍니다. 하지만 자율신경실조증으로 교감신경이 만성 과항진 상태에 놓이게 되면, 눈동자는 과도하게 긴장하여 빛에 극도로 과민해지는 눈부심(광선 공포증)이 발생하고, 반대로 눈물을 분비해야 하는 부교감신경 신호는 차단되어 극심한 안구건조증이 유발됩니다.\n\n여기에 후두골과 상부 경추(경추 1·2번)가 만성 스트레스로 굳어지면, 눈으로 올라가는 안동맥(Ophthalmic Artery)의 혈류량이 일시적으로 급감하여 모양체근에 산소 공급이 부족해집니다. 이로 인해 렌즈의 두께를 조절하는 초점 반응 속도가 현저히 느려지며 시야가 뿌옇게 번져 보이는 것입니다. 인공눈물이나 안약은 표면만 일시적으로 적실 뿐, 눈물샘을 통제하는 자율신경 스위치를 켜지 못합니다.\n\n해아림한의원에서는 후두하근과 측두골 주변의 긴장을 섬세하게 해소하는 두개천골요법(CST)을 통해 안와 신경과 뇌 혈류의 통로를 시원하게 열어줍니다. 이와 함께 간화(肝火)를 식히고 눈 주변 기혈 순환을 촉진하는 결명자, 국화, 구기자, 작약 등의 청간명목(淸肝明目) 한약을 체질에 맞게 처방하여 눈물샘의 자가 분비 능력을 복원하고 맑고 선명한 시야를 되찾아 드립니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)",
             "isAutoPublished": true
           },
           {
@@ -1346,12 +1346,32 @@ sections:
 
         var merged = [];
         var seenIds = {};
+        var seenTitles = {};
+
+        function normalizePostTitle(t) {
+          if (!t) return '';
+          return String(t)
+            .replace(/^Q[\.:\s\-]+/i, '')
+            .replace(/[\s\*_~`#\?\uFF1F\.,\(\)\[\]]/g, '')
+            .trim()
+            .toLowerCase();
+        }
 
         function addPostItem(item) {
           if (!item || !item.id) return;
           var strId = String(item.id);
           if (deletedIds.indexOf(strId) !== -1) return; // Administrator explicitly deleted
           if (seenIds[strId]) return;
+
+          // FAQ 질문 중복 원천 차단: 질문 제목이 기존 글과 동일한 경우 중복 등록 방지
+          if (key === 'faq' && item.title) {
+            var normTitle = normalizePostTitle(item.title);
+            if (normTitle) {
+              if (seenTitles[normTitle]) return;
+              seenTitles[normTitle] = true;
+            }
+          }
+
           seenIds[strId] = true;
           merged.push(item);
         }
