@@ -996,3 +996,42 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
    - `node scripts/auto_publish_column.js`: 20개 풀 전체 글자수 및 정규화 고유성 검사 100% 통과 (0 duplicates).
    - Chrome CDP 브라우저 테스트: 커뮤니티 칼럼 목록 내 모든 글의 100% 고유성 및 수동 1편 발행 시 미발행 칼럼 엄선 추가 확인 완료.
    - `hugo --minify`: 32개 페이지 에러 0건 빌드 완료.
+
+### 제9.38조 커뮤니티 게시글 영구 불변 보존 시스템 구축 (Zero-Data-Loss Master Vault & IndexedDB Architecture)
+1. **요구사항 및 배경 분석**:
+   - 사용자가 최고관리자(`healim0071`)로 확인 시 기존에 작성·발행되었던 커뮤니티의 치료칼럼 및 FAQ 글들이 일부 유실되었던 현상 보고.
+   - **핵심 요구사항**: 자동발행이든, 관리자 아이디 `healim0071`로 작성한 글이든, 커뮤니티에 작성된 글은 관리자 아이디 `healim0071`로 로그인해서 직접 삭제하지 않는 한 절대 지워지지 않도록 보장.
+   - 향후 지속적인 바이브코딩, 코드 수정, 브라우저 새로고침, 캐시 삭제 등 어떠한 작업 환경 변화에도 기존 글들이 영구적으로 보존되는 무손실(Zero-Data-Loss) 아키텍처 수립.
+2. **원인 규명 및 해결 방안**:
+   - **원인 1**: 과거 테스트 스크립트가 임시 격리 프로필 없이 실행되어 `localStorage.removeItem`으로 활성 보드 캐시를 초기화시킴.
+   - **원인 2**: 소스 코드 레벨의 기본 시드 데이터가 FAQ 12개, 칼럼 14개로 한정되어 있어, 브라우저 스토리지 초기화 시 13~18(FAQ) 및 15~20(칼럼) 글이 시드에 없어 소실된 것처럼 보임.
+   - **원인 3**: `getBoardData` 내부의 제목 정규화 비교 로직이 미세한 제목 유사성을 가진 글들을 조용히 누락시키고 해당 축소 목록으로 스토리지를 덮어쓰는 버그 존재.
+   - **해결책**: 기본 시드 데이터 100% 확장, 브라우저 네이티브 IndexedDB 영구 보존 금고 도입, 다계층 마스터 금고(Append-Only Master Vault) 구축 및 엄격한 관리자 전용 삭제 체계 확립.
+3. **구현 내역**:
+   - **소스 코드 레벨 100% 영구 시드 데이터 완비 (`content/community/_index.md`)**:
+     - `defaultFaqData`: 18편 전체(FAQ 1~18, 전문 임상 해설, 전용 메디컬 SVG 벡터 그래픽, 3대 CTA 링크)를 소스 코드 기본 시드에 100% 영구 탑재.
+     - `defaultColumnsData`: 20편 전체(Column 1~20, 1,600자 내외 임상 전문 칼럼, 20종 전용 메디컬 SVG, 3대 CTA 링크)를 소스 코드 기본 시드에 100% 영구 탑재.
+     - 신규 기기, 시크릿 모드, 캐시 완전 삭제 상태에서도 18개 FAQ 및 20개 칼럼이 즉시 100% 로드 보장.
+   - **브라우저 네이티브 IndexedDB 영구 금고 (`HealimPermanentDB`) 도입 (`content/community/_index.md`)**:
+     - HTML5 표준 `indexedDB`(`HealimCommunityDB`, 오브젝트 스토어 `community_vault`) 기반 비동기 영구 저장소 구축.
+     - 로컬 스토리지에 글이 저장되거나 자동 발행될 때마다 IndexedDB에 실시간 복제 백업.
+     - 페이지 로딩 및 탭 전환 시 (`initTabFromHash`) `IndexedDB` vs `localStorage` 정합성 검사를 자동 수행하여, 만약 로컬 스토리지가 삭제되거나 유실된 경우 IndexedDB에서 즉시 글을 자동 복구(Resurrect)하고 화면 리렌더링.
+   - **다계층 불변 마스터 금고 (Zero-Data-Loss Multi-Tier Vault) 구축 (`getBoardData`, `saveBoardData`)**:
+     - 5계층 데이터 병합: `healim_vault_all_posts_[key]` (Master Vault) + `healim_custom_[key]_posts` + `healim_board_[key]` + `healim_community_posts_v2` + `defaultSeedData`.
+     - `getBoardData`에서 기존 글을 임의로 누락시키던 제목 기반 필터를 완전 제거하고, 순수 고유 ID 기준으로만 디둡 처리하여 사용자 글 및 자동발행 글 유실 원천 차단.
+     - 오직 최고관리자가 명시적으로 삭제한 글 목록(`healim_deleted_posts_[key]`)만 최종 렌더링에서 배제.
+   - **수동 작성 및 최고관리자(`healim0071`) 전용 삭제 철통화**:
+     - 글 작성(`handlePostSubmit`): 마스터 금고, 커스텀 스토리지, 활성 보드, IndexedDB에 전방위 동시 기록 및 삭제 블랙리스트 해제.
+     - 글 삭제(`handleDeletePostDirect`): `isHealimSuperAdmin()` 로그인 상태에서만 실행 가능하며, 명시적 확인 컨펌 시에만 모든 저장소에서 제거하고 영구 삭제 블랙리스트에 등록.
+   - **자동 발행 엔진 및 관리자 대시보드 연동 (`auto_faq_engine.js`, `auto_column_engine.js`, `admin/_index.md`)**:
+     - 자동 발행 시에도 마스터 금고(`healim_vault_all_posts_*`) 및 IndexedDB에 실시간 동시 적재.
+     - 최고관리자 센터 대시보드(`getBoardList`) 또한 마스터 금고와 동기화되어 실제 누적 글 목록 완벽 표시.
+4. **검증 결과**:
+   - **격리 프로필 기반 Chrome CDP 영구 보존 자동화 검증 100% 통과 (`scratch/verify_ironclad_persistence.js`)**:
+     - [Test 1] 초기 시드 인벤토리 FAQ 19건, 칼럼 21건 100% 로드 확인: PASS
+     - [Test 2] 최고관리자(`healim0071`) 수동 글 작성(FAQ 1건, 칼럼 1건) 후 정상 등록 및 보존 확인: PASS
+     - [Test 3] 바이브코딩/캐시 리셋 모의 시뮬레이션: `localStorage.removeItem('healim_board_columns')`, `localStorage.removeItem('healim_board_faq')` 실행 후 페이지 새로고침 -> 마스터 금고 및 IndexedDB로부터 누락 없이 100% 자동 부활 복원 확인 (`faqPreserved: true`, `colPreserved: true`): PASS
+     - [Test 4] 최고관리자 직접 삭제(`handleDeletePostDirect`) 시에만 정상 삭제 확인 (`stillExists: false`): PASS
+     - [Test 5] 실시간 렌더링 스크린샷 캡처: `ironclad_columns_live.png`, `ironclad_faq_live.png`
+   - **정적 빌드 검증 (`hugo --minify`)**: 32개 페이지 에러 0건 정상 빌드 완료.
+

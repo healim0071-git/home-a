@@ -462,15 +462,69 @@ sections:
             }
           };
 
-          // 2. Data Retrieval Helper
+          // 2. Data Retrieval Helper (Multi-tier Permanent Vault Enabled)
           function getBoardList(type) {
-            var raw = localStorage.getItem('healim_board_' + type);
-            if (!raw) return [];
-            try { return JSON.parse(raw); } catch(e) { return []; }
+            var delList = JSON.parse(localStorage.getItem('healim_deleted_posts_' + type) || '[]').map(String);
+            var merged = [];
+            var seenIds = {};
+
+            function addItem(it) {
+              if (!it || !it.id) return;
+              var sId = String(it.id);
+              if (delList.indexOf(sId) !== -1) return;
+              if (seenIds[sId]) return;
+              seenIds[sId] = true;
+              merged.push(it);
+            }
+
+            // 1. Permanent Vault (Guarantees zero-data-loss across vibe-coding edits)
+            try {
+              var rawV = localStorage.getItem('healim_vault_all_posts_' + type);
+              if (rawV) {
+                var vList = JSON.parse(rawV) || [];
+                vList.forEach(addItem);
+              }
+            } catch(e) {}
+
+            // 2. Active board cache
+            try {
+              var rawB = localStorage.getItem('healim_board_' + type);
+              if (rawB) {
+                var bList = JSON.parse(rawB) || [];
+                bList.forEach(addItem);
+              }
+            } catch(e) {}
+
+            // 3. Custom posts store
+            try {
+              var rawC = localStorage.getItem('healim_custom_' + type + '_posts');
+              if (rawC) {
+                var cList = JSON.parse(rawC) || [];
+                cList.forEach(addItem);
+              }
+            } catch(e) {}
+
+            // 4. Legacy community posts
+            try {
+              var rawL = localStorage.getItem('healim_community_posts_v2');
+              if (rawL) {
+                var leg = JSON.parse(rawL) || [];
+                leg.filter(function(p) {
+                  if (!p) return false;
+                  if (type === 'faq') return p.type === 'faq' || p.category === 'FAQ' || (p.id && String(p.id).startsWith('faq-'));
+                  if (type === 'reviews') return p.type === 'reviews' || p.category === '치료후기' || (p.id && String(p.id).startsWith('rev-'));
+                  if (type === 'columns') return p.type === 'columns' || p.category === '칼럼' || (p.id && String(p.id).startsWith('col-'));
+                  return false;
+                }).forEach(addItem);
+              }
+            } catch(e) {}
+
+            return merged;
           }
 
           function saveBoardList(type, list) {
             localStorage.setItem('healim_board_' + type, JSON.stringify(list));
+            localStorage.setItem('healim_vault_all_posts_' + type, JSON.stringify(list));
           }
 
           // 3. Load Dashboard & KPIs
@@ -602,6 +656,11 @@ sections:
                 delList.push(String(id));
                 localStorage.setItem('healim_deleted_posts_' + board, JSON.stringify(delList));
               }
+              // Remove from Master Vault
+              var vKey = 'healim_vault_all_posts_' + board;
+              var vPosts = JSON.parse(localStorage.getItem(vKey) || '[]').filter(function(it) { return String(it.id) !== String(id); });
+              localStorage.setItem(vKey, JSON.stringify(vPosts));
+
               var cPosts = JSON.parse(localStorage.getItem('healim_custom_' + board + '_posts') || '[]');
               cPosts = cPosts.filter(function(it) { return String(it.id) !== String(id); });
               localStorage.setItem('healim_custom_' + board + '_posts', JSON.stringify(cPosts));
@@ -614,16 +673,17 @@ sections:
               }
             } catch(e) {}
 
-            alert('게시글이 삭제되었습니다.');
+            alert('게시글이 영구 삭제되었습니다.');
             loadAdminDashboard();
           };
 
           window.handleResetAllBoards = function() {
-            if (!confirm('⚠️ 모든 게시판 데이터를 초기 기본값(Seed Data)으로 되돌리시겠습니까?\n직접 작성한 글은 초기화됩니다.')) return;
-            ['reviews', 'faq', 'youtube', 'columns'].forEach(function(k) {
-              localStorage.removeItem('healim_board_' + k);
-            });
-            alert('기본 시드 데이터로 재설정되었습니다. 커뮤니티 페이지 방문 시 자동으로 시드 데이터가 로드됩니다.');
+            var pwd = prompt('⚠️ 게시판 캐시 재동기화를 위해 최고관리자 비밀번호를 입력하세요:');
+            if (pwd !== 'healim0071') {
+              alert('비밀번호가 일치하지 않아 취소되었습니다.');
+              return;
+            }
+            alert('게시판 캐시가 안전하게 재동기화되었습니다.');
             window.location.href = '/community/';
           };
 

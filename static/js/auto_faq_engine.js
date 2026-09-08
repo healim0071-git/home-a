@@ -556,6 +556,20 @@
         currentFaqList.unshift(newPost);
         try {
           localStorage.setItem('healim_board_faq', JSON.stringify(currentFaqList));
+
+          // Save to Permanent Master Vault
+          var vaultList = [];
+          var rawV = localStorage.getItem('healim_vault_all_posts_faq');
+          if (rawV) vaultList = JSON.parse(rawV) || [];
+          vaultList = vaultList.filter(function(p) { return p.id !== newPost.id && normalizeQuestionTitle(p.title) !== normCandidate; });
+          vaultList.unshift(newPost);
+          localStorage.setItem('healim_vault_all_posts_faq', JSON.stringify(vaultList));
+
+          // Save to IndexedDB
+          if (typeof window !== 'undefined' && window.HealimPermanentDB && window.HealimPermanentDB.saveVault) {
+            window.HealimPermanentDB.saveVault('faq', vaultList);
+          }
+
           var customList = [];
           var rawC = localStorage.getItem('healim_custom_faq_posts');
           if (rawC) customList = JSON.parse(rawC) || [];

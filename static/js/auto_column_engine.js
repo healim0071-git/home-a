@@ -405,6 +405,20 @@
     currentColumns.unshift(newPost);
     try {
       localStorage.setItem(STORAGE_BOARD_KEY, JSON.stringify(currentColumns));
+
+      // Save to Permanent Master Vault
+      var vaultList = [];
+      var rawV = localStorage.getItem('healim_vault_all_posts_columns');
+      if (rawV) vaultList = JSON.parse(rawV) || [];
+      vaultList = vaultList.filter(function(p) { return p.id !== newPost.id && normalizeColumnTitle(p.title) !== normalizeColumnTitle(newPost.title); });
+      vaultList.unshift(newPost);
+      localStorage.setItem('healim_vault_all_posts_columns', JSON.stringify(vaultList));
+
+      // Save to IndexedDB
+      if (typeof window !== 'undefined' && window.HealimPermanentDB && window.HealimPermanentDB.saveVault) {
+        window.HealimPermanentDB.saveVault('columns', vaultList);
+      }
+
       var customCols = [];
       var rawC = localStorage.getItem('healim_custom_columns_posts');
       if (rawC) customCols = JSON.parse(rawC) || [];
