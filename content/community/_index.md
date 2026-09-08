@@ -285,6 +285,15 @@ sections:
         </div>
         </div>
 
+        <!-- Attached Representative Image Preview Container -->
+        <div id="imagePreviewContainer" style="display: none; padding: 10px 20px; background: #f8fafb; border-bottom: 1px solid #edf2f4;">
+        <div class="healim-preview-card">
+        <img id="imagePreview" src="" alt="대표 이미지 미리보기" />
+        <button type="button" class="btn-remove-preview" onclick="removeSelectedImage()" title="사진 제거">&times;</button>
+        <span class="preview-badge">대표 이미지</span>
+        </div>
+        </div>
+
         <!-- Row 4: healim-tic Rich Text Editor Icon Toolbar -->
         <div class="healim-toolbar-row">
         <button type="button" class="healim-tool-btn" title="본문 사진 첨부 (커서 위치에 삽입)" onmousedown="event.preventDefault()" onclick="triggerInlineImageUpload()">
@@ -343,13 +352,6 @@ sections:
         <div class="healim-write-row-content">
         <div id="postContentEditor" class="healim-content-editor" contenteditable="true" data-placeholder="내용을 입력해주세요. (사진 아이콘 클릭 또는 사진 복사 붙여넣기(Ctrl+V)로 본문에 사진을 넣을 수 있습니다)"></div>
         <textarea id="postContent" style="display: none !important;" tabindex="-1" aria-hidden="true" disabled></textarea>
-        <div id="imagePreviewContainer" style="display: none; margin-top: 12px;">
-        <div class="healim-preview-card">
-        <img id="imagePreview" src="" alt="대표 이미지 미리보기" />
-        <button type="button" class="btn-remove-preview" onclick="removeSelectedImage()" title="사진 제거">&times;</button>
-        <span class="preview-badge">대표 이미지</span>
-        </div>
-        </div>
         </div>
 
         <!-- Admin-only Custom Date & Views Override (healim0071 / Super Admin) -->
@@ -2926,7 +2928,7 @@ sections:
             // ──────────────────────────────────────────
             var fallbackData = (boardType === 'faq' ? defaultFaqData : (boardType === 'reviews' ? defaultReviewsData : (boardType === 'youtube' ? defaultYoutubeData : defaultColumnsData)));
             var list = getBoardData(boardType, fallbackData);
-            var targetIdx = list.findIndex(function(it) { return it.id === editId; });
+            var targetIdx = list.findIndex(function(it) { return String(it.id) === String(editId); });
             var existingItem = targetIdx !== -1 ? list[targetIdx] : null;
 
             var inlineImg = extractFirstImageFromContent(content);
@@ -2945,6 +2947,7 @@ sections:
               views: (customViewsInput && customViewsInput.value.trim()) ? initialViews : (existingItem ? (existingItem.views || 1) : initialViews),
               title: (isSecret ? '🔒 ' : '') + title,
               content: content,
+              answer: content,
               image: finalImage
             };
 
@@ -3427,6 +3430,20 @@ sections:
             item = fallbackData.find(function(it) { return String(it.id) === targetStrId; });
           }
           if (!item) {
+            var customPosts = getCustomUserPosts(boardType);
+            item = customPosts.find(function(it) { return String(it.id) === targetStrId; });
+          }
+          if (!item) {
+            try {
+              var vaultKey = 'healim_vault_all_posts_' + boardType;
+              var vList = JSON.parse(localStorage.getItem(vaultKey) || '[]');
+              item = vList.find(function(it) { return String(it.id) === targetStrId; });
+            } catch(e) {}
+          }
+          if (!item) {
+            item = list.find(function(it) { return it.title && it.title === targetStrId; });
+          }
+          if (!item) {
             alert('수정할 게시글 데이터를 찾을 수 없습니다.');
             return;
           }
@@ -3488,23 +3505,50 @@ sections:
             }
           }
 
-          // Fill image
+          // Fill representative image
           if (item.image) {
             setCurrentAttachedImage(item.image, '기존 첨부사진');
           } else {
             removeSelectedImage();
           }
 
-          // Fill editor content
+          // Fill editor content with robust multi-field fallback (content, answer, desc, text, body)
           var editor = document.getElementById('postContentEditor');
           var textarea = document.getElementById('postContent');
-          var contentHtml = item.content || '';
-          if (item.image) {
-            var escImg = item.image.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            contentHtml = contentHtml.replace(new RegExp('^\\s*!\\[[^\\]]*\\]\\(' + escImg + '\\)\\s*', 'i'), '');
+          var rawContent = item.content || item.answer || item.desc || item.text || item.body || '';
+
+          // If content starts with markdown image syntax matching item.image, safely strip it
+          if (item.image && typeof item.image === 'string' && item.image.length < 500) {
+            try {
+              var escImg = item.image.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              rawContent = rawContent.replace(new RegExp('^\\s*!\\[[^\\]]*\\]\\(' + escImg + '\\)\\s*', 'i'), '');
+            } catch(e) {}
           }
+
+          var contentHtml = rawContent;
+          // Restore reading-mode inline images into interactive editable WYSIWYG widgets with delete button
+          try {
+            contentHtml = contentHtml.replace(/<div class="article-inline-img-wrap">\s*<img src="([^"]+)"[^>]*>\s*<\/div>/gi, function(match, src) {
+              return '<div class="editor-inline-image-wrap" contenteditable="false"><div class="editor-img-box"><img src="' + src + '" alt="본문 사진" class="editor-preview-img" /><button type="button" class="btn-del-inline-img" onclick="this.closest(\'.editor-inline-image-wrap\').remove()" title="사진 삭제">&times;</button></div></div><div><br></div>';
+            });
+            // Also restore markdown images into interactive editable WYSIWYG widgets
+            contentHtml = contentHtml.replace(/!\[(.*?)\]\(((?:data:image\/[^;]+;base64,[^)]+)|(?:https?:\/\/[^)]+)|(?:\/[^)]+))\)/g, function(match, alt, src) {
+              return '<div class="editor-inline-image-wrap" contenteditable="false"><div class="editor-img-box"><img src="' + src + '" alt="' + (alt || '본문 사진') + '" class="editor-preview-img" /><button type="button" class="btn-del-inline-img" onclick="this.closest(\'.editor-inline-image-wrap\').remove()" title="사진 삭제">&times;</button></div></div><div><br></div>';
+            });
+          } catch(e) {}
+
+          // If contentHtml has plain newlines without HTML block tags, convert into paragraphs
+          if (contentHtml && contentHtml.indexOf('<p') === -1 && contentHtml.indexOf('<div') === -1 && contentHtml.indexOf('<br') === -1) {
+            contentHtml = contentHtml.split(/\n\n+/).map(function(p) {
+              return '<p>' + p.replace(/\n/g, '<br>') + '</p>';
+            }).join('');
+          }
+
           if (editor) {
             editor.innerHTML = contentHtml;
+            try {
+              editor.dispatchEvent(new Event('input', { bubbles: true }));
+            } catch(e) {}
           }
           if (textarea) {
             textarea.value = contentHtml;

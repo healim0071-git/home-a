@@ -1165,9 +1165,21 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
      - 전용 12대 SVG 인포그래픽 벡터 제작 완비 (`faq_19_globus.svg` ~ `faq_30_pulsatile.svg`).
   3. **권한 판정(`isHealimSuperAdmin`) 안전성 보강**:
      - `u.uid`, `u.id`, `u.grade`, `u.role`을 종합 판정하여 최고관리자의 글쓰기 권한이 100% 안정적으로 유지되도록 강화.
-- **실시간 CDP 자동화 검증 결과 (`scratch/verify_unlimited_columns_and_faq.js`)**:
-  - **칼럼 (L1157)**: 20편 -> #21, #22, #23 실시간 자동 발행 검증 완료 (총 23편, 중복 0건, 인위적 접두어 0건, 단일 SVG 렌더링 정상).
-  - **FAQ (L1159)**: 18개 -> #19, #20, #21 실시간 자동 발행 검증 완료 (총 21개, 중복 0건, 인위적 접두어 0건, 아코디언 및 SVG 렌더링 정상).
-  - **치료후기 & 유튜브**: 수동 작성 상한 없음 확인 (후기 #7, 유튜브 #16 및 무한 페이지네이션 정상).
-  - **정적 빌드 검증 (`hugo --minify`)**: 32개 페이지, 99개 정적 파일 정상 빌드, 에러 0건 통과.
+- **치료후기 수정 진입 시 본문 내용 누락 버그 해결 (Milestone 9.42 완료)**:
+  1. **원인 분석**:
+     - 기존 `openEditModal`에서 게시글 로딩 시 `item.content` 단일 속성에만 의존하여 다형성 데이터 구조(answer, desc, text, body 등)에서 빈 문자열로 폴백될 위험 존재.
+     - `item.image`의 Base64 코드를 정규식(`new RegExp(...)`)으로 이스케이프/제거하는 과정에서 정규식 문법 에러가 발생할 경우 후속 구문(`editor.innerHTML = contentHtml`)이 중단되어 에디터가 빈 상태(`:empty`)로 남는 현상 발생.
+     - 읽기 모드의 인라인 사진 태그(`<div class="article-inline-img-wrap">`)가 에디터 인터랙티브 위젯(`.editor-inline-image-wrap` + 삭제 버튼)으로 역변환되지 않고 방치됨.
+     - 대표 사진 미리보기 박스(`#imagePreviewContainer`)가 본문 에디터 행 내부에 위치하여 에디터 영역을 밀어내고 하단 관리자 옵션과 겹치는 레이아웃 결함.
+  2. **개선 내역**:
+     - **다중 속성 안전 폴백**: `item.content || item.answer || item.desc || item.text || item.body || ''`로 데이터 누락 원천 차단.
+     - **정규식 안전 예외 처리**: `item.image` 문자열 길이 500자 이하일 때만 정규식 이스케이프를 시도하고 `try...catch`로 감싸 에디터 렌더링 중단 결함 완전 차단.
+     - **인터랙티브 인라인 이미지 역변환 복원**: 본문 이미지 및 마크다운 이미지 태그를 에디터 전용 위젯(`.editor-inline-image-wrap`, contenteditable="false", `.btn-del-inline-img`)으로 완벽 복원하여 수정 시에도 사진 삭제/위치 이동 등 인터랙션 지원.
+     - **입력 이벤트 강제 디스패치**: `editor.dispatchEvent(new Event('input'))`로 내용 복원 즉시 플레이스홀더 자동 소멸 및 반응형 동기화.
+     - **대표 사진 미리보기 레이아웃 최적화**: `#imagePreviewContainer`를 본문 에디터 행 밖(대표 이미지 설정 메타 영역)으로 이동하여 에디터 작업 영역을 100% 독립 확보.
+  3. **검증 결과 (`scratch/verify_review_edit_fix.js`)**:
+     - 치료후기 작성 후 수정 버튼(`openEditModal`) 클릭 시 제목, 작성자, 조회수뿐만 아니라 본문 텍스트 및 인라인 사진이 100% 완벽 복원됨 확인.
+     - 수정 모드에서 추가 내용 작성 후 `[수정 완료]` 저장 시 원본 데이터와 추가 내용이 무손실로 온전히 반영됨 확인.
+     - `hugo --minify` 정적 빌드 0 에러 통과.
+
 
