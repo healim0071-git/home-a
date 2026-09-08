@@ -238,7 +238,7 @@ sections:
         <!-- Row 1: Split 2 columns: 작성자 이름 | 비밀번호 -->
         <div class="healim-write-row-split">
         <div class="healim-write-col">
-        <input type="text" id="postAuthor" placeholder="작성자 이름" required />
+        <input type="text" id="postAuthor" value="해아림한의원" placeholder="해아림한의원" required />
         </div>
         <div class="healim-write-col">
         <input type="password" id="postPassword" placeholder="비밀번호" oninput="checkAdminPassword(this.value)" />
@@ -2330,7 +2330,7 @@ sections:
         imageHtml +
         '<div class="faq-content-body py-1 text-sm text-[#333333] leading-relaxed">' + richContent + '</div>' +
         '<div class="mt-3 pt-2 border-t border-[#edf2f4] flex justify-between items-center text-xs text-[#888888] flex-wrap gap-2">' +
-        '<div><span>작성자: ' + item.author + '</span> <span class="mx-1">|</span> <span>등록일: ' + item.date + '</span></div>' +
+        '<div><span>작성자: ' + (item.author || '해아림한의원') + '</span> <span class="mx-1">|</span> <span>등록일: ' + item.date + '</span></div>' +
         adminButtonsHtml +
         '</div>' +
         '</div>' +
@@ -2401,7 +2401,7 @@ sections:
         html += '<div class="healim-card white-bg text-left p-6 cursor-pointer" data-post-id="' + safeId + '" onclick="openDetailModal(\'reviews\', \'' + safeId + '\')">' +
         '<div class="flex justify-between items-center mb-2 w-full">' +
         '<div class="flex items-center gap-1.5"><span class="text-xs font-bold px-2 py-0.5 rounded bg-[#eaf3f4] text-[#1c6e78]">' + item.category + '</span>' + photoBadge + '</div>' +
-        '<span class="text-xs text-[#888888]">' + item.author + '</span>' +
+        '<span class="text-xs text-[#888888]">' + ((item.author && item.author !== '익명') ? item.author : '해아림한의원') + '</span>' +
         '</div>' +
         '<h3 class="font-bold text-[#0d3a42] text-sm mb-2 hover:text-[#1c6e78] transition-colors cursor-pointer" onclick="event.stopPropagation(); openDetailModal(\'reviews\', \'' + safeId + '\')">' + item.title + '</h3>' +
         imageThumbHtml +
@@ -2527,7 +2527,7 @@ sections:
         '<h3 class="youtube-title">' + item.title + '</h3>' +
         '<p class="youtube-desc">' + item.content + '</p>' +
         '<div class="youtube-meta flex justify-between items-center flex-wrap gap-1.5">' +
-        '<span>' + item.author + '</span>' +
+        '<span>' + (item.author || '해아림한의원') + '</span>' +
         '<div class="flex items-center gap-1.5">' +
         '<span>조회수 ' + item.views + '회</span>' +
         adminBtnsHtml +
@@ -2582,7 +2582,7 @@ sections:
         html += '<tr onclick="openDetailModal(\'columns\', \'' + safeColId + '\')">' +
         '<td style="text-align: center; color: #888888; font-size: 13px;">' + (list.length - idx) + '</td>' +
         '<td><span class="post-title-link">' + item.title + photoBadge + '</span></td>' +
-        '<td style="text-align: center; font-size: 13px;">' + item.author + '</td>' +
+        '<td style="text-align: center; font-size: 13px;">' + (item.author || '해아림한의원') + '</td>' +
         '<td style="text-align: center; color: #888888; font-size: 13px;">' + item.date + '</td>' +
         '<td style="text-align: center; color: #888888; font-size: 13px;">' + item.views + '</td>' +
         manageTd +
@@ -3058,34 +3058,23 @@ sections:
           window.updateSecretLockState();
           if (pillsWrapper) pillsWrapper.innerHTML = '';
 
-          // Autofill user name if logged in & check superadmin
+          // Default author ALWAYS to '해아림한의원'
           var isSuperAdmin = false;
           var rawUser = localStorage.getItem('healim_auth_user');
           if (rawUser) {
             try {
               var u = JSON.parse(rawUser);
-              authorInput.value = u.name || u.id || '';
               if (u.role === 'admin' || u.uid === 'healim0071' || u.grade === 'superadmin') {
                 isSuperAdmin = true;
               }
             } catch(e) {}
-          } else {
-            authorInput.value = '';
           }
+
+          authorInput.value = '해아림한의원';
 
           var adminGroup = document.getElementById('adminCustomOptionsGroup');
           if (adminGroup) {
             adminGroup.style.display = isSuperAdmin ? 'block' : 'none';
-          }
-          if (isSuperAdmin) {
-            if (!authorInput.value || authorInput.value === '최고관리자' || authorInput.value.indexOf('대표원장단') !== -1) {
-              authorInput.value = '해아림한의원';
-            }
-          }
-          if (boardType === 'faq' || boardType === 'columns') {
-            if (!authorInput.value || authorInput.value.indexOf('대표원장단') !== -1) {
-              authorInput.value = '해아림한의원';
-            }
           }
 
           // Image upload group toggle: show for faq, reviews, columns; hide for youtube
@@ -3170,7 +3159,11 @@ sections:
           var editId = document.getElementById('postEditId') ? document.getElementById('postEditId').value.trim() : '';
           var boardType = document.getElementById('postBoardType').value;
           var category = (boardType === 'youtube') ? '영상' : ((boardType === 'columns') ? '칼럼' : ((boardType === 'reviews') ? '치료후기' : 'FAQ'));
-          var author = document.getElementById('postAuthor').value.trim();
+          var authorInput = document.getElementById('postAuthor');
+          var author = authorInput ? authorInput.value.trim() : '';
+          if (!author) {
+            author = '해아림한의원';
+          }
           var password = document.getElementById('postPassword') ? document.getElementById('postPassword').value.trim() : '';
           var title = document.getElementById('postTitle').value.trim();
           var editor = document.getElementById('postContentEditor');
@@ -3182,8 +3175,8 @@ sections:
           var customDateInput = document.getElementById('postCustomDate');
           var customViewsInput = document.getElementById('postCustomViews');
 
-          if (!title || (!textOnly && !hasImg) || !author) {
-            alert('모든 필수 항목(작성자, 제목, 내용)을 입력해 주세요.');
+          if (!title || (!textOnly && !hasImg)) {
+            alert('모든 필수 항목(제목, 내용)을 입력해 주세요.');
             return;
           }
 
@@ -3465,7 +3458,7 @@ sections:
         var titleEl = document.getElementById('detailModalTitle');
         if (titleEl) titleEl.textContent = item.title || '';
         var authorEl = document.getElementById('detailModalAuthor');
-        if (authorEl) authorEl.textContent = item.author || '해아림한의원';
+        if (authorEl) authorEl.textContent = (item.author && item.author !== '익명') ? item.author : '해아림한의원';
         var dateEl = document.getElementById('detailModalDate');
         if (dateEl) dateEl.textContent = item.date || '';
         var viewsEl = document.getElementById('detailModalViews');

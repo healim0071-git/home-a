@@ -1249,3 +1249,33 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
       - `public/js/healim_cloud_db.js` 및 `public/data/healim_community_hub.json` 정상 생성 확인.
       - 커뮤니티 및 최고관리자 페이지에서 `HealimCloudDB` 스크립트 정상 연동 확인.
 
+
+---
+
+### [2026-09-09] 마일스톤 9.46: 하단 공통 섹션(치료후기·칼럼·유튜브) 최대 너비 및 모바일 최적화 & 작성자 기본값 '해아림한의원' 표준화
+
+1. **사용자 요청 사항**:
+   - 모든 페이지 하단 공통 섹션(FAQ 바로 아래 치료후기, 치료칼럼, 유튜브 영상) 카드들이 브라우저 좌우 끝까지 100% 퍼지는 현상을 중앙 정렬 영역 A(max-w-7xl, container mx-auto)로 복구하고 모바일 최적화 적용.
+   - 커뮤니티 영역에서 자동 발행되는 글과 직접 작성하는 글의 기본 작성자를 '해아림한의원'으로 통일 세팅.
+
+2. **근본 원인 분석**:
+   - layouts/_partials/components/common_bottom_sections.html에서 FAQ 19/20번 추가 작업 중 <div id="commonBottomFaqList" class="max-w-4xl mx-auto space-y-3.5 mb-8"> 여는 태그가 누락되어, FAQ 리스트를 닫는 </div> 태그가 상위의 <div class="container mx-auto max-w-7xl">을 닫아버림.
+   - 이로 인해 이후의 치료후기, 칼럼, 유튜브, 네트워크 배너 섹션이 max-w-7xl 컨테이너 밖으로 밀려나 브라우저 전체 너비로 확장되었던 것임.
+
+3. **작업 및 개선 내역**:
+   - **하단 공통 섹션 컨테이너 및 반응형 그리드 정상화 (common_bottom_sections.html)**:
+     - <div id="commonBottomFaqList"> 여는 태그 복원 및 전체 태그 밸런스 완전 일치 검증(105 Divs 정상 닫힘).
+     - 외부 컨테이너: <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">로 중앙 정렬 및 여백 확보.
+     - 그리드 최적화: 치료후기, 치료칼럼, 유튜브 그리드 모두 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 mb-8로 모바일(1열), 태블릿(2열), 데스크톱(3열) 완벽 최적화.
+     - 네트워크 바로가기 배너 모바일 패딩 조정 (p-6 sm:p-8 md:p-12).
+   - **기본 작성자 '해아림한의원' 일괄 통일**:
+     - 글 작성 모달(content/community/_index.md): postAuthor input 기본 value 및 placeholder를 '해아림한의원'으로 세팅.
+     - 모달 오픈 시(openWriteModal): authorInput.value = '해아림한의원';으로 기본값 자동 부여.
+     - 글 저장 핸들러(handlePostSubmit): 작성자 미입력 시 '해아림한의원' 기본값 적용.
+     - 게시글 렌더러(FAQ, Reviews, YouTube, Columns, DetailModal): 작성자가 비어있거나 '익명'인 경우 '해아림한의원'으로 안전 폴백 표시.
+     - 자동 발행 엔진(static/js/auto_column_engine.js, static/js/auto_faq_engine.js): 모든 칼럼 및 FAQ의 author 속성을 '해아림한의원'으로 표준화.
+
+4. **검증 결과**:
+   - hugo --minify 정적 빌드 0 에러 (1.4초) 완료.
+   - public/index.html 태그 밸런스 검증: 하단 섹션 105개 여는 태그 / 105개 닫는 태그 완전 일치.
+   - 모든 하단 섹션(FAQ, 치료후기, 칼럼, 유튜브, 배너)이 max-w-7xl 컨테이너 내부에 안전하게 중앙 배치됨을 확인.
