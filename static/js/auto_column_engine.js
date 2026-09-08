@@ -287,8 +287,15 @@
       var customCols = [];
       var rawC = localStorage.getItem('healim_custom_columns_posts');
       if (rawC) customCols = JSON.parse(rawC) || [];
+      customCols = customCols.filter(function(p) { return p.id !== newPost.id; });
       customCols.unshift(newPost);
       localStorage.setItem('healim_custom_columns_posts', JSON.stringify(customCols));
+
+      var rawLeg = localStorage.getItem('healim_community_posts_v2');
+      var legList = rawLeg ? (JSON.parse(rawLeg) || []) : [];
+      legList = legList.filter(function(p) { return p.id !== newPost.id; });
+      legList.unshift(newPost);
+      localStorage.setItem('healim_community_posts_v2', JSON.stringify(legList));
     } catch(e) {}
 
     // Update state

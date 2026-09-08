@@ -352,8 +352,15 @@
           var customList = [];
           var rawC = localStorage.getItem('healim_custom_faq_posts');
           if (rawC) customList = JSON.parse(rawC) || [];
+          customList = customList.filter(function(p) { return p.id !== newPost.id; });
           customList.unshift(newPost);
           localStorage.setItem('healim_custom_faq_posts', JSON.stringify(customList));
+
+          var rawLeg = localStorage.getItem('healim_community_posts_v2');
+          var legList = rawLeg ? (JSON.parse(rawLeg) || []) : [];
+          legList = legList.filter(function(p) { return p.id !== newPost.id; });
+          legList.unshift(newPost);
+          localStorage.setItem('healim_community_posts_v2', JSON.stringify(legList));
         } catch(e) {}
       }
 

@@ -510,8 +510,27 @@ sections:
           window.deleteAdminPost = function(board, id) {
             if (!confirm('👑 최고관리자 권한으로 해당 게시글을 영구 삭제하시겠습니까?\n삭제 후에는 복구할 수 없습니다.')) return;
             var list = getBoardList(board);
-            var filtered = list.filter(function(it) { return it.id !== id; });
+            var filtered = list.filter(function(it) { return String(it.id) !== String(id); });
             saveBoardList(board, filtered);
+
+            try {
+              var delList = JSON.parse(localStorage.getItem('healim_deleted_posts_' + board) || '[]');
+              if (delList.indexOf(String(id)) === -1) {
+                delList.push(String(id));
+                localStorage.setItem('healim_deleted_posts_' + board, JSON.stringify(delList));
+              }
+              var cPosts = JSON.parse(localStorage.getItem('healim_custom_' + board + '_posts') || '[]');
+              cPosts = cPosts.filter(function(it) { return String(it.id) !== String(id); });
+              localStorage.setItem('healim_custom_' + board + '_posts', JSON.stringify(cPosts));
+
+              var rawLeg = localStorage.getItem('healim_community_posts_v2');
+              if (rawLeg) {
+                var legList = JSON.parse(rawLeg) || [];
+                legList = legList.filter(function(p) { return String(p.id) !== String(id); });
+                localStorage.setItem('healim_community_posts_v2', JSON.stringify(legList));
+              }
+            } catch(e) {}
+
             alert('게시글이 삭제되었습니다.');
             loadAdminDashboard();
           };

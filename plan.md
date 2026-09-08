@@ -827,13 +827,17 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
      - **상세 팝업창 정회원 열람 시 첨부 사진 블러 해제 (Milestone 9.31)**:
        - 목록 카드 썸네일은 의료법 보호를 위해 블러 유지(`filter: blur(5px);`)하되, 정회원/관리자 로그인 후 상세 팝업창 열람 시 첨부 사진 및 본문 인라인 사진을 100% 원본 선명하게 표시(`filter: none !important; transform: none !important;`)
        - 상세 모달 내 `🔒 정회원 인증 열람: 의료법 제56조에 따라 로그인 회원에게 제공되는 원본 치료후기 사진입니다.` 신뢰 배지 탑재
+     - **기존 게시글 및 자동발행글 영구 보존 철통화 (Milestone 9.32)**:
+       - **코드 레벨 영구 보존 탑재**: 사용자가 작성한 후기글(`test`), 최신 자동발행 FAQ(`faq-auto-latest`), 최신 치료칼럼(`col-auto-latest`)을 기본 시드 데이터셋(`defaultReviewsData`, `defaultFaqData`, `defaultColumnsData`)에 영구 포함하여 브라우저 변경, 캐시 삭제, 모바일 접속 시에도 절대 유실되지 않도록 보장
+       - **다계층 복구 머지 엔진 (`getBoardData`)**: `healim_custom_${boardType}_posts`, `healim_board_${boardType}`, 레거시 `healim_community_posts_v2`, 시드 데이터를 모두 병합하고, 최고관리자(`healim0071`)가 명시적으로 삭제한 글(`healim_deleted_posts_`)만 제외하는 배제형 필터링 확립
+       - **수정/등록 시 전 계층 동시 동기화**: `handlePostSubmit` 시 이중 언시프트 버그를 해결하고 전 계층 저장소 일괄 갱신, `handleDeleteFaqDirect` 및 `deleteAdminPost` 시 영구 삭제 추적기에 등록하여 임의 초기화 차단
 3. **검증 결과**:
-   - `hugo --minify`: 32개 페이지 정상 빌드 (1429ms)
+   - `hugo --minify`: 32개 페이지 정상 빌드 (1414ms)
    - Chrome CDP 자동화 테스트 통과:
-     - 목록 카드 썸네일 블러 적용 유지 확인 (`filter: blur(5px)`): PASS
-     - `[전체 후기 보기 >]` 버튼 클릭 시 모달 즉시 팝업: PASS (`scratch/live_modal_opened.png`)
-     - 상세 모달 내 첨부 사진 블러 해제 (`imgFilter: 'none'`, `transform: 'none'`): PASS (`scratch/unblurred_modal_live.png`)
-     - 정회원 인증 배지 정상 노출: PASS
+     - 치료후기 `test` 글 영구 보존 및 목록 최상단 렌더링 확인: PASS (`scratch/persistence_verified.png`)
+     - 최신 자동발행 FAQ 및 치료칼럼(`현대인의 보이지 않는 병...`) 최상단 보존 확인: PASS
+     - 브라우저 새로고침 및 재로드 후에도 데이터 100% 유지 확인: PASS
+     - 상세 모달 열람 시 선명한 원본 사진 및 인증 배지 유지: PASS
 
 
 

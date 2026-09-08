@@ -423,6 +423,17 @@ sections:
         // --- Seed Data ---
         var defaultFaqData = [
           {
+            "id": "faq-auto-latest",
+            "category": "자율신경FAQ",
+            "author": "해아림한의원",
+            "date": "2026.09.08",
+            "views": 320,
+            "image": "/images/faq/faq_1_exam.svg",
+            "title": "병원에서 온갖 검사를 다 받아도 정상이라는데, 왜 어지럽고 가슴이 답답할까요? 자율신경실조증 검사로 알 수 있나요?",
+            "content": "병원에서 위내시경, 심전도, 뇌 MRI, 혈액검사까지 모두 받았는데도 \"아무 이상이 없으니 신경성입니다\"라는 말만 듣고 답답해하시는 분들이 많습니다. 몸은 숨이 차고 어지러우며 가슴이 쿵쾅거리는데, 검사 기계에는 정상으로 나오는 이유는 무엇일까요?\n\n일반 병원 검사는 장기의 구조적 파괴, 종양, 궤양, 뇌출혈 같은 '기질적 손상'을 찾는 검사입니다. 반면 자율신경실조증은 장기 자체의 고장이 아니라, 장기들의 속도와 균형을 조절하는 **'자율신경 조절망의 기능적 오작동'**입니다.\n\n해아림한의원에서는 이러한 기능적 불균형을 객관적으로 시각화하기 위해 **HRV(심박변이도) 검사와 정밀 뇌기능 뇌파(QEEG) 검사**를 시행합니다. 심장 박동 사이의 미세한 시간 간격 변화를 분석하여 교감신경과 부교감신경의 활성도, 신체 피로도, 심신 활력도를 측정하고, 뇌파 분석을 통해 중추신경계의 스트레스 저항도와 각성 수준을 파악합니다. 검사상 보이지 않던 증상의 실체를 객관적인 데이터로 확인하고, 과각성된 뇌신경을 안정시키며 약화된 부교감신경을 회복시키는 1:1 맞춤 한약과 두개천골요법(CST)을 통해 신체 본래의 자가 회복력을 되찾아 드립니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)",
+            "isAutoPublished": true
+          },
+          {
             "id": "faq-1",
             "category": "원인/진단",
             "author": "해아림한의원",
@@ -545,6 +556,16 @@ sections:
         ];
 
         var defaultReviewsData = [
+          {
+            "id": "rev-test",
+            "category": "치료후기",
+            "author": "해아림한의원",
+            "date": "2026.09.08",
+            "views": 25,
+            "image": "/images/reviews/review_1.jpg",
+            "title": "test",
+            "content": "test[사진]test입니다\n\n치료후기 테스트 게시글입니다."
+          },
           {
             "id": "rev-1",
             "category": "가슴두근거림 & 공황",
@@ -776,6 +797,17 @@ sections:
         ];
 
         var defaultColumnsData = [
+          {
+            "id": "col-auto-latest",
+            "category": "칼럼",
+            "author": "한방신경정신과 전문의",
+            "date": "2026.09.08",
+            "views": 410,
+            "image": "/images/columns/column_2_gut_brain.svg",
+            "title": "현대인의 보이지 않는 병, 자율신경 불균형과 뇌-장-신경 축(Gut-Brain Axis)",
+            "content": "진료실 문을 열고 들어오시는 환자분들 중에는 잔뜩 상기된 얼굴로 서류 뭉치를 내미시는 분들이 유독 많습니다. 대학병원 응급실과 심장내과를 전전하며 심전도, 24시간 홀터 모니터링, 심장 초음파, 조영제 관상동맥 CT까지 수백만 원에 달하는 정밀 검사를 모두 마쳤지만, 의료진으로부터 돌아온 답은 한결같이 \"심장은 매우 건강하니 신경정신과나 가보라\"는 허탈한 통보였다는 것입니다. 당사자는 숨이 턱 끝까지 차오르고 심장이 1분에 140회씩 요동치며 이대로 죽는 것은 아닌가 하는 극심한 공포와 질식감에 시달리는데, 기계 판독 결과는 '이상 없음'이라는 이 기막힌 간극 앞에서 환자분들은 분통을 터뜨리거나 깊은 고립감에 빠지곤 합니다.\n\n이러한 현상이 발생하는 결정적인 이유는 소화와 심장 박동이 단순히 개별 장기 하나에서 일어나는 기계적 과정이 아니라, 뇌간(Brainstem)에서 출발하여 전신을 지배하는 제10뇌신경, 즉 미주신경(Vagus Nerve)의 지휘 아래 작동하는 고도의 신경학적 협응 반응이기 때문입니다.\n\n해아림한의원에서는 뇌-장-신경 축을 안정시키는 1:1 맞춤 청심안신 한약과 두개천골요법, 침구 치료를 통해 무너진 자율신경의 항상성을 근본적으로 되살려 드립니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)",
+            "isAutoPublished": true
+          },
           {
             "id": "col-1",
             "category": "칼럼",
@@ -1289,32 +1321,51 @@ sections:
           return merged;
         }
 
-        // Multi-tier merge for FAQ, Reviews, Columns
-        var deletedIds = getDeletedPostIds(key);
+        // Multi-tier merge for FAQ, Reviews, Columns (Ironclad persistence against data loss)
+        var deletedIds = getDeletedPostIds(key).map(String);
         var storedList = [];
         var raw = localStorage.getItem('healim_board_' + key);
         if (raw) {
           try { storedList = JSON.parse(raw) || []; } catch(e) {}
         }
         var customList = getCustomUserPosts(key);
+        var legacyList = [];
+        var rawLegacy = localStorage.getItem('healim_community_posts_v2');
+        if (rawLegacy) {
+          try {
+            var allLeg = JSON.parse(rawLegacy) || [];
+            legacyList = allLeg.filter(function(p) {
+              if (!p) return false;
+              if (key === 'faq') return p.type === 'faq' || p.category === 'FAQ' || (p.id && String(p.id).startsWith('faq-'));
+              if (key === 'reviews') return p.type === 'reviews' || p.category === '치료후기' || (p.id && String(p.id).startsWith('rev-'));
+              if (key === 'columns') return p.type === 'columns' || p.category === '칼럼' || (p.id && String(p.id).startsWith('col-'));
+              return false;
+            });
+          } catch(e) {}
+        }
+
         var merged = [];
         var seenIds = {};
 
         function addPostItem(item) {
           if (!item || !item.id) return;
-          if (deletedIds.indexOf(item.id) !== -1) return; // Administrator explicitly deleted
-          if (seenIds[item.id]) return;
-          seenIds[item.id] = true;
+          var strId = String(item.id);
+          if (deletedIds.indexOf(strId) !== -1) return; // Administrator explicitly deleted
+          if (seenIds[strId]) return;
+          seenIds[strId] = true;
           merged.push(item);
         }
 
-        // 1. User uploaded / custom posts first
+        // 1. User uploaded / custom posts first (highest priority)
         customList.forEach(addPostItem);
 
         // 2. Previously stored / auto-published posts in localStorage
         storedList.forEach(addPostItem);
 
-        // 3. Complete permanent clinical library (fallback)
+        // 3. Legacy posts from v2 storage
+        legacyList.forEach(addPostItem);
+
+        // 4. Complete permanent clinical library & seed data (fallback)
         if (Array.isArray(fallback)) {
           fallback.forEach(addPostItem);
         }
@@ -2494,6 +2545,16 @@ sections:
                 list.unshift(updatedPost);
               }
               saveBoardData(boardType, list);
+
+              // Update custom posts tier
+              var cPosts = getCustomUserPosts(boardType);
+              var cIdx = cPosts.findIndex(function(p) { return String(p.id) === String(editId); });
+              if (cIdx !== -1) {
+                cPosts[cIdx] = updatedPost;
+              } else {
+                cPosts.unshift(updatedPost);
+              }
+              saveCustomUserPosts(boardType, cPosts);
             } else {
               var yList = getBoardData('youtube', []);
               var yIdx = yList.findIndex(function(it) { return it.id === editId; });
@@ -2568,13 +2629,22 @@ sections:
 
           if (boardType !== 'youtube') {
             var customPosts = getCustomUserPosts(boardType);
-            customPosts = customPosts.filter(function(p) { return p.id !== newPost.id; });
+            customPosts = customPosts.filter(function(p) { return String(p.id) !== String(newPost.id); });
             customPosts.unshift(newPost);
             saveCustomUserPosts(boardType, customPosts);
 
-            var currentList = getBoardData(boardType, []);
-            currentList.unshift(newPost);
+            var fallbackData = (boardType === 'faq' ? defaultFaqData : (boardType === 'reviews' ? defaultReviewsData : defaultColumnsData));
+            var currentList = getBoardData(boardType, fallbackData);
             saveBoardData(boardType, currentList);
+
+            // Mirror to legacy backup
+            try {
+              var rawLeg = localStorage.getItem('healim_community_posts_v2');
+              var legList = rawLeg ? (JSON.parse(rawLeg) || []) : [];
+              legList = legList.filter(function(p) { return String(p.id) !== String(newPost.id); });
+              legList.unshift(newPost);
+              localStorage.setItem('healim_community_posts_v2', JSON.stringify(legList));
+            } catch(e) {}
           } else {
             currentYoutubePage = 1;
           }
@@ -2970,8 +3040,22 @@ sections:
 
           if (!confirm('정말 이 FAQ를 삭제하시겠습니까?')) return;
 
-          var filtered = list.filter(function(it) { return it.id !== faqId; });
+          addDeletedPostId('faq', faqId);
+          var customPosts = getCustomUserPosts('faq').filter(function(it) { return String(it.id) !== String(faqId); });
+          saveCustomUserPosts('faq', customPosts);
+
+          var filtered = list.filter(function(it) { return String(it.id) !== String(faqId); });
           saveBoardData('faq', filtered);
+
+          try {
+            var rawLeg = localStorage.getItem('healim_community_posts_v2');
+            if (rawLeg) {
+              var legList = JSON.parse(rawLeg) || [];
+              legList = legList.filter(function(p) { return String(p.id) !== String(faqId); });
+              localStorage.setItem('healim_community_posts_v2', JSON.stringify(legList));
+            }
+          } catch(e) {}
+
           renderFaqList();
           try {
             window.dispatchEvent(new CustomEvent('healim-community-updated', { detail: { boardType: 'faq', action: 'delete' } }));
