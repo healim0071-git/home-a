@@ -48,6 +48,7 @@ sections:
         TAB 1: FAQ 자율신경치료 정보
         ══════════════════════════════════════════════════════════════ -->
         <div id="tab-pane-faq" class="tab-pane-content">
+        <div id="faq" class="scroll-mt-28"></div>
         <!-- Control Bar with Auto-Publishing Status (healim0071 Admin Only) -->
         <div class="board-control-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
         <div id="autoFaqStatusBadge" class="flex items-center gap-2 text-xs text-[#0d3a42] bg-[#f0f7f8] border border-[#badfe3] px-3.5 py-2 rounded-lg" style="display: none;">
@@ -74,6 +75,7 @@ sections:
         TAB 2: 치료후기 (의료법 제56조 로그인 잠금 게이트)
         ══════════════════════════════════════════════════════════════ -->
         <div id="tab-pane-reviews" class="tab-pane-content hidden">
+        <div id="reviews" class="scroll-mt-28"></div>
         <!-- Review Notice Banner -->
         <div class="bg-[#f2f7f8] border border-[#cde3e6] p-4 rounded-xl mb-6 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs text-[#0d3a42]">
         <div class="flex items-center gap-2">
@@ -120,6 +122,7 @@ sections:
         TAB 3: 자율신경실조증 유튜브
         ══════════════════════════════════════════════════════════════ -->
         <div id="tab-pane-youtube" class="tab-pane-content hidden">
+        <div id="youtube" class="scroll-mt-28"></div>
         <div class="board-control-bar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.5rem;">
         <div class="flex items-center gap-2 text-xs text-[#0d3a42] bg-[#f0f7f8] px-3.5 py-2 rounded-lg border border-[#cde3e6]" id="youtubeSyncStatus">
         <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -150,6 +153,7 @@ sections:
         TAB 4: 자율신경실조증 치료 칼럼
         ══════════════════════════════════════════════════════════════ -->
         <div id="tab-pane-columns" class="tab-pane-content hidden">
+        <div id="columns" class="scroll-mt-28"></div>
         <div class="board-control-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
         <div id="autoColumnStatusBadge" class="flex items-center gap-2 text-xs text-[#0d3a42] bg-[#f0f7f8] border border-[#badfe3] px-3.5 py-2 rounded-lg" style="display: none;">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -651,96 +655,216 @@ sections:
         window.defaultFaqData = defaultFaqData;
 
         var defaultReviewsData = [
-                  {
-                            "id": "reviews-1788884500000",
-                            "category": "치료후기",
-                            "title": "이것도 테스트입니다.이것도 테스트입니다.",
-                            "content": "이것도 테스트입니다. 이것도 테스트입니다. [사진] 이것도 테스트입니다. 이것도 테스트입니다. 이것도 테스트입니다. 이것도 테스트입니다.",
-                            "author": "해아림한의원",
-                            "date": "2026.09.09",
-                            "views": 18,
-                            "image": "/images/reviews/review_3.jpg"
-                  },
-                  {
-                            "id": "reviews-1788884300000",
-                            "category": "치료후기",
-                            "title": "테스트치료후기 를 해보려고합니다.테스트치료후기 를 해보려고합니다",
-                            "content": "테스트치료후기 를 해보려고합니다. 테스트치료후기 를 해보려고합니다 [사진] 테스트치료후기 를 해보려고합니다. 테스트치료후기 를 해보려고합니다",
-                            "author": "해아림한의원",
-                            "date": "2026.09.09",
-                            "views": 15,
-                            "image": "/images/reviews/review_2.jpg"
-                  },
-                  {
-                            "id": "reviews-1788878779980",
-                            "category": "치료후기",
-                            "title": "테스트를 해보려고합니다.",
-                            "content": "치료후기 테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를...",
-                            "author": "해아림한의원",
-                            "date": "2026.09.09",
-                            "views": 25,
-                            "image": "/images/reviews/review_1.jpg"
-                  },
-                  {
-                            "id": "rev-1-1788860000000",
-                            "category": "가슴두근거림 & 공황",
-                            "title": "응급실만 세 번 갔는데 한약과 훈련으로 완전히 회복되었습니다",
-                            "content": "출근길 지하철에서 가슴이 터질 듯 뛰고 숨이 막혀 응급실을 세 번이나 반복해 실려갔습니다. 심장내과와 뇌 검사상 \"이상 없다\", \"신경성이다\"라는 말만 들어 하루하루가 생지옥 같았습니다. 해아림 맞춤 청심안신 한약과 두개천골요법, 뇌파 훈련 후 불안 없이 편안하게 출퇴근하고 있습니다.",
-                            "author": "30대 직장인 김OO 님",
-                            "date": "2026.09.04",
-                            "views": 1245,
-                            "image": "/images/reviews/review_1.jpg"
-                  },
-                  {
-                            "id": "rev-2-1788850000000",
-                            "category": "만성 어지럼증 & 불면",
-                            "title": "배를 탄 듯 흔들리던 머리가 맑아지고 밤에 푹 잡니다",
-                            "content": "1년 넘게 머리가 멍하고 땅이 푹 꺼지듯 흔들려 외출조차 두려웠습니다. 밤에도 교감신경이 가라앉지 않아 1~2시간 간격으로 깼습니다. 이비인후과 이석증 검사도 정상이어서 자율신경 클리닉을 찾게 되었습니다. 원장님께서 상충열을 내려주고 부교감신경을 북돋우는 체질 탕약과 CST 치료를 해주셨는데, 1달 만에 어지럼증이 70% 이상 호전되었고 지금은 약 복용 없이도 7시간 숙면을 취하고 있습니다.",
-                            "author": "50대 주부 박OO 님",
-                            "date": "2026.09.01",
-                            "views": 1120,
-                            "image": "/images/reviews/review_2.jpg"
-                  },
-                  {
-                            "id": "rev-3-1788840000000",
-                            "category": "위장장애 & 담적",
-                            "title": "신경성 위염, 소화불량으로 10kg 빠졌는데 자율신경 치료 후 밥을 맛있게 먹습니다",
-                            "content": "조금만 스트레스를 받으면 체하고 명치가 돌처럼 굳었습니다. 위내시경을 해도 가벼운 위염뿐이라는데 살이 10kg이나 빠져 기력이 바닥이었습니다. 위장의 연동 운동을 조절하는 미주신경 기능이 떨어져 있다는 진단을 받고 해아림 맞춤 온보비위 탕약과 복부 온열 침 치료를 병행했습니다. 치료 2주 만에 트림과 더부룩함이 가라앉고 3개월이 지난 지금 체중도 정상 회복했습니다.",
-                            "author": "40대 자영업 이OO 님",
-                            "date": "2026.08.27",
-                            "views": 980,
-                            "image": "/images/reviews/review_3.jpg"
-                  },
-                  {
-                            "id": "rev-4-1788830000000",
-                            "category": "전신 신체화 증상",
-                            "title": "머리 열감, 손발 시림, 숨막힘... 온몸이 아팠는데 체질 한약 복용 후 안정을 찾았습니다",
-                            "content": "시험 준비 스트레스로 머리로는 열이 뻗치는데 손발은 얼음장처럼 차갑고, 숨을 깊게 들이쉬지 못해 얕은 숨만 쉬었습니다. 온몸에 감각 이상이 와서 우울증까지 왔었습니다. 해아림 원장님께서 자율신경 불균형으로 인한 상열하한 증상이라고 짚어주시고 꼼꼼히 진맥해 주셨습니다. 한약 복용 한 달 차에 상열감이 가라앉았고 호흡이 편안해져 무사히 시험에 합격했습니다.",
-                            "author": "20대 취준생 최OO 님",
-                            "date": "2026.08.22",
-                            "views": 1350,
-                            "image": "/images/reviews/review_4.jpg"
-                  },
-                  {
-                            "id": "rev-5-1788820000000",
-                            "category": "만성피로 & 기립성저혈압",
-                            "title": "기립성 어지럼증과 지독한 만성피로, 해아림 맞춤 한약으로 활력 회복",
-                            "content": "아침마다 일어나기 힘들고 자리에서 일어설 때마다 눈앞이 캄캄해지는 기립성 빈맥과 어지럼증에 시달렸습니다. 만성피로로 인해 회사 업무 집중이 불가능할 정도였습니다. 해아림에서 자율신경 검사와 체질 진맥 후 심비양허를 개선하는 맞춤 보양 한약과 경추 추나요법을 2달간 집중 치료받았습니다. 뇌로 가는 혈류가 맑아지면서 아침 기상이 가뿐해지고 일어설 때 어지럼증이 사라졌습니다.",
-                            "author": "30대 연구원 정OO 님",
-                            "date": "2026.08.16",
-                            "views": 1040,
-                            "image": "/images/reviews/review_5.jpg"
-                  },
-                  {
-                            "id": "rev-6-1788810000000",
-                            "category": "두통 & 이명 & 긴장",
-                            "title": "신경성 두통과 귀에서 나던 이명 소리가 맑아졌습니다",
-                            "content": "목과 어깨가 돌덩이처럼 굳으면서 뒤통수가 찌릿찌릿 쑤시는 신경성 긴장성 두통과 삐- 소리의 이명이 끊이지 않았습니다. 진통제를 아무리 먹어도 낫지 않았습니다. 해아림 원장님께서 후두하근 긴장과 뇌척수액 순환 장애를 진단해 주시고 두개천골요법(CST)과 경락 약침치료, 뇌신경 안정 한약을 처방해 주셨습니다. 치료 3주 만에 목 뒤 뻐근함이 씻은 듯 풀리고 2달 만에 이명 소리가 거의 들리지 않게 되었습니다.",
-                            "author": "40대 교사 강OO 님",
-                            "date": "2026.08.10",
-                            "views": 1180,
-                            "image": "/images/reviews/review_6.jpg"
-                  }
+          {
+            "id": "rev-1-1788860000000",
+            "category": "가슴두근거림 & 공황",
+            "title": "응급실만 세 번 갔는데 한약과 훈련으로 완전히 회복되었습니다",
+            "content": "출근길 지하철에서 가슴이 터질 듯 뛰고 숨이 막혀 응급실을 세 번이나 반복해 실려갔습니다. 심장내과와 뇌 검사상 \"이상 없다\", \"신경성이다\"라는 말만 들어 하루하루가 생지옥 같았습니다. 해아림 맞춤 청심안신 한약과 두개천골요법, 뇌파 훈련 후 불안 없이 편안하게 출퇴근하고 있습니다.",
+            "author": "30대 직장인 김OO 님",
+            "date": "2026.09.04",
+            "views": 1245,
+            "image": "/images/reviews/review_1.jpg"
+          },
+          {
+            "id": "rev-2-1788850000000",
+            "category": "만성 어지럼증 & 불면",
+            "title": "배를 탄 듯 흔들리던 머리가 맑아지고 밤에 푹 잡니다",
+            "content": "1년 넘게 머리가 멍하고 땅이 푹 꺼지듯 흔들려 외출조차 두려웠습니다. 밤에도 교감신경이 가라앉지 않아 1~2시간 간격으로 깼습니다. 이비인후과 이석증 검사도 정상이어서 자율신경 클리닉을 찾게 되었습니다. 원장님께서 상충열을 내려주고 부교감신경을 북돋우는 체질 탕약과 CST 치료를 해주셨는데, 1달 만에 어지럼증이 70% 이상 호전되었고 지금은 약 복용 없이도 7시간 숙면을 취하고 있습니다.",
+            "author": "50대 주부 박OO 님",
+            "date": "2026.09.01",
+            "views": 1120,
+            "image": "/images/reviews/review_2.jpg"
+          },
+          {
+            "id": "rev-3-1788840000000",
+            "category": "위장장애 & 담적",
+            "title": "신경성 위염, 소화불량으로 10kg 빠졌는데 자율신경 치료 후 밥을 맛있게 먹습니다",
+            "content": "조금만 스트레스를 받으면 체하고 명치가 돌처럼 굳었습니다. 위내시경을 해도 가벼운 위염뿐이라는데 살이 10kg이나 빠져 기력이 바닥이었습니다. 위장의 연동 운동을 조절하는 미주신경 기능이 떨어져 있다는 진단을 받고 해아림 맞춤 온보비위 탕약과 복부 온열 침 치료를 병행했습니다. 치료 2주 만에 트림과 더부룩함이 가라앉고 3개월이 지난 지금 체중도 정상 회복했습니다.",
+            "author": "40대 자영업 이OO 님",
+            "date": "2026.08.27",
+            "views": 980,
+            "image": "/images/reviews/review_3.jpg"
+          },
+          {
+            "id": "rev-4-1788830000000",
+            "category": "전신 신체화 증상",
+            "title": "머리 열감, 손발 시림, 숨막힘... 온몸이 아팠는데 체질 한약 복용 후 안정을 찾았습니다",
+            "content": "시험 준비 스트레스로 머리로는 열이 뻗치는데 손발은 얼음장처럼 차갑고, 숨을 깊게 들이쉬지 못해 얕은 숨만 쉬었습니다. 온몸에 감각 이상이 와서 우울증까지 왔었습니다. 해아림 원장님께서 자율신경 불균형으로 인한 상열하한 증상이라고 짚어주시고 꼼꼼히 진맥해 주셨습니다. 한약 복용 한 달 차에 상열감이 가라앉았고 호흡이 편안해져 무사히 시험에 합격했습니다.",
+            "author": "20대 취준생 최OO 님",
+            "date": "2026.08.22",
+            "views": 1350,
+            "image": "/images/reviews/review_4.jpg"
+          },
+          {
+            "id": "rev-5-1788820000000",
+            "category": "만성피로 & 기립성저혈압",
+            "title": "기립성 어지럼증과 지독한 만성피로, 해아림 맞춤 한약으로 활력 회복",
+            "content": "아침마다 일어나기 힘들고 자리에서 일어설 때마다 눈앞이 캄캄해지는 기립성 빈맥과 어지럼증에 시달렸습니다. 만성피로로 인해 회사 업무 집중이 불가능할 정도였습니다. 해아림에서 자율신경 검사와 체질 진맥 후 심비양허를 개선하는 맞춤 보양 한약과 경추 추나요법을 2달간 집중 치료받았습니다. 뇌로 가는 혈류가 맑아지면서 아침 기상이 가뿐해지고 일어설 때 어지럼증이 사라졌습니다.",
+            "author": "30대 연구원 정OO 님",
+            "date": "2026.08.16",
+            "views": 1040,
+            "image": "/images/reviews/review_5.jpg"
+          },
+          {
+            "id": "rev-6-1788810000000",
+            "category": "두통 & 이명 & 긴장",
+            "title": "신경성 두통과 귀에서 나던 이명 소리가 맑아졌습니다",
+            "content": "목과 어깨가 돌덩이처럼 굳으면서 뒤통수가 찌릿찌릿 쑤시는 신경성 긴장성 두통과 삐- 소리의 이명이 끊이지 않았습니다. 진통제를 아무리 먹어도 낫지 않았습니다. 해아림 원장님께서 후두하근 긴장과 뇌척수액 순환 장애를 진단해 주시고 두개천골요법(CST)과 경락 약침치료, 뇌신경 안정 한약을 처방해 주셨습니다. 치료 3주 만에 목 뒤 뻐근함이 씻은 듯 풀리고 2달 만에 이명 소리가 거의 들리지 않게 되었습니다.",
+            "author": "40대 교사 강OO 님",
+            "date": "2026.08.10",
+            "views": 1180,
+            "image": "/images/reviews/review_6.jpg"
+          },
+          {
+            "id": "rev-clinical-1-1776470400000",
+            "category": "가슴두근거림 & 공황",
+            "title": "회의 중 갑자기 숨이 가쁘고 가슴이 멎을 것 같던 발작, 3개월 치료 후 완전히 편안해졌습니다",
+            "content": "업무 스트레스가 극에 달했던 올해 초, 중요한 클라이언트 회의 도중 갑자기 심장이 요동치고 숨이 턱 끝까지 차올라 죽을 것 같은 공포를 겪었습니다. 응급실에 실려가 심전도, 심장초음파, 뇌 MRI 검사를 다 받았지만 \"이상 소견 없음, 신경성\"이라는 말만 들었습니다. 이후에도 지하철이나 밀폐된 공간만 가면 식은땀이 나고 가슴이 조여와 일상생활이 불가능할 지경이었습니다. 해아림한의원에서 심장과 간의 울열(鬱熱)을 풀고 교감신경을 안정시키는 청심안신탕과 두개천골요법(CST) 훈련을 병행했습니다. 치료 2주 만에 가슴 두근거림의 빈도가 절반 이하로 줄었고, 3개월이 지난 지금은 만원 지하철도 불안 없이 출퇴근하며 정상 업무를 보고 있습니다. 제 삶을 되찾아 주셔서 진심으로 감사드립니다.",
+            "author": "30대 직장인 김OO 님",
+            "date": "2026.04.18",
+            "views": 342,
+            "image": "/images/reviews/review_1.jpg"
+          },
+          {
+            "id": "rev-clinical-2-1763942400000",
+            "category": "만성 어지럼증 & 불면",
+            "title": "배를 탄 듯 붕 뜨고 흔들리는 어지럼증과 불면증, 한약과 약침으로 10년 만에 숙면을 취합니다",
+            "content": "걸을 때마다 땅이 스펀지처럼 푹푹 꺼지는 느낌과 머릿속이 뿌옇게 안개 낀 듯한 뇌 안개(Brain Fog)로 1년 넘게 고통받았습니다. 밤에는 침대에 누우면 맥박 소리가 귓가에 울리고 교감신경이 가라앉지 않아 2~3시간을 뒤척이다 겨우 잠들기 일쑤였습니다. 이비인후과 전정기능 검사나 신경과 검사에서도 특별한 이상이 발견되지 않아 절망적이었습니다. 해아림한의원에서 HPA 축 과각성과 뇌간 자율신경계 불균형을 진단받고, 상충열을 내려주는 맞춤 탕약과 경추 약침 치료를 시작했습니다. 치료 4주 차부터 머리가 맑아지며 어지럼증이 서서히 걷히기 시작했고, 지금은 밤에 눕자마자 7시간 연속으로 깊은 잠에 듭니다. 아침에 개운하게 일어나는 평범한 일상이 얼마나 큰 축복인지 깨닫고 있습니다.",
+            "author": "40대 전문직 이OO 님",
+            "date": "2025.11.24",
+            "views": 418,
+            "image": "/images/reviews/review_2.jpg"
+          },
+          {
+            "id": "rev-clinical-3-1749686400000",
+            "category": "만성 위장장애 & 담적",
+            "title": "물만 마셔도 체하고 명치가 돌처럼 굳었던 기능성 소화불량, 자율신경 치료로 밥 한 공기 다 먹습니다",
+            "content": "조금만 신경을 쓰거나 음식을 먹으면 명치가 꽉 막히고 헛구역질과 트림이 끊이지 않았습니다. 위내시경을 받아도 '경미한 만성 표재성 위염'일 뿐이라는데 몸무게는 8kg이나 빠져 뼈만 앙상하게 남았습니다. 소화제와 제산제를 달고 살았지만 아무런 차도가 없었습니다. 해아림에서 소화관을 지배하는 미주신경(부교감신경)이 극도로 저하되어 위장 연동운동이 멈춰있다는 설명을 듣고 큰 충격을 받았습니다. 위장 담적을 제거하고 미주신경 활성도를 높이는 이기건비 탕약과 복부 온열 침 치료를 2달간 집중적으로 받았습니다. 거짓말처럼 명치의 돌덩이가 풀리면서 가스가 빠지고 식욕이 돌기 시작했습니다. 이제는 가족들과 함께 삼겹살도 편하게 먹고 밥 한 공기를 뚝딱 비웁니다.",
+            "author": "50대 자영업 박OO 님",
+            "date": "2025.06.12",
+            "views": 526,
+            "image": "/images/reviews/review_3.jpg"
+          },
+          {
+            "id": "rev-clinical-4-1733356800000",
+            "category": "기립성 조절장애 & POTS",
+            "title": "일어설 때마다 눈앞이 캄캄해지고 심장이 130회까지 뛰던 기립성 빈맥증후군, 완치 판정 받았습니다",
+            "content": "아침에 침대에서 일어나거나 의자에서 일어설 때마다 눈앞이 하얘지고 핑 돌면서 주저앉기 일쑤였습니다. 스마트워치를 차고 측정해 보면 앉아있을 땐 75회이던 심박수가 일어서기만 하면 130~140회까지 치솟았습니다. 빈혈약도 소용없었고 대학병원에서 POTS(기립성 빈맥증후군) 진단을 받았으나 마땅한 치료제가 없어 물과 염분만 많이 먹으라는 권유를 받았습니다. 학업을 휴학해야 하나 고민하던 중 해아림을 찾았습니다. 말초 혈관 탄력을 높여주고 하체로 쏠린 혈류를 뇌로 끌어올리는 승양익기 한약과 자율신경 바이오피드백 훈련을 받았습니다. 6주가 지나자 일어설 때의 심박수 상승이 15회 이내로 안정되었고 암전 현상이 완전히 사라졌습니다. 무사히 복학하여 건강하게 캠퍼스 생활을 이어가고 있습니다.",
+            "author": "20대 대학생 최OO 님",
+            "date": "2024.12.05",
+            "views": 389,
+            "image": "/images/reviews/review_4.jpg"
+          },
+          {
+            "id": "rev-clinical-5-1716076800000",
+            "category": "상열하한 & 수족냉증",
+            "title": "얼굴은 불타오르고 손발은 얼음장 같던 극심한 상열하한증, 체온 균형을 되찾았습니다",
+            "content": "사계절 내내 얼굴과 머리로는 열이 펄펄 끓어올라 홍조가 심하고 두피에 열감이 가득한데, 반대로 손과 발은 얼음장처럼 차가워 양말 두 켤레를 신고도 시려서 잠을 설쳤습니다. 산부인과 갱년기 호르몬 검사에서도 호르몬 수치는 정상이라 원인을 알 수 없어 답답했습니다. 해아림 원장님께서 자율신경계 체온 조절 중추의 이상으로 인한 전형적인 '상열하한(上熱下寒)' 병증이라고 짚어주셨습니다. 상체의 허열을 아래로 끌어내리고 단전의 찬 기운을 덥혀주는 수승화강(水昇火降) 맞춤 탕약과 뜸 치료를 3달간 받았습니다. 얼굴로 치밀어 오르던 화끈거림이 사라지고 손발 끝까지 따뜻한 온기가 돌기 시작했습니다. 혈색도 맑아지고 만성 피로까지 함께 해결되어 새 인생을 사는 기분입니다.",
+            "author": "40대 주부 정OO 님",
+            "date": "2024.05.19",
+            "views": 462,
+            "image": "/images/reviews/review_5.jpg"
+          },
+          {
+            "id": "rev-clinical-6-1697241600000",
+            "category": "다한증 & 체온조절이상",
+            "title": "긴장하면 손발과 겨드랑이에 비 오듯 쏟아지던 국소 다한증, 신경차단술 없이 한방 치료로 극복했습니다",
+            "content": "조금만 긴장하거나 사람을 만날 때, 발표를 할 때 손바닥과 발바닥, 겨드랑이에 땀이 주체할 수 없을 정도로 흘러내려 악수조차 꺼려졌습니다. 땀샘 수술이나 교감신경 차단술을 고민했지만 보상성 다한증 부작용이 두려워 망설이던 중 해아림을 알게 되었습니다. 교감신경의 과민도를 낮추고 땀샘을 주관하는 자율신경 반사를 정상화하는 한약과 체질 침 치료를 꾸준히 받았습니다. 한 달 정도 지나자 긴장 상황에서도 손바닥이 뽀송뽀송함을 유지하기 시작했고, 두 달 후에는 사람들 앞에서 긴장해도 땀이 비정상적으로 터져 나오지 않게 되었습니다. 수술 없이 근본적으로 신경계를 안정시켜 주신 원장님께 감사드립니다.",
+            "author": "30대 엔지니어 강OO 님",
+            "date": "2023.10.14",
+            "views": 395,
+            "image": "/images/reviews/review_6.jpg"
+          },
+          {
+            "id": "rev-clinical-7-1679443200000",
+            "category": "이명 & 브레인포그",
+            "title": "24시간 삐- 소리 나던 신경성 이명과 머릿속 멍함, 자율신경 교정으로 소음이 80% 줄었습니다",
+            "content": "과로와 스트레스가 누적된 후 오른쪽 귀에서 고주파 삐- 소리와 매미 우는 소리가 끊이지 않았습니다. 집중하려고 하면 머릿속이 뿌옇게 굳어 책이나 보고서 문장이 눈에 들어오지 않는 브레인포그 증상까지 겹쳐 은퇴를 고민할 정도였습니다. 이비인후과 청력검사에서는 청력 저하가 없다고 하여 신경안정제만 처방받았으나 멍함만 심해졌습니다. 해아림에서 뇌간 청신경과 미주신경의 과각성을 가라앉히고 미세 뇌혈류를 순환시키는 통두청이 탕약과 경추 추나요법을 받았습니다. 3주 만에 이명의 음량이 절반으로 줄어들었고, 2개월 치료 후에는 조용한 방에서도 신경 쓰이지 않을 만큼 80% 이상 소음이 사라졌습니다. 머리가 맑아져 연구 업무에도 온전히 몰입할 수 있게 되었습니다.",
+            "author": "50대 연구원 윤OO 님",
+            "date": "2023.03.22",
+            "views": 512,
+            "image": "/images/reviews/review_1.jpg"
+          },
+          {
+            "id": "rev-clinical-8-1661817600000",
+            "category": "과민대장증후군 & 복부팽만",
+            "title": "시험장이나 긴장 상황만 되면 배가 부글거리고 화장실로 달려가던 과민대장, 완치하고 취업 성공했습니다",
+            "content": "수험 생활 중 중요한 시험이나 면접만 앞두면 배가 칼로 찌르듯 아프고 가스가 차서 하루에도 화장실을 5~6번씩 들락거렸습니다. 대장내시경 검사는 너무나 깨끗한 정상이었지만 저에게는 매일이 지옥 같았습니다. 장-뇌 축(Gut-Brain Axis)의 신경 신호 전달 이상으로 장 신경총이 과민해진 상태라는 해아림의 진단을 받고 치료를 시작했습니다. 장내 미생물 환경을 개선하고 자율신경 장관 반사를 안정시키는 맞춤 한약을 복용하며 복부 약침 치료를 받았습니다. 3주 차부터 복부 팽만감과 묵직한 통증이 사라졌고, 대변 상태가 황금색 바나나변으로 정상화되었습니다. 최종 면접에서도 아무런 복통 없이 실력을 발휘해 꿈꾸던 공기업에 당당히 합격했습니다.",
+            "author": "20대 취준생 조OO 님",
+            "date": "2022.08.30",
+            "views": 478,
+            "image": "/images/reviews/review_2.jpg"
+          },
+          {
+            "id": "rev-clinical-9-1636934400000",
+            "category": "긴장성 두통 & 목어깨통증",
+            "title": "머리를 띠로 꽉 조이는 듯한 만성 긴장성 두통, 진통제 끊고 10년 두통에서 해방되었습니다",
+            "content": "모니터를 종일 보는 직업 특성상 뒷목과 승모근이 바위처럼 굳어 있었고, 매일 오후만 되면 관자놀이와 정수리를 바이스로 조이는 듯한 두통에 시달렸습니다. 게보린, 타이레놀을 하루 4~5알씩 복용하다 보니 위장까지 망가져 속쓰림에 시달렸습니다. 통증의학과 신경차단 주사도 효과가 일주일을 넘기지 못했습니다. 해아림한의원에서 경추 심부 근막의 지속적 긴장과 교감신경 긴장이 결합된 만성 두통임을 확인하고, 후두하근과 측두근의 긴장을 푸는 침구 치료와 신경 영양 한약을 처방받았습니다. 2주 만에 두통 발생 빈도가 주 6회에서 1~2회로 뚝 떨어졌고, 2달 치료 후에는 진통제를 완전히 끊었습니다. 뒷목이 가볍고 눈이 번쩍 뜨이는 기분입니다.",
+            "author": "40대 디자이너 임OO 님",
+            "date": "2021.11.15",
+            "views": 433,
+            "image": "/images/reviews/review_3.jpg"
+          },
+          {
+            "id": "rev-clinical-10-1594166400000",
+            "category": "자율신경실조증 & 무기력",
+            "title": "배터리가 방전된 로봇 같던 극심한 만성 피로와 번아웃, 해아림 맞춤 보양 한약으로 에너지를 회복했습니다",
+            "content": "아침에 눈을 뜨면 온몸에 모래주머니를 달아 놓은 것처럼 천근만근 무겁고, 주말에 14시간씩 잠을 자도 피로가 1%도 풀리지 않았습니다. 피검사에서 간 기능, 갑상선 수치 모두 정상이었지만 의욕과 집중력이 바닥나 일상생활 자체가 불가능한 번아웃 상태였습니다. 부신 피로와 자율신경계 탈진으로 인한 교감·부교감신경의 총합 활성도 저하 상태였습니다. 해아림에서 원기를 북돋우고 신수(腎水)를 채워주는 맞춤 공진단과 익기탕을 복용하며 주 1회 CST 치료를 받았습니다. 복용 2주째부터 오후 시간의 졸음과 무기력감이 걷히기 시작했고, 한 달 뒤에는 퇴근 후 가벼운 조깅을 즐길 수 있을 만큼 신체 에너지가 충전되었습니다.",
+            "author": "30대 공무원 한OO 님",
+            "date": "2020.07.08",
+            "views": 567,
+            "image": "/images/reviews/review_4.jpg"
+          },
+          {
+            "id": "rev-clinical-11-1556150400000",
+            "category": "심인성 방광 & 빈뇨",
+            "title": "외출할 때마다 화장실 위치부터 찾던 과민성 방광과 야간뇨, 밤에 깨지 않고 푹 잡니다",
+            "content": "고속도로 버스를 타거나 차가 막히면 갑자기 소변이 마려워 미칠 것 같았고, 밤에도 자다가 4~5번씩 소변 때문에 깨어나 숙면을 취해본 지가 언제인지 기억도 나지 않았습니다. 비뇨기과 약을 먹으면 입이 바짝 마르고 변비가 심해져 오래 먹을 수 없었습니다. 방광 괄약근을 조절하는 자율신경계 과흥분 상태를 진단받고, 신장과 방광의 기운을 보하고 중추 신경 긴장을 이완시키는 온포탕 계열의 한약 치료를 받았습니다. 치료 한 달 만에 야간뇨 횟수가 1회로 줄었고, 낮에도 3~4시간 동안 화장실 걱정 없이 편안하게 업무를 봅니다. 삶의 질이 200% 개선되었습니다.",
+            "author": "50대 자영업 송OO 님",
+            "date": "2019.04.25",
+            "views": 388,
+            "image": "/images/reviews/review_5.jpg"
+          },
+          {
+            "id": "rev-clinical-12-1505088000000",
+            "category": "전신 통증 & 섬유근통",
+            "title": "온몸을 몽둥이로 맞은 듯 쑤시고 아프던 원인 모를 섬유근육통, 맑은 혈액과 신경 안정 한약으로 완쾌",
+            "content": "어깨, 등, 허리, 골반 할 것 없이 온몸 구석구석이 쑤시고 아파 정형외과, 마취통증의학과, 류마티스내과를 수없이 전전했습니다. 류마티스 인자나 염증 수치는 다 정상인데 본인은 숨도 못 쉴 만큼 아팠습니다. 섬유근육통은 통증을 전달하고 억제하는 중추 신경계 신경전달물질의 교란과 자율신경 실조가 근본 원인이라는 해아림의 설명을 듣고 희망을 품었습니다. 굳어있던 심부 척추 신경근을 이완하는 침 치료와 기혈 순환 탕약을 3개월간 복용했습니다. 찌르는 듯한 전신 유주성 통증이 80% 이상 줄어들었고, 이제는 손자들과 함께 공원 산책을 다닐 정도로 거동이 편안해졌습니다.",
+            "author": "60대 은퇴자 신OO 님",
+            "date": "2017.09.11",
+            "views": 495,
+            "image": "/images/reviews/review_6.jpg"
+          },
+          {
+            "id": "rev-clinical-13-1449091200000",
+            "category": "가슴두근거림 & 공황",
+            "title": "수업 중 갑작스런 호흡곤란과 심장 발작으로 쓰러질 뻔했던 공황 증상, 교단에 당당히 섰습니다",
+            "content": "학생들 앞에서 강의를 하던 도중 갑자기 목구멍이 좁아지는 느낌과 함께 숨을 들이마실 수 없었고 심장이 분당 120회로 미친 듯이 뛰었습니다. 교단에 서는 것이 공포가 되어 병가를 내고 정신과 약을 복용했지만 멍하고 둔해지는 부작용 때문에 수업 진행이 어려웠습니다. 해아림한의원에서 자율신경계 급발진을 안정시키는 한약과 심호흡 이완 훈련을 시작했습니다. 첫 3주간의 집중 치료를 거치며 심장의 안정을 찾았고, 2달 후에는 약 없이도 떨림이나 과호흡 없이 50분 수업을 힘차게 마칠 수 있게 되었습니다. 저처럼 공황과 자율신경 장애로 고통받는 선생님들께 강력히 추천합니다.",
+            "author": "30대 교사 오OO 님",
+            "date": "2015.12.03",
+            "views": 521,
+            "image": "/images/reviews/review_1.jpg"
+          },
+          {
+            "id": "rev-clinical-14-1376870400000",
+            "category": "만성 어지럼증 & 불면",
+            "title": "엘리베이터도 못 탈 만큼 심각했던 회전성 어지럼증과 3년 불면증, 한방 치료로 완치했습니다",
+            "content": "천장이 뱅글뱅글 도는 이석증을 앓고 난 뒤, 이석은 제자리에 들어갔다는데도 어지럼증과 울렁거림 잔여 증상이 1년 넘게 지속되었습니다. 특히 마트나 백화점처럼 사람이 붐비고 조명이 화려한 곳에 가면 뇌가 과부하 걸리며 쓰러질 것 같았습니다. 해아림에서 전정신경계와 자율신경계가 만성적으로 불안정해진 '지속성 체위-지각 어지럼증(PPPD)' 상태로 진단받고, 뇌신경 밸런스를 바로잡는 청훈탕과 두개천골요법을 병행했습니다. 한 달 치료 후 마트 쇼핑이 가능해졌고, 3개월 치료 후에는 엘리베이터와 에스컬레이터도 두려움 없이 탑승하게 되었습니다. 깊은 밤 편안한 수면까지 덤으로 얻었습니다.",
+            "author": "40대 주부 권OO 님",
+            "date": "2013.08.19",
+            "views": 610,
+            "image": "/images/reviews/review_2.jpg"
+          },
+          {
+            "id": "rev-clinical-15-1322438400000",
+            "category": "만성 위장장애 & 담적",
+            "title": "신경성 위경련으로 10년 동안 밥을 못 먹고 응급실을 오가던 위장병, 해아림 한약으로 완전히 나았습니다",
+            "content": "스트레스만 받으면 위장이 쥐어짜듯 뒤틀리며 극심한 경련이 발생해 119 구급차를 탄 것만 10번이 넘습니다. 대학병원 위장관 조영술과 내시경 검사를 매년 반복해도 \"신경성 위경련이니 마음을 편히 가지라\"는 허탈한 답변뿐이었습니다. 지인의 강력한 추천으로 해아림한의원을 찾아 자율신경과 위장관 연동 신경망을 안정시키는 맞춤 치료를 시작했습니다. 복부 담적을 삭히고 간위불화(肝胃不和)를 해소하는 탕약을 복용하자 2주 만에 복부 팽만과 위경련 조짐이 사라졌습니다. 3달 완치 프로그램을 마친 후 지난 10년 동안 단 한 번도 위경련이 재발하지 않았으며, 지금도 감사한 마음으로 건강하게 사업을 운영하고 있습니다.",
+            "author": "50대 사업가 배OO 님",
+            "date": "2011.11.28",
+            "views": 742,
+            "image": "/images/reviews/review_3.jpg"
+          }
         ];
 
                 var defaultYoutubeData = [
@@ -1481,7 +1605,42 @@ sections:
               try {
                 var tx = db.transaction(STORE_NAME, 'readwrite');
                 var store = tx.objectStore(STORE_NAME);
-                store.put({ storeKey: boardKey, data: list, updatedAt: Date.now() });
+                var cleanList = Array.isArray(list) ? list.filter(function(it) {
+                  return it && !isDeletedPostId(boardKey, it.id, it);
+                }) : [];
+                store.put({ storeKey: boardKey, data: cleanList, updatedAt: Date.now() });
+              } catch(e) {}
+            });
+          }
+
+          function deleteFromVault(boardKey, postId) {
+            getDB().then(function(db) {
+              if (!db) return;
+              try {
+                var tx = db.transaction(STORE_NAME, 'readwrite');
+                var store = tx.objectStore(STORE_NAME);
+                var req = store.get(boardKey);
+                req.onsuccess = function() {
+                  if (req.result && Array.isArray(req.result.data)) {
+                    var filtered = req.result.data.filter(function(it) {
+                      return it && String(it.id) !== String(postId);
+                    });
+                    store.put({ storeKey: boardKey, data: filtered, updatedAt: Date.now() });
+                  }
+                };
+                try { store.delete('edited_' + boardKey + '_' + postId); } catch(err) {}
+              } catch(e) {}
+            });
+          }
+
+          function saveEdited(boardKey, post) {
+            if (!boardKey || !post || !post.id) return;
+            getDB().then(function(db) {
+              if (!db) return;
+              try {
+                var tx = db.transaction(STORE_NAME, 'readwrite');
+                var store = tx.objectStore(STORE_NAME);
+                store.put({ storeKey: 'edited_' + boardKey + '_' + post.id, data: post, updatedAt: Date.now() });
               } catch(e) {}
             });
           }
@@ -1506,10 +1665,50 @@ sections:
 
           return {
             saveVault: saveVault,
+            deleteFromVault: deleteFromVault,
+            saveEdited: saveEdited,
             restoreVault: restoreVault
           };
         })();
         window.HealimPermanentDB = HealimPermanentDB;
+
+        // ─────────────────────────────────────────────────────────────
+        // Authoritative Edited Posts Registry (Immune to F5 Reset & Server Overwrite)
+        // ─────────────────────────────────────────────────────────────
+        function getEditedPostsMap(boardKey) {
+          try {
+            var raw = localStorage.getItem('healim_edited_posts_' + boardKey);
+            return raw ? JSON.parse(raw) : {};
+          } catch(e) {
+            return {};
+          }
+        }
+        window.getEditedPostsMap = getEditedPostsMap;
+
+        function saveEditedPostRecord(boardKey, post) {
+          if (!boardKey || !post || !post.id) return;
+          try {
+            var map = getEditedPostsMap(boardKey);
+            post.isEdited = true;
+            if (!post.updatedAt) post.updatedAt = Date.now();
+            map[String(post.id)] = post;
+            localStorage.setItem('healim_edited_posts_' + boardKey, JSON.stringify(map));
+            if (typeof HealimPermanentDB !== 'undefined' && HealimPermanentDB.saveEdited) {
+              HealimPermanentDB.saveEdited(boardKey, post);
+            }
+          } catch(e) {}
+        }
+        window.saveEditedPostRecord = saveEditedPostRecord;
+
+        function removeEditedPostRecord(boardKey, postId) {
+          if (!boardKey || !postId) return;
+          try {
+            var map = getEditedPostsMap(boardKey);
+            delete map[String(postId)];
+            localStorage.setItem('healim_edited_posts_' + boardKey, JSON.stringify(map));
+          } catch(e) {}
+        }
+        window.removeEditedPostRecord = removeEditedPostRecord;
 
         // ─────────────────────────────────────────────────────────────
         // Obsolete Initial Mock Data Purge & Migration Helper
@@ -1629,28 +1828,127 @@ sections:
         // ─────────────────────────────────────────────────────────────
         // Permanent Persistence & Multi-Tier Deletion Tracker
         // ─────────────────────────────────────────────────────────────
+        var PERMANENT_DELETED_REVIEW_IDS = ['reviews-1788884300000', 'reviews-1788878779980', 'reviews-1788884500000'];
+
         function getDeletedPostIds(key) {
           try {
             var raw = localStorage.getItem('healim_deleted_posts_' + key);
-            return raw ? JSON.parse(raw) : [];
+            var list = raw ? JSON.parse(raw) : [];
+            if (key === 'reviews') {
+              PERMANENT_DELETED_REVIEW_IDS.forEach(function(dId) {
+                if (list.indexOf(dId) === -1) list.push(dId);
+              });
+            }
+            return list;
           } catch(e) {
-            return [];
+            return (key === 'reviews') ? PERMANENT_DELETED_REVIEW_IDS.slice() : [];
           }
         }
+        window.getDeletedPostIds = getDeletedPostIds;
 
         function addDeletedPostId(key, id) {
           if (!id) return;
+          var strId = String(id).trim();
           var list = getDeletedPostIds(key);
-          if (list.indexOf(id) === -1) {
-            list.push(id);
+          if (list.indexOf(strId) === -1) {
+            list.push(strId);
             localStorage.setItem('healim_deleted_posts_' + key, JSON.stringify(list));
           }
+          try {
+            var allDel = JSON.parse(localStorage.getItem('healim_deleted_post_ids') || '[]');
+            if (allDel.indexOf(strId) === -1) {
+              allDel.push(strId);
+              localStorage.setItem('healim_deleted_post_ids', JSON.stringify(allDel));
+            }
+          } catch(e) {}
         }
+        window.addDeletedPostId = addDeletedPostId;
 
-        function isDeletedPostId(key, id) {
+        function isDeletedPostId(key, id, item) {
+          if (!id && !item) return false;
+          var strId = String(id || (item ? item.id : '')).trim();
+
+          if (key === 'reviews') {
+            if (PERMANENT_DELETED_REVIEW_IDS.indexOf(strId) !== -1) return true;
+            var t = String((item && item.title) || '');
+            if (t.indexOf('테스트치료후기') !== -1 || t.indexOf('테스트를 해보려고합니다') !== -1 || t.indexOf('테스트를해보려고합니다') !== -1) {
+              return true;
+            }
+          }
+
           var list = getDeletedPostIds(key);
-          return list.indexOf(id) !== -1;
+          if (strId && list.indexOf(strId) !== -1) return true;
+          try {
+            var allDel = JSON.parse(localStorage.getItem('healim_deleted_post_ids') || '[]');
+            if (strId && allDel.indexOf(strId) !== -1) return true;
+          } catch(e) {}
+          return false;
         }
+        window.isDeletedPostId = isDeletedPostId;
+
+        // One-time Deep Client Storage & IndexedDB Purge for Deleted Test Reviews
+        function purgeClientDeletedReviews() {
+          try {
+            var revDelKey = 'healim_deleted_posts_reviews';
+            var curDel = [];
+            try { curDel = JSON.parse(localStorage.getItem(revDelKey) || '[]'); } catch(e) {}
+            PERMANENT_DELETED_REVIEW_IDS.forEach(function(dId) {
+              if (curDel.indexOf(dId) === -1) curDel.push(dId);
+            });
+            localStorage.setItem(revDelKey, JSON.stringify(curDel));
+
+            ['healim_board_reviews', 'healim_vault_all_posts_reviews', 'healim_custom_reviews_posts', 'healim_community_posts_v2'].forEach(function(k) {
+              var raw = localStorage.getItem(k);
+              if (raw) {
+                try {
+                  var arr = JSON.parse(raw);
+                  if (Array.isArray(arr)) {
+                    var filtered = arr.filter(function(it) {
+                      if (!it) return false;
+                      var sId = String(it.id || '');
+                      if (PERMANENT_DELETED_REVIEW_IDS.indexOf(sId) !== -1) return false;
+                      var t = String(it.title || '');
+                      if (t.indexOf('테스트치료후기') !== -1 || t.indexOf('테스트를 해보려고합니다') !== -1 || t.indexOf('테스트를해보려고합니다') !== -1) return false;
+                      return true;
+                    });
+                    if (filtered.length !== arr.length) {
+                      localStorage.setItem(k, JSON.stringify(filtered));
+                    }
+                  }
+                } catch(e) {}
+              }
+            });
+
+            // Deep purge in IndexedDB
+            if (window.indexedDB) {
+              try {
+                var req = window.indexedDB.open('HealimCommunityDB', 1);
+                req.onsuccess = function(e) {
+                  var db = e.target.result;
+                  if (!db || !db.objectStoreNames.contains('community_vault')) return;
+                  var tx = db.transaction('community_vault', 'readwrite');
+                  var store = tx.objectStore('community_vault');
+                  var gReq = store.get('reviews');
+                  gReq.onsuccess = function() {
+                    if (gReq.result && Array.isArray(gReq.result.data)) {
+                      var vClean = gReq.result.data.filter(function(it) {
+                        if (!it) return false;
+                        var sId = String(it.id || '');
+                        if (PERMANENT_DELETED_REVIEW_IDS.indexOf(sId) !== -1) return false;
+                        var t = String(it.title || '');
+                        if (t.indexOf('테스트치료후기') !== -1 || t.indexOf('테스트를 해보려고합니다') !== -1 || t.indexOf('테스트를해보려고합니다') !== -1) return false;
+                        return true;
+                      });
+                      store.put({ storeKey: 'reviews', data: vClean, updatedAt: Date.now() });
+                    }
+                  };
+                };
+              } catch(e) {}
+            }
+          } catch(e) {}
+        }
+        purgeClientDeletedReviews();
+        window.purgeClientDeletedReviews = purgeClientDeletedReviews;
 
         function getCustomUserPosts(key) {
           try {
@@ -1792,23 +2090,58 @@ sections:
                 var vKey = 'healim_vault_all_posts_' + bKey;
                 var rawV = localStorage.getItem(vKey);
                 var localList = rawV ? (JSON.parse(rawV) || []) : [];
+                var editedMap = getEditedPostsMap(bKey);
                 var merged = [];
                 var seenIds = {};
 
-                remoteList.forEach(function(p) {
-                  if (p && p.id && !isDeletedPostId(bKey, p.id)) {
-                    seenIds[String(p.id)] = true;
-                    merged.push(p);
+                // Tier 1: User-edited posts have absolute top priority (immune to static server data)
+                Object.keys(editedMap).forEach(function(eid) {
+                  var ep = editedMap[eid];
+                  if (ep && !isDeletedPostId(bKey, ep.id, ep)) {
+                    var strId = String(ep.id);
+                    seenIds[strId] = true;
+                    merged.push(ep);
                   }
                 });
 
+                // Tier 2: Local posts that were edited or created locally
                 localList.forEach(function(p) {
-                  if (p && p.id && !seenIds[String(p.id)] && !isDeletedPostId(bKey, p.id)) {
-                    seenIds[String(p.id)] = true;
-                    merged.push(p);
+                  if (p && p.id && !isDeletedPostId(bKey, p.id, p)) {
+                    var strId = String(p.id);
+                    if (p.isEdited || p.updatedAt) {
+                      if (!seenIds[strId]) {
+                        seenIds[strId] = true;
+                        merged.push(p);
+                      }
+                    }
                   }
                 });
 
+                // Tier 3: Remote hub posts (use edited version if user edited it, otherwise remote post)
+                remoteList.forEach(function(p) {
+                  if (p && p.id && !isDeletedPostId(bKey, p.id, p)) {
+                    var strId = String(p.id);
+                    if (!seenIds[strId]) {
+                      var finalP = editedMap[strId] ? editedMap[strId] : p;
+                      seenIds[strId] = true;
+                      merged.push(finalP);
+                    }
+                  }
+                });
+
+                // Tier 4: Remaining local posts
+                localList.forEach(function(p) {
+                  if (p && p.id && !isDeletedPostId(bKey, p.id, p)) {
+                    var strId = String(p.id);
+                    if (!seenIds[strId]) {
+                      var finalP = editedMap[strId] ? editedMap[strId] : p;
+                      seenIds[strId] = true;
+                      merged.push(finalP);
+                    }
+                  }
+                });
+
+                merged = sortCommunityItemsByTime(merged);
                 localStorage.setItem(vKey, JSON.stringify(merged));
                 localStorage.setItem('healim_board_' + bKey, JSON.stringify(merged));
                 if (typeof HealimPermanentDB !== 'undefined' && HealimPermanentDB.saveVault) {
@@ -1969,40 +2302,37 @@ sections:
         // LocalStorage Helper with Multi-Tier Merge (Guarantees zero data loss)
         function getItemTimeScore(item, index, totalLength) {
           if (!item) return 0;
-          var dateScore = 0;
-          if (item.date) {
-            var cleanDate = String(item.date).replace(/\./g, '-').trim();
-            var td = new Date(cleanDate).getTime();
-            if (!isNaN(td)) dateScore = td;
-          }
           var idStr = String(item.id || '');
           var idMatch = idStr.match(/(\d{10,14})/);
           var idTimestamp = idMatch ? parseInt(idMatch[1], 10) : 0;
+          if (idTimestamp >= 1000000000 && idTimestamp < 10000000000) idTimestamp *= 1000;
+
+          if (idTimestamp >= 1577836800000) {
+            return idTimestamp;
+          }
+
+          var dateScore = 0;
+          if (item.date) {
+            var cleanDate = String(item.date).replace(/\./g, '-').trim();
+            if (/^\d{4}-\d{2}-\d{2}$/.test(cleanDate)) cleanDate += 'T00:00:00+09:00';
+            var td = new Date(cleanDate).getTime();
+            if (!isNaN(td)) dateScore = td;
+          }
 
           var subDayOffset = 0;
-          if (idTimestamp > 0) {
-            if (dateScore > 0 && idTimestamp >= dateScore && idTimestamp < dateScore + 86400000) {
-              return idTimestamp;
-            }
-            subDayOffset = idTimestamp % 86400000;
+          var ytMatch = idStr.match(/^yt-(\d+)$/i);
+          if (ytMatch) {
+            subDayOffset = 100000 - parseInt(ytMatch[1], 10) * 1000;
           } else {
-            var ytMatch = idStr.match(/^yt-(\d+)$/i);
-            if (ytMatch) {
-              subDayOffset = 10000 - parseInt(ytMatch[1], 10);
+            var colIdx = item.colIndex || item.poolIndex || 0;
+            if (colIdx > 0) {
+              subDayOffset = colIdx * 1000;
             } else {
-              var colIdx = item.colIndex || item.poolIndex || 0;
-              if (colIdx > 0) {
-                subDayOffset = colIdx;
-              } else {
-                subDayOffset = (totalLength - (index || 0));
-              }
+              subDayOffset = (totalLength - (index || 0));
             }
           }
 
-          if (dateScore > 0) {
-            return dateScore + subDayOffset;
-          }
-          if (idTimestamp > 0) return idTimestamp;
+          if (dateScore > 0) return dateScore + subDayOffset;
           return subDayOffset;
         }
 
@@ -2023,6 +2353,7 @@ sections:
 
         function getBoardData(key, fallback) {
         if (key === 'youtube') {
+          var ytEditedMap = getEditedPostsMap('youtube');
           var customPosts = getCustomYoutubePosts();
           var syncedPosts = getSyncedYoutubePosts();
           var merged = [];
@@ -2031,23 +2362,32 @@ sections:
 
           function addItem(item) {
             if (!item) return;
-            var vId = extractYoutubeId(item.videoEmbed || item.thumb || item.youtubeUrl || '');
-            if (isDeletedYoutubeId(vId, item.id)) return;
-            if (vId && seenVids[vId]) return;
-            if (item.id && seenIds[item.id]) return;
-            if (vId) seenVids[vId] = true;
-            if (item.id) seenIds[item.id] = true;
+            var strId = item.id ? String(item.id).trim() : '';
+            if (isDeletedPostId('youtube', strId, item)) return;
 
-            if (item.thumb && item.thumb.includes('/hqdefault.jpg')) {
-              item.thumb = item.thumb.replace('/hqdefault.jpg', '/maxresdefault.jpg');
-            } else if (!item.thumb && vId) {
-              item.thumb = 'https://img.youtube.com/vi/' + vId + '/maxresdefault.jpg';
+            var finalItem = (strId && ytEditedMap[strId]) ? ytEditedMap[strId] : item;
+            var vId = extractYoutubeId(finalItem.videoEmbed || finalItem.thumb || finalItem.youtubeUrl || '');
+            if (isDeletedYoutubeId(vId, finalItem.id)) return;
+            if (vId && seenVids[vId]) return;
+            if (finalItem.id && seenIds[finalItem.id]) return;
+            if (vId) seenVids[vId] = true;
+            if (finalItem.id) seenIds[finalItem.id] = true;
+
+            if (finalItem.thumb && finalItem.thumb.includes('/hqdefault.jpg')) {
+              finalItem.thumb = finalItem.thumb.replace('/hqdefault.jpg', '/maxresdefault.jpg');
+            } else if (!finalItem.thumb && vId) {
+              finalItem.thumb = 'https://img.youtube.com/vi/' + vId + '/maxresdefault.jpg';
             }
-            merged.push(item);
+            merged.push(finalItem);
           }
 
+          // 1. Edited YouTube posts first
+          Object.keys(ytEditedMap).forEach(function(eid) { addItem(ytEditedMap[eid]); });
+          // 2. Custom YouTube posts
           customPosts.forEach(addItem);
+          // 3. Synced YouTube posts
           syncedPosts.forEach(addItem);
+          // 4. Default Seed
           defaultYoutubeData.forEach(addItem);
 
           var raw = localStorage.getItem('healim_board_youtube');
@@ -2071,6 +2411,7 @@ sections:
 
         // Multi-tier Ironclad Permanent Vault (Zero-Data-Loss Guaranteed)
         var deletedIds = getDeletedPostIds(key).map(String);
+        var editedMap = getEditedPostsMap(key);
         var vaultList = [];
         var rawVault = localStorage.getItem('healim_vault_all_posts_' + key);
         if (rawVault) {
@@ -2122,12 +2463,15 @@ sections:
           if (key === 'reviews' && isObsoleteMockReview(item)) return;
 
           var strId = String(item.id);
-          if (deletedIds.indexOf(strId) !== -1) return; // Only explicitly deleted by healim0071 admin
+          if (isDeletedPostId(key, strId, item)) return;
+
+          // If this post has an authoritative user edit, use the edited version!
+          var finalItem = editedMap[strId] ? editedMap[strId] : item;
           if (seenIds[strId]) return;
 
           // Normalized title duplicate prevention for FAQ, Columns, Reviews
-          if (item.title && (key === 'faq' || key === 'columns' || key === 'reviews')) {
-            var normT = String(item.title)
+          if (finalItem.title && (key === 'faq' || key === 'columns' || key === 'reviews')) {
+            var normT = String(finalItem.title)
               .replace(/^Q[\.:\s\-]+/i, '')
               .replace(/^칼럼[\.:\s\-]+/i, '')
               .replace(/[\s\*\*_~\`#\?\uFF1F\.,\(\)\[\]:;\-]/g, '')
@@ -2138,22 +2482,25 @@ sections:
           }
 
           seenIds[strId] = true;
-          merged.push(item);
+          merged.push(finalItem);
         }
 
-        // 1. Permanent Vault Posts (Immutable accumulator: survives any vibe-coding resets)
-        vaultList.forEach(addPostItem);
+        // 1. Authoritative User Edited Posts (Absolute Top Precedence on F5 / Reload)
+        Object.keys(editedMap).forEach(function(eid) { addPostItem(editedMap[eid]); });
 
         // 2. User uploaded / custom posts (written by healim0071 admin)
         customList.forEach(addPostItem);
 
-        // 3. Previously stored / auto-published posts in active localStorage
+        // 3. Permanent Vault Posts
+        vaultList.forEach(addPostItem);
+
+        // 4. Previously stored / auto-published posts in active localStorage
         storedList.forEach(addPostItem);
 
-        // 4. Legacy posts from v2 storage
+        // 5. Legacy posts from v2 storage
         legacyList.forEach(addPostItem);
 
-        // 5. Complete permanent clinical library & seed data (fallback)
+        // 6. Complete permanent clinical library & seed data (fallback)
         if (Array.isArray(fallback)) {
           fallback.forEach(addPostItem);
         }
@@ -2230,6 +2577,11 @@ sections:
           localStorage.setItem('healim_vault_all_posts_' + key, JSON.stringify(data));
           if (typeof HealimPermanentDB !== 'undefined' && HealimPermanentDB.saveVault) {
             HealimPermanentDB.saveVault(key, data);
+          }
+          if (typeof window.broadcastHealimCommunityUpdate === 'function') {
+            window.broadcastHealimCommunityUpdate(key, 'save');
+          } else if (typeof window.syncBottomSections === 'function') {
+            window.syncBottomSections();
           }
         } catch(e) {
           console.warn('저장소 용량 부족 또는 저장 오류:', e);
@@ -3391,8 +3743,13 @@ sections:
               title: (isSecret ? '🔒 ' : '') + title,
               content: content,
               answer: content,
-              image: finalImage
+              image: finalImage,
+              isEdited: true,
+              updatedAt: Date.now()
             };
+
+            // 1. Authoritative Edited Posts Registry Save (Guarantees permanence across F5 & hub sync)
+            saveEditedPostRecord(boardType, updatedPost);
 
             if (boardType === 'youtube') {
               var vId = extractYoutubeId(youtubeUrl);
@@ -3472,6 +3829,9 @@ sections:
             try {
               if (window.HealimUniversalSync && window.HealimUniversalSync.syncPostToRemote) {
                 window.HealimUniversalSync.syncPostToRemote(boardType, updatedPost, 'edit');
+              }
+              if (typeof window.broadcastHealimCommunityUpdate === 'function') {
+                window.broadcastHealimCommunityUpdate(boardType, 'edit');
               }
               window.dispatchEvent(new CustomEvent('healim-community-updated', { detail: { boardType: boardType, post: updatedPost, action: 'edit' } }));
             } catch(e) {}
@@ -3561,6 +3921,9 @@ sections:
           try {
             if (window.HealimUniversalSync && window.HealimUniversalSync.syncPostToRemote) {
               window.HealimUniversalSync.syncPostToRemote(boardType, newPost, 'create');
+            }
+            if (typeof window.broadcastHealimCommunityUpdate === 'function') {
+              window.broadcastHealimCommunityUpdate(boardType, 'create');
             }
             window.dispatchEvent(new CustomEvent('healim-community-updated', { detail: { boardType: boardType, post: newPost, action: 'create' } }));
           } catch(e) {}
@@ -3779,13 +4142,15 @@ sections:
           var customPosts = getCustomUserPosts(boardType).filter(function(it) { return String(it.id) !== strId; });
           saveCustomUserPosts(boardType, customPosts);
 
-          // 3.5 Remove from Master Vault and IndexedDB
+          // 3.5 Remove from Master Vault, Edited Registry, and IndexedDB
           try {
+            removeEditedPostRecord(boardType, strId);
             var vKey = 'healim_vault_all_posts_' + boardType;
             var vPosts = JSON.parse(localStorage.getItem(vKey) || '[]').filter(function(it) { return String(it.id) !== strId; });
             localStorage.setItem(vKey, JSON.stringify(vPosts));
-            if (typeof HealimPermanentDB !== 'undefined' && HealimPermanentDB.saveVault) {
-              HealimPermanentDB.saveVault(boardType, vPosts);
+            if (typeof HealimPermanentDB !== 'undefined') {
+              if (HealimPermanentDB.saveVault) HealimPermanentDB.saveVault(boardType, vPosts);
+              if (HealimPermanentDB.deleteFromVault) HealimPermanentDB.deleteFromVault(boardType, strId);
             }
           } catch(e) {}
 
@@ -3818,6 +4183,9 @@ sections:
 
           // 8. Dispatch global update event
           try {
+            if (typeof window.broadcastHealimCommunityUpdate === 'function') {
+              window.broadcastHealimCommunityUpdate(boardType, 'delete');
+            }
             window.dispatchEvent(new CustomEvent('healim-community-updated', {
               detail: { boardType: boardType, action: 'delete', postId: strId }
             }));
@@ -4019,21 +4387,50 @@ sections:
           handleDeletePostDirect('faq', faqId);
         };
 
-        // Hash Navigation Initialization
+        // Hash & Query Navigation Initialization
         function initTabFromHash() {
         if (window.HealimUniversalSync && window.HealimUniversalSync.init && !window._healimUniversalSyncInited) {
           window._healimUniversalSyncInited = true;
           window.HealimUniversalSync.init();
         }
         if (typeof purgeObsoleteMockPosts === 'function') purgeObsoleteMockPosts();
-        var hash = window.location.hash.replace('#', '');
-        if (hash === 'faq' || hash === 'reviews' || hash === 'youtube' || hash === 'columns') {
-        switchCommunityTab(hash);
-        } else if (hash === 'write') {
-        switchCommunityTab('reviews');
-        setTimeout(function() { openWriteModal('reviews'); }, 150);
+
+        // Check query parameters (?board=reviews&id=...)
+        var urlParams = new URLSearchParams(window.location.search);
+        var qBoard = urlParams.get('board') || urlParams.get('tab');
+        var qId = urlParams.get('id');
+
+        var rawHash = window.location.hash.replace('#', '');
+        var hashMatch = rawHash.match(/^(faq|reviews|youtube|columns)/);
+        var hashIdMatch = rawHash.match(/^(faq|reviews|youtube|columns)[-_](.+)$/);
+
+        var targetTab = qBoard || (hashMatch ? hashMatch[1] : null);
+        var targetId = qId || (hashIdMatch ? hashIdMatch[2] : null);
+
+        // Session storage fallback
+        if (!targetTab) {
+          try {
+            targetTab = sessionStorage.getItem('healim_target_community_tab');
+            sessionStorage.removeItem('healim_target_community_tab');
+          } catch(e) {}
+        }
+
+        if (targetTab === 'faq' || targetTab === 'reviews' || targetTab === 'youtube' || targetTab === 'columns') {
+          switchCommunityTab(targetTab);
+          setTimeout(function() {
+            var targetEl = document.getElementById(targetTab) || document.getElementById('tab-pane-' + targetTab) || document.querySelector('.community-tabs-container') || document.getElementById('communityTabList');
+            if (targetEl) {
+              targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            if (targetId && typeof openDetailModal === 'function') {
+              openDetailModal(targetTab, targetId);
+            }
+          }, 150);
+        } else if (rawHash === 'write') {
+          switchCommunityTab('reviews');
+          setTimeout(function() { openWriteModal('reviews'); }, 150);
         } else {
-        switchCommunityTab('faq');
+          switchCommunityTab('faq');
         }
 
         // Apply admin auto badges visibility check on load
@@ -4051,6 +4448,20 @@ sections:
                 } else if (bKey === 'reviews') {
                   vaultList = vaultList.filter(function(it) { return !isObsoleteMockReview(it); });
                 }
+                // ALWAYS filter deleted items!
+                vaultList = vaultList.filter(function(it) {
+                  return it && !isDeletedPostId(bKey, it.id, it);
+                });
+
+                // Apply any locally edited versions!
+                var editedMap = getEditedPostsMap(bKey);
+                vaultList = vaultList.map(function(it) {
+                  if (it && it.id && editedMap[String(it.id)]) {
+                    return editedMap[String(it.id)];
+                  }
+                  return it;
+                });
+
                 var curRaw = localStorage.getItem('healim_vault_all_posts_' + bKey);
                 var curList = curRaw ? JSON.parse(curRaw) : [];
                 if (curList.length < vaultList.length) {
@@ -4077,19 +4488,49 @@ sections:
               var hub = json.data || json;
               if (hub && typeof hub === 'object') {
                 var didUpdate = false;
+                if (Array.isArray(hub.deleted_ids)) {
+                  hub.deleted_ids.forEach(function(did) {
+                    ['faq', 'reviews', 'columns', 'youtube'].forEach(function(bk) {
+                      addDeletedPostId(bk, did);
+                    });
+                  });
+                }
                 ['faq', 'reviews', 'columns', 'youtube'].forEach(function(bKey) {
                   if (Array.isArray(hub[bKey]) && hub[bKey].length > 0) {
                     var vKey = 'healim_vault_all_posts_' + bKey;
                     var rawV = localStorage.getItem(vKey);
                     var localList = rawV ? (JSON.parse(rawV) || []) : [];
+                    var editedMap = getEditedPostsMap(bKey);
                     var seen = {};
                     var merged = [];
+
+                    // 1. Edited posts first
+                    Object.keys(editedMap).forEach(function(eid) {
+                      var ep = editedMap[eid];
+                      if (ep && !isDeletedPostId(bKey, ep.id, ep)) {
+                        seen[String(ep.id)] = true;
+                        merged.push(ep);
+                      }
+                    });
+
+                    // 2. Local posts
                     localList.forEach(function(p) {
-                      if (p && p.id) { seen[String(p.id)] = true; merged.push(p); }
+                      if (p && p.id && !seen[String(p.id)] && !isDeletedPostId(bKey, p.id, p)) {
+                        seen[String(p.id)] = true;
+                        merged.push(p);
+                      }
                     });
+
+                    // 3. Hub posts (use edited version if user edited it)
                     hub[bKey].forEach(function(p) {
-                      if (p && p.id && !seen[String(p.id)]) { seen[String(p.id)] = true; merged.push(p); }
+                      if (p && p.id && !seen[String(p.id)] && !isDeletedPostId(bKey, p.id, p)) {
+                        seen[String(p.id)] = true;
+                        var finalP = editedMap[String(p.id)] ? editedMap[String(p.id)] : p;
+                        merged.push(finalP);
+                      }
                     });
+
+                    merged = sortCommunityItemsByTime(merged);
                     localStorage.setItem(vKey, JSON.stringify(merged));
                     localStorage.setItem('healim_board_' + bKey, JSON.stringify(merged));
                     didUpdate = true;

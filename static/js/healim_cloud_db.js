@@ -301,22 +301,28 @@
     var vKey = 'healim_vault_all_posts_' + bKey;
     var rawV = localStorage.getItem(vKey);
     var localList = rawV ? (JSON.parse(rawV) || []) : [];
+    var editedMap = {};
+    try { editedMap = JSON.parse(localStorage.getItem('healim_edited_posts_' + bKey) || '{}'); } catch(e) {}
 
     var seenIds = {};
     var merged = [];
 
-    // Local user posts have priority
+    // Local user posts and edited posts have absolute priority
     localList.forEach(function(p) {
       if (p && p.id) {
-        seenIds[String(p.id)] = true;
-        merged.push(p);
+        var strId = String(p.id);
+        var finalP = editedMap[strId] ? editedMap[strId] : p;
+        seenIds[strId] = true;
+        merged.push(finalP);
       }
     });
 
     remoteList.forEach(function(p) {
       if (p && p.id && !seenIds[String(p.id)]) {
-        seenIds[String(p.id)] = true;
-        merged.push(p);
+        var strId = String(p.id);
+        var finalP = editedMap[strId] ? editedMap[strId] : p;
+        seenIds[strId] = true;
+        merged.push(finalP);
       }
     });
 
@@ -347,6 +353,16 @@
     localStorage.setItem(vKey, JSON.stringify(list));
     localStorage.setItem('healim_board_' + bKey, JSON.stringify(list));
 
+    // Also register in authoritative edited registry if edited
+    if (post.isEdited) {
+      try {
+        var eKey = 'healim_edited_posts_' + bKey;
+        var eMap = JSON.parse(localStorage.getItem(eKey) || '{}');
+        eMap[strId] = post;
+        localStorage.setItem(eKey, JSON.stringify(eMap));
+      } catch(e) {}
+    }
+
     var cKey = (bKey === 'youtube') ? 'healim_custom_youtube_posts' : ('healim_custom_' + bKey + '_posts');
     var rawC = localStorage.getItem(cKey);
     var cList = rawC ? (JSON.parse(rawC) || []) : [];
@@ -365,6 +381,13 @@
       localStorage.setItem(vKey, JSON.stringify(list));
       localStorage.setItem('healim_board_' + bKey, JSON.stringify(list));
     }
+
+    try {
+      var eKey = 'healim_edited_posts_' + bKey;
+      var eMap = JSON.parse(localStorage.getItem(eKey) || '{}');
+      delete eMap[strId];
+      localStorage.setItem(eKey, JSON.stringify(eMap));
+    } catch(e) {}
 
     var cKey = (bKey === 'youtube') ? 'healim_custom_youtube_posts' : ('healim_custom_' + bKey + '_posts');
     var rawC = localStorage.getItem(cKey);

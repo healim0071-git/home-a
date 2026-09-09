@@ -1417,3 +1417,43 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
      - 하단 공통 정적 HTML 카드 4대 영역 모두 최신 1위 글과 100% 일치 확인.
    - **정적 빌드 검증 (`hugo --minify`)**: 32개 페이지 에러 0건 정상 빌드 완료.
 
+---
+
+## 📌 [2026-09-09] 마일스톤 9.51: 커뮤니티 4대 영역 글 수정 영구 보존(F5 새로고침 복원 방지) 및 삭제된 테스트 치료후기 IndexedDB 심층 영구 제거 완료
+
+1. **사용자 요청 사항**:
+   - 1) 모든 페이지 하단 치료후기 영역에서 관리자(healim0071)가 삭제했던 테스트 글 2건("테스트치료후기 를 해보려고합니다...", "테스트를 해보려고합니다...")이 브라우저에 여전히 노출되는 현상 완벽 제거. (단, "이것도 테스트입니다" 글은 유지)
+   - 2) 커뮤니티 4대 영역(FAQ·치료후기·유튜브·칼럼) 각 카테고리에서 글을 수정하고 '수정완료'를 눌렀으나, F5(새로고침) 시 수정 전 글로 되돌아가는 현상 원인 규명 및 영구 해결.
+
+2. **근본 원인 분석 (Root Cause)**:
+   - **원인 1: 허브 동기화(`applyHubData`)의 로컬 수정본 덮어쓰기 문제**
+     - 페이지 로드 및 주기적(10초) 폴링 시 `/data/healim_community_hub.json`을 가져와 병합할 때, 정적 서버 JSON의 원본 글 목록(`remoteList`)이 `seenIds`에 먼저 등록되면서 브라우저에서 방금 수정한 글(`localList`)이 무시되고 수정 전 원본으로 롤백되는 현상 발생.
+   - **원인 2: 영구 보존 볼트(`HealimPermanentDB.restoreVault`)의 삭제글 무단 부활 문제**
+     - 브라우저 IndexedDB의 `community_vault` 저장소에서 글을 복구할 때 `if (curList.length < vaultList.length)` 조건만 확인하고, `isDeletedPostId` 필터링 및 IndexedDB 내부 삭제 로직이 누락되어 삭제된 2개 테스트 후기가 새로고침할 때마다 IndexedDB에서 `localStorage`로 다시 복구됨.
+   - **원인 3: 하단 공통 영역(`common_bottom_sections.html`)의 수정본 매핑 누락**
+     - 하단 공통 영역에서 실시간 데이터를 가져올 때 사용자의 최신 수정본 레지스트리가 반영되지 않고 캐시된 로컬/원격 데이터를 그대로 가져와 수정 내역이 하단에 즉각 반영되지 않음.
+
+3. **작업 및 개선 내역**:
+   - **1) 최우선 권한 수정 레지스트리(`healim_edited_posts_${boardKey}`) 구축**:
+     - `content/community/_index.md`, `layouts/_partials/components/common_bottom_sections.html`, `static/js/healim_cloud_db.js` 전반에 걸쳐 수정된 글을 영구 보존하는 전용 레지스트리 탑재.
+     - `getBoardData()`, `applyHubData()`, `fetchRemoteSyncIfAvailable()`, `getRealtimeBoardData()` 등 모든 데이터 파이프라인에서 정적 서버 데이터나 이전 캐시보다 `healim_edited_posts`가 100% 최우선 적용되도록 보장.
+   - **2) IndexedDB 영구 볼트 심층 삭제 및 수정 보존 엔진 탑재**:
+     - `HealimPermanentDB.deleteFromVault(boardKey, postId)` 및 `HealimPermanentDB.saveEdited(boardKey, post)` 구현.
+     - `restoreVault()` 실행 시 삭제된 글(`isDeletedPostId`)을 엄격히 배제하고 최신 수정본(`editedMap`)으로 매핑 후 복구하도록 개선.
+   - **3) 삭제된 테스트 치료후기 2건 클라이언트 스토리지 및 IndexedDB 심층 일괄 소거**:
+     - `purgeClientDeletedReviews()` 및 `purgeClientDeletedCache()`를 통해 브라우저 시작 시 `localStorage`와 IndexedDB `community_vault` 양쪽에서 대상 2개 글을 완전히 소거.
+     - `isItemDeleted()`에 대상 ID 및 제목 패턴을 등록하여 영구 차단. (보존 요청된 "이것도 테스트입니다"는 안전하게 유지).
+
+4. **실제 브라우저(Headless Chrome CDP) 자동화 검증 결과**:
+   - **FAQ·치료후기·칼럼·유튜브 4대 영역 수정 및 F5 새로고침 영구 보존 테스트**:
+     - FAQ 수정 후 F5 새로고침: `matchesNewTitle: true`, 하단 공통 실시간 반영: `true`
+     - 치료후기 수정 후 F5 새로고침: `matchesNewTitle: true`, 하단 공통 실시간 반영: `true`
+     - 칼럼 수정 후 F5 새로고침: `matchesNewTitle: true`, 하단 공통 실시간 반영: `true`
+     - 유튜브 수정 후 F5 새로고침: `matchesNewTitle: true`, 하단 공통 실시간 반영: `true`
+   - **삭제 치료후기 2건 검증**:
+     - IndexedDB 및 localStorage에서 완전히 삭제됨 확인 (`hasDeleted1: false`, `hasDeleted2: false`).
+     - 하단 공통 치료후기 목록에서도 100% 미노출 확인 (`reviewsContainDeleted: false`).
+     - 유지 대상인 "이것도 테스트입니다" 카드 정상 노출 확인 (`hasKept: true`, `reviewsContainKept: true`).
+   - **정적 빌드 검증 (`hugo --minify`)**: 32개 페이지 에러 0건 빌드 완료.
+
+

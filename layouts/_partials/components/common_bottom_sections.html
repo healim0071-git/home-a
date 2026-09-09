@@ -174,6 +174,11 @@
           </div>
         </details>
       </div>
+      <div class="text-center mt-6">
+        <a href="/community/#faq" onclick="handleBottomMoreClick(event, 'faq')" class="btn-healim">
+          <span>자율신경 FAQ 더보기 &gt;</span>
+        </a>
+      </div>
     </section>
 
     <!-- ──────────────────────────────────────────────────────────
@@ -188,77 +193,8 @@
 
       <!-- 6-Review Grid -->
       <div id="commonBottomReviewsList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 mb-8">
-        <!-- Review 1 (Test Review 1) -->
-        <div class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col">
-          <div class="relative overflow-hidden h-44 bg-slate-100">
-            <img src="/images/reviews/review_3.jpg" alt="치료후기 사진" class="bottom-review-blurred-img w-full h-full object-cover">
-            <div class="absolute top-3 left-3 bg-[#0d3a42]/80 backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">
-              🔒 의료법 보호 흐림처리
-            </div>
-          </div>
-          <div class="p-5 flex flex-col flex-grow">
-            <span class="text-xs font-bold text-[#1c6e78] mb-1.5">치료후기</span>
-            <h3 class="text-base font-bold text-[#0d3a42] mb-2 leading-snug">
-              이것도 테스트입니다.이것도 테스트입니다.
-            </h3>
-            <p class="text-xs text-[#666666] leading-relaxed mb-4 flex-grow">
-              이것도 테스트입니다. 이것도 테스트입니다. [사진] 이것도 테스트입니다. 이것도 테스트입니다. 이것도 테스트입니다. 이것도 테스트입니다.
-            </p>
-            <div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">
-              <span>해아림한의원 · 2026.09.09</span>
-              <a href="/community/#reviews" class="text-[#1c6e78] font-semibold hover:underline">상세보기 &gt;</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Review 2 (Test Review 2) -->
-        <div class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col">
-          <div class="relative overflow-hidden h-44 bg-slate-100">
-            <img src="/images/reviews/review_2.jpg" alt="치료후기 사진" class="bottom-review-blurred-img w-full h-full object-cover">
-            <div class="absolute top-3 left-3 bg-[#0d3a42]/80 backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">
-              🔒 의료법 보호 흐림처리
-            </div>
-          </div>
-          <div class="p-5 flex flex-col flex-grow">
-            <span class="text-xs font-bold text-[#1c6e78] mb-1.5">치료후기</span>
-            <h3 class="text-base font-bold text-[#0d3a42] mb-2 leading-snug">
-              테스트치료후기 를 해보려고합니다.테스트치료후기 를 해보려고합니다
-            </h3>
-            <p class="text-xs text-[#666666] leading-relaxed mb-4 flex-grow">
-              테스트치료후기 를 해보려고합니다. 테스트치료후기 를 해보려고합니다 [사진] 테스트치료후기 를 해보려고합니다. 테스트치료후기 를 해보려고합니다
-            </p>
-            <div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">
-              <span>해아림한의원 · 2026.09.09</span>
-              <a href="/community/#reviews" class="text-[#1c6e78] font-semibold hover:underline">상세보기 &gt;</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Review 3 (Test Review 3) -->
-        <div class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col">
-          <div class="relative overflow-hidden h-44 bg-slate-100">
-            <img src="/images/reviews/review_1.jpg" alt="치료후기 사진" class="bottom-review-blurred-img w-full h-full object-cover">
-            <div class="absolute top-3 left-3 bg-[#0d3a42]/80 backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">
-              🔒 의료법 보호 흐림처리
-            </div>
-          </div>
-          <div class="p-5 flex flex-col flex-grow">
-            <span class="text-xs font-bold text-[#1c6e78] mb-1.5">치료후기</span>
-            <h3 class="text-base font-bold text-[#0d3a42] mb-2 leading-snug">
-              테스트를 해보려고합니다.
-            </h3>
-            <p class="text-xs text-[#666666] leading-relaxed mb-4 flex-grow">
-              치료후기 테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를...
-            </p>
-            <div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">
-              <span>해아림한의원 · 2026.09.09</span>
-              <a href="/community/#reviews" class="text-[#1c6e78] font-semibold hover:underline">상세보기 &gt;</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Review 4 (Clinical 1) -->
-        <div class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col">
+        <!-- Review 1 -->
+        <div class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col cursor-pointer" onclick="openCommonBottomDetail('reviews', 'rev-1-1788860000000')">
           <div class="relative overflow-hidden h-44 bg-slate-100">
             <img src="/images/reviews/review_1.jpg" alt="치료후기 사진" class="bottom-review-blurred-img w-full h-full object-cover">
             <div class="absolute top-3 left-3 bg-[#0d3a42]/80 backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">
@@ -271,17 +207,17 @@
               응급실만 세 번 갔는데 한약과 훈련으로 완전히 회복되었습니다
             </h3>
             <p class="text-xs text-[#666666] leading-relaxed mb-4 flex-grow">
-              출근길 지하철에서 가슴이 터질 듯 뛰고 숨이 막혀 응급실을 세 번이나 반복해 실려갔습니다. 심장내과와 뇌 검사상 "이상 없다"는 진단을 받고 해아림 맞춤 청심안신 한약과 CST 치료 후 불안 없이 출퇴근하고 있습니다.
+              출근길 지하철에서 가슴이 터질 듯 뛰고 숨이 막혀 응급실을 세 번이나 반복해 실려갔습니다. 심장내과와 뇌 검사상 "이상 없다", "신경성이다"라는 말만 들어 하루하루가 생지옥 같았습니다. 해아림 맞...
             </p>
             <div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">
               <span>30대 직장인 김OO 님 · 2026.09.04</span>
-              <a href="/community/#reviews" class="text-[#1c6e78] font-semibold hover:underline">상세보기 &gt;</a>
+              <a href="/community/?board=reviews&id=rev-1-1788860000000" onclick="event.preventDefault(); event.stopPropagation(); openCommonBottomDetail('reviews', 'rev-1-1788860000000')" class="text-[#1c6e78] font-semibold hover:underline">상세보기 &gt;</a>
             </div>
           </div>
         </div>
 
-        <!-- Review 5 (Clinical 2) -->
-        <div class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col">
+        <!-- Review 2 -->
+        <div class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col cursor-pointer" onclick="openCommonBottomDetail('reviews', 'rev-2-1788850000000')">
           <div class="relative overflow-hidden h-44 bg-slate-100">
             <img src="/images/reviews/review_2.jpg" alt="치료후기 사진" class="bottom-review-blurred-img w-full h-full object-cover">
             <div class="absolute top-3 left-3 bg-[#0d3a42]/80 backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">
@@ -294,17 +230,17 @@
               배를 탄 듯 흔들리던 머리가 맑아지고 밤에 푹 잡니다
             </h3>
             <p class="text-xs text-[#666666] leading-relaxed mb-4 flex-grow">
-              1년 넘게 머리가 멍하고 땅이 푹 꺼지듯 흔들려 외출조차 두려웠습니다. 상충열을 내리고 부교감신경을 북돋우는 체질 탕약과 CST 치료 1달 만에 70% 이상 호전되었고 지금은 7시간 숙면을 취하고 있습니다.
+              1년 넘게 머리가 멍하고 땅이 푹 꺼지듯 흔들려 외출조차 두려웠습니다. 밤에도 교감신경이 가라앉지 않아 1~2시간 간격으로 깼습니다. 이비인후과 이석증 검사도 정상이어서 자율신경 클리닉을 찾게 되었...
             </p>
             <div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">
               <span>50대 주부 박OO 님 · 2026.09.01</span>
-              <a href="/community/#reviews" class="text-[#1c6e78] font-semibold hover:underline">상세보기 &gt;</a>
+              <a href="/community/?board=reviews&id=rev-2-1788850000000" onclick="event.preventDefault(); event.stopPropagation(); openCommonBottomDetail('reviews', 'rev-2-1788850000000')" class="text-[#1c6e78] font-semibold hover:underline">상세보기 &gt;</a>
             </div>
           </div>
         </div>
 
-        <!-- Review 6 (Clinical 3) -->
-        <div class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col">
+        <!-- Review 3 -->
+        <div class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col cursor-pointer" onclick="openCommonBottomDetail('reviews', 'rev-3-1788840000000')">
           <div class="relative overflow-hidden h-44 bg-slate-100">
             <img src="/images/reviews/review_3.jpg" alt="치료후기 사진" class="bottom-review-blurred-img w-full h-full object-cover">
             <div class="absolute top-3 left-3 bg-[#0d3a42]/80 backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">
@@ -317,21 +253,90 @@
               신경성 위염, 소화불량으로 10kg 빠졌는데 자율신경 치료 후 밥을 맛있게 먹습니다
             </h3>
             <p class="text-xs text-[#666666] leading-relaxed mb-4 flex-grow">
-              조금만 스트레스 받아도 체하고 명치가 돌처럼 굳어 10kg이나 빠졌습니다. 미주신경 기능 회복 온보비위 탕약과 온열 침 치료 2주 만에 트림과 더부룩함이 가라앉고 체중도 정상 회복했습니다.
+              조금만 스트레스를 받으면 체하고 명치가 돌처럼 굳었습니다. 위내시경을 해도 가벼운 위염뿐이라는데 살이 10kg이나 빠져 기력이 바닥이었습니다. 위장의 연동 운동을 조절하는 미주신경 기능이 떨어져 있...
             </p>
             <div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">
               <span>40대 자영업 이OO 님 · 2026.08.27</span>
-              <a href="/community/#reviews" class="text-[#1c6e78] font-semibold hover:underline">상세보기 &gt;</a>
+              <a href="/community/?board=reviews&id=rev-3-1788840000000" onclick="event.preventDefault(); event.stopPropagation(); openCommonBottomDetail('reviews', 'rev-3-1788840000000')" class="text-[#1c6e78] font-semibold hover:underline">상세보기 &gt;</a>
             </div>
           </div>
         </div>
+
+        <!-- Review 4 -->
+        <div class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col cursor-pointer" onclick="openCommonBottomDetail('reviews', 'rev-4-1788830000000')">
+          <div class="relative overflow-hidden h-44 bg-slate-100">
+            <img src="/images/reviews/review_4.jpg" alt="치료후기 사진" class="bottom-review-blurred-img w-full h-full object-cover">
+            <div class="absolute top-3 left-3 bg-[#0d3a42]/80 backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">
+              🔒 의료법 보호 흐림처리
+            </div>
+          </div>
+          <div class="p-5 flex flex-col flex-grow">
+            <span class="text-xs font-bold text-[#1c6e78] mb-1.5">전신 신체화 증상</span>
+            <h3 class="text-base font-bold text-[#0d3a42] mb-2 leading-snug">
+              머리 열감, 손발 시림, 숨막힘... 온몸이 아팠는데 체질 한약 복용 후 안정을 찾았습니다
+            </h3>
+            <p class="text-xs text-[#666666] leading-relaxed mb-4 flex-grow">
+              시험 준비 스트레스로 머리로는 열이 뻗치는데 손발은 얼음장처럼 차갑고, 숨을 깊게 들이쉬지 못해 얕은 숨만 쉬었습니다. 온몸에 감각 이상이 와서 우울증까지 왔었습니다. 해아림 원장님께서 자율신경 불...
+            </p>
+            <div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">
+              <span>20대 취준생 최OO 님 · 2026.08.22</span>
+              <a href="/community/?board=reviews&id=rev-4-1788830000000" onclick="event.preventDefault(); event.stopPropagation(); openCommonBottomDetail('reviews', 'rev-4-1788830000000')" class="text-[#1c6e78] font-semibold hover:underline">상세보기 &gt;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 5 -->
+        <div class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col cursor-pointer" onclick="openCommonBottomDetail('reviews', 'rev-5-1788820000000')">
+          <div class="relative overflow-hidden h-44 bg-slate-100">
+            <img src="/images/reviews/review_5.jpg" alt="치료후기 사진" class="bottom-review-blurred-img w-full h-full object-cover">
+            <div class="absolute top-3 left-3 bg-[#0d3a42]/80 backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">
+              🔒 의료법 보호 흐림처리
+            </div>
+          </div>
+          <div class="p-5 flex flex-col flex-grow">
+            <span class="text-xs font-bold text-[#1c6e78] mb-1.5">만성피로 & 기립성저혈압</span>
+            <h3 class="text-base font-bold text-[#0d3a42] mb-2 leading-snug">
+              기립성 어지럼증과 지독한 만성피로, 해아림 맞춤 한약으로 활력 회복
+            </h3>
+            <p class="text-xs text-[#666666] leading-relaxed mb-4 flex-grow">
+              아침마다 일어나기 힘들고 자리에서 일어설 때마다 눈앞이 캄캄해지는 기립성 빈맥과 어지럼증에 시달렸습니다. 만성피로로 인해 회사 업무 집중이 불가능할 정도였습니다. 해아림에서 자율신경 검사와 체질 진...
+            </p>
+            <div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">
+              <span>30대 연구원 정OO 님 · 2026.08.16</span>
+              <a href="/community/?board=reviews&id=rev-5-1788820000000" onclick="event.preventDefault(); event.stopPropagation(); openCommonBottomDetail('reviews', 'rev-5-1788820000000')" class="text-[#1c6e78] font-semibold hover:underline">상세보기 &gt;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 6 -->
+        <div class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col cursor-pointer" onclick="openCommonBottomDetail('reviews', 'rev-6-1788810000000')">
+          <div class="relative overflow-hidden h-44 bg-slate-100">
+            <img src="/images/reviews/review_6.jpg" alt="치료후기 사진" class="bottom-review-blurred-img w-full h-full object-cover">
+            <div class="absolute top-3 left-3 bg-[#0d3a42]/80 backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">
+              🔒 의료법 보호 흐림처리
+            </div>
+          </div>
+          <div class="p-5 flex flex-col flex-grow">
+            <span class="text-xs font-bold text-[#1c6e78] mb-1.5">두통 & 이명 & 긴장</span>
+            <h3 class="text-base font-bold text-[#0d3a42] mb-2 leading-snug">
+              신경성 두통과 귀에서 나던 이명 소리가 맑아졌습니다
+            </h3>
+            <p class="text-xs text-[#666666] leading-relaxed mb-4 flex-grow">
+              목과 어깨가 돌덩이처럼 굳으면서 뒤통수가 찌릿찌릿 쑤시는 신경성 긴장성 두통과 삐- 소리의 이명이 끊이지 않았습니다. 진통제를 아무리 먹어도 낫지 않았습니다. 해아림 원장님께서 후두하근 긴장과 뇌척...
+            </p>
+            <div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">
+              <span>40대 교사 강OO 님 · 2026.08.10</span>
+              <a href="/community/?board=reviews&id=rev-6-1788810000000" onclick="event.preventDefault(); event.stopPropagation(); openCommonBottomDetail('reviews', 'rev-6-1788810000000')" class="text-[#1c6e78] font-semibold hover:underline">상세보기 &gt;</a>
+            </div>
+          </div>
+        </div>
+
       </div>
       <div class="text-center">
-        <a href="/community/#reviews" class="btn-healim">
+        <a href="/community/#reviews" onclick="handleBottomMoreClick(event, 'reviews')" class="btn-healim">
           <span>치료후기 더보기 &gt;</span>
         </a>
-      </div>
-    </section>
+      </div></section>
 
     <!-- ──────────────────────────────────────────────────────────
          4. 자율신경실조증 치료 칼럼 (3개 카드)
@@ -346,7 +351,7 @@
       <!-- 3-Column Grid -->
       <div id="commonBottomColumnsList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 mb-8">
         <!-- Col 1 (Col 23: 수면 중 이갈이와 턱관절) -->
-        <a href="/community/#columns" class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group text-left">
+        <div onclick="openCommonBottomDetail('columns', 'col-auto-23-1788884200000')" class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group text-left cursor-pointer">
           <div class="overflow-hidden h-44 bg-slate-100">
             <img src="/images/columns/column_23_bruxism_tmj.svg" alt="수면 중 이갈이와 턱관절 통증" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
           </div>
@@ -360,13 +365,13 @@
             </p>
             <div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">
               <span>해아림한의원 · 2026.09.09</span>
-              <span class="text-[#1c6e78] font-semibold">읽기 &gt;</span>
+              <a href="/community/?board=columns&id=col-auto-23-1788884200000" onclick="event.preventDefault(); event.stopPropagation(); openCommonBottomDetail('columns', 'col-auto-23-1788884200000')" class="text-[#1c6e78] font-semibold hover:underline">읽기 &gt;</a>
             </div>
           </div>
-        </a>
+        </div>
 
         <!-- Col 2 (Col 22: 만성 골반통과 잔뇨감) -->
-        <a href="/community/#columns" class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group text-left">
+        <div onclick="openCommonBottomDetail('columns', 'col-auto-22-1788884100000')" class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group text-left cursor-pointer">
           <div class="overflow-hidden h-44 bg-slate-100">
             <img src="/images/columns/column_22_pelvic_pain.svg" alt="만성 골반통과 잔뇨감·빈뇨" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
           </div>
@@ -380,13 +385,13 @@
             </p>
             <div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">
               <span>해아림한의원 · 2026.09.09</span>
-              <span class="text-[#1c6e78] font-semibold">읽기 &gt;</span>
+              <a href="/community/?board=columns&id=col-auto-22-1788884100000" onclick="event.preventDefault(); event.stopPropagation(); openCommonBottomDetail('columns', 'col-auto-22-1788884100000')" class="text-[#1c6e78] font-semibold hover:underline">읽기 &gt;</a>
             </div>
           </div>
-        </a>
+        </div>
 
         <!-- Col 3 (Col 21: 미각·후각 상실) -->
-        <a href="/community/#columns" class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group text-left">
+        <div onclick="openCommonBottomDetail('columns', 'col-auto-21-1788883500000')" class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group text-left cursor-pointer">
           <div class="overflow-hidden h-44 bg-slate-100">
             <img src="/images/columns/column_21_olfactory_gustatory.svg" alt="미각·후각 상실과 왜곡된 이상후각" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
           </div>
@@ -400,17 +405,16 @@
             </p>
             <div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">
               <span>해아림한의원 · 2026.09.08</span>
-              <span class="text-[#1c6e78] font-semibold">읽기 &gt;</span>
+              <a href="/community/?board=columns&id=col-auto-21-1788883500000" onclick="event.preventDefault(); event.stopPropagation(); openCommonBottomDetail('columns', 'col-auto-21-1788883500000')" class="text-[#1c6e78] font-semibold hover:underline">읽기 &gt;</a>
             </div>
           </div>
-        </a>
+        </div>
       </div>
       <div class="text-center">
-        <a href="/community/#columns" class="btn-healim">
+        <a href="/community/#columns" onclick="handleBottomMoreClick(event, 'columns')" class="btn-healim">
           <span>치료 칼럼 더보기 &gt;</span>
         </a>
-      </div>
-    </section>
+      </div></section>
 
     <!-- ──────────────────────────────────────────────────────────
          5. 자율신경실조증 유튜브 동영상 (3개 카드)
@@ -425,7 +429,7 @@
       <!-- 3-YouTube Grid -->
       <div id="commonBottomYoutubeList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 mb-8">
         <!-- YT 1 -->
-        <a href="/community/#youtube" class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group text-left">
+        <div onclick="openCommonBottomDetail('youtube', '51rIQ1T5dIU')" class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group text-left cursor-pointer">
           <div class="relative overflow-hidden h-44 bg-slate-900">
             <img src="https://img.youtube.com/vi/51rIQ1T5dIU/maxresdefault.jpg" alt="유튜브 영상 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='/images/youtube/yt_1.jpg';">
             <div class="absolute inset-0 flex items-center justify-center">
@@ -444,13 +448,13 @@
             </p>
             <div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">
               <span>해아림TV 알쓸한상</span>
-              <span class="text-[#1c6e78] font-semibold">시청하기 &gt;</span>
+              <a href="/community/?board=youtube&id=51rIQ1T5dIU" onclick="event.preventDefault(); event.stopPropagation(); openCommonBottomDetail('youtube', '51rIQ1T5dIU')" class="text-[#1c6e78] font-semibold hover:underline">시청하기 &gt;</a>
             </div>
           </div>
-        </a>
+        </div>
 
         <!-- YT 2 -->
-        <a href="/community/#youtube" class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group text-left">
+        <div onclick="openCommonBottomDetail('youtube', '9X4PapgvBWE')" class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group text-left cursor-pointer">
           <div class="relative overflow-hidden h-44 bg-slate-900">
             <img src="https://img.youtube.com/vi/9X4PapgvBWE/maxresdefault.jpg" alt="유튜브 영상 2" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='/images/youtube/yt_2.jpg';">
             <div class="absolute inset-0 flex items-center justify-center">
@@ -469,13 +473,13 @@
             </p>
             <div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">
               <span>해아림TV 알쓸한상</span>
-              <span class="text-[#1c6e78] font-semibold">시청하기 &gt;</span>
+              <a href="/community/?board=youtube&id=9X4PapgvBWE" onclick="event.preventDefault(); event.stopPropagation(); openCommonBottomDetail('youtube', '9X4PapgvBWE')" class="text-[#1c6e78] font-semibold hover:underline">시청하기 &gt;</a>
             </div>
           </div>
-        </a>
+        </div>
 
         <!-- YT 3 -->
-        <a href="/community/#youtube" class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group text-left">
+        <div onclick="openCommonBottomDetail('youtube', '1Bb6dIYtgvs')" class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group text-left cursor-pointer">
           <div class="relative overflow-hidden h-44 bg-slate-900">
             <img src="https://img.youtube.com/vi/1Bb6dIYtgvs/maxresdefault.jpg" alt="유튜브 영상 3" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='/images/youtube/yt_3.jpg';">
             <div class="absolute inset-0 flex items-center justify-center">
@@ -494,21 +498,60 @@
             </p>
             <div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">
               <span>해아림TV 알쓸한상</span>
-              <span class="text-[#1c6e78] font-semibold">시청하기 &gt;</span>
+              <a href="/community/?board=youtube&id=1Bb6dIYtgvs" onclick="event.preventDefault(); event.stopPropagation(); openCommonBottomDetail('youtube', '1Bb6dIYtgvs')" class="text-[#1c6e78] font-semibold hover:underline">시청하기 &gt;</a>
             </div>
           </div>
-        </a>
+        </div>
       </div>
 
       <div class="text-center">
-        <a href="/community/#youtube" class="btn-healim">
+        <a href="/community/#youtube" onclick="handleBottomMoreClick(event, 'youtube')" class="btn-healim">
           <span>유튜브 영상 더보기 &gt;</span>
         </a>
-      </div>
-    </section>
+      </div></section>
 
     <!-- Dynamic LocalStorage Community Sync & Chronological Sorting Engine -->
-    <script src="/js/auto_faq_engine.js"></script>
+    
+    <!-- Common Bottom Section Universal Detail Modal Backdrop -->
+    <div class="healim-modal-backdrop" id="commonBottomDetailModalBackdrop" style="display: none;" onclick="if(event.target === this) closeCommonBottomDetailModal();">
+      <div class="healim-modal-dialog">
+        <div class="healim-modal-header">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="post-badge inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#edf7f8] text-[#1c6e78] border border-[#badfe3]" id="commonBottomModalCategory">분류</span>
+            <h3 class="healim-modal-title" id="commonBottomModalTitle" style="margin: 0; font-size: 1.15rem; line-height: 1.4;">제목</h3>
+          </div>
+          <button type="button" class="btn-modal-close" onclick="closeCommonBottomDetailModal()">&times;</button>
+        </div>
+        <div class="flex items-center justify-between text-xs text-[#888888] pb-3 border-b border-[#edf2f4] mb-4">
+          <div>
+            작성자: <strong class="text-[#0d3a42]" id="commonBottomModalAuthor">해아림한의원</strong>
+            <span class="mx-2">|</span>
+            등록일: <span id="commonBottomModalDate">2026.09.09</span>
+          </div>
+          <div>
+            조회수: <span id="commonBottomModalViews">1</span>
+          </div>
+        </div>
+        <div id="commonBottomModalYoutubeArea" class="mb-4" style="display: none;"></div>
+        <div id="commonBottomModalImageArea" class="mb-4" style="display: none;">
+          <img id="commonBottomModalImage" src="" alt="첨부 사진" class="w-full max-h-[380px] object-contain rounded-xl border border-[#badfe3] bg-[#f8fafb]" onerror="this.onerror=null; this.parentElement.style.display='none';" />
+          <div id="commonBottomModalBlurNotice" class="mt-2 text-xs text-[#1c6e78] font-semibold flex items-center justify-between bg-[#f0f7f8] px-3 py-1.5 rounded-lg border border-[#badfe3]" style="display: none;">
+            <span class="flex items-center gap-1.5"><span>🔒</span> <span>회원 인증 열람: 의료법 제56조에 따라 로그인 회원에게 제공되는 원본 치료후기 사진입니다.</span></span>
+          </div>
+        </div>
+        <div id="commonBottomModalContent" class="text-sm text-[#333333] leading-relaxed py-2 min-h-[120px]">
+          내용이 여기에 표시됩니다.
+        </div>
+        <div class="modal-footer mt-4 pt-3 border-t border-[#edf2f4] flex items-center justify-between">
+          <a id="commonBottomModalMoreLink" href="/community/" class="text-xs text-[#1c6e78] font-bold hover:underline flex items-center gap-1">
+            <span>커뮤니티에서 더 많은 글 보기</span>
+            <span>&gt;</span>
+          </a>
+          <button type="button" class="px-4 py-2 bg-[#1c6e78] text-white text-xs font-bold rounded-lg hover:bg-[#0d3a42] transition-colors" onclick="closeCommonBottomDetailModal()">닫기</button>
+        </div>
+      </div>
+    </div>
+<script src="/js/auto_faq_engine.js"></script>
     <script src="/js/auto_column_engine.js"></script>
     <script src="/js/healim_cloud_db.js"></script>
     <script>
@@ -739,98 +782,218 @@
               }
       ];
 
-      var defaultReviewsList = [
-              {
-                      "id": "reviews-1788884500000",
-                      "category": "치료후기",
-                      "title": "이것도 테스트입니다.이것도 테스트입니다.",
-                      "content": "이것도 테스트입니다. 이것도 테스트입니다. [사진] 이것도 테스트입니다. 이것도 테스트입니다. 이것도 테스트입니다. 이것도 테스트입니다.",
-                      "author": "해아림한의원",
-                      "date": "2026.09.09",
-                      "views": 18,
-                      "image": "/images/reviews/review_3.jpg"
-              },
-              {
-                      "id": "reviews-1788884300000",
-                      "category": "치료후기",
-                      "title": "테스트치료후기 를 해보려고합니다.테스트치료후기 를 해보려고합니다",
-                      "content": "테스트치료후기 를 해보려고합니다. 테스트치료후기 를 해보려고합니다 [사진] 테스트치료후기 를 해보려고합니다. 테스트치료후기 를 해보려고합니다",
-                      "author": "해아림한의원",
-                      "date": "2026.09.09",
-                      "views": 15,
-                      "image": "/images/reviews/review_2.jpg"
-              },
-              {
-                      "id": "reviews-1788878779980",
-                      "category": "치료후기",
-                      "title": "테스트를 해보려고합니다.",
-                      "content": "치료후기 테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를 해보려고합니다.테스트를...",
-                      "author": "해아림한의원",
-                      "date": "2026.09.09",
-                      "views": 25,
-                      "image": "/images/reviews/review_1.jpg"
-              },
-              {
-                      "id": "rev-1-1788860000000",
-                      "category": "가슴두근거림 & 공황",
-                      "title": "응급실만 세 번 갔는데 한약과 훈련으로 완전히 회복되었습니다",
-                      "content": "출근길 지하철에서 가슴이 터질 듯 뛰고 숨이 막혀 응급실을 세 번이나 반복해 실려갔습니다. 심장내과와 뇌 검사상 \"이상 없다\", \"신경성이다\"라는 말만 들어 하루하루가 생지옥 같았습니다. 해아림 맞춤 청심안신 한약과 두개천골요법, 뇌파 훈련 후 불안 없이 편안하게 출퇴근하고 있습니다.",
-                      "author": "30대 직장인 김OO 님",
-                      "date": "2026.09.04",
-                      "views": 1245,
-                      "image": "/images/reviews/review_1.jpg"
-              },
-              {
-                      "id": "rev-2-1788850000000",
-                      "category": "만성 어지럼증 & 불면",
-                      "title": "배를 탄 듯 흔들리던 머리가 맑아지고 밤에 푹 잡니다",
-                      "content": "1년 넘게 머리가 멍하고 땅이 푹 꺼지듯 흔들려 외출조차 두려웠습니다. 밤에도 교감신경이 가라앉지 않아 1~2시간 간격으로 깼습니다. 이비인후과 이석증 검사도 정상이어서 자율신경 클리닉을 찾게 되었습니다. 원장님께서 상충열을 내려주고 부교감신경을 북돋우는 체질 탕약과 CST 치료를 해주셨는데, 1달 만에 어지럼증이 70% 이상 호전되었고 지금은 약 복용 없이도 7시간 숙면을 취하고 있습니다.",
-                      "author": "50대 주부 박OO 님",
-                      "date": "2026.09.01",
-                      "views": 1120,
-                      "image": "/images/reviews/review_2.jpg"
-              },
-              {
-                      "id": "rev-3-1788840000000",
-                      "category": "위장장애 & 담적",
-                      "title": "신경성 위염, 소화불량으로 10kg 빠졌는데 자율신경 치료 후 밥을 맛있게 먹습니다",
-                      "content": "조금만 스트레스를 받으면 체하고 명치가 돌처럼 굳었습니다. 위내시경을 해도 가벼운 위염뿐이라는데 살이 10kg이나 빠져 기력이 바닥이었습니다. 위장의 연동 운동을 조절하는 미주신경 기능이 떨어져 있다는 진단을 받고 해아림 맞춤 온보비위 탕약과 복부 온열 침 치료를 병행했습니다. 치료 2주 만에 트림과 더부룩함이 가라앉고 3개월이 지난 지금 체중도 정상 회복했습니다.",
-                      "author": "40대 자영업 이OO 님",
-                      "date": "2026.08.27",
-                      "views": 980,
-                      "image": "/images/reviews/review_3.jpg"
-              },
-              {
-                      "id": "rev-4-1788830000000",
-                      "category": "전신 신체화 증상",
-                      "title": "머리 열감, 손발 시림, 숨막힘... 온몸이 아팠는데 체질 한약 복용 후 안정을 찾았습니다",
-                      "content": "시험 준비 스트레스로 머리로는 열이 뻗치는데 손발은 얼음장처럼 차갑고, 숨을 깊게 들이쉬지 못해 얕은 숨만 쉬었습니다. 온몸에 감각 이상이 와서 우울증까지 왔었습니다. 해아림 원장님께서 자율신경 불균형으로 인한 상열하한 증상이라고 짚어주시고 꼼꼼히 진맥해 주셨습니다. 한약 복용 한 달 차에 상열감이 가라앉았고 호흡이 편안해져 무사히 시험에 합격했습니다.",
-                      "author": "20대 취준생 최OO 님",
-                      "date": "2026.08.22",
-                      "views": 1350,
-                      "image": "/images/reviews/review_4.jpg"
-              },
-              {
-                      "id": "rev-5-1788820000000",
-                      "category": "만성피로 & 기립성저혈압",
-                      "title": "기립성 어지럼증과 지독한 만성피로, 해아림 맞춤 한약으로 활력 회복",
-                      "content": "아침마다 일어나기 힘들고 자리에서 일어설 때마다 눈앞이 캄캄해지는 기립성 빈맥과 어지럼증에 시달렸습니다. 만성피로로 인해 회사 업무 집중이 불가능할 정도였습니다. 해아림에서 자율신경 검사와 체질 진맥 후 심비양허를 개선하는 맞춤 보양 한약과 경추 추나요법을 2달간 집중 치료받았습니다. 뇌로 가는 혈류가 맑아지면서 아침 기상이 가뿐해지고 일어설 때 어지럼증이 사라졌습니다.",
-                      "author": "30대 연구원 정OO 님",
-                      "date": "2026.08.16",
-                      "views": 1040,
-                      "image": "/images/reviews/review_5.jpg"
-              },
-              {
-                      "id": "rev-6-1788810000000",
-                      "category": "두통 & 이명 & 긴장",
-                      "title": "신경성 두통과 귀에서 나던 이명 소리가 맑아졌습니다",
-                      "content": "목과 어깨가 돌덩이처럼 굳으면서 뒤통수가 찌릿찌릿 쑤시는 신경성 긴장성 두통과 삐- 소리의 이명이 끊이지 않았습니다. 진통제를 아무리 먹어도 낫지 않았습니다. 해아림 원장님께서 후두하근 긴장과 뇌척수액 순환 장애를 진단해 주시고 두개천골요법(CST)과 경락 약침치료, 뇌신경 안정 한약을 처방해 주셨습니다. 치료 3주 만에 목 뒤 뻐근함이 씻은 듯 풀리고 2달 만에 이명 소리가 거의 들리지 않게 되었습니다.",
-                      "author": "40대 교사 강OO 님",
-                      "date": "2026.08.10",
-                      "views": 1180,
-                      "image": "/images/reviews/review_6.jpg"
-              }
-      ];
+      var defaultReviewsList =     [
+            {
+                    "id": "rev-1-1788860000000",
+                    "category": "가슴두근거림 & 공황",
+                    "title": "응급실만 세 번 갔는데 한약과 훈련으로 완전히 회복되었습니다",
+                    "content": "출근길 지하철에서 가슴이 터질 듯 뛰고 숨이 막혀 응급실을 세 번이나 반복해 실려갔습니다. 심장내과와 뇌 검사상 \"이상 없다\", \"신경성이다\"라는 말만 들어 하루하루가 생지옥 같았습니다. 해아림 맞춤 청심안신 한약과 두개천골요법, 뇌파 훈련 후 불안 없이 편안하게 출퇴근하고 있습니다.",
+                    "author": "30대 직장인 김OO 님",
+                    "date": "2026.09.04",
+                    "views": 1245,
+                    "image": "/images/reviews/review_1.jpg"
+            },
+            {
+                    "id": "rev-2-1788850000000",
+                    "category": "만성 어지럼증 & 불면",
+                    "title": "배를 탄 듯 흔들리던 머리가 맑아지고 밤에 푹 잡니다",
+                    "content": "1년 넘게 머리가 멍하고 땅이 푹 꺼지듯 흔들려 외출조차 두려웠습니다. 밤에도 교감신경이 가라앉지 않아 1~2시간 간격으로 깼습니다. 이비인후과 이석증 검사도 정상이어서 자율신경 클리닉을 찾게 되었습니다. 원장님께서 상충열을 내려주고 부교감신경을 북돋우는 체질 탕약과 CST 치료를 해주셨는데, 1달 만에 어지럼증이 70% 이상 호전되었고 지금은 약 복용 없이도 7시간 숙면을 취하고 있습니다.",
+                    "author": "50대 주부 박OO 님",
+                    "date": "2026.09.01",
+                    "views": 1120,
+                    "image": "/images/reviews/review_2.jpg"
+            },
+            {
+                    "id": "rev-3-1788840000000",
+                    "category": "위장장애 & 담적",
+                    "title": "신경성 위염, 소화불량으로 10kg 빠졌는데 자율신경 치료 후 밥을 맛있게 먹습니다",
+                    "content": "조금만 스트레스를 받으면 체하고 명치가 돌처럼 굳었습니다. 위내시경을 해도 가벼운 위염뿐이라는데 살이 10kg이나 빠져 기력이 바닥이었습니다. 위장의 연동 운동을 조절하는 미주신경 기능이 떨어져 있다는 진단을 받고 해아림 맞춤 온보비위 탕약과 복부 온열 침 치료를 병행했습니다. 치료 2주 만에 트림과 더부룩함이 가라앉고 3개월이 지난 지금 체중도 정상 회복했습니다.",
+                    "author": "40대 자영업 이OO 님",
+                    "date": "2026.08.27",
+                    "views": 980,
+                    "image": "/images/reviews/review_3.jpg"
+            },
+            {
+                    "id": "rev-4-1788830000000",
+                    "category": "전신 신체화 증상",
+                    "title": "머리 열감, 손발 시림, 숨막힘... 온몸이 아팠는데 체질 한약 복용 후 안정을 찾았습니다",
+                    "content": "시험 준비 스트레스로 머리로는 열이 뻗치는데 손발은 얼음장처럼 차갑고, 숨을 깊게 들이쉬지 못해 얕은 숨만 쉬었습니다. 온몸에 감각 이상이 와서 우울증까지 왔었습니다. 해아림 원장님께서 자율신경 불균형으로 인한 상열하한 증상이라고 짚어주시고 꼼꼼히 진맥해 주셨습니다. 한약 복용 한 달 차에 상열감이 가라앉았고 호흡이 편안해져 무사히 시험에 합격했습니다.",
+                    "author": "20대 취준생 최OO 님",
+                    "date": "2026.08.22",
+                    "views": 1350,
+                    "image": "/images/reviews/review_4.jpg"
+            },
+            {
+                    "id": "rev-5-1788820000000",
+                    "category": "만성피로 & 기립성저혈압",
+                    "title": "기립성 어지럼증과 지독한 만성피로, 해아림 맞춤 한약으로 활력 회복",
+                    "content": "아침마다 일어나기 힘들고 자리에서 일어설 때마다 눈앞이 캄캄해지는 기립성 빈맥과 어지럼증에 시달렸습니다. 만성피로로 인해 회사 업무 집중이 불가능할 정도였습니다. 해아림에서 자율신경 검사와 체질 진맥 후 심비양허를 개선하는 맞춤 보양 한약과 경추 추나요법을 2달간 집중 치료받았습니다. 뇌로 가는 혈류가 맑아지면서 아침 기상이 가뿐해지고 일어설 때 어지럼증이 사라졌습니다.",
+                    "author": "30대 연구원 정OO 님",
+                    "date": "2026.08.16",
+                    "views": 1040,
+                    "image": "/images/reviews/review_5.jpg"
+            },
+            {
+                    "id": "rev-6-1788810000000",
+                    "category": "두통 & 이명 & 긴장",
+                    "title": "신경성 두통과 귀에서 나던 이명 소리가 맑아졌습니다",
+                    "content": "목과 어깨가 돌덩이처럼 굳으면서 뒤통수가 찌릿찌릿 쑤시는 신경성 긴장성 두통과 삐- 소리의 이명이 끊이지 않았습니다. 진통제를 아무리 먹어도 낫지 않았습니다. 해아림 원장님께서 후두하근 긴장과 뇌척수액 순환 장애를 진단해 주시고 두개천골요법(CST)과 경락 약침치료, 뇌신경 안정 한약을 처방해 주셨습니다. 치료 3주 만에 목 뒤 뻐근함이 씻은 듯 풀리고 2달 만에 이명 소리가 거의 들리지 않게 되었습니다.",
+                    "author": "40대 교사 강OO 님",
+                    "date": "2026.08.10",
+                    "views": 1180,
+                    "image": "/images/reviews/review_6.jpg"
+            },
+            {
+                    "id": "rev-clinical-1-1776470400000",
+                    "category": "가슴두근거림 & 공황",
+                    "title": "회의 중 갑자기 숨이 가쁘고 가슴이 멎을 것 같던 발작, 3개월 치료 후 완전히 편안해졌습니다",
+                    "content": "업무 스트레스가 극에 달했던 올해 초, 중요한 클라이언트 회의 도중 갑자기 심장이 요동치고 숨이 턱 끝까지 차올라 죽을 것 같은 공포를 겪었습니다. 응급실에 실려가 심전도, 심장초음파, 뇌 MRI 검사를 다 받았지만 \"이상 소견 없음, 신경성\"이라는 말만 들었습니다. 이후에도 지하철이나 밀폐된 공간만 가면 식은땀이 나고 가슴이 조여와 일상생활이 불가능할 지경이었습니다. 해아림한의원에서 심장과 간의 울열(鬱熱)을 풀고 교감신경을 안정시키는 청심안신탕과 두개천골요법(CST) 훈련을 병행했습니다. 치료 2주 만에 가슴 두근거림의 빈도가 절반 이하로 줄었고, 3개월이 지난 지금은 만원 지하철도 불안 없이 출퇴근하며 정상 업무를 보고 있습니다. 제 삶을 되찾아 주셔서 진심으로 감사드립니다.",
+                    "author": "30대 직장인 김OO 님",
+                    "date": "2026.04.18",
+                    "views": 342,
+                    "image": "/images/reviews/review_1.jpg"
+            },
+            {
+                    "id": "rev-clinical-2-1763942400000",
+                    "category": "만성 어지럼증 & 불면",
+                    "title": "배를 탄 듯 붕 뜨고 흔들리는 어지럼증과 불면증, 한약과 약침으로 10년 만에 숙면을 취합니다",
+                    "content": "걸을 때마다 땅이 스펀지처럼 푹푹 꺼지는 느낌과 머릿속이 뿌옇게 안개 낀 듯한 뇌 안개(Brain Fog)로 1년 넘게 고통받았습니다. 밤에는 침대에 누우면 맥박 소리가 귓가에 울리고 교감신경이 가라앉지 않아 2~3시간을 뒤척이다 겨우 잠들기 일쑤였습니다. 이비인후과 전정기능 검사나 신경과 검사에서도 특별한 이상이 발견되지 않아 절망적이었습니다. 해아림한의원에서 HPA 축 과각성과 뇌간 자율신경계 불균형을 진단받고, 상충열을 내려주는 맞춤 탕약과 경추 약침 치료를 시작했습니다. 치료 4주 차부터 머리가 맑아지며 어지럼증이 서서히 걷히기 시작했고, 지금은 밤에 눕자마자 7시간 연속으로 깊은 잠에 듭니다. 아침에 개운하게 일어나는 평범한 일상이 얼마나 큰 축복인지 깨닫고 있습니다.",
+                    "author": "40대 전문직 이OO 님",
+                    "date": "2025.11.24",
+                    "views": 418,
+                    "image": "/images/reviews/review_2.jpg"
+            },
+            {
+                    "id": "rev-clinical-3-1749686400000",
+                    "category": "만성 위장장애 & 담적",
+                    "title": "물만 마셔도 체하고 명치가 돌처럼 굳었던 기능성 소화불량, 자율신경 치료로 밥 한 공기 다 먹습니다",
+                    "content": "조금만 신경을 쓰거나 음식을 먹으면 명치가 꽉 막히고 헛구역질과 트림이 끊이지 않았습니다. 위내시경을 받아도 '경미한 만성 표재성 위염'일 뿐이라는데 몸무게는 8kg이나 빠져 뼈만 앙상하게 남았습니다. 소화제와 제산제를 달고 살았지만 아무런 차도가 없었습니다. 해아림에서 소화관을 지배하는 미주신경(부교감신경)이 극도로 저하되어 위장 연동운동이 멈춰있다는 설명을 듣고 큰 충격을 받았습니다. 위장 담적을 제거하고 미주신경 활성도를 높이는 이기건비 탕약과 복부 온열 침 치료를 2달간 집중적으로 받았습니다. 거짓말처럼 명치의 돌덩이가 풀리면서 가스가 빠지고 식욕이 돌기 시작했습니다. 이제는 가족들과 함께 삼겹살도 편하게 먹고 밥 한 공기를 뚝딱 비웁니다.",
+                    "author": "50대 자영업 박OO 님",
+                    "date": "2025.06.12",
+                    "views": 526,
+                    "image": "/images/reviews/review_3.jpg"
+            },
+            {
+                    "id": "rev-clinical-4-1733356800000",
+                    "category": "기립성 조절장애 & POTS",
+                    "title": "일어설 때마다 눈앞이 캄캄해지고 심장이 130회까지 뛰던 기립성 빈맥증후군, 완치 판정 받았습니다",
+                    "content": "아침에 침대에서 일어나거나 의자에서 일어설 때마다 눈앞이 하얘지고 핑 돌면서 주저앉기 일쑤였습니다. 스마트워치를 차고 측정해 보면 앉아있을 땐 75회이던 심박수가 일어서기만 하면 130~140회까지 치솟았습니다. 빈혈약도 소용없었고 대학병원에서 POTS(기립성 빈맥증후군) 진단을 받았으나 마땅한 치료제가 없어 물과 염분만 많이 먹으라는 권유를 받았습니다. 학업을 휴학해야 하나 고민하던 중 해아림을 찾았습니다. 말초 혈관 탄력을 높여주고 하체로 쏠린 혈류를 뇌로 끌어올리는 승양익기 한약과 자율신경 바이오피드백 훈련을 받았습니다. 6주가 지나자 일어설 때의 심박수 상승이 15회 이내로 안정되었고 암전 현상이 완전히 사라졌습니다. 무사히 복학하여 건강하게 캠퍼스 생활을 이어가고 있습니다.",
+                    "author": "20대 대학생 최OO 님",
+                    "date": "2024.12.05",
+                    "views": 389,
+                    "image": "/images/reviews/review_4.jpg"
+            },
+            {
+                    "id": "rev-clinical-5-1716076800000",
+                    "category": "상열하한 & 수족냉증",
+                    "title": "얼굴은 불타오르고 손발은 얼음장 같던 극심한 상열하한증, 체온 균형을 되찾았습니다",
+                    "content": "사계절 내내 얼굴과 머리로는 열이 펄펄 끓어올라 홍조가 심하고 두피에 열감이 가득한데, 반대로 손과 발은 얼음장처럼 차가워 양말 두 켤레를 신고도 시려서 잠을 설쳤습니다. 산부인과 갱년기 호르몬 검사에서도 호르몬 수치는 정상이라 원인을 알 수 없어 답답했습니다. 해아림 원장님께서 자율신경계 체온 조절 중추의 이상으로 인한 전형적인 '상열하한(上熱下寒)' 병증이라고 짚어주셨습니다. 상체의 허열을 아래로 끌어내리고 단전의 찬 기운을 덥혀주는 수승화강(水昇火降) 맞춤 탕약과 뜸 치료를 3달간 받았습니다. 얼굴로 치밀어 오르던 화끈거림이 사라지고 손발 끝까지 따뜻한 온기가 돌기 시작했습니다. 혈색도 맑아지고 만성 피로까지 함께 해결되어 새 인생을 사는 기분입니다.",
+                    "author": "40대 주부 정OO 님",
+                    "date": "2024.05.19",
+                    "views": 462,
+                    "image": "/images/reviews/review_5.jpg"
+            },
+            {
+                    "id": "rev-clinical-6-1697241600000",
+                    "category": "다한증 & 체온조절이상",
+                    "title": "긴장하면 손발과 겨드랑이에 비 오듯 쏟아지던 국소 다한증, 신경차단술 없이 한방 치료로 극복했습니다",
+                    "content": "조금만 긴장하거나 사람을 만날 때, 발표를 할 때 손바닥과 발바닥, 겨드랑이에 땀이 주체할 수 없을 정도로 흘러내려 악수조차 꺼려졌습니다. 땀샘 수술이나 교감신경 차단술을 고민했지만 보상성 다한증 부작용이 두려워 망설이던 중 해아림을 알게 되었습니다. 교감신경의 과민도를 낮추고 땀샘을 주관하는 자율신경 반사를 정상화하는 한약과 체질 침 치료를 꾸준히 받았습니다. 한 달 정도 지나자 긴장 상황에서도 손바닥이 뽀송뽀송함을 유지하기 시작했고, 두 달 후에는 사람들 앞에서 긴장해도 땀이 비정상적으로 터져 나오지 않게 되었습니다. 수술 없이 근본적으로 신경계를 안정시켜 주신 원장님께 감사드립니다.",
+                    "author": "30대 엔지니어 강OO 님",
+                    "date": "2023.10.14",
+                    "views": 395,
+                    "image": "/images/reviews/review_6.jpg"
+            },
+            {
+                    "id": "rev-clinical-7-1679443200000",
+                    "category": "이명 & 브레인포그",
+                    "title": "24시간 삐- 소리 나던 신경성 이명과 머릿속 멍함, 자율신경 교정으로 소음이 80% 줄었습니다",
+                    "content": "과로와 스트레스가 누적된 후 오른쪽 귀에서 고주파 삐- 소리와 매미 우는 소리가 끊이지 않았습니다. 집중하려고 하면 머릿속이 뿌옇게 굳어 책이나 보고서 문장이 눈에 들어오지 않는 브레인포그 증상까지 겹쳐 은퇴를 고민할 정도였습니다. 이비인후과 청력검사에서는 청력 저하가 없다고 하여 신경안정제만 처방받았으나 멍함만 심해졌습니다. 해아림에서 뇌간 청신경과 미주신경의 과각성을 가라앉히고 미세 뇌혈류를 순환시키는 통두청이 탕약과 경추 추나요법을 받았습니다. 3주 만에 이명의 음량이 절반으로 줄어들었고, 2개월 치료 후에는 조용한 방에서도 신경 쓰이지 않을 만큼 80% 이상 소음이 사라졌습니다. 머리가 맑아져 연구 업무에도 온전히 몰입할 수 있게 되었습니다.",
+                    "author": "50대 연구원 윤OO 님",
+                    "date": "2023.03.22",
+                    "views": 512,
+                    "image": "/images/reviews/review_1.jpg"
+            },
+            {
+                    "id": "rev-clinical-8-1661817600000",
+                    "category": "과민대장증후군 & 복부팽만",
+                    "title": "시험장이나 긴장 상황만 되면 배가 부글거리고 화장실로 달려가던 과민대장, 완치하고 취업 성공했습니다",
+                    "content": "수험 생활 중 중요한 시험이나 면접만 앞두면 배가 칼로 찌르듯 아프고 가스가 차서 하루에도 화장실을 5~6번씩 들락거렸습니다. 대장내시경 검사는 너무나 깨끗한 정상이었지만 저에게는 매일이 지옥 같았습니다. 장-뇌 축(Gut-Brain Axis)의 신경 신호 전달 이상으로 장 신경총이 과민해진 상태라는 해아림의 진단을 받고 치료를 시작했습니다. 장내 미생물 환경을 개선하고 자율신경 장관 반사를 안정시키는 맞춤 한약을 복용하며 복부 약침 치료를 받았습니다. 3주 차부터 복부 팽만감과 묵직한 통증이 사라졌고, 대변 상태가 황금색 바나나변으로 정상화되었습니다. 최종 면접에서도 아무런 복통 없이 실력을 발휘해 꿈꾸던 공기업에 당당히 합격했습니다.",
+                    "author": "20대 취준생 조OO 님",
+                    "date": "2022.08.30",
+                    "views": 478,
+                    "image": "/images/reviews/review_2.jpg"
+            },
+            {
+                    "id": "rev-clinical-9-1636934400000",
+                    "category": "긴장성 두통 & 목어깨통증",
+                    "title": "머리를 띠로 꽉 조이는 듯한 만성 긴장성 두통, 진통제 끊고 10년 두통에서 해방되었습니다",
+                    "content": "모니터를 종일 보는 직업 특성상 뒷목과 승모근이 바위처럼 굳어 있었고, 매일 오후만 되면 관자놀이와 정수리를 바이스로 조이는 듯한 두통에 시달렸습니다. 게보린, 타이레놀을 하루 4~5알씩 복용하다 보니 위장까지 망가져 속쓰림에 시달렸습니다. 통증의학과 신경차단 주사도 효과가 일주일을 넘기지 못했습니다. 해아림한의원에서 경추 심부 근막의 지속적 긴장과 교감신경 긴장이 결합된 만성 두통임을 확인하고, 후두하근과 측두근의 긴장을 푸는 침구 치료와 신경 영양 한약을 처방받았습니다. 2주 만에 두통 발생 빈도가 주 6회에서 1~2회로 뚝 떨어졌고, 2달 치료 후에는 진통제를 완전히 끊었습니다. 뒷목이 가볍고 눈이 번쩍 뜨이는 기분입니다.",
+                    "author": "40대 디자이너 임OO 님",
+                    "date": "2021.11.15",
+                    "views": 433,
+                    "image": "/images/reviews/review_3.jpg"
+            },
+            {
+                    "id": "rev-clinical-10-1594166400000",
+                    "category": "자율신경실조증 & 무기력",
+                    "title": "배터리가 방전된 로봇 같던 극심한 만성 피로와 번아웃, 해아림 맞춤 보양 한약으로 에너지를 회복했습니다",
+                    "content": "아침에 눈을 뜨면 온몸에 모래주머니를 달아 놓은 것처럼 천근만근 무겁고, 주말에 14시간씩 잠을 자도 피로가 1%도 풀리지 않았습니다. 피검사에서 간 기능, 갑상선 수치 모두 정상이었지만 의욕과 집중력이 바닥나 일상생활 자체가 불가능한 번아웃 상태였습니다. 부신 피로와 자율신경계 탈진으로 인한 교감·부교감신경의 총합 활성도 저하 상태였습니다. 해아림에서 원기를 북돋우고 신수(腎水)를 채워주는 맞춤 공진단과 익기탕을 복용하며 주 1회 CST 치료를 받았습니다. 복용 2주째부터 오후 시간의 졸음과 무기력감이 걷히기 시작했고, 한 달 뒤에는 퇴근 후 가벼운 조깅을 즐길 수 있을 만큼 신체 에너지가 충전되었습니다.",
+                    "author": "30대 공무원 한OO 님",
+                    "date": "2020.07.08",
+                    "views": 567,
+                    "image": "/images/reviews/review_4.jpg"
+            },
+            {
+                    "id": "rev-clinical-11-1556150400000",
+                    "category": "심인성 방광 & 빈뇨",
+                    "title": "외출할 때마다 화장실 위치부터 찾던 과민성 방광과 야간뇨, 밤에 깨지 않고 푹 잡니다",
+                    "content": "고속도로 버스를 타거나 차가 막히면 갑자기 소변이 마려워 미칠 것 같았고, 밤에도 자다가 4~5번씩 소변 때문에 깨어나 숙면을 취해본 지가 언제인지 기억도 나지 않았습니다. 비뇨기과 약을 먹으면 입이 바짝 마르고 변비가 심해져 오래 먹을 수 없었습니다. 방광 괄약근을 조절하는 자율신경계 과흥분 상태를 진단받고, 신장과 방광의 기운을 보하고 중추 신경 긴장을 이완시키는 온포탕 계열의 한약 치료를 받았습니다. 치료 한 달 만에 야간뇨 횟수가 1회로 줄었고, 낮에도 3~4시간 동안 화장실 걱정 없이 편안하게 업무를 봅니다. 삶의 질이 200% 개선되었습니다.",
+                    "author": "50대 자영업 송OO 님",
+                    "date": "2019.04.25",
+                    "views": 388,
+                    "image": "/images/reviews/review_5.jpg"
+            },
+            {
+                    "id": "rev-clinical-12-1505088000000",
+                    "category": "전신 통증 & 섬유근통",
+                    "title": "온몸을 몽둥이로 맞은 듯 쑤시고 아프던 원인 모를 섬유근육통, 맑은 혈액과 신경 안정 한약으로 완쾌",
+                    "content": "어깨, 등, 허리, 골반 할 것 없이 온몸 구석구석이 쑤시고 아파 정형외과, 마취통증의학과, 류마티스내과를 수없이 전전했습니다. 류마티스 인자나 염증 수치는 다 정상인데 본인은 숨도 못 쉴 만큼 아팠습니다. 섬유근육통은 통증을 전달하고 억제하는 중추 신경계 신경전달물질의 교란과 자율신경 실조가 근본 원인이라는 해아림의 설명을 듣고 희망을 품었습니다. 굳어있던 심부 척추 신경근을 이완하는 침 치료와 기혈 순환 탕약을 3개월간 복용했습니다. 찌르는 듯한 전신 유주성 통증이 80% 이상 줄어들었고, 이제는 손자들과 함께 공원 산책을 다닐 정도로 거동이 편안해졌습니다.",
+                    "author": "60대 은퇴자 신OO 님",
+                    "date": "2017.09.11",
+                    "views": 495,
+                    "image": "/images/reviews/review_6.jpg"
+            },
+            {
+                    "id": "rev-clinical-13-1449091200000",
+                    "category": "가슴두근거림 & 공황",
+                    "title": "수업 중 갑작스런 호흡곤란과 심장 발작으로 쓰러질 뻔했던 공황 증상, 교단에 당당히 섰습니다",
+                    "content": "학생들 앞에서 강의를 하던 도중 갑자기 목구멍이 좁아지는 느낌과 함께 숨을 들이마실 수 없었고 심장이 분당 120회로 미친 듯이 뛰었습니다. 교단에 서는 것이 공포가 되어 병가를 내고 정신과 약을 복용했지만 멍하고 둔해지는 부작용 때문에 수업 진행이 어려웠습니다. 해아림한의원에서 자율신경계 급발진을 안정시키는 한약과 심호흡 이완 훈련을 시작했습니다. 첫 3주간의 집중 치료를 거치며 심장의 안정을 찾았고, 2달 후에는 약 없이도 떨림이나 과호흡 없이 50분 수업을 힘차게 마칠 수 있게 되었습니다. 저처럼 공황과 자율신경 장애로 고통받는 선생님들께 강력히 추천합니다.",
+                    "author": "30대 교사 오OO 님",
+                    "date": "2015.12.03",
+                    "views": 521,
+                    "image": "/images/reviews/review_1.jpg"
+            },
+            {
+                    "id": "rev-clinical-14-1376870400000",
+                    "category": "만성 어지럼증 & 불면",
+                    "title": "엘리베이터도 못 탈 만큼 심각했던 회전성 어지럼증과 3년 불면증, 한방 치료로 완치했습니다",
+                    "content": "천장이 뱅글뱅글 도는 이석증을 앓고 난 뒤, 이석은 제자리에 들어갔다는데도 어지럼증과 울렁거림 잔여 증상이 1년 넘게 지속되었습니다. 특히 마트나 백화점처럼 사람이 붐비고 조명이 화려한 곳에 가면 뇌가 과부하 걸리며 쓰러질 것 같았습니다. 해아림에서 전정신경계와 자율신경계가 만성적으로 불안정해진 '지속성 체위-지각 어지럼증(PPPD)' 상태로 진단받고, 뇌신경 밸런스를 바로잡는 청훈탕과 두개천골요법을 병행했습니다. 한 달 치료 후 마트 쇼핑이 가능해졌고, 3개월 치료 후에는 엘리베이터와 에스컬레이터도 두려움 없이 탑승하게 되었습니다. 깊은 밤 편안한 수면까지 덤으로 얻었습니다.",
+                    "author": "40대 주부 권OO 님",
+                    "date": "2013.08.19",
+                    "views": 610,
+                    "image": "/images/reviews/review_2.jpg"
+            },
+            {
+                    "id": "rev-clinical-15-1322438400000",
+                    "category": "만성 위장장애 & 담적",
+                    "title": "신경성 위경련으로 10년 동안 밥을 못 먹고 응급실을 오가던 위장병, 해아림 한약으로 완전히 나았습니다",
+                    "content": "스트레스만 받으면 위장이 쥐어짜듯 뒤틀리며 극심한 경련이 발생해 119 구급차를 탄 것만 10번이 넘습니다. 대학병원 위장관 조영술과 내시경 검사를 매년 반복해도 \"신경성 위경련이니 마음을 편히 가지라\"는 허탈한 답변뿐이었습니다. 지인의 강력한 추천으로 해아림한의원을 찾아 자율신경과 위장관 연동 신경망을 안정시키는 맞춤 치료를 시작했습니다. 복부 담적을 삭히고 간위불화(肝胃不和)를 해소하는 탕약을 복용하자 2주 만에 복부 팽만과 위경련 조짐이 사라졌습니다. 3달 완치 프로그램을 마친 후 지난 10년 동안 단 한 번도 위경련이 재발하지 않았으며, 지금도 감사한 마음으로 건강하게 사업을 운영하고 있습니다.",
+                    "author": "50대 사업가 배OO 님",
+                    "date": "2011.11.28",
+                    "views": 742,
+                    "image": "/images/reviews/review_3.jpg"
+            }
+    ];
 
       var defaultColumnsList = [
               {
@@ -1289,40 +1452,37 @@
       // 2. High-Precision Chronological Scoring Function (가장 최근 등록순 / 시간순 계산)
       function getItemTimeScore(item, index, totalLength) {
         if (!item) return 0;
-        var dateScore = 0;
-        if (item.date) {
-          var cleanDate = String(item.date).replace(/\./g, '-').trim();
-          var td = new Date(cleanDate).getTime();
-          if (!isNaN(td)) dateScore = td;
-        }
         var idStr = String(item.id || '');
         var idMatch = idStr.match(/(\d{10,14})/);
         var idTimestamp = idMatch ? parseInt(idMatch[1], 10) : 0;
+        if (idTimestamp >= 1000000000 && idTimestamp < 10000000000) idTimestamp *= 1000;
+
+        if (idTimestamp >= 1577836800000) {
+          return idTimestamp;
+        }
+
+        var dateScore = 0;
+        if (item.date) {
+          var cleanDate = String(item.date).replace(/\./g, '-').trim();
+          if (/^\d{4}-\d{2}-\d{2}$/.test(cleanDate)) cleanDate += 'T00:00:00+09:00';
+          var td = new Date(cleanDate).getTime();
+          if (!isNaN(td)) dateScore = td;
+        }
 
         var subDayOffset = 0;
-        if (idTimestamp > 0) {
-          if (dateScore > 0 && idTimestamp >= dateScore && idTimestamp < dateScore + 86400000) {
-            return idTimestamp;
-          }
-          subDayOffset = idTimestamp % 86400000;
+        var ytMatch = idStr.match(/^yt-(\d+)$/i);
+        if (ytMatch) {
+          subDayOffset = 100000 - parseInt(ytMatch[1], 10) * 1000;
         } else {
-          var ytMatch = idStr.match(/^yt-(\d+)$/i);
-          if (ytMatch) {
-            subDayOffset = 10000 - parseInt(ytMatch[1], 10);
+          var colIdx = item.colIndex || item.poolIndex || 0;
+          if (colIdx > 0) {
+            subDayOffset = colIdx * 1000;
           } else {
-            var colIdx = item.colIndex || item.poolIndex || 0;
-            if (colIdx > 0) {
-              subDayOffset = colIdx;
-            } else {
-              subDayOffset = (totalLength - (index || 0));
-            }
+            subDayOffset = (totalLength - (index || 0));
           }
         }
 
-        if (dateScore > 0) {
-          return dateScore + subDayOffset;
-        }
-        if (idTimestamp > 0) return idTimestamp;
+        if (dateScore > 0) return dateScore + subDayOffset;
         return subDayOffset;
       }
 
@@ -1463,6 +1623,390 @@
       }
 
       // 8. Main Dynamic Community Synchronization Function
+      // 8. Robust Deletion Checker across all 4 community areas
+      var PERMANENT_DELETED_REVIEW_IDS = ['reviews-1788884300000', 'reviews-1788878779980', 'reviews-1788884500000'];
+
+      function isItemDeleted(boardKey, item) {
+        if (!item) return true;
+        var strId = item.id ? String(item.id).trim() : '';
+
+        // Explicitly block deleted test reviews
+        if (boardKey === 'reviews') {
+          if (PERMANENT_DELETED_REVIEW_IDS.indexOf(strId) !== -1) return true;
+          var rawTitle = String(item.title || '');
+          if (rawTitle.indexOf('테스트치료후기') !== -1 || rawTitle.indexOf('테스트를 해보려고합니다') !== -1 || rawTitle.indexOf('테스트를해보려고합니다') !== -1) {
+            return true;
+          }
+        }
+
+        // Check board-specific deleted IDs
+        try {
+          var delList = JSON.parse(localStorage.getItem('healim_deleted_posts_' + boardKey) || '[]');
+          if (Array.isArray(delList)) {
+            if (strId && delList.indexOf(strId) !== -1) return true;
+            if (item.title && delList.indexOf(item.title) !== -1) return true;
+          }
+        } catch(e) {}
+
+        // Check global deleted posts
+        try {
+          var globalDel = JSON.parse(localStorage.getItem('healim_deleted_posts_all') || '[]');
+          if (Array.isArray(globalDel) && strId && globalDel.indexOf(strId) !== -1) return true;
+        } catch(e) {}
+        try {
+          var postIdsDel = JSON.parse(localStorage.getItem('healim_deleted_post_ids') || '[]');
+          if (Array.isArray(postIdsDel) && strId && postIdsDel.indexOf(strId) !== -1) return true;
+        } catch(e) {}
+
+        // Check YouTube deleted IDs
+        if (boardKey === 'youtube') {
+          var vId = extractYoutubeId(item.videoEmbed || item.thumb || item.youtubeUrl || '');
+          try {
+            var ytDel = JSON.parse(localStorage.getItem('healim_deleted_youtube_ids') || '[]');
+            if (Array.isArray(ytDel)) {
+              if (vId && ytDel.indexOf(vId) !== -1) return true;
+              if (strId && ytDel.indexOf(strId) !== -1) return true;
+            }
+          } catch(e) {}
+        }
+
+        return false;
+      }
+
+      // 9. One-time Client Storage & IndexedDB Cleanup for Deleted Reviews
+      function purgeClientDeletedCache() {
+        try {
+          var revDelKey = 'healim_deleted_posts_reviews';
+          var curDel = [];
+          try { curDel = JSON.parse(localStorage.getItem(revDelKey) || '[]'); } catch(e) {}
+          PERMANENT_DELETED_REVIEW_IDS.forEach(function(dId) {
+            if (curDel.indexOf(dId) === -1) curDel.push(dId);
+          });
+          localStorage.setItem(revDelKey, JSON.stringify(curDel));
+
+          try {
+            var gDel = JSON.parse(localStorage.getItem('healim_deleted_post_ids') || '[]');
+            PERMANENT_DELETED_REVIEW_IDS.forEach(function(dId) {
+              if (gDel.indexOf(dId) === -1) gDel.push(dId);
+            });
+            localStorage.setItem('healim_deleted_post_ids', JSON.stringify(gDel));
+          } catch(e) {}
+
+          ['healim_board_reviews', 'healim_vault_all_posts_reviews', 'healim_custom_reviews_posts', 'healim_community_posts_v2'].forEach(function(k) {
+            var raw = localStorage.getItem(k);
+            if (raw) {
+              try {
+                var arr = JSON.parse(raw);
+                if (Array.isArray(arr)) {
+                  var filtered = arr.filter(function(it) {
+                    if (!it) return false;
+                    var sId = String(it.id || '');
+                    if (PERMANENT_DELETED_REVIEW_IDS.indexOf(sId) !== -1) return false;
+                    var t = String(it.title || '');
+                    if (t.indexOf('테스트치료후기') !== -1 || t.indexOf('테스트를 해보려고합니다') !== -1 || t.indexOf('테스트를해보려고합니다') !== -1) return false;
+                    return true;
+                  });
+                  if (filtered.length !== arr.length) {
+                    localStorage.setItem(k, JSON.stringify(filtered));
+                  }
+                }
+              } catch(e) {}
+            }
+          });
+
+          // Deep purge in IndexedDB
+          if (window.indexedDB) {
+            try {
+              var req = window.indexedDB.open('HealimCommunityDB', 1);
+              req.onsuccess = function(e) {
+                var db = e.target.result;
+                if (!db || !db.objectStoreNames.contains('community_vault')) return;
+                var tx = db.transaction('community_vault', 'readwrite');
+                var store = tx.objectStore('community_vault');
+                var gReq = store.get('reviews');
+                gReq.onsuccess = function() {
+                  if (gReq.result && Array.isArray(gReq.result.data)) {
+                    var vClean = gReq.result.data.filter(function(it) {
+                      if (!it) return false;
+                      var sId = String(it.id || '');
+                      if (PERMANENT_DELETED_REVIEW_IDS.indexOf(sId) !== -1) return false;
+                      var t = String(it.title || '');
+                      if (t.indexOf('테스트치료후기') !== -1 || t.indexOf('테스트를 해보려고합니다') !== -1 || t.indexOf('테스트를해보려고합니다') !== -1) return false;
+                      return true;
+                    });
+                    store.put({ storeKey: 'reviews', data: vClean, updatedAt: Date.now() });
+                  }
+                };
+              };
+            } catch(e) {}
+          }
+        } catch(e) {}
+      }
+      purgeClientDeletedCache();
+
+      // 10. Universal Detail Modal System for Bottom Sections
+      window.openCommonBottomDetail = function(boardType, postId) {
+        if (!boardType || !postId) return;
+        var targetStrId = String(postId).trim();
+
+        // Medical law gate for reviews (의료법 제56조 준수)
+        if (boardType === 'reviews') {
+          var rawUser = localStorage.getItem('healim_auth_user');
+          var isAdmin = false;
+          if (rawUser) {
+            try {
+              var u = JSON.parse(rawUser);
+              if (u.role === 'admin' || u.uid === 'healim0071' || u.grade === 'superadmin') isAdmin = true;
+            } catch(e) {}
+          }
+          if (!rawUser && !isAdmin) {
+            var confirmLogin = confirm('치료후기는 환자의 개인정보 보호 및 의료법 제56조에 의거하여 로그인한 회원만 열람하실 수 있습니다.\n로그인 페이지로 이동하시겠습니까?');
+            if (confirmLogin) {
+              var backUrl = encodeURIComponent(window.location.pathname + '#reviews');
+              window.location.href = '/login/?back_url=' + backUrl;
+            }
+            return;
+          }
+        }
+
+        // Locate item across realtime board data (authoritative live master)
+        var candidateList = getRealtimeBoardData(boardType);
+
+        var item = candidateList.find(function(it) {
+          if (!it) return false;
+          if (String(it.id) === targetStrId) return true;
+          if (boardType === 'youtube') {
+            var vId = extractYoutubeId(it.videoEmbed || it.thumb || it.youtubeUrl || '');
+            if (vId && vId === targetStrId) return true;
+          }
+          return false;
+        });
+
+        if (!item) {
+          item = candidateList.find(function(it) {
+            return it && it.title && it.title === targetStrId;
+          });
+        }
+
+        if (!item) {
+          if (typeof window.openDetailModal === 'function') {
+            window.openDetailModal(boardType, postId);
+            return;
+          }
+          window.location.href = '/community/?board=' + encodeURIComponent(boardType) + '&id=' + encodeURIComponent(postId);
+          return;
+        }
+
+        // Populate Modal Fields
+        var catEl = document.getElementById('commonBottomModalCategory');
+        if (catEl) {
+          catEl.textContent = item.category || (boardType === 'reviews' ? '치료후기' : (boardType === 'columns' ? '칼럼' : (boardType === 'youtube' ? '영상' : '자율신경 FAQ')));
+        }
+        var titleEl = document.getElementById('commonBottomModalTitle');
+        if (titleEl) {
+          titleEl.textContent = formatFaqTitle(item.title || '');
+        }
+        var authorEl = document.getElementById('commonBottomModalAuthor');
+        if (authorEl) {
+          authorEl.textContent = (item.author && item.author !== '익명') ? item.author : '해아림한의원';
+        }
+        var dateEl = document.getElementById('commonBottomModalDate');
+        if (dateEl) {
+          dateEl.textContent = item.date || '2026.09.09';
+        }
+        var viewsEl = document.getElementById('commonBottomModalViews');
+        if (viewsEl) {
+          item.views = (item.views || 0) + 1;
+          viewsEl.textContent = item.views;
+        }
+
+        // YouTube video area
+        var ytArea = document.getElementById('commonBottomModalYoutubeArea');
+        if (ytArea) {
+          if (boardType === 'youtube') {
+            var vId = extractYoutubeId(item.videoEmbed || item.thumb || item.youtubeUrl || targetStrId);
+            if (!vId) vId = '51rIQ1T5dIU';
+            ytArea.innerHTML = '<div class="relative w-full rounded-xl overflow-hidden shadow-lg border border-[#2b8894]" style="padding-top: 56.25%;"><iframe class="absolute inset-0 w-full h-full" src="https://www.youtube-nocookie.com/embed/' + vId + '?autoplay=1&rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>';
+            ytArea.style.display = 'block';
+          } else {
+            ytArea.innerHTML = '';
+            ytArea.style.display = 'none';
+          }
+        }
+
+        // Image area
+        var imgArea = document.getElementById('commonBottomModalImageArea');
+        var imgEl = document.getElementById('commonBottomModalImage');
+        var blurNotice = document.getElementById('commonBottomModalBlurNotice');
+        var displayImg = item.image || item.thumb || '';
+        if (boardType === 'youtube') displayImg = '';
+
+        if (displayImg) {
+          if (imgArea && imgEl) {
+            imgEl.src = displayImg;
+            imgArea.style.display = 'block';
+          }
+          if (blurNotice) {
+            blurNotice.style.display = (boardType === 'reviews') ? 'flex' : 'none';
+          }
+        } else {
+          if (imgArea) imgArea.style.display = 'none';
+          if (blurNotice) blurNotice.style.display = 'none';
+        }
+
+        // Content area
+        var contentEl = document.getElementById('commonBottomModalContent');
+        if (contentEl) {
+          var rawC = item.content || item.summary || '';
+          contentEl.innerHTML = renderFaqRichContent(rawC);
+        }
+
+        // Link to community tab
+        var moreLink = document.getElementById('commonBottomModalMoreLink');
+        if (moreLink) {
+          moreLink.href = '/community/#' + (boardType || 'reviews');
+          moreLink.onclick = function(e) { handleBottomMoreClick(e, boardType || 'reviews'); };
+        }
+
+        // Show Modal
+        var backdrop = document.getElementById('commonBottomDetailModalBackdrop');
+        if (backdrop) {
+          backdrop.style.display = 'flex';
+          backdrop.classList.add('is-open');
+        }
+      };
+
+      window.closeCommonBottomDetailModal = function() {
+        var backdrop = document.getElementById('commonBottomDetailModalBackdrop');
+        if (backdrop) {
+          backdrop.classList.remove('is-open');
+          backdrop.style.display = 'none';
+        }
+        var ytArea = document.getElementById('commonBottomModalYoutubeArea');
+        if (ytArea) ytArea.innerHTML = '';
+      };
+
+      // 11. Read More Navigation Handler
+      function handleBottomMoreClick(event, tabName) {
+        if (event) {
+          try { event.preventDefault(); } catch(e) {}
+        }
+        var curPath = (window.location.pathname || '').replace(/\/+$/, '');
+        if (curPath === '/community') {
+          if (typeof window.switchCommunityTab === 'function') {
+            window.switchCommunityTab(tabName);
+          }
+          var targetElem = document.getElementById(tabName) || document.getElementById('tab-pane-' + tabName) || document.getElementById('communityTabList');
+          if (targetElem) {
+            targetElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          try { history.replaceState(null, null, '/community/#' + tabName); } catch(e) {}
+          return false;
+        }
+        window.location.href = '/community/#' + tabName;
+        return false;
+      }
+      window.handleBottomMoreClick = handleBottomMoreClick;
+
+      
+      // 10. Real-time Cross-Tab BroadcastChannel Bus
+      var healimRealtimeChannel = null;
+      try {
+        if (typeof BroadcastChannel !== 'undefined') {
+          healimRealtimeChannel = new BroadcastChannel('healim_community_realtime_bus');
+          healimRealtimeChannel.onmessage = function(ev) {
+            syncBottomCommunity();
+          };
+        }
+      } catch(e) {}
+
+      window.broadcastHealimCommunityUpdate = function(boardType, action) {
+        try {
+          if (healimRealtimeChannel) {
+            healimRealtimeChannel.postMessage({ type: 'sync', boardType: boardType, action: action, timestamp: Date.now() });
+          }
+        } catch(e) {}
+        try {
+          window.dispatchEvent(new CustomEvent('healim-community-updated', { detail: { boardType: boardType, action: action } }));
+        } catch(e) {}
+        if (typeof window.syncBottomSections === 'function') {
+          window.syncBottomSections();
+        }
+      };
+
+      // 11. Unified Real-Time Category Data Fetcher (FAQ · 치료후기 · 칼럼 · 유튜브)
+      // Master concept: The 4 community categories are the source of truth, and bottom sections scrape/reflect them in real-time
+      function getRealtimeBoardData(boardKey) {
+        var defaultList = (boardKey === 'faq' ? defaultFaqList : (boardKey === 'reviews' ? defaultReviewsList : (boardKey === 'youtube' ? defaultYoutubeList : defaultColumnsList)));
+        var editedMap = {};
+        try { editedMap = JSON.parse(localStorage.getItem('healim_edited_posts_' + boardKey) || '{}'); } catch(e) {}
+
+        if (boardKey === 'youtube') {
+          var boardYt = [];
+          try { boardYt = JSON.parse(localStorage.getItem('healim_board_youtube') || '[]'); } catch(e) {}
+          var customYt = [];
+          try { customYt = JSON.parse(localStorage.getItem('healim_custom_youtube_posts') || '[]'); } catch(e) {}
+          var syncedYt = [];
+          try { syncedYt = JSON.parse(localStorage.getItem('healim_synced_youtube_posts') || '[]'); } catch(e) {}
+
+          var allYt = [];
+          if (boardYt.length > 0) {
+            allYt = mergeUniqueItems(customYt.concat(boardYt), defaultList);
+          } else {
+            allYt = mergeUniqueItems(customYt.concat(syncedYt), defaultList);
+          }
+
+          var mappedYt = allYt.map(function(it) {
+            if (it && it.id && editedMap[String(it.id)]) return editedMap[String(it.id)];
+            return it;
+          });
+          Object.keys(editedMap).forEach(function(eid) {
+            var ep = editedMap[eid];
+            if (ep && !mappedYt.some(function(it) { return String(it.id) === String(ep.id); })) {
+              mappedYt.unshift(ep);
+            }
+          });
+
+          return sortItemsByTime(mappedYt.filter(function(it) { return !isItemDeleted('youtube', it); }));
+        }
+
+        // For faq, reviews, columns:
+        var liveBoardPosts = [];
+        try { liveBoardPosts = JSON.parse(localStorage.getItem('healim_board_' + boardKey) || '[]'); } catch(e) {}
+        var customPosts = [];
+        try { customPosts = JSON.parse(localStorage.getItem('healim_custom_' + boardKey + '_posts') || '[]'); } catch(e) {}
+
+        var candidateList = [];
+        if (liveBoardPosts.length > 0) {
+          candidateList = mergeUniqueItems(customPosts.concat(liveBoardPosts), defaultList);
+        } else {
+          var vaultPosts = [];
+          try { vaultPosts = JSON.parse(localStorage.getItem('healim_vault_all_posts_' + boardKey) || '[]'); } catch(e) {}
+          candidateList = mergeUniqueItems(customPosts.concat(vaultPosts), defaultList);
+        }
+
+        // Apply authoritative user edits
+        var mapped = candidateList.map(function(it) {
+          if (it && it.id && editedMap[String(it.id)]) return editedMap[String(it.id)];
+          return it;
+        });
+        Object.keys(editedMap).forEach(function(eid) {
+          var ep = editedMap[eid];
+          if (ep && !mapped.some(function(it) { return String(it.id) === String(ep.id); })) {
+            mapped.unshift(ep);
+          }
+        });
+
+        // Strictly filter deleted items
+        var filtered = mapped.filter(function(it) { return !isItemDeleted(boardKey, it); });
+        return sortItemsByTime(filtered);
+      }
+      window.getRealtimeBoardData = getRealtimeBoardData;
+
+      // Track last rendered state for seamless real-time DOM updates without flicker
+      var lastRenderedCache = { faq: '', reviews: '', columns: '', youtube: '' };
+
+      // 12. Main Dynamic Community Synchronization Function (Real-Time Reactive)
       function syncBottomCommunity() {
         try {
           if (typeof window.checkAndRunAutoFaqPublish === 'function') {
@@ -1471,57 +2015,34 @@
           if (typeof window.checkAndRunAutoColumnPublish === 'function') {
             window.checkAndRunAutoColumnPublish(false);
           }
-          // Read all possible storage sources
-          var rawLegacy = localStorage.getItem('healim_community_posts_v2');
-          var legacyPosts = [];
-          if (rawLegacy) {
-            try { legacyPosts = JSON.parse(rawLegacy) || []; } catch(e) {}
-          }
 
           // -------------------------------------------------------------
-          // (1) FAQ Synchronization (최신 등록 시간순서대로 배치, 기본 닫힘 유지)
+          // (1) FAQ Real-time Synchronization
           // -------------------------------------------------------------
-          var isObsoleteFaqTitle = function(t) {
-            if (!t) return false;
-            var norm = String(t).replace(/^Q[\.:\s\-]+/i, '').replace(/[\s\*_~`#\?\.,\(\)\[\]:;\-]/g, '').toLowerCase();
-            return [
-              '검사상정상으로나오는데한방치료로개선이가능한가요',
-              '치료기간및호전경과는보통어떻게되나요',
-              '복용중인양약신경안정제수면제혈압약등과한약치료를병행할수있나요',
-              '교감신경항진증과부교감신경저하의차이점은무엇인가요',
-              '재발을방지하려면치료후어떤관리가필요한가요'
-            ].some(function(o) { return norm.indexOf(o) !== -1; });
-          };
-
-          var storedFaq = [];
-          var rawFaq = localStorage.getItem('healim_board_faq');
-          if (rawFaq) {
-            try { storedFaq = JSON.parse(rawFaq) || []; } catch(e) {}
-          }
-          storedFaq = storedFaq.filter(function(it) { return !isObsoleteFaqTitle(it.title, it); });
-          var legacyFaq = legacyPosts.filter(function(p) {
-            return (p.type === 'faq' || p.category === 'FAQ' || (p.id && String(p.id).startsWith('faq-'))) && !isObsoleteFaqTitle(p.title);
-          });
-          var allFaq = mergeUniqueItems(storedFaq.concat(legacyFaq), defaultFaqList);
-          var sortedFaq = sortItemsByTime(allFaq);
-
+          var sortedFaq = getRealtimeBoardData('faq');
           var faqContainer = document.getElementById('commonBottomFaqList');
           if (faqContainer && sortedFaq.length > 0) {
+            // Preserve currently open FAQ if user is reading it
+            var currentlyOpenId = '';
+            var openEl = faqContainer.querySelector('details[open]');
+            if (openEl) currentlyOpenId = openEl.getAttribute('data-faq-id') || '';
+
             var fHtml = '';
             sortedFaq.slice(0, 5).forEach(function(item) {
+              var safeFaqId = String(item.id || '').replace(/'/g, "\\'");
               var formattedTitle = formatFaqTitle(item.title);
               var richContent = renderFaqRichContent(item.content);
               var hasAnyImage = item.image || (item.content && (item.content.indexOf('![') !== -1 || item.content.indexOf('<img') !== -1));
               var photoBadge = hasAnyImage ? '<span class="text-[11px] font-bold px-1.5 py-0.5 rounded bg-[#f0f7f8] text-[#1c6e78] border border-[#badfe3] ml-1.5">📷 사진</span>' : '';
 
-              // 상단 대표 이미지 표시 (본문에 동일 이미지가 없을 경우)
               var imageHtml = '';
               if (item.image && richContent.indexOf(item.image) === -1) {
                 imageHtml = '<div class="my-3.5 rounded-xl overflow-hidden border border-[#badfe3] bg-[#f8fafb] max-w-lg shadow-xs"><img src="' + item.image + '" alt="' + formattedTitle + '" class="max-h-80 w-auto object-contain rounded-lg" loading="lazy" onerror="this.onerror=null; this.parentElement.style.display=\'none\';" /></div>';
               }
 
-              // 모든 질문은 기본적으로 닫힌 상태로 렌더링 (+ 아이콘 표시), 클릭 시에만 펼쳐짐
-              fHtml += '<details class="faq-item">' +
+              var isOpenAttr = (currentlyOpenId && currentlyOpenId === String(item.id)) ? ' open' : '';
+
+              fHtml += '<details class="faq-item" data-faq-id="' + safeFaqId + '"' + isOpenAttr + '>' +
                 '<summary>' +
                 '<span class="flex items-center gap-1.5 text-left">' +
                 '<span class="text-sm font-extrabold text-[#1c6e78]">Q.</span>' +
@@ -1532,52 +2053,34 @@
                 '<div class="faq-answer">' +
                 imageHtml +
                 '<div class="faq-content-body py-1 text-sm text-[#333333] leading-relaxed">' + richContent + '</div>' +
+                '<div class="mt-2 text-right"><button type="button" class="text-xs text-[#1c6e78] font-bold hover:underline cursor-pointer" onclick="event.stopPropagation(); openCommonBottomDetail(\'faq\', \'' + safeFaqId + '\')">팝업 전문보기 &gt;</button></div>' +
                 '</div>' +
                 '</details>';
             });
-            if (fHtml) faqContainer.innerHTML = fHtml;
+            if (fHtml && fHtml !== lastRenderedCache.faq) {
+              faqContainer.innerHTML = fHtml;
+              lastRenderedCache.faq = fHtml;
+            }
           }
 
           // -------------------------------------------------------------
-          // (2) 치료후기 Synchronization (최신 등록 시간순서대로 배치)
+          // (2) 치료후기 Real-time Synchronization (Medical Gate & Clickable)
           // -------------------------------------------------------------
-          var isObsoleteReviewTitle = function(t, item) {
-            if (!t) return false;
-            if (item && (item.isCustom || /^rev(iews)?-\d{8,}/.test(String(item.id || '')))) return false;
-            var norm = String(t).replace(/[\s\*_~`#\?\.,\(\)\[\]:;\-]/g, '').toLowerCase();
-            return [
-              '원인모를가슴두근거림과어지럼증3개월치료후일상복귀',
-              '매일밤괴롭히던불면과만성위장장애신경계안정찾았습니다',
-              '공황인줄알았던과호흡과식은땀자율신경교정으로극복',
-              '시도때도없는상열감과손발차가움이균형을되찾았습니다'
-            ].some(function(o) { return norm.indexOf(o) !== -1; });
-          };
-
-          var storedRev = [];
-          var rawRev = localStorage.getItem('healim_board_reviews');
-          if (rawRev) {
-            try { storedRev = JSON.parse(rawRev) || []; } catch(e) {}
-          }
-          storedRev = storedRev.filter(function(it) { return !isObsoleteReviewTitle(it.title, it); });
-          var legacyRev = legacyPosts.filter(function(p) {
-            return (p.type === 'reviews' || p.category === '치료후기' || (p.id && String(p.id).startsWith('rev-'))) && !isObsoleteReviewTitle(p.title);
-          });
-          var allRev = mergeUniqueItems(storedRev.concat(legacyRev), defaultReviewsList);
-          var sortedRev = sortItemsByTime(allRev);
-
+          var sortedRev = getRealtimeBoardData('reviews');
           var revContainer = document.getElementById('commonBottomReviewsList');
           if (revContainer && sortedRev.length > 0) {
             var rHtml = '';
             sortedRev.slice(0, 6).forEach(function(item) {
+              var safeRevId = String(item.id || '').replace(/'/g, "\\'");
               var cleanContent = (item.content || '').replace(/<img[^>]*>/gi, '[사진]').replace(/!\[.*?\]\(.*?\)/g, '[사진]').replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim();
               cleanContent = cleanContent.replace(/\*\*(.*?)\*\*/g, '$1').replace(/__(.*?)__/g, '$1').replace(/^#+\s*/g, '');
               if (cleanContent.length > 110) cleanContent = cleanContent.slice(0, 110) + '...';
               var img = item.image || item.thumb || '/images/reviews/review_1.jpg';
               var cat = item.category || '치료후기';
               var author = (item.author && item.author !== '익명') ? item.author : '해아림한의원';
-              var date = item.date || '';
+              var date = item.date || '2026.09.09';
 
-              rHtml += '<div class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col">' +
+              rHtml += '<div class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col cursor-pointer" onclick="openCommonBottomDetail(\'reviews\', \'' + safeRevId + '\')">' +
                 '<div class="relative overflow-hidden h-44 bg-slate-100">' +
                 '<img src="' + img + '" alt="치료후기 사진" class="bottom-review-blurred-img w-full h-full object-cover">' +
                 '<div class="absolute top-3 left-3 bg-[#0d3a42]/80 backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">🔒 의료법 보호 흐림처리</div>' +
@@ -1588,54 +2091,35 @@
                 '<p class="text-xs text-[#666666] leading-relaxed mb-4 flex-grow">' + cleanContent + '</p>' +
                 '<div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">' +
                 '<span>' + author + (date ? ' · ' + date : '') + '</span>' +
-                '<a href="/community/#reviews" class="text-[#1c6e78] font-semibold hover:underline">상세보기 &gt;</a>' +
+                '<a href="/community/?board=reviews&id=' + encodeURIComponent(safeRevId) + '" onclick="event.preventDefault(); event.stopPropagation(); openCommonBottomDetail(\'reviews\', \'' + safeRevId + '\')" class="text-[#1c6e78] font-semibold hover:underline">상세보기 &gt;</a>' +
                 '</div>' +
                 '</div>' +
                 '</div>';
             });
-            if (rHtml) revContainer.innerHTML = rHtml;
+            if (rHtml && rHtml !== lastRenderedCache.reviews) {
+              revContainer.innerHTML = rHtml;
+              lastRenderedCache.reviews = rHtml;
+            }
           }
 
           // -------------------------------------------------------------
-          // (3) 치료 칼럼 Synchronization (최신 등록 시간순서대로 배치)
+          // (3) 치료 칼럼 Real-time Synchronization
           // -------------------------------------------------------------
-          var isObsoleteColumnTitle = function(t) {
-            if (!t) return false;
-            var norm = String(t).replace(/^칼럼[\.:\s\-]+/i, '').replace(/[\s\*_~`#\?\.,\(\)\[\]:;\-]/g, '').toLowerCase();
-            return [
-              '현대인의보이지않는병자율신경불균형과장뇌축',
-              '현대인의보이지않는병자율신경불균형과뇌장신경축',
-              '두개천골요법cst이뇌척수액순환및미주신경활성에미치는임상적고찰',
-              '스트레스호르몬과바이오피드백자율신경회복식습관과수면리듬설계법',
-              '스트레스저항도를높이는자율신경회복식습관과수면리듬설계법'
-            ].some(function(o) { return norm.indexOf(o) !== -1; });
-          };
-
-          var storedCol = [];
-          var rawCol = localStorage.getItem('healim_board_columns');
-          if (rawCol) {
-            try { storedCol = JSON.parse(rawCol) || []; } catch(e) {}
-          }
-          storedCol = storedCol.filter(function(it) { return !isObsoleteColumnTitle(it.title, it); });
-          var legacyCol = legacyPosts.filter(function(p) {
-            return (p.type === 'columns' || p.category === '칼럼' || (p.id && String(p.id).startsWith('col-'))) && !isObsoleteColumnTitle(p.title);
-          });
-          var allCol = mergeUniqueItems(storedCol.concat(legacyCol), defaultColumnsList);
-          var sortedCol = sortItemsByTime(allCol);
-
+          var sortedCol = getRealtimeBoardData('columns');
           var colContainer = document.getElementById('commonBottomColumnsList');
           if (colContainer && sortedCol.length > 0) {
             var cHtml = '';
             sortedCol.slice(0, 3).forEach(function(item) {
+              var safeColId = String(item.id || '').replace(/'/g, "\\'");
               var cleanContent = (item.content || '').replace(/<img[^>]*>/gi, '[사진]').replace(/!\[.*?\]\(.*?\)/g, '[사진]').replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim();
               cleanContent = cleanContent.replace(/\*\*(.*?)\*\*/g, '$1').replace(/__(.*?)__/g, '$1').replace(/^#+\s*/g, '');
               if (cleanContent.length > 110) cleanContent = cleanContent.slice(0, 110) + '...';
               var img = item.image || item.thumb || '/images/columns/column_1_palpitation.svg';
               var cat = item.category || '칼럼';
               var author = item.author || '해아림한의원';
-              var date = item.date || '';
+              var date = item.date || '2026.09.09';
 
-              cHtml += '<a href="/community/#columns" class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group text-left">' +
+              cHtml += '<div onclick="openCommonBottomDetail(\'columns\', \'' + safeColId + '\')" class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group text-left cursor-pointer">' +
                 '<div class="overflow-hidden h-44 bg-slate-100">' +
                 '<img src="' + img + '" alt="의학 칼럼" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">' +
                 '</div>' +
@@ -1645,57 +2129,29 @@
                 '<p class="text-xs text-[#666666] leading-relaxed mb-4 flex-grow">' + cleanContent + '</p>' +
                 '<div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">' +
                 '<span>' + author + (date ? ' · ' + date : '') + '</span>' +
-                '<span class="text-[#1c6e78] font-semibold">읽기 &gt;</span>' +
+                '<a href="/community/?board=columns&id=' + encodeURIComponent(safeColId) + '" onclick="event.preventDefault(); event.stopPropagation(); openCommonBottomDetail(\'columns\', \'' + safeColId + '\')" class="text-[#1c6e78] font-semibold hover:underline">읽기 &gt;</a>' +
                 '</div>' +
                 '</div>' +
-                '</a>';
+                '</div>';
             });
-            if (cHtml) colContainer.innerHTML = cHtml;
+            if (cHtml && cHtml !== lastRenderedCache.columns) {
+              colContainer.innerHTML = cHtml;
+              lastRenderedCache.columns = cHtml;
+            }
           }
 
           // -------------------------------------------------------------
-          // (4) 유튜브 동영상 Synchronization (최신 등록 시간순서대로 배치)
+          // (4) 유튜브 동영상 Real-time Synchronization
           // -------------------------------------------------------------
-          var deletedYtIds = [];
-          var rawDel = localStorage.getItem('healim_deleted_youtube_ids');
-          if (rawDel) {
-            try { deletedYtIds = JSON.parse(rawDel) || []; } catch(e) {}
-          }
-
-          var customYt = [];
-          var rawCustomYt = localStorage.getItem('healim_custom_youtube_posts');
-          if (rawCustomYt) {
-            try { customYt = JSON.parse(rawCustomYt) || []; } catch(e) {}
-          }
-
-          var syncedYt = [];
-          var rawSyncedYt = localStorage.getItem('healim_synced_youtube_posts');
-          if (rawSyncedYt) {
-            try { syncedYt = JSON.parse(rawSyncedYt) || []; } catch(e) {}
-          }
-
-          var storedYt = [];
-          var rawStoredYt = localStorage.getItem('healim_board_youtube');
-          if (rawStoredYt) {
-            try { storedYt = JSON.parse(rawStoredYt) || []; } catch(e) {}
-          }
-
-          var allYt = mergeUniqueItems(customYt.concat(syncedYt).concat(storedYt), defaultYoutubeList);
-          // Filter out deleted videos
-          allYt = allYt.filter(function(item) {
-            var vId = extractYoutubeId(item.videoEmbed || item.thumb || item.youtubeUrl || '');
-            if (vId && deletedYtIds.indexOf(vId) !== -1) return false;
-            if (item.id && deletedYtIds.indexOf(item.id) !== -1) return false;
-            return true;
-          });
-          var sortedYt = sortItemsByTime(allYt);
-
+          var sortedYt = getRealtimeBoardData('youtube');
           var ytContainer = document.getElementById('commonBottomYoutubeList');
           if (ytContainer && sortedYt.length > 0) {
             var yHtml = '';
             sortedYt.slice(0, 3).forEach(function(item) {
               var vId = extractYoutubeId(item.videoEmbed || item.thumb || item.youtubeUrl || '');
               if (!vId) vId = '51rIQ1T5dIU';
+              var targetYtId = item.id || vId;
+              var safeTargetYtId = String(targetYtId).replace(/'/g, "\\'");
               var thumb = item.thumb || ('https://img.youtube.com/vi/' + vId + '/maxresdefault.jpg');
               if (thumb.indexOf('/hqdefault.jpg') !== -1) {
                 thumb = thumb.replace('/hqdefault.jpg', '/maxresdefault.jpg');
@@ -1705,7 +2161,7 @@
               var cat = item.category || '영상';
               var author = item.author || '해아림TV 알쓸한상';
 
-              yHtml += '<a href="/community/#youtube" class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group text-left">' +
+              yHtml += '<div onclick="openCommonBottomDetail(\'youtube\', \'' + safeTargetYtId + '\')" class="bg-white rounded-xl border border-[#e0eaec] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group text-left cursor-pointer">' +
                 '<div class="relative overflow-hidden h-44 bg-slate-900">' +
                 '<img src="' + thumb + '" alt="' + (item.title || '유튜브 영상') + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="if(!this.dataset.fallback){this.dataset.fallback=\'1\';this.src=\'https://img.youtube.com/vi/' + vId + '/hqdefault.jpg\';}">' +
                 '<div class="absolute inset-0 flex items-center justify-center">' +
@@ -1720,12 +2176,15 @@
                 '<p class="text-xs text-[#666666] leading-relaxed mb-4 flex-grow">' + cleanContent + '</p>' +
                 '<div class="pt-3 border-t border-[#f0f4f5] flex items-center justify-between text-xs text-[#888888]">' +
                 '<span>' + author + '</span>' +
-                '<span class="text-[#1c6e78] font-semibold">시청하기 &gt;</span>' +
+                '<a href="/community/?board=youtube&id=' + encodeURIComponent(safeTargetYtId) + '" onclick="event.preventDefault(); event.stopPropagation(); openCommonBottomDetail(\'youtube\', \'' + safeTargetYtId + '\')" class="text-[#1c6e78] font-semibold hover:underline">시청하기 &gt;</a>' +
                 '</div>' +
                 '</div>' +
-                '</a>';
+                '</div>';
             });
-            if (yHtml) ytContainer.innerHTML = yHtml;
+            if (yHtml && yHtml !== lastRenderedCache.youtube) {
+              ytContainer.innerHTML = yHtml;
+              lastRenderedCache.youtube = yHtml;
+            }
           }
         } catch(e) {
           console.warn('하단 공통 섹션 동기화 오류:', e);
@@ -1734,9 +2193,9 @@
 
       window.syncBottomSections = syncBottomCommunity;
 
+      // 13. Remote Synchronization Engine (Hub & Cloud DB)
       function fetchRemoteSyncIfAvailable() {
         if (!window.fetch) return;
-        // 1. Fetch static hub data from web server (production-ready cross-browser)
         fetch('/data/healim_community_hub.json?t=' + Date.now(), { cache: 'no-cache' })
           .then(function(res) {
             if (!res.ok) throw new Error('Static hub data unavailable');
@@ -1746,12 +2205,35 @@
             var data = json.data || json;
             if (data) {
               var didUpdate = false;
+              if (Array.isArray(data.deleted_ids) && data.deleted_ids.length > 0) {
+                ['faq', 'reviews', 'columns', 'youtube'].forEach(function(bKey) {
+                  var dKey = 'healim_deleted_posts_' + bKey;
+                  var curDel = [];
+                  try { curDel = JSON.parse(localStorage.getItem(dKey) || '[]'); } catch(e) {}
+                  data.deleted_ids.forEach(function(dId) {
+                    if (curDel.indexOf(dId) === -1) {
+                      curDel.push(dId);
+                      didUpdate = true;
+                    }
+                  });
+                  localStorage.setItem(dKey, JSON.stringify(curDel));
+                });
+              }
+
               ['faq', 'reviews', 'columns', 'youtube'].forEach(function(bKey) {
                 if (Array.isArray(data[bKey]) && data[bKey].length > 0) {
                   var vKey = 'healim_vault_all_posts_' + bKey;
                   var rawV = localStorage.getItem(vKey);
                   var localList = rawV ? (JSON.parse(rawV) || []) : [];
-                  var merged = mergeUniqueItems(data[bKey], localList);
+                  var editedMap = {};
+                  try { editedMap = JSON.parse(localStorage.getItem('healim_edited_posts_' + bKey) || '{}'); } catch(e) {}
+
+                  var merged = mergeUniqueItems(localList, data[bKey])
+                    .map(function(it) {
+                      return (it && it.id && editedMap[String(it.id)]) ? editedMap[String(it.id)] : it;
+                    })
+                    .filter(function(it) { return !isItemDeleted(bKey, it); });
+
                   localStorage.setItem(vKey, JSON.stringify(merged));
                   localStorage.setItem('healim_board_' + bKey, JSON.stringify(merged));
                   didUpdate = true;
@@ -1771,7 +2253,8 @@
                   var didUpdate = false;
                   ['faq', 'reviews', 'columns', 'youtube'].forEach(function(bKey) {
                     if (Array.isArray(data[bKey]) && data[bKey].length > 0) {
-                      localStorage.setItem('healim_board_' + bKey, JSON.stringify(data[bKey]));
+                      var filtered = data[bKey].filter(function(it) { return !isItemDeleted(bKey, it); });
+                      localStorage.setItem('healim_board_' + bKey, JSON.stringify(filtered));
                       didUpdate = true;
                     }
                   });
@@ -1782,6 +2265,7 @@
           });
       }
 
+      // 14. Real-time Multi-Trigger Event Listeners
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
           syncBottomCommunity();
@@ -1792,13 +2276,36 @@
         setTimeout(fetchRemoteSyncIfAvailable, 100);
       }
 
-      window.addEventListener('storage', syncBottomCommunity);
-      window.addEventListener('healim-community-updated', syncBottomCommunity);
-      window.addEventListener('healim-cloud-db-updated', syncBottomCommunity);
-      window.addEventListener('pageshow', syncBottomCommunity);
+      // (1) Cross-tab storage change listener
+      window.addEventListener('storage', function(e) {
+        if (!e.key || e.key.indexOf('healim_') === 0) {
+          syncBottomCommunity();
+        }
+      });
+
+      // (2) Custom intra-window event listeners
+      window.addEventListener('healim-community-updated', function() { syncBottomCommunity(); });
+      window.addEventListener('healim-cloud-db-updated', function() { syncBottomCommunity(); });
+      window.addEventListener('healim-post-saved', function() { syncBottomCommunity(); });
+      window.addEventListener('healim-post-deleted', function() { syncBottomCommunity(); });
+
+      // (3) Page lifecycle listeners (BFCache restore & Tab focus)
+      window.addEventListener('pageshow', function() { syncBottomCommunity(); });
+      window.addEventListener('focus', function() { syncBottomCommunity(); });
+      document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) syncBottomCommunity();
+      });
+
+      // (4) Cloud DB reactive callback
       if (window.HealimCloudDB && window.HealimCloudDB.onUpdate) {
         window.HealimCloudDB.onUpdate(function() { syncBottomCommunity(); });
       }
+
+      // (5) Real-time Heartbeat Polling (Every 2.5 seconds ensures 100% synchronization)
+      setInterval(syncBottomCommunity, 2500);
+
+      // (6) Background remote data poll (Every 20 seconds)
+      setInterval(fetchRemoteSyncIfAvailable, 20000);
     })();
     </script>
 
