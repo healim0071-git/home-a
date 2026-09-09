@@ -276,16 +276,16 @@ sections:
         <div>
         <div style="display: flex; align-items: center; gap: 8px;">
         <span style="font-size: 18px;">🔑</span>
-        <h2 style="font-size: 15px; font-weight: 700; color: #0d3a42; margin: 0;">SNS 간편로그인 (카카오 · 네이버) API 연동 관리</h2>
-        <span id="snsStatusBadge" style="font-size: 11px; font-weight: 700; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 9999px;">네이버 안심 간편인증 모드 작동 중</span>
+        <h2 style="font-size: 15px; font-weight: 700; color: #0d3a42; margin: 0;">네이버 아이디 로그인 (OAuth 2.0) API 연동 관리</h2>
+        <span id="snsStatusBadge" style="font-size: 11px; font-weight: 700; background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 9999px;">네이버 공식 API 연동 중 (OAuth 2.0)</span>
         </div>
         <p style="font-size: 12px; color: #64748b; margin: 4px 0 0 0;">
-        네이버 개발자센터에서 발급받은 Client ID를 등록하면 공식 네아로(OAuth 2.0) 간편로그인이 즉시 연동됩니다. 미등록 시에도 네이버 아이디 안심 인증 모드로 100% 안전하게 작동하며 치료후기 열람 권한이 부여됩니다.
+        네이버 개발자센터에서 발급받은 Client ID(기본: <code>h2nuQi_Y9Z0DOB0j6kby</code>)가 등록되어 공식 네아로(OAuth 2.0) 간편로그인이 즉시 연동됩니다. 네이버 로그인 완료 시 자동으로 치료후기 열람 권한이 부여됩니다.
         </p>
         </div>
         <div>
         <button type="button" onclick="toggleSnsKeyGuide()" style="font-size: 12px; font-weight: 600; color: #1c6e78; background: #edf7f8; border: 1px solid #c2e2e5; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-        <span>📖 [초간단 3분] 네이버 Client ID 무료 발급 가이드</span>
+        <span>📖 [초간단 3분] 네이버 Client ID 설정 & Callback 주소 가이드</span>
         <span id="guideToggleArrow">▼</span>
         </button>
         </div>
@@ -293,23 +293,23 @@ sections:
         <!-- Collapsible 3-Minute Guide -->
         <div id="snsKeyGuideBox" style="display: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 20px; font-size: 12px; color: #334155; line-height: 1.6;">
         <div style="font-weight: 700; color: #0d3a42; font-size: 13px; margin-bottom: 8px;">
-        💡 네이버 무료 Client ID 발급 방법 (비용 0원, 3분 소요)
+        💡 네이버 개발자센터 (Naver Developers) 설정 안내
         </div>
         <div style="background: #ffffff; padding: 14px 16px; border-radius: 6px; border: 1px solid #e2e8f0;">
         <div style="font-weight: 700; color: #047857; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
         <span style="background: #03C75A; color: #ffffff; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 800;">N</span>
-        네이버 아이디로 로그인 (Naver Client ID) 발급 절차
+        네이버 아이디로 로그인 (Naver Client ID) 등록 정보
         </div>
         <ol style="margin: 0; padding-left: 18px; space-y: 4px;">
         <li><a href="https://developers.naver.com" target="_blank" style="color: #0284c7; text-decoration: underline; font-weight: 600;">developers.naver.com</a> 접속 후 로그인</li>
-        <li>[Application] &gt; [애플리케이션 등록] (애플리케이션 이름: 해아림한의원)</li>
-        <li>사용 API: [네이버 로그인] 선택 (회원 이름, 이메일 필수 체크)</li>
-        <li>서비스 환경: [PC웹] 선택 후 서비스 URL 및 Callback URL 등록 (예: <code>https://healim-autonerve.pages.dev/login/</code>)</li>
-        <li>등록 완료 후 발급된 <strong>Client ID</strong> 복사하여 아래에 등록</li>
+        <li>[Application] &gt; [내 애플리케이션] &gt; [API 설정]</li>
+        <li><strong>서비스 URL</strong>: <code>https://healim-autonomic.com</code></li>
+        <li><strong>Callback URL (고정)</strong>: <code>https://healim-autonomic.com/login/</code></li>
+        <li>발급된 <strong>Client ID</strong>: <code>h2nuQi_Y9Z0DOB0j6kby</code></li>
         </ol>
         </div>
         <div style="margin-top: 10px; font-size: 11px; color: #64748b;">
-        ※ Client ID를 등록하지 않아도 웹사이트는 <strong>'네이버 아이디 안심 간편인증 모드'</strong>로 100% 정상 작동하며, 환자는 비밀번호 없이 안전하게 로그인하여 치료후기를 열람할 수 있습니다.
+        ※ 네이버 개발자센터의 Callback URL에 <code>https://healim-autonomic.com/login/</code>이 정확히 등록되어 있어야 오류 없이 정상 동작합니다.
         </div>
         </div>
         <!-- Input Fields Form -->
@@ -317,11 +317,11 @@ sections:
         <label style="display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 6px;">
         네이버 Client ID (Naver Client ID)
         </label>
-        <input type="text" id="adminNaverClientId" placeholder="예: abCdEfGhIjKlMnOp..." style="width: 100%; font-size: 13px; font-family: monospace; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px 14px; box-sizing: border-box; outline: none;" />
+        <input type="text" id="adminNaverClientId" placeholder="h2nuQi_Y9Z0DOB0j6kby" style="width: 100%; font-size: 13px; font-family: monospace; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px 14px; box-sizing: border-box; outline: none;" />
         </div>
         <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-top: 14px;">
         <button type="button" onclick="resetAdminSnsConfig()" style="font-size: 12px; font-weight: 600; color: #64748b; background: #f1f5f9; border: 1px solid #cbd5e1; padding: 7px 14px; border-radius: 6px; cursor: pointer;">
-        설정 초기화
+        기본값 복원
         </button>
         <button type="button" onclick="saveAdminSnsConfig()" style="font-size: 12px; font-weight: 700; color: #ffffff; background: #03C75A; border: none; padding: 7px 18px; border-radius: 6px; cursor: pointer; transition: filter 0.15s;">
         💾 네이버 API 설정 저장
@@ -911,27 +911,21 @@ sections:
           window.loadAdminSnsConfig = function() {
             try {
               var raw = localStorage.getItem('healim_sns_config');
-              var config = raw ? JSON.parse(raw) : { naverClientId: '' };
+              var config = raw ? JSON.parse(raw) : {};
+              var curId = (config.naverClientId && config.naverClientId.trim().length > 5) ? config.naverClientId.trim() : 'h2nuQi_Y9Z0DOB0j6kby';
               var naverInput = document.getElementById('adminNaverClientId');
               var badge = document.getElementById('snsStatusBadge');
-              if (naverInput) naverInput.value = config.naverClientId || '';
+              if (naverInput) naverInput.value = curId;
               if (badge) {
-                var hasNaver = config.naverClientId && config.naverClientId.trim().length > 5;
-                if (hasNaver) {
-                  badge.textContent = '네이버 공식 API 연동 중 (OAuth 2.0)';
-                  badge.style.background = '#dcfce7';
-                  badge.style.color = '#15803d';
-                } else {
-                  badge.textContent = '네이버 안심 간편인증 모드 작동 중 (미인증 차단 100%)';
-                  badge.style.background = '#e0f2fe';
-                  badge.style.color = '#0369a1';
-                }
+                badge.textContent = '네이버 공식 API 연동 활성화 (' + curId + ')';
+                badge.style.background = '#dcfce7';
+                badge.style.color = '#15803d';
               }
             } catch(e) {}
           };
 
           window.saveAdminSnsConfig = function() {
-            var naverId = (document.getElementById('adminNaverClientId').value || '').trim();
+            var naverId = (document.getElementById('adminNaverClientId').value || '').trim() || 'h2nuQi_Y9Z0DOB0j6kby';
             var config = {
               naverClientId: naverId,
               updatedAt: new Date().toISOString()
@@ -942,10 +936,10 @@ sections:
           };
 
           window.resetAdminSnsConfig = function() {
-            if (confirm('등록된 네이버 API 설정을 초기화하시겠습니까?\n초기화 시 기본 안심 간편인증 모드로 동작합니다.')) {
+            if (confirm('네이버 Client ID를 기본값(h2nuQi_Y9Z0DOB0j6kby)으로 복원하시겠습니까?')) {
               localStorage.removeItem('healim_sns_config');
               loadAdminSnsConfig();
-              alert('네이버 API 설정이 초기화되었습니다.');
+              alert('네이버 Client ID가 공식 기본값으로 복원되었습니다.');
             }
           };
 

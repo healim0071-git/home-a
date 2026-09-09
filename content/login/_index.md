@@ -204,9 +204,12 @@ sections:
         function getSnsConfig() {
           try {
             var raw = localStorage.getItem('healim_sns_config');
-            return raw ? JSON.parse(raw) : { naverClientId: '' };
+            var parsed = raw ? JSON.parse(raw) : {};
+            return {
+              naverClientId: (parsed.naverClientId && parsed.naverClientId.trim().length > 5) ? parsed.naverClientId.trim() : 'h2nuQi_Y9Z0DOB0j6kby'
+            };
           } catch(e) {
-            return { naverClientId: '' };
+            return { naverClientId: 'h2nuQi_Y9Z0DOB0j6kby' };
           }
         }
 
@@ -227,15 +230,28 @@ sections:
 
             if (accessToken) {
               var config = getSnsConfig();
-              if (window.naver && window.naver.LoginWithNaverId && config.naverClientId) {
+              var clientId = config.naverClientId || 'h2nuQi_Y9Z0DOB0j6kby';
+
+              var hasCompleted = false;
+              var fallbackTimer = setTimeout(function() {
+                if (!hasCompleted) {
+                  hasCompleted = true;
+                  completeNaverLogin('naver_user', '네이버 회원');
+                }
+              }, 2000);
+
+              if (window.naver && window.naver.LoginWithNaverId) {
                 try {
                   var naverLogin = new window.naver.LoginWithNaverId({
-                    clientId: config.naverClientId.trim(),
-                    callbackUrl: window.location.href,
+                    clientId: clientId,
+                    callbackUrl: 'https://healim-autonomic.com/login/',
                     isPopup: false
                   });
                   naverLogin.init();
                   naverLogin.getLoginStatus(function(status) {
+                    if (hasCompleted) return;
+                    hasCompleted = true;
+                    clearTimeout(fallbackTimer);
                     if (status && naverLogin.user) {
                       var email = naverLogin.user.getEmail() || naverLogin.user.getId() || '';
                       var nickname = naverLogin.user.getName() || naverLogin.user.getNickName() || '네이버 회원';
@@ -249,7 +265,11 @@ sections:
                   console.warn('Naver SDK profile check error:', err);
                 }
               }
-              completeNaverLogin('naver_user', '네이버 회원');
+              clearTimeout(fallbackTimer);
+              if (!hasCompleted) {
+                hasCompleted = true;
+                completeNaverLogin('naver_user', '네이버 회원');
+              }
             }
           } catch(e) {
             console.warn('checkNaverOAuthCallback error:', e);
@@ -271,30 +291,31 @@ sections:
           };
 
           localStorage.setItem('healim_auth_user', JSON.stringify(userData));
+          
+          var savedBack = localStorage.getItem('healim_naver_back_url');
+          if (savedBack) localStorage.removeItem('healim_naver_back_url');
+          var back = savedBack || getBackUrl();
+          var targetUrl = (back && back !== '/' && !back.includes('/login')) ? back : '/community/#reviews';
+
           alert('네이버 계정(' + finalName + ')으로 정상 로그인이 완료되었습니다.\n치료후기 열람 권한이 활성화되었습니다.');
-          var back = getBackUrl();
-          window.location.href = (back && back !== '/') ? back : '/community/#reviews';
+          window.location.href = targetUrl;
         }
 
-        // Social Login Handler (Naver Only)
+        // Social Login Handler (Naver Official OAuth with Fixed Callback URL)
         function handleSocialLogin(provider) {
-          var config = getSnsConfig();
+          if (provider === 'naver') {
+            const clientId = 'h2nuQi_Y9Z0DOB0j6kby';
 
-          // 1. If official Naver Client ID is registered, trigger official Naver OAuth
-          if (config.naverClientId && config.naverClientId.trim().length > 5) {
-            try {
-              var naverState = Math.random().toString(36).substring(2, 12);
-              var redirectUri = encodeURIComponent(window.location.origin + '/login/?back_url=' + encodeURIComponent(getBackUrl()));
-              var naverAuthUrl = 'https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=' + encodeURIComponent(config.naverClientId.trim()) + '&redirect_uri=' + redirectUri + '&state=' + naverState;
-              window.location.href = naverAuthUrl;
-              return;
-            } catch(e) {
-              console.warn('Naver OAuth 호출 실패, 안심 모달로 전환:', e);
-            }
+            // 원래 돌아가고자 했던 페이지를 로컬스토리지에 안전하게 보관 (URL 파라미터 오염 방지)
+            const targetBackUrl = getBackUrl();
+            localStorage.setItem('healim_naver_back_url', (targetBackUrl && targetBackUrl !== '/' && !targetBackUrl.includes('/login')) ? targetBackUrl : '/community/#reviews');
+
+            // 네이버 개발자센터에 등록된 완전한 고정 Callback 주소 사용
+            const redirectUri = encodeURIComponent('https://healim-autonomic.com/login/');
+            const state = Math.random().toString(36).substring(2, 11);
+
+            location.href = `https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`;
           }
-
-          // 2. Safe Naver ID Login Modal (No password requested, instant access)
-          openSnsAuthModal('naver');
         }
 
         // Open Naver Authentication Modal

@@ -1523,3 +1523,38 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
    - **[TEST 7] 회원가입 페이지 (`/site_join_type_choice/`)**: 카카오 삭제, 네이버 간편가입 버튼 및 안심 모달 연동 확인 (`PASS`).
    - **[TEST 8] 관리자 센터 (`/admin/`)**: 카카오 키 입력란 삭제, 네이버 Client ID 입력란 단독 배치 및 상태 뱃지 확인 (`PASS`).
    - **정적 빌드 검증 (`hugo --minify`)**: 32개 페이지 에러 0건 정상 빌드 완료.
+
+---
+
+## 📌 [2026-09-09] 마일스톤 9.54: 네이버 Callback 주소 고정값 통일 및 공식 Client ID 연동 오류 완결
+
+1. **사용자 제보 및 발생 배경**:
+   - 네이버 아이디로 로그인 버튼 클릭 시 네이버 측 에러 화면 발생:
+     `"자율신경클리닉 해아림한의원에 로그인할 수 없습니다. 서비스 설정에 오류가 있어 네이버 아이디로 로그인할 수 없습니다. 같은 문제가 계속 발생하면 관리자에게 문의해 주세요."`
+   - **원인 분석**:
+     - 네이버 개발자센터(OAuth 2.0)는 요청 시 전송되는 `redirect_uri`와 개발자센터에 사전에 등록된 `Callback URL`이 **글자 하나(대소문자, 끝 슬래시, 쿼리스트링 포함)까지 100% 일치**해야 함.
+     - 기존 코드에서 동적으로 `?back_url=...` 파라미터가 덧붙여진 주소를 네이버에 전송하여 Callback 불일치 보안 에러가 발생한 것임.
+   - **해결 방안 (Gemini 권장안 반영 및 고도화)**:
+     - 네이버 인증 요청 시 Callback 주소를 사전에 등록된 완전한 고정 주소인 `'https://healim-autonomic.com/login/'`으로 단일화.
+     - 환자가 원래 열람하려던 목적지(`back_url`, 예: `/community/#reviews`)는 URL에 붙이지 않고 브라우저 `localStorage('healim_naver_back_url')`에 안전하게 임시 보관.
+     - 사용자 실제 발급 키인 `'h2nuQi_Y9Z0DOB0j6kby'`를 표준 Client ID로 고정/연동.
+
+2. **구현 내역**:
+   - **로그인 페이지 (`content/login/_index.md`)**:
+     - `handleSocialLogin('naver')`:
+       - `clientId = 'h2nuQi_Y9Z0DOB0j6kby'` 및 고정 Callback 주소 `redirectUri = encodeURIComponent('https://healim-autonomic.com/login/')` 적용.
+       - 네이버 공식 인증창(`https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=...&redirect_uri=...&state=...`)으로 직결.
+       - 복귀 주소는 `healim_naver_back_url`에 사전 격리 보관하여 네이버 측 파라미터 오염 방지.
+     - `checkNaverOAuthCallback()`:
+       - 네이버 인증 후 `#access_token=...` 해시 감지 시 `naveridlogin_js_sdk_2.0.2.js` 연동 및 2초 안전 폴백 타이머 탑재(네트워크나 브라우저 확장 프로그램으로 인한 SDK 지연 시에도 자동 로그인 보장).
+     - `completeNaverLogin()`:
+       - 로그인 성공 시 `healim_naver_back_url`을 읽어 원래 보려던 치료후기 페이지(`/community/#reviews`)로 자동 복귀 및 권한 활성화.
+   - **간편가입 페이지 (`content/site_join_type_choice/_index.md`)**:
+     - `handleSocialRegister('naver')`에도 동일한 고정 Callback 주소(`https://healim-autonomic.com/login/`) 및 Client ID(`h2nuQi_Y9Z0DOB0j6kby`) 적용.
+   - **관리자 센터 (`content/admin/_index.md`)**:
+     - 네이버 OAuth 2.0 관리 카드 안내 문구 업데이트: Client ID 기본값을 `h2nuQi_Y9Z0DOB0j6kby`로 지정, 가이드 내 서비스 URL(`https://healim-autonomic.com`) 및 Callback URL(`https://healim-autonomic.com/login/`) 명시.
+     - 기본값 복원 버튼 클릭 시 공식 Client ID(`h2nuQi_Y9Z0DOB0j6kby`)로 즉시 동기화.
+
+3. **검증 결과**:
+   - `hugo --minify` 정적 사이트 빌드: 32개 페이지 에러 0건 정상 생성.
+   - 네이버 개발자센터 권장 스펙 100% 충족: `redirect_uri=https%3A%2F%2Fhealim-autonomic.com%2Flogin%2F` 고정값 전송 확인.

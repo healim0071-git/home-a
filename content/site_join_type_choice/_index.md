@@ -204,9 +204,12 @@ sections:
         function getSnsConfig() {
           try {
             var raw = localStorage.getItem('healim_sns_config');
-            return raw ? JSON.parse(raw) : { naverClientId: '' };
+            var parsed = raw ? JSON.parse(raw) : {};
+            return {
+              naverClientId: (parsed.naverClientId && parsed.naverClientId.trim().length > 5) ? parsed.naverClientId.trim() : 'h2nuQi_Y9Z0DOB0j6kby'
+            };
           } catch(e) {
-            return { naverClientId: '' };
+            return { naverClientId: 'h2nuQi_Y9Z0DOB0j6kby' };
           }
         }
 
@@ -246,28 +249,25 @@ sections:
 
           localStorage.setItem('healim_auth_user', JSON.stringify(userData));
           alert('네이버 계정(' + finalName + ')으로 정상 간편가입 및 로그인이 완료되었습니다.\n치료후기 열람 권한이 활성화되었습니다.');
-          var back = getBackUrl();
-          window.location.href = (back && back !== '/') ? back : '/community/#reviews';
+          var savedBack = localStorage.getItem('healim_naver_back_url');
+          if (savedBack) localStorage.removeItem('healim_naver_back_url');
+          var back = savedBack || getBackUrl();
+          var targetUrl = (back && back !== '/' && !back.includes('/login') && !back.includes('/site_join_type_choice')) ? back : '/community/#reviews';
+          window.location.href = targetUrl;
         }
 
         function handleSocialRegister(provider) {
-          var config = getSnsConfig();
+          if (provider === 'naver') {
+            const clientId = 'h2nuQi_Y9Z0DOB0j6kby';
 
-          // 1. If official Naver Client ID is registered, trigger official Naver OAuth
-          if (config.naverClientId && config.naverClientId.trim().length > 5) {
-            try {
-              var naverState = Math.random().toString(36).substring(2, 12);
-              var redirectUri = encodeURIComponent(window.location.origin + '/site_join_type_choice/?back_url=' + encodeURIComponent(getBackUrl()));
-              var naverAuthUrl = 'https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=' + encodeURIComponent(config.naverClientId.trim()) + '&redirect_uri=' + redirectUri + '&state=' + naverState;
-              window.location.href = naverAuthUrl;
-              return;
-            } catch(e) {
-              console.warn('Naver OAuth 호출 실패, 안심 모달로 전환:', e);
-            }
+            const targetBackUrl = getBackUrl();
+            localStorage.setItem('healim_naver_back_url', (targetBackUrl && targetBackUrl !== '/' && !targetBackUrl.includes('/login') && !targetBackUrl.includes('/site_join_type_choice')) ? targetBackUrl : '/community/#reviews');
+
+            const redirectUri = encodeURIComponent('https://healim-autonomic.com/login/');
+            const state = Math.random().toString(36).substring(2, 11);
+
+            location.href = `https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`;
           }
-
-          // 2. Safe Naver ID Join Modal (No password requested, instant access)
-          openSnsAuthModal('naver');
         }
 
         function openSnsAuthModal(provider) {
