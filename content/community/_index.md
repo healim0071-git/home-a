@@ -66,9 +66,10 @@ sections:
         </div>
 
         <!-- FAQ Accordion & List -->
-        <div id="faqListContainer" class="space-y-3 mb-10">
+        <div id="faqListContainer" class="space-y-3 mb-6">
         <!-- Dynamic FAQ items rendered by JS -->
         </div>
+        <div class="healim-pagination-wrapper mb-10" id="faqPaginationContainer"></div>
         </div>
 
         <!-- ══════════════════════════════════════════════════════════════
@@ -122,9 +123,12 @@ sections:
         </div>
         </div>
 
-        <!-- Review Cards / Table (Blurred when locked) -->
-        <div class="review-blurred-content p-4 md:p-6 bg-white" id="reviewListContainer">
-        <!-- Dynamic Review Cards rendered by JS -->
+        <!-- Review Rows Table & Pagination (Blurred when locked) -->
+        <div class="review-blurred-content bg-white" style="min-height: 480px;">
+        <div id="reviewListContainer" class="healim-reviews-table">
+        <!-- Dynamic Review Rows rendered by JS -->
+        </div>
+        <div class="healim-pagination-wrapper pt-4 pb-6" id="reviewsPaginationContainer"></div>
         </div>
         </div>
         </div>
@@ -198,6 +202,7 @@ sections:
         </tbody>
         </table>
         </div>
+        <div class="healim-pagination-wrapper mb-10" id="columnsPaginationContainer"></div>
         </div>
 
         <!-- ══════════════════════════════════════════════════════════════
@@ -3204,8 +3209,12 @@ sections:
         }
 
         // Render content for active tab
-        if (tabName === 'faq') renderFaqList();
+        if (tabName === 'faq') {
+          currentFaqPage = 1;
+          renderFaqList();
+        }
         if (tabName === 'reviews') {
+          currentReviewsPage = 1;
           renderReviewsList();
           var rawUser = localStorage.getItem('healim_auth_user');
           if (!rawUser) {
@@ -3218,10 +3227,14 @@ sections:
           }
         }
         if (tabName === 'youtube') {
+          currentYoutubePage = 1;
           renderYoutubeList();
           syncHealimtvChannel(false);
         }
-        if (tabName === 'columns') renderColumnsList();
+        if (tabName === 'columns') {
+          currentColumnsPage = 1;
+          renderColumnsList();
+        }
 
         // Refresh admin permissions and auto badges visibility
         updateCommunityPermissionsUI();
@@ -3379,153 +3392,263 @@ sections:
           return s;
         }
 
-        // --- 1. FAQ Render ---
+        // --- Universal Board Pagination Engine (1:1 with user screenshot) ---
+        function renderHealimPagination(containerId, totalPages, currentPage, onPageFnName) {
+          var container = document.getElementById(containerId);
+          if (!container) return;
+          if (!totalPages || totalPages <= 1) {
+            container.innerHTML = '';
+            return;
+          }
+
+          var blockSize = 10;
+          var currentBlock = Math.floor((currentPage - 1) / blockSize);
+          var startPage = currentBlock * blockSize + 1;
+          var endPage = Math.min(totalPages, startPage + blockSize - 1);
+
+          var isFirst = (currentPage === 1);
+          var isLast = (currentPage === totalPages);
+
+          var html = '';
+
+          // 1. 처음 (First Page)
+          html += '<button type="button" class="healim-pagination-btn healim-page-text-btn" ' +
+                  (isFirst ? 'disabled' : ('onclick="' + onPageFnName + '(1)"')) +
+                  ' title="처음 페이지">처음</button>';
+
+          // 2. « (Previous Page)
+          html += '<button type="button" class="healim-pagination-btn" ' +
+                  (isFirst ? 'disabled' : ('onclick="' + onPageFnName + '(' + (currentPage - 1) + ')"')) +
+                  ' title="이전 페이지">&laquo;</button>';
+
+          // 3. Page Number Buttons
+          for (var p = startPage; p <= endPage; p++) {
+            if (p === currentPage) {
+              html += '<button type="button" class="healim-pagination-btn active" aria-current="page">' + p + '</button>';
+            } else {
+              html += '<button type="button" class="healim-pagination-btn" onclick="' + onPageFnName + '(' + p + ')">' + p + '</button>';
+            }
+          }
+
+          // 4. » (Next Page)
+          html += '<button type="button" class="healim-pagination-btn" ' +
+                  (isLast ? 'disabled' : ('onclick="' + onPageFnName + '(' + (currentPage + 1) + ')"')) +
+                  ' title="다음 페이지">&raquo;</button>';
+
+          // 5. 마지막 (Last Page)
+          html += '<button type="button" class="healim-pagination-btn healim-page-text-btn" ' +
+                  (isLast ? 'disabled' : ('onclick="' + onPageFnName + '(' + totalPages + ')"')) +
+                  ' title="마지막 페이지">마지막</button>';
+
+          container.innerHTML = html;
+        }
+
+        // --- 1. FAQ Render & Pagination (15 items per page) ---
+        var FAQ_PAGE_SIZE = 15;
+        var currentFaqPage = 1;
+
+        window.goToFaqPage = function(page) {
+          currentFaqPage = page;
+          renderFaqList();
+          var anchor = document.getElementById('tab-pane-faq');
+          if (anchor) {
+            var rect = anchor.getBoundingClientRect();
+            var offset = window.pageYOffset + rect.top - 80;
+            window.scrollTo({ top: offset, behavior: 'smooth' });
+          }
+        };
+
         window.filterFaq = function() {
-        renderFaqList();
+          currentFaqPage = 1;
+          renderFaqList();
         };
 
         function renderFaqList() {
-        purgeObsoleteMockFaqPosts();
-        if (typeof window.checkAndRunAutoFaqPublish === 'function') {
-          window.checkAndRunAutoFaqPublish(false);
+          purgeObsoleteMockFaqPosts();
+          if (typeof window.checkAndRunAutoFaqPublish === 'function') {
+            window.checkAndRunAutoFaqPublish(false);
+          }
+          var container = document.getElementById('faqListContainer');
+          if (!container) return;
+          var list = sortCommunityItemsByTime(getBoardData('faq', defaultFaqData));
+
+          var totalItems = list.length;
+          var totalPages = Math.ceil(totalItems / FAQ_PAGE_SIZE) || 1;
+          if (currentFaqPage > totalPages) currentFaqPage = totalPages;
+          if (currentFaqPage < 1) currentFaqPage = 1;
+
+          var startIndex = (currentFaqPage - 1) * FAQ_PAGE_SIZE;
+          var pageItems = list.slice(startIndex, startIndex + FAQ_PAGE_SIZE);
+
+          if (pageItems.length === 0) {
+            container.innerHTML = '<div class="p-8 text-center text-gray-500 bg-white rounded-xl border border-gray-200">등록된 FAQ가 없습니다.</div>';
+            renderHealimPagination('faqPaginationContainer', 0, 1, 'goToFaqPage');
+            return;
+          }
+
+          var html = '';
+          var isSuperAdmin = isHealimSuperAdmin();
+          pageItems.forEach(function(item) {
+            var safeFaqId = String(item.id || '').replace(/'/g, "\\'");
+            var cleanTitle = (item.title || '').replace(/^Q[\.:\s\-]+/i, '').replace(/\*\*(.*?)\*\*/g, '$1').replace(/__(.*?)__/g, '$1').trim();
+            var hasAnyImage = item.image || (item.content && (item.content.indexOf('![') !== -1 || item.content.indexOf('<img') !== -1));
+            var photoBadge = hasAnyImage ? '<span class="text-xs font-bold px-1.5 py-0.5 rounded bg-[#f0f7f8] text-[#1c6e78] border border-[#badfe3] ml-1 shrink-0">📷 사진</span>' : '';
+            var richContent = renderRichContent(item.content);
+            var imageHtml = (item.image && richContent.indexOf(item.image) === -1) ? '<div class="my-3 rounded-lg overflow-hidden border border-[#badfe3] bg-[#f8fafb] max-w-md"><img src="' + item.image + '" alt="' + cleanTitle + '" class="max-h-80 w-auto object-contain rounded-lg" loading="lazy" onerror="this.onerror=null; this.parentElement.style.display=\'none\';" /></div>' : '';
+
+            var adminButtonsHtml = isSuperAdmin ? (
+              '<div class="flex items-center gap-1.5">' +
+              '<button type="button" class="px-2.5 py-1 text-xs font-semibold text-[#1c6e78] bg-[#eaf3f4] hover:bg-[#d8eaed] rounded-md transition-colors border border-[#badfe3] cursor-pointer" onclick="event.stopPropagation(); openEditModal(\'faq\', \'' + safeFaqId + '\')">✏️ 수정</button>' +
+              '<button type="button" class="px-2.5 py-1 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-md transition-colors border border-red-200 cursor-pointer" onclick="event.stopPropagation(); handleDeletePostDirect(\'faq\', \'' + safeFaqId + '\')">🗑️ 삭제</button>' +
+              '</div>'
+            ) : '';
+
+            var summaryAdminBtns = isSuperAdmin ? (
+              '<span class="inline-flex items-center gap-1.5 ml-auto mr-3 shrink-0">' +
+              '<button type="button" class="px-2 py-0.5 text-xs font-semibold text-[#1c6e78] bg-[#eaf3f4] hover:bg-[#d8eaed] rounded border border-[#badfe3] transition-colors cursor-pointer" onclick="event.stopPropagation(); event.preventDefault(); openEditModal(\'faq\', \'' + safeFaqId + '\')">✏️ 수정</button>' +
+              '<button type="button" class="px-2 py-0.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded border border-red-200 transition-colors cursor-pointer" onclick="event.stopPropagation(); event.preventDefault(); handleDeletePostDirect(\'faq\', \'' + safeFaqId + '\')">🗑️ 삭제</button>' +
+              '</span>'
+            ) : '';
+
+            html += '<details class="faq-item">' +
+            '<summary>' +
+            '<span class="flex items-center gap-2 text-left flex-1 min-w-0 pr-2">' +
+            '<span class="text-sm font-extrabold text-[#1c6e78] shrink-0">Q.</span>' +
+            photoBadge +
+            '<span class="font-bold text-[#0d3a42]">' + cleanTitle + '</span>' +
+            '</span>' +
+            summaryAdminBtns +
+            '</summary>' +
+            '<div class="faq-answer">' +
+            imageHtml +
+            '<div class="faq-content-body py-1 text-sm text-[#333333] leading-relaxed">' + richContent + '</div>' +
+            '<div class="mt-3 pt-2 border-t border-[#edf2f4] flex justify-between items-center text-xs text-[#888888] flex-wrap gap-2">' +
+            '<div><span>작성자: ' + (item.author || '해아림한의원') + '</span> <span class="mx-1">|</span> <span>등록일: ' + item.date + '</span></div>' +
+            adminButtonsHtml +
+            '</div>' +
+            '</div>' +
+            '</details>';
+          });
+
+          container.innerHTML = html;
+          renderHealimPagination('faqPaginationContainer', totalPages, currentFaqPage, 'goToFaqPage');
         }
-        var container = document.getElementById('faqListContainer');
-        if (!container) return;
-        var list = sortCommunityItemsByTime(getBoardData('faq', defaultFaqData));
 
-        if (list.length === 0) {
-        container.innerHTML = '<div class="p-8 text-center text-gray-500 bg-white rounded-xl border border-gray-200">등록된 FAQ가 없습니다.</div>';
-        return;
-        }
+        // --- 2. Reviews Render & Medical Gate (10 items per page, 1:1 user screenshot layout) ---
+        var REVIEWS_PAGE_SIZE = 10;
+        var currentReviewsPage = 1;
 
-        var html = '';
-        var isSuperAdmin = isHealimSuperAdmin();
-        list.forEach(function(item) {
-        var safeFaqId = String(item.id || '').replace(/'/g, "\\'");
-        var cleanTitle = (item.title || '').replace(/^Q[\.:\s\-]+/i, '').replace(/\*\*(.*?)\*\*/g, '$1').replace(/__(.*?)__/g, '$1').trim();
-        var hasAnyImage = item.image || (item.content && (item.content.indexOf('![') !== -1 || item.content.indexOf('<img') !== -1));
-        var photoBadge = hasAnyImage ? '<span class="text-xs font-bold px-1.5 py-0.5 rounded bg-[#f0f7f8] text-[#1c6e78] border border-[#badfe3] ml-1 shrink-0">📷 사진</span>' : '';
-        var richContent = renderRichContent(item.content);
-        var imageHtml = (item.image && richContent.indexOf(item.image) === -1) ? '<div class="my-3 rounded-lg overflow-hidden border border-[#badfe3] bg-[#f8fafb] max-w-md"><img src="' + item.image + '" alt="' + cleanTitle + '" class="max-h-80 w-auto object-contain rounded-lg" loading="lazy" onerror="this.onerror=null; this.parentElement.style.display=\'none\';" /></div>' : '';
+        window.goToReviewsPage = function(page) {
+          currentReviewsPage = page;
+          renderReviewsList();
+          var anchor = document.getElementById('tab-pane-reviews');
+          if (anchor) {
+            var rect = anchor.getBoundingClientRect();
+            var offset = window.pageYOffset + rect.top - 80;
+            window.scrollTo({ top: offset, behavior: 'smooth' });
+          }
+        };
 
-        var adminButtonsHtml = isSuperAdmin ? (
-          '<div class="flex items-center gap-1.5">' +
-          '<button type="button" class="px-2.5 py-1 text-xs font-semibold text-[#1c6e78] bg-[#eaf3f4] hover:bg-[#d8eaed] rounded-md transition-colors border border-[#badfe3] cursor-pointer" onclick="event.stopPropagation(); openEditModal(\'faq\', \'' + safeFaqId + '\')">✏️ 수정</button>' +
-          '<button type="button" class="px-2.5 py-1 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-md transition-colors border border-red-200 cursor-pointer" onclick="event.stopPropagation(); handleDeletePostDirect(\'faq\', \'' + safeFaqId + '\')">🗑️ 삭제</button>' +
-          '</div>'
-        ) : '';
-
-        var summaryAdminBtns = isSuperAdmin ? (
-          '<span class="inline-flex items-center gap-1.5 ml-auto mr-3 shrink-0">' +
-          '<button type="button" class="px-2 py-0.5 text-xs font-semibold text-[#1c6e78] bg-[#eaf3f4] hover:bg-[#d8eaed] rounded border border-[#badfe3] transition-colors cursor-pointer" onclick="event.stopPropagation(); event.preventDefault(); openEditModal(\'faq\', \'' + safeFaqId + '\')">✏️ 수정</button>' +
-          '<button type="button" class="px-2 py-0.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded border border-red-200 transition-colors cursor-pointer" onclick="event.stopPropagation(); event.preventDefault(); handleDeletePostDirect(\'faq\', \'' + safeFaqId + '\')">🗑️ 삭제</button>' +
-          '</span>'
-        ) : '';
-
-        html += '<details class="faq-item">' +
-        '<summary>' +
-        '<span class="flex items-center gap-2 text-left flex-1 min-w-0 pr-2">' +
-        '<span class="text-sm font-extrabold text-[#1c6e78] shrink-0">Q.</span>' +
-        photoBadge +
-        '<span class="font-bold text-[#0d3a42]">' + cleanTitle + '</span>' +
-        '</span>' +
-        summaryAdminBtns +
-        '</summary>' +
-        '<div class="faq-answer">' +
-        imageHtml +
-        '<div class="faq-content-body py-1 text-sm text-[#333333] leading-relaxed">' + richContent + '</div>' +
-        '<div class="mt-3 pt-2 border-t border-[#edf2f4] flex justify-between items-center text-xs text-[#888888] flex-wrap gap-2">' +
-        '<div><span>작성자: ' + (item.author || '해아림한의원') + '</span> <span class="mx-1">|</span> <span>등록일: ' + item.date + '</span></div>' +
-        adminButtonsHtml +
-        '</div>' +
-        '</div>' +
-        '</details>';
-        });
-
-        container.innerHTML = html;
-        }
-
-        // --- 2. Reviews Render & Medical Gate ---
         window.checkAuthAndOpenWrite = function(tab) {
-        if (!isHealimSuperAdmin()) {
-          alert('치료후기 등록 권한은 최고관리자(healim0071)에게만 있습니다.\n일반 회원은 열람 전용입니다.');
-          return;
-        }
-        openWriteModal(tab);
+          if (!isHealimSuperAdmin()) {
+            alert('치료후기 등록 권한은 최고관리자(healim0071)에게만 있습니다.\n일반 회원은 열람 전용입니다.');
+            return;
+          }
+          openWriteModal(tab);
         };
 
         function renderReviewsList() {
-        if (typeof purgeObsoleteMockPosts === 'function') purgeObsoleteMockPosts();
-        var lockWrapper = document.getElementById('reviewLockWrapper');
-        var overlay = document.getElementById('reviewGateOverlay');
-        var container = document.getElementById('reviewListContainer');
-        if (!lockWrapper || !container) return;
+          if (typeof purgeObsoleteMockPosts === 'function') purgeObsoleteMockPosts();
+          var lockWrapper = document.getElementById('reviewLockWrapper');
+          var overlay = document.getElementById('reviewGateOverlay');
+          var container = document.getElementById('reviewListContainer');
+          if (!lockWrapper || !container) return;
 
-        var rawUser = localStorage.getItem('healim_auth_user');
-        var isLoggedIn = !!rawUser;
+          var rawUser = localStorage.getItem('healim_auth_user');
+          var isLoggedIn = !!rawUser;
 
-        var currentBackUrl = encodeURIComponent(window.location.pathname + '#reviews');
-        var gateLoginBtn = document.getElementById('btnGateLogin');
-        var gateJoinBtn = document.getElementById('btnGateJoin');
-        if (gateLoginBtn) gateLoginBtn.href = '/login/?back_url=' + currentBackUrl;
-        if (gateJoinBtn) gateJoinBtn.href = '/site_join_type_choice/?back_url=' + currentBackUrl;
+          var currentBackUrl = encodeURIComponent(window.location.pathname + '#reviews');
+          var gateLoginBtn = document.getElementById('btnGateLogin');
+          var gateJoinBtn = document.getElementById('btnGateJoin');
+          if (gateLoginBtn) gateLoginBtn.href = '/login/?back_url=' + currentBackUrl;
+          if (gateJoinBtn) gateJoinBtn.href = '/site_join_type_choice/?back_url=' + currentBackUrl;
 
-        var list = sortCommunityItemsByTime(getBoardData('reviews', defaultReviewsData));
+          var list = sortCommunityItemsByTime(getBoardData('reviews', defaultReviewsData));
 
-        var noticeBanner = document.getElementById('reviewNoticeBanner');
-        if (isLoggedIn) {
-        lockWrapper.classList.remove('is-locked');
-        if (overlay) overlay.style.display = 'none';
-        if (noticeBanner) noticeBanner.style.display = 'flex';
-        } else {
-        lockWrapper.classList.add('is-locked');
-        if (overlay) overlay.style.display = 'flex';
-        if (noticeBanner) noticeBanner.style.display = 'none';
-        }
+          var noticeBanner = document.getElementById('reviewNoticeBanner');
+          if (isLoggedIn) {
+            lockWrapper.classList.remove('is-locked');
+            if (overlay) overlay.style.display = 'none';
+            if (noticeBanner) noticeBanner.style.display = 'flex';
+          } else {
+            lockWrapper.classList.add('is-locked');
+            if (overlay) overlay.style.display = 'flex';
+            if (noticeBanner) noticeBanner.style.display = 'none';
+          }
 
-        var html = '<div class="healim-grid-2">';
-        list.forEach(function(item, idx) {
-        var reviewImg = item.image;
-        if (!reviewImg) {
-          var extracted = extractFirstImageFromContent(item.content);
-          reviewImg = extracted || getReviewFallbackImage(item.id || item.title || idx);
-          item.image = reviewImg;
-        }
-        var photoBadge = '<span class="text-xs font-bold px-1.5 py-0.5 rounded bg-[#eaf3f4] text-[#1c6e78] border border-[#badfe3]">📷 사진</span>';
-        var safeId = String(item.id || ('rev-' + idx)).replace(/'/g, "\\'");
-        var imageThumbHtml = '<div class="relative my-2.5 rounded-lg overflow-hidden border border-[#edf2f4] bg-[#f8fafb] max-h-40 flex items-center justify-center cursor-pointer" onclick="event.stopPropagation(); openDetailModal(\'reviews\', \'' + safeId + '\')">' +
-          '<img src="' + reviewImg + '" alt="' + (item.title || '치료후기 사진') + '" class="healim-review-blurred-img max-h-40 w-full object-cover" loading="lazy" />' +
-          '<div class="absolute top-2 left-2 bg-[#0d3a42]/80 backdrop-blur-xs text-white text-[10px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-xs pointer-events-none">' +
-          '<span>🔒</span> <span>의료법 보호 흐림처리</span>' +
-          '</div>' +
-          '</div>';
-        var cleanSnippet = (item.content || '').replace(/<img[^>]*>/gi, '[사진]').replace(/!\[.*?\]\(.*?\)/g, '[사진]').replace(/<[^>]+>/g, '').replace(/[*_~`#]/g, '').trim();
-        var isSuperAdmin = isHealimSuperAdmin();
-        var adminBtnsHtml = isSuperAdmin ? (
-          '<button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors cursor-pointer" onclick="event.stopPropagation(); openEditModal(\'reviews\', \'' + safeId + '\')">✏️ 수정</button>' +
-          '<button type="button" class="px-2 py-0.5 text-xs text-red-600 bg-red-50 hover:bg-red-100 font-semibold rounded border border-red-200 transition-colors cursor-pointer" onclick="event.stopPropagation(); handleDeletePostDirect(\'reviews\', \'' + safeId + '\')">🗑️ 삭제</button>'
-        ) : '';
+          var totalItems = list.length;
+          var totalPages = Math.ceil(totalItems / REVIEWS_PAGE_SIZE) || 1;
+          if (currentReviewsPage > totalPages) currentReviewsPage = totalPages;
+          if (currentReviewsPage < 1) currentReviewsPage = 1;
 
-        html += '<div class="healim-card white-bg text-left p-6 cursor-pointer" data-post-id="' + safeId + '" onclick="openDetailModal(\'reviews\', \'' + safeId + '\')">' +
-        '<div class="flex justify-between items-center mb-2 w-full">' +
-        '<div class="flex items-center gap-1.5"><span class="text-xs font-bold px-2 py-0.5 rounded bg-[#eaf3f4] text-[#1c6e78]">' + item.category + '</span>' + photoBadge + '</div>' +
-        '<span class="text-xs text-[#888888]">' + ((item.author && item.author !== '익명') ? item.author : '해아림한의원') + '</span>' +
-        '</div>' +
-        '<h3 class="font-bold text-[#0d3a42] text-sm mb-2 hover:text-[#1c6e78] transition-colors cursor-pointer" onclick="event.stopPropagation(); openDetailModal(\'reviews\', \'' + safeId + '\')">' + item.title + '</h3>' +
-        imageThumbHtml +
-        '<p class="text-xs text-[#555555] leading-relaxed line-clamp-3">' + cleanSnippet + '</p>' +
-        '<div class="mt-3 pt-3 border-t border-[#f0f4f5] flex justify-between items-center text-xs text-[#888888] w-full flex-wrap gap-2">' +
-        '<span>등록일: ' + item.date + '</span>' +
-        '<div class="flex items-center gap-1.5 ml-auto">' +
-        adminBtnsHtml +
-        '<button type="button" class="px-2.5 py-1 text-xs font-bold text-[#1c6e78] bg-[#eaf3f4] hover:bg-[#d8eaed] rounded border border-[#badfe3] transition-all flex items-center gap-1 shadow-2xs cursor-pointer" onclick="event.stopPropagation(); openDetailModal(\'reviews\', \'' + safeId + '\')"><span>전체 후기 보기</span><span class="text-xs">&gt;</span></button>' +
-        '</div>' +
-        '</div>' +
-        '</div>';
-        });
-        html += '</div>';
+          var startIndex = (currentReviewsPage - 1) * REVIEWS_PAGE_SIZE;
+          var pageItems = list.slice(startIndex, startIndex + REVIEWS_PAGE_SIZE);
 
-        container.innerHTML = html;
+          if (pageItems.length === 0) {
+            container.innerHTML = '<div class="p-8 text-center text-gray-500 bg-white rounded-xl border border-gray-200">등록된 치료후기가 없습니다.</div>';
+            renderHealimPagination('reviewsPaginationContainer', 0, 1, 'goToReviewsPage');
+            return;
+          }
+
+          var isSuperAdmin = isHealimSuperAdmin();
+          var html = '';
+
+          pageItems.forEach(function(item, idx) {
+            var reviewImg = item.image;
+            if (!reviewImg) {
+              var extracted = extractFirstImageFromContent(item.content);
+              reviewImg = extracted || getReviewFallbackImage(item.id || item.title || idx);
+              item.image = reviewImg;
+            }
+            var safeId = String(item.id || ('rev-' + idx)).replace(/'/g, "\\'");
+            var cleanTitle = (item.title || '').replace(/<[^>]+>/g, '').replace(/[*_~`#]/g, '').trim();
+            var cleanSnippet = (item.content || '')
+              .replace(/<img[^>]*>/gi, '')
+              .replace(/!\[.*?\]\(.*?\)/g, '')
+              .replace(/<[^>]+>/g, '')
+              .replace(/[*_~`#]/g, '')
+              .replace(/\s+/g, ' ')
+              .trim();
+
+            var itemNumber = totalItems - startIndex - idx;
+            var formattedDate = (item.date || '').replace(/\./g, '-');
+            if (formattedDate.length > 10) formattedDate = formattedDate.substring(0, 10);
+
+            var adminBtnsHtml = isSuperAdmin ? (
+              '<span class="inline-flex items-center gap-1 ml-2" onclick="event.stopPropagation()">' +
+              '<button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] cursor-pointer" onclick="openEditModal(\'reviews\', \'' + safeId + '\')">✏️ 수정</button>' +
+              '<button type="button" class="px-2 py-0.5 text-xs text-red-600 bg-red-50 hover:bg-red-100 font-semibold rounded border border-red-200 cursor-pointer" onclick="handleDeletePostDirect(\'reviews\', \'' + safeId + '\')">🗑️ 삭제</button>' +
+              '</span>'
+            ) : '';
+
+            html += '<div class="review-row-item" onclick="openDetailModal(\'reviews\', \'' + safeId + '\')">' +
+              '<div class="review-row-num">' + itemNumber + '</div>' +
+              '<div class="review-row-thumb">' +
+                '<img src="' + reviewImg + '" alt="' + cleanTitle + '" loading="lazy" onerror="this.onerror=null; this.src=\'/images/reviews/review_1.jpg\';" />' +
+              '</div>' +
+              '<div class="review-row-body">' +
+                '<div class="review-row-title-wrap">' +
+                  '<h3 class="review-row-title">' + cleanTitle + '</h3>' +
+                  adminBtnsHtml +
+                '</div>' +
+                '<p class="review-row-snippet">' + cleanSnippet + '</p>' +
+              '</div>' +
+              '<div class="review-row-date">' + formattedDate + '</div>' +
+            '</div>';
+          });
+
+          container.innerHTML = html;
+          renderHealimPagination('reviewsPaginationContainer', totalPages, currentReviewsPage, 'goToReviewsPage');
         }
 
         // --- 3. YouTube Render & Pagination ---
@@ -3649,55 +3772,93 @@ sections:
         renderYoutubePagination(totalPages, currentYoutubePage);
         }
 
-        // --- 4. Columns Render ---
+        // --- 4. Columns Render & Pagination (15 items per page) ---
+        var COLUMNS_PAGE_SIZE = 15;
+        var currentColumnsPage = 1;
+
+        window.goToColumnsPage = function(page) {
+          currentColumnsPage = page;
+          renderColumnsList();
+          var anchor = document.getElementById('tab-pane-columns');
+          if (anchor) {
+            var rect = anchor.getBoundingClientRect();
+            var offset = window.pageYOffset + rect.top - 80;
+            window.scrollTo({ top: offset, behavior: 'smooth' });
+          }
+        };
+
         window.filterColumns = function(category, btn) {
-        activeColumnFilter = category;
-        var pills = document.querySelectorAll('#columnFilterPills .filter-pill');
-        pills.forEach(function(p) { p.classList.remove('active'); });
-        if (btn) btn.classList.add('active');
-        renderColumnsList();
+          activeColumnFilter = category;
+          currentColumnsPage = 1;
+          var pills = document.querySelectorAll('#columnFilterPills .filter-pill');
+          pills.forEach(function(p) { p.classList.remove('active'); });
+          if (btn) btn.classList.add('active');
+          renderColumnsList();
         };
 
         function renderColumnsList() {
-        if (typeof purgeObsoleteMockPosts === 'function') purgeObsoleteMockPosts();
-        if (typeof window.checkAndRunAutoColumnPublish === 'function') {
-          window.checkAndRunAutoColumnPublish(false);
-        }
-        var container = document.getElementById('columnListContainer');
-        if (!container) return;
-        var list = sortCommunityItemsByTime(getBoardData('columns', defaultColumnsData));
-        var isSuperAdmin = isHealimSuperAdmin();
+          if (typeof purgeObsoleteMockPosts === 'function') purgeObsoleteMockPosts();
+          if (typeof window.checkAndRunAutoColumnPublish === 'function') {
+            window.checkAndRunAutoColumnPublish(false);
+          }
+          var container = document.getElementById('columnListContainer');
+          if (!container) return;
+          var list = sortCommunityItemsByTime(getBoardData('columns', defaultColumnsData));
+          var isSuperAdmin = isHealimSuperAdmin();
 
-        var colTh = document.getElementById('colManageTh');
-        if (colTh) {
-          colTh.style.display = isSuperAdmin ? '' : 'none';
-        }
+          var filteredList = list;
+          if (activeColumnFilter && activeColumnFilter !== '전체') {
+            filteredList = list.filter(function(it) {
+              return it.category === activeColumnFilter;
+            });
+          }
 
-        var html = '';
-        list.forEach(function(item, idx) {
-        var safeColId = String(item.id || ('col-' + idx)).replace(/'/g, "\\'");
-        var hasAnyImage = item.image || (item.content && (item.content.indexOf('![') !== -1 || item.content.indexOf('<img') !== -1));
-        var photoBadge = hasAnyImage ? ' <span class="text-[12px] text-[#1c6e78] font-bold" title="사진 첨부">📷</span>' : '';
-        var manageTd = isSuperAdmin ? (
-          '<td style="text-align: center; white-space: nowrap;">' +
-          '<div class="inline-flex items-center justify-center gap-1.5">' +
-          '<button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors cursor-pointer" onclick="event.stopPropagation(); openEditModal(\'columns\', \'' + safeColId + '\')">✏️ 수정</button>' +
-          '<button type="button" class="px-2 py-0.5 text-xs text-red-600 bg-red-50 hover:bg-red-100 font-semibold rounded border border-red-200 transition-colors cursor-pointer" onclick="event.stopPropagation(); handleDeletePostDirect(\'columns\', \'' + safeColId + '\')">🗑️ 삭제</button>' +
-          '</div>' +
-          '</td>'
-        ) : '';
+          var totalItems = filteredList.length;
+          var totalPages = Math.ceil(totalItems / COLUMNS_PAGE_SIZE) || 1;
+          if (currentColumnsPage > totalPages) currentColumnsPage = totalPages;
+          if (currentColumnsPage < 1) currentColumnsPage = 1;
 
-        html += '<tr onclick="openDetailModal(\'columns\', \'' + safeColId + '\')">' +
-        '<td style="text-align: center; color: #888888; font-size: 13px;">' + (list.length - idx) + '</td>' +
-        '<td><span class="post-title-link">' + item.title + photoBadge + '</span></td>' +
-        '<td style="text-align: center; font-size: 13px;">' + (item.author || '해아림한의원') + '</td>' +
-        '<td style="text-align: center; color: #888888; font-size: 13px;">' + item.date + '</td>' +
-        '<td style="text-align: center; color: #888888; font-size: 13px;">' + item.views + '</td>' +
-        manageTd +
-        '</tr>';
-        });
+          var startIndex = (currentColumnsPage - 1) * COLUMNS_PAGE_SIZE;
+          var pageItems = filteredList.slice(startIndex, startIndex + COLUMNS_PAGE_SIZE);
 
-        container.innerHTML = html;
+          var colTh = document.getElementById('colManageTh');
+          if (colTh) {
+            colTh.style.display = isSuperAdmin ? '' : 'none';
+          }
+
+          if (pageItems.length === 0) {
+            container.innerHTML = '<tr><td colspan="' + (isSuperAdmin ? 6 : 5) + '" style="text-align:center; padding: 2rem; color: #888;">등록된 치료 칼럼이 없습니다.</td></tr>';
+            renderHealimPagination('columnsPaginationContainer', 0, 1, 'goToColumnsPage');
+            return;
+          }
+
+          var html = '';
+          pageItems.forEach(function(item, idx) {
+            var safeColId = String(item.id || ('col-' + idx)).replace(/'/g, "\\'");
+            var hasAnyImage = item.image || (item.content && (item.content.indexOf('![') !== -1 || item.content.indexOf('<img') !== -1));
+            var photoBadge = hasAnyImage ? ' <span class="text-[12px] text-[#1c6e78] font-bold" title="사진 첨부">📷</span>' : '';
+            var itemNumber = totalItems - startIndex - idx;
+            var manageTd = isSuperAdmin ? (
+              '<td style="text-align: center; white-space: nowrap;">' +
+              '<div class="inline-flex items-center justify-center gap-1.5">' +
+              '<button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors cursor-pointer" onclick="event.stopPropagation(); openEditModal(\'columns\', \'' + safeColId + '\')">✏️ 수정</button>' +
+              '<button type="button" class="px-2 py-0.5 text-xs text-red-600 bg-red-50 hover:bg-red-100 font-semibold rounded border border-red-200 transition-colors cursor-pointer" onclick="event.stopPropagation(); handleDeletePostDirect(\'columns\', \'' + safeColId + '\')">🗑️ 삭제</button>' +
+              '</div>' +
+              '</td>'
+            ) : '';
+
+            html += '<tr onclick="openDetailModal(\'columns\', \'' + safeColId + '\')">' +
+            '<td style="text-align: center; color: #888888; font-size: 13px;">' + itemNumber + '</td>' +
+            '<td><span class="post-title-link">' + item.title + photoBadge + '</span></td>' +
+            '<td style="text-align: center; font-size: 13px;">' + (item.author || '해아림한의원') + '</td>' +
+            '<td style="text-align: center; color: #888888; font-size: 13px;">' + item.date + '</td>' +
+            '<td style="text-align: center; color: #888888; font-size: 13px;">' + item.views + '</td>' +
+            manageTd +
+            '</tr>';
+          });
+
+          container.innerHTML = html;
+          renderHealimPagination('columnsPaginationContainer', totalPages, currentColumnsPage, 'goToColumnsPage');
         }
 
         // --- 5. Write Modal Logic & Photo Attachment (healim-tic 1:1) ---
