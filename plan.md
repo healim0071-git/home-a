@@ -1558,3 +1558,29 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
 3. **검증 결과**:
    - `hugo --minify` 정적 사이트 빌드: 32개 페이지 에러 0건 정상 생성.
    - 네이버 개발자센터 권장 스펙 100% 충족: `redirect_uri=https%3A%2F%2Fhealim-autonomic.com%2Flogin%2F` 고정값 전송 확인.
+
+---
+
+## 📌 [2026-09-09] 마일스톤 9.55: 미로그인 상태 치료후기 열람 잠금 카드(의료법 제56조 안내) 상단바 밀착 상향 재배치 완료
+
+1. **사용자 요구사항**:
+   - 로그인되지 않은 상태에서 '치료후기' 메뉴 또는 탭을 클릭했을 때 화면 하단/중앙에 멀리 떨어져 노출되던 '의료법 제56조 회원 열람 안내' 잠금 카드를 사용자가 지정한 **상단바(GNB 네비게이션 메뉴바)에 가깝도록 대폭 올려서(상향) 밀착 배치**.
+
+2. **원인 분석 및 개선 내역**:
+   - **(기존 원인)**:
+     - `.review-gate-overlay`가 `justify-content: center;`로 설정되어 있어 수천 픽셀에 달하는 전체 치료후기 컨테이너의 정중앙에 카드가 배치되어 스크롤 시 화면 한참 아래로 밀려남.
+     - 비로그인 상태에서도 비어있는 `board-control-bar`와 중복되는 안내 배너(`reviewNoticeBanner`)가 잠금 영역 상단에 불필요한 마진(약 80~100px)을 차지함.
+   - **(해결 및 고도화)**:
+     - **오버레이 정렬 전면 개편 (`assets/css/custom.css`)**:
+       - `.review-gate-overlay`를 `justify-content: flex-start; padding: 0.5rem 1rem 1.5rem;`로 변경하여 카드를 컨테이너 최상단으로 직결.
+       - `.review-gate-card`에 `position: sticky; top: 96px; (모바일 64px)`를 적용하여 상단바 바로 아래에 완벽하게 밀착 및 스크롤 시에도 최상단에 안정적으로 고정.
+       - 카드 내부 여백 및 아이콘 크기를 황금비율(`padding: 1.5rem`, `lock-icon: 48px`)로 최적화하여 한눈에 들어오는 컴팩트 뷰 구현.
+     - **상단 잉여 공간 완전 압축 (`content/community/_index.md`)**:
+       - 잠금 상태(`is-locked`)일 때 빈 관리바(`reviewAdminControlBar`) 및 중복 배너(`reviewNoticeBanner`)를 `display: none`으로 숨김 처리하여 잉여 공간 100px 제거.
+       - 탭 전환 시 미로그인 사용자는 즉시 `#reviews` 앵커로 부드럽게 스크롤되도록 인터랙션 연동.
+     - **GNB 서브메뉴 스크롤 동기화 (`layouts/_partials/components/headers/navbar.html`)**:
+       - 상단 메뉴에서 '치료후기' 클릭 시 탭 컨테이너 대신 `#reviews` 앵커로 정밀 스크롤되도록 개선.
+
+3. **검증 결과**:
+   - 실제 브라우저(Headless Chrome CDP) 스크린샷 캡처 검증 완료: 상단 네비게이션 메뉴바 바로 아래에 잠금 카드가 즉각 밀착 배치됨 확인.
+   - 정적 사이트 빌드(`hugo --minify`): 32개 페이지 에러 0건 빌드 완료.

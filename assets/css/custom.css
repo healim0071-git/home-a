@@ -1637,51 +1637,63 @@ section#section-markdown:first-of-type {
 .review-gate-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.90);
+  backdrop-filter: blur(5px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 2rem 1.5rem;
+  justify-content: flex-start;
+  padding: 0.5rem 1rem 1.5rem;
   text-align: center;
   z-index: 20;
 }
 
 .review-gate-card {
-  max-width: 480px;
+  max-width: 460px;
+  width: 100%;
+  margin: 0.25rem auto 1rem;
   background: #ffffff;
   border: 2px solid #1c6e78;
   border-radius: 16px;
-  padding: 2.25rem 1.75rem;
-  box-shadow: 0 12px 35px -6px rgba(13, 58, 66, 0.2);
+  padding: 1.5rem 1.5rem;
+  box-shadow: 0 10px 30px -5px rgba(13, 58, 66, 0.18);
+  position: sticky;
+  top: 96px;
+  z-index: 25;
+}
+
+@media (max-width: 768px) {
+  .review-gate-card {
+    top: 64px;
+    padding: 1.25rem 1.15rem;
+  }
 }
 
 .review-gate-card .lock-icon-circle {
-  width: 56px;
-  height: 56px;
-  margin: 0 auto 1.25rem;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 0.75rem;
   border-radius: 50%;
   background: #eaf3f4;
   color: #1c6e78;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
+  font-size: 22px;
 }
 
 .review-gate-card h3 {
-  font-size: 1.25rem;
+  font-size: 1.18rem;
   font-weight: 800;
   color: #0d3a42;
-  margin-bottom: 0.65rem;
+  margin-bottom: 0.5rem;
 }
 
 .review-gate-card p {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: #555555;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
+  line-height: 1.55;
+  margin-bottom: 1.25rem;
 }
 
 .review-gate-card .gate-actions {

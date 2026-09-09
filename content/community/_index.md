@@ -75,9 +75,9 @@ sections:
         TAB 2: 치료후기 (의료법 제56조 로그인 잠금 게이트)
         ══════════════════════════════════════════════════════════════ -->
         <div id="tab-pane-reviews" class="tab-pane-content hidden">
-        <div id="reviews" class="scroll-mt-28"></div>
+        <div id="reviews" class="scroll-mt-16 md:scroll-mt-24"></div>
         <!-- Control Bar with Auto-Publishing Status (healim0071 Superadmin Only) -->
-        <div class="board-control-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
+        <div class="board-control-bar" id="reviewAdminControlBar" style="display: none; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
         <div id="autoReviewStatusBadge" class="flex items-center gap-2 text-xs text-[#0d3a42] bg-[#f0f7f8] border border-[#badfe3] px-3.5 py-2 rounded-lg" style="display: none;">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span><strong>자율신경 치료후기 자동 발행</strong>: 4개월당 2~6회 (랜덤 일시)</span>
@@ -92,8 +92,8 @@ sections:
         </div>
         </div>
 
-        <!-- Review Notice Banner -->
-        <div class="bg-[#f2f7f8] border border-[#cde3e6] p-4 rounded-xl mb-6 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs text-[#0d3a42]">
+        <!-- Review Notice Banner (Visible only for logged-in members; hidden when locked to avoid duplicate message & extra height) -->
+        <div id="reviewNoticeBanner" class="bg-[#f2f7f8] border border-[#cde3e6] p-3.5 rounded-xl mb-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs text-[#0d3a42]" style="display: none;">
         <div class="flex items-center gap-2">
         <span class="font-bold px-2 py-0.5 bg-[#1c6e78] text-white rounded">의료법 제56조 준수</span>
         <span>치료후기는 환자의 개인정보 보호 및 의료법령에 의거하여 정회원 로그인 후 열람이 가능합니다.</span>
@@ -3205,7 +3205,18 @@ sections:
 
         // Render content for active tab
         if (tabName === 'faq') renderFaqList();
-        if (tabName === 'reviews') renderReviewsList();
+        if (tabName === 'reviews') {
+          renderReviewsList();
+          var rawUser = localStorage.getItem('healim_auth_user');
+          if (!rawUser) {
+            setTimeout(function() {
+              var revAnchor = document.getElementById('reviews');
+              if (revAnchor) {
+                revAnchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }, 60);
+          }
+        }
         if (tabName === 'youtube') {
           renderYoutubeList();
           syncHealimtvChannel(false);
@@ -3250,6 +3261,10 @@ sections:
           var revBadge = document.getElementById('autoReviewStatusBadge');
           if (revBadge) {
             revBadge.style.display = isHealimAdmin ? 'flex' : 'none';
+          }
+          var revControlBar = document.getElementById('reviewAdminControlBar');
+          if (revControlBar) {
+            revControlBar.style.display = isHealimAdmin ? 'flex' : 'none';
           }
 
           // 3. Columns table "관리" header
@@ -3457,12 +3472,15 @@ sections:
 
         var list = sortCommunityItemsByTime(getBoardData('reviews', defaultReviewsData));
 
+        var noticeBanner = document.getElementById('reviewNoticeBanner');
         if (isLoggedIn) {
         lockWrapper.classList.remove('is-locked');
         if (overlay) overlay.style.display = 'none';
+        if (noticeBanner) noticeBanner.style.display = 'flex';
         } else {
         lockWrapper.classList.add('is-locked');
         if (overlay) overlay.style.display = 'flex';
+        if (noticeBanner) noticeBanner.style.display = 'none';
         }
 
         var html = '<div class="healim-grid-2">';

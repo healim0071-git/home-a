@@ -224,9 +224,9 @@
             } else {
               window.location.hash = tabName;
             }
-            var tabContainer = document.querySelector('.community-tabs-container') || document.getElementById('communityTabList');
-            if (tabContainer) {
-              tabContainer.scrollIntoView({ behavior: 'smooth' });
+            var targetEl = document.getElementById(tabName) || document.getElementById('tab-pane-' + tabName) || document.querySelector('.community-tabs-container') || document.getElementById('communityTabList');
+            if (targetEl) {
+              targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
           }
 
