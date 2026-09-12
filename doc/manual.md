@@ -7,7 +7,7 @@
 
 <!-- AUTO-SYNC-METADATA-START -->
 > [!NOTE]
-> **문서 최종 자동 동기화**: 2026. 9. 9. 오후 8:42:12 (KST) | **Git Commit**: `df533a0` (main) | **상태**: 수정 작업 중
+> **문서 최종 자동 동기화**: 2026. 9. 12. 오후 1:55:45 (KST) | **Git Commit**: `997d5e5` (main) | **상태**: 수정 작업 중
 <!-- AUTO-SYNC-METADATA-END -->
 
 ## 1. 프로젝트 개요 (Project Overview)
