@@ -2707,17 +2707,22 @@ sections:
                 });
 
                 merged = sortCommunityItemsByTime(merged);
-                localStorage.setItem(vKey, JSON.stringify(merged));
-                localStorage.setItem('healim_board_' + bKey, JSON.stringify(merged));
-                if (typeof HealimPermanentDB !== 'undefined' && HealimPermanentDB.saveVault) {
-                  HealimPermanentDB.saveVault(bKey, merged);
+                var newMergedJson = JSON.stringify(merged);
+                var isDataChanged = (rawV !== newMergedJson);
+                if (isDataChanged) {
+                  localStorage.setItem(vKey, newMergedJson);
+                  localStorage.setItem('healim_board_' + bKey, newMergedJson);
+                  if (typeof HealimPermanentDB !== 'undefined' && HealimPermanentDB.saveVault) {
+                    HealimPermanentDB.saveVault(bKey, merged);
+                  }
+                  didChange = true;
                 }
 
                 // Also update custom posts tier so getCustomUserPosts has it
                 var cKey = (bKey === 'youtube') ? 'healim_custom_youtube_posts' : ('healim_custom_' + bKey + '_posts');
                 localStorage.setItem(cKey, JSON.stringify(merged.filter(function(p) { return p.isCustom || String(p.id).indexOf(bKey + '-') === 0; })));
 
-                didChange = true;
+                if (isDataChanged) { didChange = true; }
               }
             });
 
@@ -3470,6 +3475,17 @@ sections:
           }
           var container = document.getElementById('faqListContainer');
           if (!container) return;
+
+          // Preserve currently open FAQ items so user reading state is 100% preserved
+          var openFaqIds = [];
+          try {
+            var openDetails = container.querySelectorAll('details.faq-item[open]');
+            openDetails.forEach(function(dEl) {
+              var fId = dEl.getAttribute('data-faq-id');
+              if (fId) openFaqIds.push(fId);
+            });
+          } catch(e) {}
+
           var list = sortCommunityItemsByTime(getBoardData('faq', defaultFaqData));
 
           var totalItems = list.length;
@@ -3510,7 +3526,8 @@ sections:
               '</span>'
             ) : '';
 
-            html += '<details class="faq-item">' +
+            var isOpenAttr = (openFaqIds.indexOf(safeFaqId) !== -1) ? ' open' : '';
+            html += '<details class="faq-item" data-faq-id="' + safeFaqId + '"' + isOpenAttr + '>' +
             '<summary>' +
             '<span class="flex items-center gap-2 text-left flex-1 min-w-0 pr-2">' +
             '<span class="text-sm font-extrabold text-[#1c6e78] shrink-0">Q.</span>' +

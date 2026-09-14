@@ -2577,7 +2577,13 @@
             // Preserve currently open FAQ if user is reading it
             var currentlyOpenId = '';
             var openEl = faqContainer.querySelector('details[open]');
-            if (openEl) currentlyOpenId = openEl.getAttribute('data-faq-id') || '';
+            if (openEl) {
+              currentlyOpenId = openEl.getAttribute('data-faq-id') || '';
+              if (!currentlyOpenId) {
+                var titleSpan = openEl.querySelector('summary span.font-bold');
+                if (titleSpan) currentlyOpenId = titleSpan.textContent.trim();
+              }
+            }
 
             var fHtml = '';
             sortedFaq.slice(0, 5).forEach(function(item) {
@@ -2592,7 +2598,7 @@
                 imageHtml = '<div class="my-3.5 rounded-xl overflow-hidden border border-[#badfe3] bg-[#f8fafb] max-w-lg shadow-xs"><img src="' + item.image + '" alt="' + formattedTitle + '" class="max-h-80 w-auto object-contain rounded-lg" loading="lazy" onerror="this.onerror=null; this.parentElement.style.display=\'none\';" /></div>';
               }
 
-              var isOpenAttr = (currentlyOpenId && currentlyOpenId === String(item.id)) ? ' open' : '';
+              var isOpenAttr = (currentlyOpenId && (currentlyOpenId === String(item.id) || currentlyOpenId === safeFaqId || (formattedTitle && currentlyOpenId === formattedTitle))) ? ' open' : '';
 
               fHtml += '<details class="faq-item" data-faq-id="' + safeFaqId + '"' + isOpenAttr + '>' +
                 '<summary>' +
