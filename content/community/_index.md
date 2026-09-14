@@ -186,15 +186,15 @@ sections:
 
         <!-- Column Table List -->
         <div class="healim-table-container mb-10">
-        <table class="healim-table">
+        <table class="healim-table healim-column-table">
         <thead>
         <tr>
-        <th style="width: 7%; text-align: center;">번호</th>
-        <th>제목</th>
-        <th style="width: 17%; text-align: center;">작성자</th>
-        <th style="width: 13%; text-align: center;">등록일</th>
-        <th style="width: 8%; text-align: center;">조회</th>
-        <th style="width: 130px; text-align: center; display: none;" id="colManageTh">관리</th>
+        <th class="col-th-num" style="width: 7%; text-align: center;">번호</th>
+        <th class="col-th-title">제목</th>
+        <th class="col-desktop-only" style="width: 17%; text-align: center;">작성자</th>
+        <th class="col-desktop-only" style="width: 13%; text-align: center;">등록일</th>
+        <th class="col-desktop-only" style="width: 8%; text-align: center;">조회</th>
+        <th class="col-desktop-only" style="width: 130px; text-align: center; display: none;" id="colManageTh">관리</th>
         </tr>
         </thead>
         <tbody id="columnListContainer">
@@ -3856,7 +3856,7 @@ sections:
             var photoBadge = hasAnyImage ? ' <span class="text-[12px] text-[#1c6e78] font-bold" title="사진 첨부">📷</span>' : '';
             var itemNumber = totalItems - startIndex - idx;
             var manageTd = isSuperAdmin ? (
-              '<td style="text-align: center; white-space: nowrap;">' +
+              '<td class="col-desktop-only" style="text-align: center; white-space: nowrap;">' +
               '<div class="inline-flex items-center justify-center gap-1.5">' +
               '<button type="button" class="px-2 py-0.5 text-xs text-[#1c6e78] hover:bg-[#eaf3f4] font-semibold rounded border border-[#badfe3] transition-colors cursor-pointer" onclick="event.stopPropagation(); openEditModal(\'columns\', \'' + safeColId + '\')">✏️ 수정</button>' +
               '<button type="button" class="px-2 py-0.5 text-xs text-red-600 bg-red-50 hover:bg-red-100 font-semibold rounded border border-red-200 transition-colors cursor-pointer" onclick="event.stopPropagation(); handleDeletePostDirect(\'columns\', \'' + safeColId + '\')">🗑️ 삭제</button>' +
@@ -3864,12 +3864,31 @@ sections:
               '</td>'
             ) : '';
 
+            var mobileAdminBtns = isSuperAdmin ? (
+              '<span class="inline-flex items-center gap-1 ml-auto">' +
+              '<button type="button" class="px-1.5 py-0.5 text-[11px] text-[#1c6e78] bg-[#eaf3f4] rounded border border-[#badfe3]" onclick="event.stopPropagation(); openEditModal(\'columns\', \'' + safeColId + '\')">수정</button>' +
+              '<button type="button" class="px-1.5 py-0.5 text-[11px] text-red-600 bg-red-50 rounded border border-red-200" onclick="event.stopPropagation(); handleDeletePostDirect(\'columns\', \'' + safeColId + '\')">삭제</button>' +
+              '</span>'
+            ) : '';
+
+            var mobileMeta = '<div class="col-meta-mobile">' +
+              '<span>' + (item.author || '해아림한의원') + '</span>' +
+              '<span class="col-meta-divider">·</span>' +
+              '<span>' + item.date + '</span>' +
+              '<span class="col-meta-divider">·</span>' +
+              '<span>조회 ' + item.views + '</span>' +
+              mobileAdminBtns +
+              '</div>';
+
             html += '<tr onclick="openDetailModal(\'columns\', \'' + safeColId + '\')">' +
-            '<td style="text-align: center; color: #888888; font-size: 13px;">' + itemNumber + '</td>' +
-            '<td><span class="post-title-link">' + item.title + photoBadge + '</span></td>' +
-            '<td style="text-align: center; font-size: 13px;">' + (item.author || '해아림한의원') + '</td>' +
-            '<td style="text-align: center; color: #888888; font-size: 13px;">' + item.date + '</td>' +
-            '<td style="text-align: center; color: #888888; font-size: 13px;">' + item.views + '</td>' +
+            '<td class="col-td-num" style="text-align: center; color: #888888; font-size: 13px;">' + itemNumber + '</td>' +
+            '<td class="col-td-title">' +
+              '<span class="post-title-link">' + item.title + photoBadge + '</span>' +
+              mobileMeta +
+            '</td>' +
+            '<td class="col-desktop-only" style="text-align: center; font-size: 13px;">' + (item.author || '해아림한의원') + '</td>' +
+            '<td class="col-desktop-only" style="text-align: center; color: #888888; font-size: 13px;">' + item.date + '</td>' +
+            '<td class="col-desktop-only" style="text-align: center; color: #888888; font-size: 13px;">' + item.views + '</td>' +
             manageTd +
             '</tr>';
           });
