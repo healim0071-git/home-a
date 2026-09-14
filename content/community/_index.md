@@ -14,7 +14,7 @@ sections:
         해아림 커뮤니티
         </h1>
         <p class="text-[#555555] text-base md:text-lg leading-relaxed max-w-none lg:whitespace-nowrap break-keep">
-        전국 15개 네트워크 해아림한의원의 축적된 임상 노하우와 치료 정보, 환자 호전 사례, 원장단 의학 칼럼 및 영상을 공유합니다.
+        전국 16개 네트워크 해아림한의원의 축적된 임상 노하우와 치료 정보, 환자 호전 사례, 원장단 의학 칼럼 및 영상을 공유합니다.
         </p>
         </div>
 
@@ -223,7 +223,7 @@ sections:
         </div>
 
         <div class="text-center my-10">
-        <a href="#branches" class="btn-healim" style="padding: 0.85rem 2.25rem; font-size: 1.05rem;">가까운 15개 지점 찾기 &gt;</a>
+        <a href="#branches" class="btn-healim" style="padding: 0.85rem 2.25rem; font-size: 1.05rem;">가까운 16개 지점 찾기 &gt;</a>
         </div>
 
         <!-- ══════════════════════════════════════════════════════════════

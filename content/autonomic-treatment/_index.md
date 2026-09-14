@@ -461,6 +461,6 @@ sections:
 
         <!-- 5. 하단 CTA -->
         <div class="text-center my-10">
-        <a href="#branches" class="btn-healim" style="padding: 0.85rem 2.25rem; font-size: 1.05rem;">가까운 15개 지점 찾기 &gt;</a>
+        <a href="#branches" class="btn-healim" style="padding: 0.85rem 2.25rem; font-size: 1.05rem;">가까운 16개 지점 찾기 &gt;</a>
         </div>
 ---

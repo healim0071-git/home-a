@@ -13,7 +13,7 @@ sections:
         <div class="healim-hero-box" style="background-image: linear-gradient(rgba(255,255,255,0.88), rgba(255,255,255,0.95)), url('/images/hero_bg.jpg'); background-size: cover; background-position: center;">
           <div class="healim-hero-badge">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-            16여 년 임상 노하우 &amp; 전국 15개 네트워크
+            16여 년 임상 노하우 &amp; 전국 16개 네트워크
           </div>
           
           <div class="healim-hero-eyebrow">
@@ -33,7 +33,7 @@ sections:
           
           <div class="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-lg mx-auto">
             <a href="#branches" class="btn-healim w-full sm:w-auto">
-              <span>가까운 15개 지점 찾기 &gt;</span>
+              <span>가까운 16개 지점 찾기 &gt;</span>
             </a>
             <a href="/autonomic-diagnosis/" class="btn-healim w-full sm:w-auto" style="background-color: #ffffff; color: #1c6e78 !important; border: 2px solid #1c6e78;">
               <span>정밀 검사 시스템 &gt;</span>
@@ -280,7 +280,7 @@ sections:
             <p class="text-xs text-slate-300 mt-1">가까운 해아림한의원 지점에서 1:1 맞춤 진료 상담을 도와드립니다.</p>
           </div>
           <div class="flex justify-center">
-            <a href="#branches" class="px-6 py-2.5 rounded-md bg-[#c16e1f] text-white font-bold text-sm hover:bg-[#a85d18] transition-colors">가까운 15개 지점 찾기 &gt;</a>
+            <a href="#branches" class="px-6 py-2.5 rounded-md bg-[#c16e1f] text-white font-bold text-sm hover:bg-[#a85d18] transition-colors">가까운 16개 지점 찾기 &gt;</a>
           </div>
         </div>
 ---

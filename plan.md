@@ -1705,3 +1705,31 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
      - `<meta property="og:title" content="자율신경실조증 치료 | 해아림한의원">` 반영 확인.
      - `<meta name="description" ...>` '체계적인 치료병원' 100% 일치 확인.
      - `<meta property="og:description" ...>` '체계적인 치료병원' 100% 일치 확인.
+
+
+## 📍 [2026-09-15] 마일스톤 9.68: 전국 지점 안내 울산점 신설 (대전점과 부산센텀점 사이 배치) 및 16개 지점 네트워크 갱신
+
+1. **요구사항**:
+   - 전국 지점 안내에서 **울산점**을 대전점과 부산센텀점 사이 위치에 추가.
+     - 지점명: `울산점`
+     - 지역: `울산`
+     - 주소: `울산시 남구 삼산로 266, 11층`
+     - 전화번호: `052) 700-1953` (`tel:052-700-1953`, `T. 052-700-1953`)
+   - 기존의 전국 15개 지점 표기를 총 지점 수에 맞춰 **전국 16개 지점** 및 **전국 16개 네트워크**로 전면 갱신.
+
+2. **수정 및 개선 내역**:
+   - **푸터 전국 지점 안내 (`layouts/_partials/site_footer.html`)**:
+     - 대전점(12번째)과 부산센텀점(기존 13번째) 사이에 **울산점** 카드(13번째) 신설.
+     - 푸터 타이틀 및 헤더를 `해아림한의원 전국 16개 네트워크 지점 안내`로 갱신.
+   - **사이트 전역 16개 지점 카운트 동기화**:
+     - `content/_index.md`: `16여 년 임상 노하우 & 전국 16개 네트워크`, `가까운 16개 지점 찾기 >` 갱신.
+     - `content/autonomic-clinic/_index.md`: `전국 16개 지점 원장단`, `전국 16개 네트워크 거점`, `가까운 16개 지점 찾기 >` 갱신.
+     - `content/autonomic-treatment/_index.md`: `가까운 16개 지점 찾기 >` 갱신.
+     - `content/community/_index.md`: `전국 16개 네트워크 해아림한의원`, `가까운 16개 지점 찾기 >` 갱신.
+     - `layouts/_partials/components/common_bottom_sections.html`: 16개 네트워크 원장단 및 지점 안내로 갱신.
+     - `layouts/_partials/hooks/head-end/seo_schema.html`: Schema.org 메타데이터 `16개 네트워크` 갱신.
+     - `config/_default/params.yaml`: `organization: "해아림한의원 전국 16개 네트워크"` 갱신.
+
+3. **검증 및 빌드**:
+   - `hugo --gc --minify` 정상 컴파일 완료 (Pages: 32개, Error: 0건).
+   - `site_footer.html` 내 지점 수 16개 일치 및 대전점-울산점-부산센텀점 순서 검증 완료.
