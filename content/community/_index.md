@@ -439,7 +439,7 @@ sections:
         COMMUNITY JAVASCRIPT LOGIC
         ══════════════════════════════════════════════════════════════ -->
         <script src="/js/auto_faq_engine.js"></script>
-        <script src="/js/auto_column_engine.js"></script>
+        <script src="/js/auto_column_engine.js?v=20260916_colfix"></script>
         <script src="/js/auto_review_engine.js"></script>
         <script src="/js/healim_cloud_db.js"></script>
         <script>
