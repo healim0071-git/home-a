@@ -686,11 +686,11 @@
       postContent = '> 💡 **[해아림 자율신경실조증 심층 임상 의학 연재]**\n> 본 칼럼은 환자분들의 이해와 빠른 일상 복귀를돕기 위해 해아림한의원 원장단이 지속적으로 집필하는 심층 임상 칼럼 시리즈입니다.\n\n' + article.content;
     }
 
-    colTitle = sanitizeMedicalCompliance(colTitle);
-      colSummary = sanitizeMedicalCompliance(colSummary);
-      colContent = sanitizeMedicalCompliance(colContent);
+    var colTitle = sanitizeMedicalCompliance(postTitle);
+    var colSummary = sanitizeMedicalCompliance(article.summary || '');
+    var colContent = sanitizeMedicalCompliance(postContent);
 
-      var newPost = {
+    var newPost = {
       id: postId,
       poolId: article.idPrefix,
       category: '칼럼',
@@ -698,9 +698,9 @@
       date: dateStr,
       views: Math.floor(Math.random() * 150) + 180,
       image: article.image,
-      title: postTitle,
-      summary: article.summary,
-      content: postContent,
+      title: colTitle,
+      summary: colSummary,
+      content: colContent,
       isAutoPublished: true
     };
 
@@ -709,7 +709,7 @@
       return normalizeColumnTitle(item.title) === normalizeColumnTitle(newPost.title);
     });
     if (dupFound) {
-      newPost.title = postTitle.replace(/[\?\.]*$/, '') + ' (심층 연재)';
+      newPost.title = colTitle.replace(/[\?\.]*$/, '') + ' (심층 연재)';
     }
 
     // Insert at top of list

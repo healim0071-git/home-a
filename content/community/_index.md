@@ -3814,9 +3814,17 @@ sections:
         };
 
         function renderColumnsList() {
-          if (typeof purgeObsoleteMockPosts === 'function') purgeObsoleteMockPosts();
-          if (typeof window.checkAndRunAutoColumnPublish === 'function') {
-            window.checkAndRunAutoColumnPublish(false);
+          try {
+            if (typeof purgeObsoleteMockPosts === 'function') purgeObsoleteMockPosts();
+          } catch(e) {
+            console.warn('[Community] purgeObsoleteMockPosts error:', e);
+          }
+          try {
+            if (typeof window.checkAndRunAutoColumnPublish === 'function') {
+              window.checkAndRunAutoColumnPublish(false);
+            }
+          } catch(e) {
+            console.warn('[Community] checkAndRunAutoColumnPublish error:', e);
           }
           var container = document.getElementById('columnListContainer');
           if (!container) return;
