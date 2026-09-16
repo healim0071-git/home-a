@@ -1,0 +1,30 @@
+{{- printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?>" | safeHTML }}
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>{{ .Title | default site.Title }}</title>
+    <link>{{ .Permalink }}</link>
+    <atom:link href="{{ .Permalink }}index.xml" rel="self" type="application/rss+xml" />
+    <description>{{ .Description | default site.Params.hugoblox.identity.description | plainify }}</description>
+    <generator>HugoBlox Kit (https://hugoblox.com)</generator>
+    <language>ko</language>
+    <lastBuildDate>{{ now.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</lastBuildDate>
+    <image>
+      <url>https://healim-autonomic.com/media/sharing.jpg</url>
+      <title>{{ .Title | default site.Title }}</title>
+      <link>{{ .Permalink }}</link>
+    </image>
+    {{- range site.Pages -}}
+      {{- if and (not .IsHome) (ne .Params.private true) (not (in .RelPermalink "/admin/")) (not (in .RelPermalink "/login/")) (not (in .RelPermalink "/register/")) (not (in .RelPermalink "/site_join_type_choice/")) (not (in .RelPermalink "/tags/")) (not (in .RelPermalink "/categories/")) (not (in .RelPermalink "/authors/")) -}}
+    <item>
+      <title>{{ .Title }}</title>
+      <link>{{ .Permalink }}</link>
+      <pubDate>{{ if not .Date.IsZero }}{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}{{ else }}{{ now.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}{{ end }}</pubDate>
+      <author>healim@healim.com (해아림한의원)</author>
+      <guid isPermaLink="true">{{ .Permalink }}</guid>
+      <description>{{ .Description | default .Summary | plainify }}</description>
+      <category>자율신경실조증</category>
+    </item>
+      {{- end -}}
+    {{- end -}}
+  </channel>
+</rss>
