@@ -1,6 +1,6 @@
 {{/* Mobile Sticky Bottom CTA Bar - healim-tic signature */}}
 <div class="fixed bottom-0 inset-x-0 z-50 bg-[#0d3a42]/95 backdrop-blur-md border-t border-[#1c6e78]/40 p-2.5 px-4 shadow-2xl md:hidden">
-  <a href="/#branches" onclick="if(window.location.pathname === '/' || window.location.pathname === '') { var b = document.getElementById('branches'); if(b) { b.scrollIntoView({behavior:'smooth'}); return false; } }" class="w-full py-3.5 px-5 rounded-xl bg-[#1c6e78] hover:bg-[#15555c] active:bg-[#0d3a42] text-white font-bold text-center text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg transition-all active:scale-[0.98]">
+  <a href="#branches" id="btn-floating-branches" onclick="if(window.scrollToBranchesElement){window.scrollToBranchesElement(event);}" class="w-full py-3.5 px-5 rounded-xl bg-[#1c6e78] hover:bg-[#15555c] active:bg-[#0d3a42] text-white font-bold text-center text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg transition-all active:scale-[0.98]">
     <svg class="w-4 h-4 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -12,3 +12,48 @@
   </a>
 </div>
 
+<script>
+(function() {
+  window.scrollToBranchesElement = function(e) {
+    var b = document.getElementById('branches');
+    if (!b) {
+      window.location.href = '/#branches';
+      return;
+    }
+    if (e) {
+      if (typeof e.preventDefault === 'function') e.preventDefault();
+      if (typeof e.stopPropagation === 'function') e.stopPropagation();
+    }
+    var header = document.getElementById('site-header');
+    var hOffset = header ? header.getBoundingClientRect().height : (window.innerWidth >= 1024 ? 110 : 80);
+    var bRect = b.getBoundingClientRect();
+    // 사진 기준 0px 오차 정밀 정렬: 헤더 바로 아래 약 18px 여백을 두고 배너 카드 상단 위치
+    var targetTop = window.pageYOffset + bRect.top - hOffset - 7;
+    window.scrollTo({
+      top: Math.max(0, targetTop),
+      behavior: 'smooth'
+    });
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, '', '#branches');
+    }
+  };
+
+  // Intercept all branch guide anchors (#branches) in CAPTURE phase for 100% reliable mobile interception
+  document.addEventListener('click', function(e) {
+    var anchor = e.target.closest ? e.target.closest('a[href="#branches"], a[href="/#branches"], a[href*="#branches"]') : null;
+    if (anchor) {
+      window.scrollToBranchesElement(e);
+    }
+  }, true);
+
+  // Handle direct page load with #branches hash
+  if (window.location.hash === '#branches') {
+    setTimeout(function() {
+      window.scrollToBranchesElement();
+    }, 100);
+    setTimeout(function() {
+      window.scrollToBranchesElement();
+    }, 350);
+  }
+})();
+</script>
