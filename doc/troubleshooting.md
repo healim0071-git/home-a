@@ -7,7 +7,7 @@
 
 <!-- AUTO-SYNC-METADATA-START -->
 > [!NOTE]
-> **문서 최종 자동 동기화**: 2026. 9. 12. 오후 1:55:45 (KST) | **Git Commit**: `997d5e5` (main) | **상태**: 수정 작업 중
+> **문서 최종 자동 동기화**: 2026. 9. 17. 오후 11:21:32 (KST) | **Git Commit**: `31ca96d` (main) | **상태**: 수정 작업 중
 <!-- AUTO-SYNC-METADATA-END -->
 
 ## 1. 이슈 분류 및 처리 현황 요약 (Summary Table)

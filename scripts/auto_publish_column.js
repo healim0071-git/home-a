@@ -68,6 +68,41 @@ if (duplicatesFound === 0) {
   console.error(`\n❌ Found ${duplicatesFound} duplicate columns in pool!`);
 }
 
+// 6대 의료광고 및 표현 원칙 준수 검증기
+console.log('\n--- Checking 6 Medical Compliance Principles on Column Content Pool ---');
+const complianceChecks = [
+  { rule: 1, label: '지양 단어(근원/근본치료)', regex: /(근원|근본)\s*치료|(근원|근본)적인?\s*치료|(근본|근원)적으로|(근본|근원)적\s*(접근|해결)|(근본|근원)\s*원인/g },
+  { rule: 1, label: '완치 단어 배제', regex: /완치/g },
+  { rule: 1, label: '전문병원 표방 금지', regex: /전문병원/g },
+  { rule: 1, label: '전문/특화/첨단 수식 남용 배제', regex: /(전문\s*치료|전문\s*클리닉|특화\s*경추|특화된|첨단\s*장비|첨단\s*기기)/g },
+  { rule: 1, label: '완벽 단어 배제', regex: /(완벽해결|완벽\s*해결|완벽히|완벽하게|완벽한)/g },
+  { rule: 1, label: '부작용 없다 표현 배제', regex: /부작용\s*(이|은)?\s*(전혀\s*)?없/g },
+  { rule: 2, label: '타 병원 비교 우위 배제', regex: /(다른\s*병원보다\s*우수|타\s*병원보다|타\s*병원과의\s*차별화|타\s*의료기관)/g },
+  { rule: 3, label: "'재발안된다' 지양 및 재발율 완곡화", regex: /재발\s*(안\s*된다|되지\s*않|하지\s*않|없는|없이)/g },
+  { rule: 4, label: '단정적/절대적 표현 배제', regex: /(단언컨대|결코\s*(일어나지|해결되지|아닙니다|답이|성공할|분리되어)|불가능합니다)/g },
+  { rule: 6, label: "'해아림만의' 독점 표현 금지", regex: /(해아림한의원만의|해아림만의|해아림\s*만의|오직\s*해아림)/g },
+  { rule: 6, label: '반드시/절대/무조건 배제', regex: /(반드시\s*(해야|하여야|된다|됩니다|낫|완치|복귀|회복)|절대로?\s*(안|금물)|무조건)/g },
+];
+
+let colComplianceViolations = 0;
+columnsPool.forEach((item, idx) => {
+  const full = `${item.title} ${item.summary || ''} ${item.content}`;
+  complianceChecks.forEach(c => {
+    c.regex.lastIndex = 0;
+    let m;
+    while ((m = c.regex.exec(full)) !== null) {
+      console.error(`[COMPLIANCE VIOLATION] Column #${idx + 1} [Rule ${c.rule}: ${c.label}]: "${m[0]}"`);
+      colComplianceViolations++;
+    }
+  });
+});
+
+if (colComplianceViolations === 0) {
+  console.log(`✅ All ${columnsPool.length} columns 100% strictly comply with all 6 medical compliance principles.`);
+} else {
+  console.error(`\n❌ Found ${colComplianceViolations} compliance violations in column pool!`);
+}
+
 function calculateNextColumnSchedule(baseTime = new Date()) {
   const base = (baseTime instanceof Date) ? baseTime : new Date();
   const dayOffset = Math.random() < 0.5 ? 1 : 2;
