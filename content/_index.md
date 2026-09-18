@@ -238,7 +238,7 @@ sections:
               <p class="text-xs md:text-sm text-[#666666] leading-relaxed">한방신경정신과 전문의 및 박사·석사 등 의료진의 체계적 진료</p>
             </div>
             <div class="trust-card">
-              <div class="trust-number">15<span>개 지점</span></div>
+              <div class="trust-number" id="trustBranchHeader"><span id="trustBranchCount" class="trust-num-val">16</span><span>개 지점</span></div>
               <h3 class="text-base font-bold text-[#0d3a42] mb-1">전국 네트워크</h3>
               <p class="text-xs md:text-sm text-[#666666] leading-relaxed">서울, 경기, 인천, 대구, 대전, 부산, 제주 등 전국 주요 거점 네트워크</p>
             </div>
@@ -273,14 +273,14 @@ sections:
           </div>
         </div>
 
-        <!-- 11. 하단 바로가기 내비게이션 배너 -->
+        <!-- 11. 하단 바로가기 내비게이션 배너 (A 영역) -->
         <div class="bg-[#0d3a42] text-white rounded-xl p-6 md:p-8 text-center md:flex md:justify-between md:items-center">
           <div class="mb-4 md:mb-0 text-center md:text-left">
             <h3 class="text-lg md:text-xl font-bold text-white">어떤 검사를 받아야 할지 고민되시나요?</h3>
             <p class="text-xs text-slate-300 mt-1">가까운 해아림한의원 지점에서 1:1 맞춤 진료 상담을 도와드립니다.</p>
           </div>
           <div class="flex justify-center">
-            <a href="#branches" class="px-6 py-2.5 rounded-md bg-[#c16e1f] text-white font-bold text-sm hover:bg-[#a85d18] transition-colors">가까운 16개 지점 찾기 &gt;</a>
+            <a href="#branches" id="bannerBranchCountBtn" class="px-6 py-2.5 rounded-md bg-[#c16e1f] text-white font-bold text-sm hover:bg-[#a85d18] transition-colors">가까운 16개 지점 찾기 &gt;</a>
           </div>
         </div>
 ---

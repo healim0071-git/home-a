@@ -55,5 +55,88 @@
       window.scrollToBranchesElement();
     }, 350);
   }
+
+  // =========================================================================
+  // [A -> B 지점 갯수 자동 동기화 세팅]
+  // A(하단 배너 버튼 "가까운 16개 지점 찾기 >" 등)에 적힌 지점갯수를 감지하여
+  // B(트러스트 카드 "16개 지점")의 숫자가 자동으로 바뀌도록 완벽 연동
+  // =========================================================================
+  function syncBranchCountFromA() {
+    // 1. A 영역 요소 탐색
+    var btnA = document.getElementById('bannerBranchCountBtn');
+    if (!btnA) {
+      var candidates = document.querySelectorAll('a[href="#branches"], a[href="/#branches"], a[href*="#branches"]');
+      for (var i = 0; i < candidates.length; i++) {
+        var cText = candidates[i].textContent || '';
+        if (cText.indexOf('지점 찾기') !== -1) {
+          btnA = candidates[i];
+          break;
+        }
+      }
+    }
+    if (!btnA) return;
+
+    // 2. A 버튼의 텍스트에서 지점 갯수 숫자 파싱
+    var textA = btnA.textContent || '';
+    var match = textA.match(/(\d+)\s*개\s*지점/) || textA.match(/(\d+)/);
+    if (!match || !match[1]) return;
+    var count = match[1];
+
+    // 3. B 영역(트러스트 카드 지점 수)에 자동 반영
+    var countTargetB = document.getElementById('trustBranchCount');
+    if (countTargetB) {
+      if (countTargetB.textContent !== count) {
+        countTargetB.textContent = count;
+      }
+    } else {
+      var trustNumbers = document.querySelectorAll('.trust-number');
+      for (var j = 0; j < trustNumbers.length; j++) {
+        var el = trustNumbers[j];
+        if (el.textContent && el.textContent.indexOf('개 지점') !== -1) {
+          el.id = 'trustBranchHeader';
+          el.innerHTML = '<span id="trustBranchCount" class="trust-num-val">' + count + '</span><span>개 지점</span>';
+          break;
+        }
+      }
+    }
+  }
+
+  // DOMContentLoaded 및 즉시 실행
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', syncBranchCountFromA);
+  } else {
+    syncBranchCountFromA();
+  }
+
+  // window load 시점 재검증 및 MutationObserver 등록 (A 변경 시 B 실시간 반응)
+  window.addEventListener('load', function() {
+    syncBranchCountFromA();
+    var btnA = document.getElementById('bannerBranchCountBtn') || document.querySelector('a[href="#branches"]');
+    if (btnA && window.MutationObserver) {
+      var observer = new MutationObserver(function() {
+        syncBranchCountFromA();
+      });
+      observer.observe(btnA, { characterData: true, childList: true, subtree: true });
+    }
+  });
+
+  // 전역 API 노출
+  window.syncBranchCountFromA = syncBranchCountFromA;
+  window.setBranchCount = function(newCount) {
+    var btnA = document.getElementById('bannerBranchCountBtn');
+    if (!btnA) {
+      var candidates = document.querySelectorAll('a[href="#branches"], a[href="/#branches"]');
+      for (var i = 0; i < candidates.length; i++) {
+        if (candidates[i].textContent && candidates[i].textContent.indexOf('지점 찾기') !== -1) {
+          btnA = candidates[i];
+          break;
+        }
+      }
+    }
+    if (btnA) {
+      btnA.textContent = '가까운 ' + newCount + '개 지점 찾기 >';
+    }
+    syncBranchCountFromA();
+  };
 })();
 </script>
