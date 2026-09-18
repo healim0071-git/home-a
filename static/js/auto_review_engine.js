@@ -333,7 +333,212 @@
   }
 
   // ──────────────────────────────────────────────────────────
-  // 3. 치료후기 자동 발행 실행 엔진
+  // 3. 치료후기 제목 정규화 & 영구 삭제 블랙리스트 헬퍼
+  // ──────────────────────────────────────────────────────────
+  function normalizeReviewTitle(t) {
+    if (!t) return '';
+    return String(t)
+      .replace(/^(치료후기|후기|review)[\.:\s\-]+/i, '')
+      .replace(/\s*[\(\[\{][^\)\]\}]*(?:심층|연재|안내|에디션|특별|증례|회복|가이드|속편|2편|3편|극복|후기|치료)[^\)\]\}]*[\)\]\}]/gi, '')
+      .replace(/\s*\([^\)]*\)\s*$/g, '')
+      .replace(/\s*[-–—:]\s*(?:한방|임상|치료|신경|검사상|뇌[\s\-]신경계|원인|병원|재발|한약|미주신경|생체|자가|체질|환자|문답|질의|극복기|완치기).*$/gi, '')
+      .replace(/\s*[-–—]\s*[^:]{4,}\s*$/g, '')
+      .replace(/[\s\*\*_~`#\?\uFF1F\.,\(\)\[\]:;\-–—!/\\'"“”‘’]/g, '')
+      .trim()
+      .toLowerCase();
+  }
+
+  function isReviewPoolBlacklisted(candidate) {
+    if (!candidate) return false;
+    var pid = String(candidate.id || '').trim();
+    var norm = normalizeReviewTitle(candidate.title);
+    try {
+      var rawP = localStorage.getItem('healim_deleted_pool_ids_reviews');
+      if (rawP) {
+        var pList = JSON.parse(rawP) || [];
+        if (pid && pList.indexOf(pid) !== -1) return true;
+      }
+      var rawT = localStorage.getItem('healim_deleted_title_keys_reviews');
+      if (rawT) {
+        var tList = JSON.parse(rawT) || [];
+        if (norm && tList.indexOf(norm) !== -1) return true;
+      }
+      var rawAllDel = localStorage.getItem('healim_deleted_posts_reviews');
+      if (rawAllDel) {
+        var allList = JSON.parse(rawAllDel) || [];
+        if (pid && allList.indexOf(pid) !== -1) return true;
+      }
+    } catch(e) {}
+    return false;
+  }
+
+  function getExistingReviewTitles() {
+    var titles = new Set();
+    ['healim_board_reviews', 'healim_vault_all_posts_reviews', 'healim_custom_reviews_posts'].forEach(function(k) {
+      try {
+        var raw = localStorage.getItem(k);
+        if (raw) {
+          var list = JSON.parse(raw) || [];
+          list.forEach(function(it) {
+            if (it && it.title) titles.add(normalizeReviewTitle(it.title));
+          });
+        }
+      } catch(e) {}
+    });
+    if (typeof window !== 'undefined' && Array.isArray(window.defaultReviewsData)) {
+      window.defaultReviewsData.forEach(function(it) {
+        if (it && it.title) titles.add(normalizeReviewTitle(it.title));
+      });
+    }
+    return titles;
+  }
+
+  // ──────────────────────────────────────────────────────────
+  // [신규 치료후기 배치 동적 생성 엔진]
+  // 풀이 모두 소진되거나 삭제 등으로 가용 아이템이 없을 때
+  // 기준(300~600자, 치료법 언급 비율 20%:80%, 익명성 보호)에 맞춰
+  // 새로운 회복 수기를 지속적으로 만들어 낼 수 있도록 신규 배치를 자동 공급합니다.
+  // ──────────────────────────────────────────────────────────
+  var EXTENDED_REVIEW_TEMPLATES = [
+    {
+      subId: '31',
+      category: '체온조절/오한',
+      title: '체온이 35도대로 떨어지고 한여름에도 오한으로 패딩을 입던 저체온증 극복',
+      author: '40대 직장인 박OO 님',
+      hasTreatment: false,
+      content: '여름철 에어컨 바람만 닿아도 온몸이 얼어붙듯 떨리고 체온이 35.4도를 넘지 못해 고통스러웠습니다. 내분비내과 갑상선 검사에서는 아무 이상이 없다고 하여 가족들조차 꾀병 취급을 해 서러웠습니다. 뼛속까지 시린 오한 때문에 잠을 이루지 못해 불면증까지 찾아왔습니다.\n\n해아림한의원에서 자율신경 대사 조절 중추의 기능 저하라는 설명을 듣고 치료를 시작했습니다. 하초의 양기를 데워주는 한방 처방을 2달간 꾸준히 복용하면서 서서히 체온이 36.5도로 돌아왔습니다. 이제는 뼛속 시림이 깨끗이 사라져 반팔 옷을 입고도 편안하게 생활하고 있습니다. 다시 따뜻한 생기를 되찾아주셔서 진심으로 감사드립니다.'
+    },
+    {
+      subId: '32',
+      category: '수면/불면증',
+      title: '스마트폰만 보면 심장이 뛰고 새벽 4시까지 잠을 못 이루던 수면장애 탈출',
+      author: '20대 대학생 최OO 님',
+      hasTreatment: true,
+      treatmentType: '한약 + 침 치료',
+      content: '자려고 누워서 스마트폰을 조금만 봐도 가슴이 두근거리고 머리가 각성되어 새벽 4~5시까지 눈을 감지 못했습니다. 수면유도제 없이는 잠을 잘 수 없었고 다음 날 수업 시간에 멍하고 어지러워 학업이 불가능했습니다.\n\n해아림에서 야간 교감신경 과각성을 진정시키는 한약 복용과 침 치료를 받았습니다. 치료 3주 차부터 잠자리에 누우면 자연스럽게 졸음이 밀려오기 시작했고, 지금은 밤 11시 반이면 깊은 숙면에 들어 아침에 상쾌하게 눈을 뜹니다. 약 없이도 편안하게 잘 수 있게 되어 삶의 질이 180도 달라졌습니다.'
+    },
+    {
+      subId: '33',
+      category: '소화/식곤증',
+      title: '밥만 먹으면 쏟아지던 기절할 듯한 식곤증과 브레인포그가 사라졌습니다',
+      author: '30대 직장인 이OO 님',
+      hasTreatment: false,
+      content: '점심 식사만 마치면 마취제를 맞은 것처럼 머리가 멍해지고 기절하듯 졸음이 쏟아져 정상적인 업무를 볼 수가 없었습니다. 내시경이나 혈당 검사는 정상인데 밥만 먹으면 뇌가 마비되는 느낌에 퇴사까지 고민했습니다.\n\n해아림한의원에서 미주신경 소화 혈류 장애 진단을 받고 치료를 진행했습니다. 굳어 있던 명치가 부드럽게 풀리면서 식후 쏟아지던 무거운 피로감이 싹 걷혔습니다. 식사 후에도 맑은 머리로 집중할 수 있게 되어 직장 생활에 큰 자신감을 되찾았습니다.'
+    },
+    {
+      subId: '34',
+      category: '가슴통증/흉통',
+      title: '심장 조영술은 정상인데 가슴을 쥐어짜던 미세혈관 흉통에서 벗어났습니다',
+      author: '50대 주부 정OO 님',
+      hasTreatment: false,
+      content: '가슴을 바위로 짓누르고 쥐어짜는 듯한 통증으로 대학병원 응급실을 세 번이나 실려 갔습니다. 관상동맥 조영술 결과는 깨끗하다는데 통증은 날마다 반복되어 심장마비 공포에 시달렸습니다.\n\n해아림에서 흉부 교감신경절 긴장으로 인한 미세혈관 연축 치료를 받았습니다. 척추 긴장을 풀어주고 심장 신경을 안정시키는 처방을 받으면서 가슴을 옥죄던 통증이 사라졌습니다. 이제는 숨을 깊게 들이쉴 수 있고 가슴 답답함 없이 외출을 즐기고 있습니다.'
+    },
+    {
+      subId: '35',
+      category: '어지럼/기상병',
+      title: '비만 오면 머리가 깨질 듯 아프고 어지럽던 기상병, 맑은 날처럼 편안합니다',
+      author: '40대 자영업 강OO 님',
+      hasTreatment: true,
+      treatmentType: '한약 + 추나요법',
+      content: '흐린 날이나 비가 오기 전날이면 온몸이 쑤시고 머리가 깨질 듯 아프며 땅이 울렁거려 가게 문을 닫아야 했습니다. 일기예보보다 더 정확하게 찾아오는 통증에 진통제를 달고 살았습니다.\n\n해아림한의원에서 내이 림프 순환과 자율신경 기압 조절력을 높이는 한약과 경추 추나 치료를 받았습니다. 치료 두 달 차부터 비가 와도 머리가 맑고 어지럼증이 나타나지 않아 놀라웠습니다. 날씨에 구애받지 않고 활기차게 일할 수 있어 정말 감사드립니다.'
+    }
+  ];
+
+  function ensureDynamicReviewBatch() {
+    if (!window.autoReviewContentPool) window.autoReviewContentPool = [];
+
+    // 1. 기존 캐시된 동적 풀 복원
+    try {
+      var rawDyn = localStorage.getItem('healim_dynamic_review_pool');
+      if (rawDyn) {
+        var dynList = JSON.parse(rawDyn) || [];
+        dynList.forEach(function(item) {
+          if (!window.autoReviewContentPool.some(function(rp) { return rp.id === item.id || normalizeReviewTitle(rp.title) === normalizeReviewTitle(item.title); })) {
+            window.autoReviewContentPool.push(item);
+          }
+        });
+      }
+    } catch(e) {}
+
+    // 2. 가용 풀 확인
+    var existingTitles = getExistingReviewTitles();
+    var hasAvailable = window.autoReviewContentPool.some(function(p) {
+      return !existingTitles.has(normalizeReviewTitle(p.title)) && !isReviewPoolBlacklisted(p);
+    });
+
+    // 3. 풀 고갈 시 신규 배치 자동 확장
+    if (!hasAvailable) {
+      var added = [];
+      var curPoolCount = window.autoReviewContentPool.length;
+
+      EXTENDED_REVIEW_TEMPLATES.forEach(function(tmpl) {
+        var pid = 'pool-rev-' + tmpl.subId;
+        var norm = normalizeReviewTitle(tmpl.title);
+        if (!window.autoReviewContentPool.some(function(p) { return p.id === pid || normalizeReviewTitle(p.title) === norm; })) {
+          var item = {
+            id: pid,
+            category: tmpl.category,
+            title: tmpl.title,
+            author: tmpl.author,
+            hasTreatment: tmpl.hasTreatment,
+            treatmentType: tmpl.treatmentType || null,
+            content: tmpl.content
+          };
+          window.autoReviewContentPool.push(item);
+          added.push(item);
+        }
+      });
+
+      // 템플릿 소진 시 무제한 회복수기 생성기
+      if (added.length === 0) {
+        var batchSerial = Math.floor(curPoolCount / 5) + 1;
+        var dynamicReviewThemes = [
+          { cat: '목이물감/매핵기', author: '30대 직장인 한OO 님', title: '목에 가시가 걸린 듯 답답하던 만성 매핵기 호전 후기', hasTr: false, cont: '목에 무언가 걸려 뱉어지지도 삼켜지지도 않는 이물감으로 이비인후과와 소화기내과를 전전했습니다. 위산 역류제도 듣지 않아 절망적이었는데 해아림한의원에서 미주신경 인후부 긴장을 완화하는 맞춤 치료를 받고 편안해졌습니다. 목의 걸림이 완전히 사라져 시원하게 숨을 쉬고 있습니다.' },
+          { cat: '배뇨장애/방광', author: '40대 주부 윤OO 님', title: '검사는 정상인데 화장실을 수없이 찾던 과민성 방광 극복', hasTr: true, trType: '한약 + 약침 치료', cont: '외출만 하면 10분마다 화장실을 찾아야 해서 대중교통조차 탈 수 없었습니다. 비뇨기과에서는 이상이 없다는데 일상이 지옥 같았습니다. 해아림에서 골반 자율신경총 안정 한약과 약침 치료를 받으며 방광 신경 과민이 가라앉아 이제는 3~4시간 동안 편안하게 영화도 보고 여행도 다닙니다.' },
+          { cat: '안면감각/떨림', author: '50대 자영업 송OO 님', title: '눈 밑 떨림과 얼굴 저림으로 풍인 줄 알고 겁먹었던 자율신경 회복기', hasTr: false, cont: '얼굴 한쪽이 파르르 떨리고 피부가 얼얼하게 마비되는 느낌에 뇌졸중인 줄 알고 뇌 MRI를 찍었으나 정상이었습니다. 해아림에서 스트레스성 3차신경 및 자율신경 안정 처방을 받고 4주 만에 떨림과 저림이 깨끗하게 사라졌습니다. 마음의 불안까지 씻은 듯 나아 감사드립니다.' },
+          { cat: '수족냉증/시림', author: '20대 직장인 신OO 님', title: '한여름에도 손가락이 하얗게 질리던 레이노 증상 완화 후기', hasTr: false, cont: '에어컨 찬바람만 쐬면 손가락 끝으로 피가 안 통해 하얗게 질리고 감각이 없었습니다. 혈관확장제는 두통이 심해 못 먹었는데 해아림에서 말초 모세혈관 순환을 돕는 한방 치료를 받고 손끝까지 온기가 돌기 시작했습니다. 사무실에서 얼음장 같던 손이 따뜻해져 행복합니다.' },
+          { cat: '과민대장/복통', author: '30대 프리랜서 조OO 님', title: '중요한 미팅마다 배가 쥐어짜듯 아프던 과민대장증후군 극복기', hasTr: true, trType: '한약 + 두개천골요법 CST', cont: '긴장되는 일정만 있으면 배가 끓어오르고 급하게 화장실로 달려가야 했습니다. 장-뇌 축을 바로잡아주는 한약과 뇌신경 이완 CST 치료를 병행하면서 배에 차던 가스가 빠지고 변이 단단해졌습니다. 이제는 중요한 미팅 전에도 긴장하지 않고 편안한 속을 유지합니다.' }
+        ];
+
+        dynamicReviewThemes.forEach(function(th, idx) {
+          var newId = 'pool-rev-' + (curPoolCount + idx + 1);
+          var newTitle = th.title + ' (회복 수기 제' + batchSerial + '기)';
+          var normT = normalizeReviewTitle(newTitle);
+          if (!window.autoReviewContentPool.some(function(p) { return normalizeReviewTitle(p.title) === normT; })) {
+            var item = {
+              id: newId,
+              category: th.cat,
+              title: newTitle,
+              author: th.author,
+              hasTreatment: th.hasTr,
+              treatmentType: th.trType || null,
+              content: th.cont
+            };
+            window.autoReviewContentPool.push(item);
+            added.push(item);
+          }
+        });
+      }
+
+      if (added.length > 0) {
+        try {
+          var allDyn = [];
+          var rawD = localStorage.getItem('healim_dynamic_review_pool');
+          if (rawD) allDyn = JSON.parse(rawD) || [];
+          added.forEach(function(it) {
+            if (!allDyn.some(function(ad) { return ad.id === it.id; })) {
+              allDyn.push(it);
+            }
+          });
+          localStorage.setItem('healim_dynamic_review_pool', JSON.stringify(allDyn));
+        } catch(e) {}
+        console.log('[Healim Auto-Review Engine] Dynamic batch generated: ' + added.length + ' new clinical reviews added to pool.');
+      }
+    }
+  }
+
+  // ──────────────────────────────────────────────────────────
+  // 4. 치료후기 자동 발행 실행 엔진
   // ──────────────────────────────────────────────────────────
   function checkAndRunAutoReviewPublish(isManual) {
     var state = getAutoReviewState();
@@ -341,28 +546,45 @@
     var shouldPublish = isManual || (state.nextScheduledTime && now >= state.nextScheduledTime);
 
     if (shouldPublish) {
+      // 4. 자동발행 목록이 소진되면 기준에 맞춘 신규 자동발행 목록을 동적으로 보충
+      ensureDynamicReviewBatch();
+
       var pool = window.autoReviewContentPool || [];
       var poolLength = pool.length;
       if (poolLength === 0) return null;
 
-      // 이미 발행된 글 목록 확인
-      var publishedSet = {};
-      (state.publishedPoolIds || []).forEach(function(pid) { publishedSet[pid] = true; });
+      var existingTitles = getExistingReviewTitles();
 
+      // 1 & 3. 미발행이면서 영구 삭제 블랙리스트에 없는 항목 순회 탐색
       var chosenIndex = -1;
       for (var i = 0; i < poolLength; i++) {
         var idx = (state.poolIndex + i) % poolLength;
         var cand = pool[idx];
-        if (!publishedSet[cand.id]) {
+        var normT = normalizeReviewTitle(cand.title);
+
+        if (!existingTitles.has(normT) && !isReviewPoolBlacklisted(cand)) {
           chosenIndex = idx;
           break;
         }
       }
 
-      // 모든 풀이 소진된 경우 풀 리셋
+      // 만약 기존 풀에서 찾지 못했다면 신규 배치를 생성하여 미발행 글 탐색
       if (chosenIndex === -1) {
-        state.publishedPoolIds = [];
-        chosenIndex = state.poolIndex % poolLength;
+        ensureDynamicReviewBatch();
+        for (var j = 0; j < window.autoReviewContentPool.length; j++) {
+          var cItem = window.autoReviewContentPool[j];
+          var nT = normalizeReviewTitle(cItem.title);
+          if (!existingTitles.has(nT) && !isReviewPoolBlacklisted(cItem)) {
+            chosenIndex = j;
+            break;
+          }
+        }
+      }
+
+      // 1. 중복 감지 시 강제 발행 중단: 미발행 글이 없으면 리셋하여 재탕하지 않고 즉시 프로세스 중단!
+      if (chosenIndex === -1) {
+        console.warn('[Healim Auto-Review Engine] No un-published unique reviews available. Halting publish process safely without duplication.');
+        return null;
       }
 
       var poolItem = pool[chosenIndex];
@@ -384,17 +606,41 @@
         treatmentType: poolItem.treatmentType || null,
         isCustom: true,
         isAutoPublished: true,
+        poolId: poolItem.id,
         createdAt: pubTimestamp,
         updatedAt: pubTimestamp
       };
 
+      // 1. 중복 감지 시 강제 발행 중단
+      var currentRevList = [];
+      try {
+        var rawB = localStorage.getItem('healim_board_reviews');
+        if (rawB) currentRevList = JSON.parse(rawB) || [];
+      } catch(e) {}
+      if (currentRevList.length === 0 && window.defaultReviewsData) {
+        currentRevList = window.defaultReviewsData.slice();
+      }
+
+      var normNew = normalizeReviewTitle(newPost.title);
+      var dupFound = currentRevList.some(function(item) {
+        return normalizeReviewTitle(item.title) === normNew;
+      });
+
+      if (dupFound) {
+        console.warn('[Healim Auto-Review Engine] Duplicate review title detected: "' + newPost.title + '". Halting publication immediately.');
+        return null;
+      }
+
+      // 3. 영구 삭제 블랙리스트 2차 방어
+      if (isReviewPoolBlacklisted(poolItem)) {
+        console.warn('[Healim Auto-Review Engine] Blacklisted review item detected: "' + poolItem.id + '". Halting publication immediately.');
+        return null;
+      }
+
       // 스토리지 및 IndexedDB 영구 반영
       try {
-        var revList = [];
-        var rawB = localStorage.getItem('healim_board_reviews');
-        if (rawB) revList = JSON.parse(rawB) || [];
-        revList.unshift(newPost);
-        localStorage.setItem('healim_board_reviews', JSON.stringify(revList));
+        currentRevList.unshift(newPost);
+        localStorage.setItem('healim_board_reviews', JSON.stringify(currentRevList));
 
         var vaultList = [];
         var rawV = localStorage.getItem('healim_vault_all_posts_reviews');
@@ -448,6 +694,9 @@
 
   // 전역 API 노출
   window.checkAndRunAutoReviewPublish = checkAndRunAutoReviewPublish;
+  window.normalizeReviewTitle = normalizeReviewTitle;
+  window.isReviewPoolBlacklisted = isReviewPoolBlacklisted;
+  window.ensureDynamicReviewBatch = ensureDynamicReviewBatch;
   window.getAutoReviewState = getAutoReviewState;
   window.calculateNextReviewScheduleTime = calculateNextReviewScheduleTime;
   window.formatReviewScheduleTime = formatScheduleTime;

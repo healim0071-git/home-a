@@ -285,9 +285,37 @@
     if (!t) return '';
     return String(t)
       .replace(/^칼럼[\.:\s\-]+/i, '')
-      .replace(/[\s\*\*_~\`#\?\uFF1F\.,\(\)\[\]:;\-]/g, '')
+      .replace(/\s*[\(\[\{][^\)\]\}]*(?:심층|연재|안내|에디션|특별|증례|회복|가이드|속편|2편|3편|분석|전략|솔루션)[^\)\]\}]*[\)\]\}]/gi, '')
+      .replace(/\s*\([^\)]*\)\s*$/g, '')
+      .replace(/\s*[-–—:]\s*(?:한방|임상|치료|신경|검사상|뇌[\s\-]신경계|원인|병원|재발|한약|미주신경|생체|자가|체질|환자|문답|질의).*$/gi, '')
+      .replace(/\s*[-–—]\s*[^:]{4,}\s*$/g, '')
+      .replace(/[\s\*\*_~`#\?\uFF1F\.,\(\)\[\]:;\-–—!/\\'"“”‘’]/g, '')
       .trim()
       .toLowerCase();
+  }
+
+  function isColumnPoolBlacklisted(candidate) {
+    if (!candidate) return false;
+    var pid = String(candidate.idPrefix || candidate.id || '').trim();
+    var norm = normalizeColumnTitle(candidate.title);
+    try {
+      var rawP = localStorage.getItem('healim_deleted_pool_ids_columns');
+      if (rawP) {
+        var pList = JSON.parse(rawP) || [];
+        if (pid && pList.indexOf(pid) !== -1) return true;
+      }
+      var rawT = localStorage.getItem('healim_deleted_title_keys_columns');
+      if (rawT) {
+        var tList = JSON.parse(rawT) || [];
+        if (norm && tList.indexOf(norm) !== -1) return true;
+      }
+      var rawAllDel = localStorage.getItem('healim_deleted_posts_columns');
+      if (rawAllDel) {
+        var allList = JSON.parse(rawAllDel) || [];
+        if (pid && allList.indexOf(pid) !== -1) return true;
+      }
+    } catch(e) {}
+    return false;
   }
 
   var OBSOLETE_COLUMN_TITLES = [
@@ -689,6 +717,142 @@
   }
 
 
+  // ──────────────────────────────────────────────────────────
+  // [신규 배치 동적 생성 엔진]
+  // 풀이 모두 소진되거나 삭제 등으로 가용 아이템이 없을 때
+  // 기준(1,600자 내외 임상 분석, SVG 썸네일, 6대 의료광고 원칙, 3대 링크)에 맞춰
+  // 새로운 글을 지속적으로 만들어 낼 수 있도록 신규 배치를 자동 공급합니다.
+  // ──────────────────────────────────────────────────────────
+  var EXTENDED_COLUMN_TEMPLATES = [
+    {
+      subId: '31',
+      title: '체온이 35도대로 떨어지는 저체온증과 오한: 갑상선 검사는 정상인데 자율신경 대사 조절 중추가 꺼진 이유',
+      image: '/images/columns/column_31_hypothermia.svg',
+      summary: '갑상선 기능은 정상인데 체온이 36도를 넘지 못하고 뼛속까지 시린 오한을 겪는 환자분들을 위해 시상하부 대사 조절 중추와 한방 온양 치법의 원리를 밝힙니다.',
+      content: '진료실을 찾는 자율신경 환자분들 중에는 여름철에도 두꺼운 내복을 챙겨 입고 패딩 조끼를 입은 채 들어오시는 분들이 적지 않습니다. "원장님, 아침에 일어나 체온을 재면 35.2도, 낮에도 35.8도를 넘지 못합니다. 뼛속에서부터 찬바람이 불어 나오는 것 같아 온몸이 덜덜 떨리는데, 대학병원 내분비내과에서 갑상선 호르몬 검사를 해보면 너무나 깨끗한 정상이라고 합니다. 저는 왜 이렇게 몸이 얼어붙는 걸까요?" 체온계 수치는 분명 저체온인데 정밀 혈액 검사에서는 아무런 내분비 질환도 발견되지 않아 답답함을 호소하시는 전형적인 자율신경 대사 실조 증례입니다.\n\n인간의 체온 조절을 총괄하는 핵심 관제탑은 뇌간 바로 위에 위치한 시상하부(Hypothalamus)입니다. 시상하부는 전신의 혈류와 대사량을 실시간으로 감지하여 체온이 떨어지면 교감신경을 적절히 자극해 갈색지방 조직에서 열을 생성하고, 말초 혈관을 수축시켜 중심 체온의 방출을 막습니다. 그러나 만성 스트레스, 극심한 수면 결핍, 신경계 피로가 장기화되면 시상하부의 체온 기준점(Set-point) 자체가 고장 나면서 정상적인 열 생산 신호를 전신 장부로 전달하지 못하게 됩니다. 혈액 검사상 갑상선 호르몬 수치 자체는 정상 범위에 머물러 있을지라도, 세포 단위에서 열을 생성하는 신진대사 스위치가 완전히 꺼져버린 것입니다. 자율신경 균형 검사(HRV)를 통해 확인해 보면, 심박변이도 곡선이 극도로 평탄화되어 있으며 교감신경과 부교감신경의 전체 에너지 활성도가 바닥을 치는 심각한 자율신경 저하 패턴이 뚜렷하게 관찰됩니다.\n\n한의학에서는 이러한 상태를 심양(心陽)과 비신양기(脾腎陽氣)가 극도로 쇠약해진 \'양허오한(陽虛惡寒)\'이자 \'음성즉한(陰盛則寒)\'의 병증으로 정밀하게 진단합니다. 생명 활동의 근원인 하초의 원양(元陽)이 바닥나 전신의 기혈 순환 동력이 멈추고, 이로 인해 비위 소화기계의 온도가 떨어지면서 섭취한 음식물을 열에너지로 치환하지 못하는 것입니다. 환자분들은 극심한 추위와 함께 전신 무기력증, 소화불량, 묽은 변, 손발 저림, 아침 기상 시 부종을 복합적으로 동반하게 됩니다. 이는 단순한 체질적 추위 타기가 아니며, 뇌신경계와 미세순환계의 항상성이 무너져 내린 생리학적 경고입니다.\n\n해아림한의원에서는 저하된 시상하부 체온 조절 중추를 깨우기 위해 부자, 육계, 건강, 황기 등 온리산한(溫裏散寒)과 보기온양(補氣溫陽)의 핵심 본초를 체질에 맞춰 정밀 배합합니다. 하초의 단전을 덥히고 말초 모세혈관의 혈류 순환을 촉진하는 약침 치료와 척추 신경절 온열 뜸 요법을 병행하여 정체된 미세순환 통로를 뚫어줍니다. 신경계의 배터리가 충전되고 세포의 대사 열 생산이 정상화되면, 35도대에 머물던 기초체온이 건강한 36.5도로 회복되면서 뼛속 시림이 사라지고 온몸에 따뜻한 생기가 돌아오게 됩니다. 치료 종료 후에도 아침 기상 직후 따뜻한 온수 한 잔 섭취와 주 3회 반신욕을 통해 체온 조절 신경망을 단단하게 유지하시도록 1:1 생활 수호 프로토콜을 완성해 드립니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)'
+    },
+    {
+      subId: '32',
+      title: '스마트폰 블루라이트와 야간 교감신경 흥분: 멜라토닌 분비 억제가 부르는 자율신경 불면증의 악순환',
+      image: '/images/columns/column_32_blue_light.svg',
+      summary: '잠들기 전 스마트폰 사용이 시신경과 송과체를 어떻게 교란하여 교감신경 과각성과 수면장애를 일으키는지 한방신경정신과 관점에서 분석합니다.',
+      content: '현대인들의 잠자리를 관찰해 보면 침대에 누워 불을 끈 채 스마트폰 화면을 응시하는 모습이 일상화되어 있습니다. "원장님, 몸은 천근만근 피곤해 죽겠는데 침대에 누워 유튜브나 숏폼을 조금만 보다 보면 어느새 뇌가 말똥말똥해지고 심장이 쿵쾅거립니다. 새벽 3시가 넘도록 잠을 이루지 못해 수면유도제를 먹어야만 겨우 눈을 붙입니다." 진료실에서 매일같이 듣는 자율신경성 수면장애 환자분들의 생생한 목소리입니다. 피로에 지친 뇌가 잠을 원하면서도 역설적으로 각성 상태에서 벗어나지 못하는 현대적 신경 고통입니다.\n\n스마트폰 디스플레이에서 방출되는 단파장 블루라이트는 눈의 망막에 위치한 내인성 광민감성 망막신경절세포(ipRGC)를 강력하게 자극합니다. 이 세포는 뇌의 생체시계 중추인 시교차상핵(SCN)으로 직접 신경 흥분 신호를 전달하여, 어두워지면 송과체에서 분비되어야 할 수면 호尔몬인 멜라토닌의 합성을 즉각 중단시킵니다. 뇌는 한밤중임에도 불구하고 지금을 정오의 한낮으로 착각하여 교감신경을 긴급 흥분시키고 코르티솔 분비를 촉진합니다. 그 결과 심박수가 빨라지고 뇌파가 고주파 베타파로 치솟으며 깊은 이완 상태로 진입하지 못하는 \'야간 교감신경 항진증\'이 만성화됩니다. 뇌 신경망이 쉬지 못하고 공회전하면서 야간 두통과 식은땀, 안구 건조가 연쇄적으로 동반됩니다.\n\n한의학에서는 이를 낮 동안 신체 활동을 주관하는 위기(衛氣)가 밤이 되면 신체 내부의 음분(陰分)으로 들어가 휴식을 취해야 하는 생리 리듬이 깨진 \'위기불입(衛氣不入)\'이자 \'심신불교(心腎不交)\'의 병증으로 파악합니다. 눈은 오장육부 중 간(肝)과 심(心)에 배속되어 있는데, 야간의 강한 광자극이 간양(肝陽)을 치솟게 하고 심화(心火)를 일으켜 뇌수를 마르게 하는 것입니다. 환자는 얕은 렘수면에 머물며 끊임없는 악몽에 시달리고, 자고 일어나도 개운함 대신 머리가 무겁고 눈이 침침한 만성 피로에 갇히게 됩니다. 이 악순환이 지속되면 낮 동안의 집중력 저하와 브레인포그로 삶의 질이 현저히 떨어집니다.\n\n해아림한의원에서는 들뜬 심화(心火)를 서늘하게 내리고 뇌수를 보충하는 산조인, 백자인, 용골, 모려 등의 안신 한약 처방을 통해 과각성된 뇌신경망을 부드럽게 이완시킵니다. 또한 안구 주변의 정명혈, 찬죽혈과 목 뒤 풍지혈 침구 치료를 통해 시신경 피로를 풀고 뇌혈류를 안정화합니다. 취침 1시간 전 스마트폰 차단과 함께 체계적인 한방 수면 리셋 프로토콜을 실천할 때, 부교감신경이 자연스럽게 활성화되면서 약물 의존에 대한 부담을 덜고 깊은 숙면을 되찾을 수 있습니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)'
+    },
+    {
+      subId: '33',
+      title: '식후 쏟아지는 극심한 식곤증과 혈당 스파이크: 췌장 인슐린 문제가 아닌 미주신경 소화혈류 장애',
+      image: '/images/columns/column_33_postprandial.svg',
+      summary: '식사 직후 머리가 깨질 듯 멍하고 기절하듯 잠이 쏟아지는 증상, 당뇨 검사는 정상인데 왜 자율신경계 미주신경 소화 조절이 실패하는지 규명합니다.',
+      content: '점심 식사를 마치고 사무실 책상에 앉자마자 머리가 멍해지며 마치 수면마취제를 맞은 것처럼 눈꺼풀이 천근만근 무거워지는 경험을 해보신 적이 있으실 것입니다. "원장님, 밥만 먹으면 머릿속으로 안개가 자욱하게 끼면서 극심한 피로감과 졸음이 쏟아져 업무를 볼 수가 없습니다. 당뇨병인가 싶어 내과에서 당화혈색소와 공복혈당 검사를 해보았지만 지극히 정상이라는데 저는 왜 기절하듯 졸릴까요?" 많은 직장인 환자분들이 호소하시는 난치성 식후 무기력증의 전형적인 증상입니다.\n\n이러한 현상의 기저에는 자율신경계의 혈류 재분배 실패와 미주신경의 조절 장애가 자리 잡고 있습니다. 정상적인 신체는 식사 후 음식물을 소화하기 위해 부교감신경인 미주신경이 활성화되며 위장관으로 혈류를 부드럽게 집중시키되, 뇌로 가는 혈류량은 뇌혈관 자동조절능력(Cerebral Autoregulation)을 통해 일정하게 유지합니다. 그러나 자율신경 균형이 무너진 환자분들은 식후에 장간막 혈관으로 과도하게 혈액이 몰리거나 반대로 위장 연동운동이 멈추면서 뇌간과 대뇌피질로 공급되는 산소와 포도당이 급감합니다. 이것이 바로 \'식후 혈류 저하에 의한 뇌신경 마비성 피로\'입니다. 혈류 부족으로 인해 뇌세포가 저산소증에 빠지며 순간적인 혼미와 불안감이 엄습하게 됩니다.\n\n한의학에서는 이를 비위(脾胃)의 운화 기능이 극도로 약화되어 음식물이 맑은 기운(淸氣)으로 승화하지 못하고 탁한 습담(濕痰)으로 변해 머리를 덮치는 \'비허습성(脾虛濕盛)\'이자 \'식후혼곤(食後昏困)\'으로 진단합니다. 소화기계의 에너지가 고갈되어 밥 한 끼를 소화시키는 데 전신의 모든 기혈을 끌어다 쓰다 보니, 뇌와 사지 말단으로 갈 기운이 통째로 바닥나 버리는 것입니다. 환자분들은 식후 피로감과 함께 명치 답답함, 잦은 트림, 두통, 어지럼증을 호소하게 됩니다. 이 상태가 만성화되면 식사 시간 자체가 두려움의 대상이 되기도 합니다.\n\n해아림한의원에서는 소화관의 미주신경 톤을 정상화하고 비위 기운을 끌어올리는 향사육군자탕, 보중익기탕을 바탕으로 신경성 담적을 배출하고 뇌혈류를 보존하는 맞춤 처방을 시행합니다. 상복부의 중완혈과 다리의 족삼리혈 온침 치료는 위장의 자율신경 총을 부드럽게 깨워 혈류의 급격한 쏠림을 방지합니다. 위장과 뇌의 신경축이 안정적인 리듬을 회복할 때, 식후에 찾아오던 무거운 졸음이 걷히고 식사 후에도 맑은 집중력을 유지할 수 있습니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)'
+    },
+    {
+      subId: '34',
+      title: '가슴이 뻐근하고 쥐어짜는 비전형적 흉통: 조영술 정상 환자의 미세혈관 연축과 흉부 교감신경절 긴장',
+      image: '/images/columns/column_34_chest_pain.svg',
+      summary: '관상동맥 조영술과 심장 초음파는 깨끗한데 가슴을 쥐어짜는 흉통이 지속되는 분들을 위해 미세혈관 연축성 협심증과 흉추 교감신경의 기전을 해설합니다.',
+      content: '가슴 한가운데가 뻐근하게 조여오고 쥐어짜는 듯한 통증이 발생하면 누구나 심근경색이나 협심증 같은 위중한 심장질환을 떠올리며 공포에 질리게 됩니다. "원장님, 가슴이 콕콕 찌르고 무거운 바위로 짓누르는 것 같아 대학병원 심장혈관내과에서 혈관 조영술까지 받았습니다. 그런데 주 관상동맥은 좁아진 곳 없이 너무나 깨끗하다며 신경성이라는 진단만 받았습니다. 검사는 정상인데 저는 여전히 가슴이 조이고 아픕니다." 심장 정밀 검사에서 이상이 없다는 말을 듣고도 지속되는 흉통에 절망하는 환자분들의 호소입니다.\n\n이러한 비전형적 흉통의 상당수는 눈에 보이는 굵은 관상동맥이 아닌, 머리카락보다 가는 심장 표면의 미세 모세혈관들이 자율신경계 이상으로 인해 갑작스럽게 수축하는 \'미세혈관 연축(Microvascular Spasm)\'에서 비롯됩니다. 특히 흉추 1번에서 4번 사이에 위치한 흉부 교감신경절이 스트레스와 불안, 자세 불균형으로 인해 과도하게 긴장하면, 심장 근육으로 미세 혈류를 보내는 모세혈관망이 과도하게 오그라들면서 일시적인 허혈성 통증을 유발합니다. 일반 조영술에서는 미세혈관의 경련 상태를 잡아내지 못하므로 \'기질적 이상 없음\'이라는 허탈한 판독이 나오는 것입니다. 그러나 심근 세포는 실제로 산소 결핍을 겪고 있으므로 통증은 매우 실재적입니다.\n\n한의학에서는 이를 가슴속의 기운이 맺혀 혈액 순환을 방해하는 \'흉비(胸痺)\'이자 \'기체어혈(氣滯瘀血)\'의 병증으로 정밀하게 파악합니다. 지속적인 정신적 긴장과 화(火)가 심포(心包)의 맥락을 막아 가슴 통로인 흉곽 내의 양기가 순환하지 못하고 굳어버린 것입니다. 환자분들은 흉통뿐만 아니라 깊은 한숨을 자주 쉬고, 가슴 중앙 전중혈을 누르면 심한 통증을 느끼며, 견갑골 안쪽 능형근 부위가 묵직하게 굳어 있는 소견을 함께 보입니다. 이는 흉곽 출구의 신경과 근막이 복합적으로 얽혀 있음을 의미합니다.\n\n해아림한의원에서는 흉부 교감신경의 긴장을 풀어주는 단삼, 천궁, 울금, 패모 등의 행기활혈(行氣活血) 처방을 통해 심장 미세혈관의 경련을 완화하고 혈류를 개선합니다. 아울러 굽은 등과 흉추 관절의 변위를 바로잡는 경추·흉추 추나요법을 병행하여 척추에서 심장으로 뻗어나가는 신경 전도로의 압박을 해소합니다. 혈관 연축을 일으키던 신경성 방아쇠가 제거될 때, 가슴을 짓누르던 뻐근한 압박감이 시원하게 풀리며 편안한 숨을 쉴 수 있게 됩니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)'
+    },
+    {
+      subId: '35',
+      title: '날씨가 흐리거나 비가 올 때마다 쑤시고 붓는 기상병(氣象病): 기압 변화를 이겨내지 못하는 내이 림프관과 자율신경',
+      image: '/images/columns/column_35_weather_sensitivity.svg',
+      summary: '비가 오기 전날부터 두통, 어지럼증, 관절통이 심해지는 기상병 환자분들을 위해 내이 전정기관과 기압 변화 감지 센서의 자율신경 메커니즘을 규명합니다.',
+      content: '"원장님, 일기예보를 보지 않아도 비가 올 것을 온몸으로 압니다. 비가 오기 전날만 되면 머리가 깨질 듯 지끈거리고, 온몸의 관절이 쑤시며 어지럼증과 메스꺼움이 밀려옵니다. 맑은 날에는 견딜 만하다가도 저기압이 다가오면 침대에서 일어날 수가 없습니다." 기후 변화에 민감하게 반응하여 일상이 무너지는 이른바 \'기상병(Meteoropathy)\' 환자분들의 전형적인 호소입니다.\n\n인간의 내이(Inner Ear)에는 외부의 기압 변화를 감지하는 미세한 센서가 존재합니다. 저기압이 다가오거나 태풍이 불 때 외부 기압이 급격히 떨어지면, 내이 림프액의 압력이 상대적으로 팽창하면서 전정신경을 통해 뇌간의 자율신경 중추로 강한 신호를 보냅니다. 건강한 신경계는 이러한 미세한 기압 변동에 맞춰 혈관 긴장도를 유연하게 조절하지만, 자율신경 조절력이 탈진된 환자분들은 뇌가 기압 변화를 극심한 위기 상황으로 오인하여 교감신경을 과항진시킵니다. 그 결과 뇌혈관이 수축과 확장을 반복하며 편두통이 발생하고, 전정신경계가 자극되어 심한 흔들림과 어지럼증을 겪게 되는 것입니다. 몸 전체의 통각 수용체 또한 예민해져 기존의 관절염이나 근육통이 배가됩니다.\n\n한의학에서는 이를 체내에 머무르는 불필요한 수분 노폐물인 \'수독(水毒)\'과 \'담음(痰飮)\'이 외부의 습기(濕氣)와 만나 신경계를 짓누르는 \'풍습비통(風濕痺痛)\'이자 \'습곤비위(濕困脾胃)\'의 병증으로 파악합니다. 인체 내부의 수분 대사를 주관하는 비장과 신장의 기능이 약해진 상태에서 대기 중의 습도가 높아지면, 체내 림프 순환이 정체되면서 신경막 주변에 부종을 일으켜 통증과 어지럼증이 동반 악화되는 것입니다. 이는 신경계의 수분 배출력과 온도 조절력이 한계에 도달했음을 보여줍니다.\n\n해아림한의원에서는 내이 림프 순환을 돕고 체내 수독을 말려주는 오령산, 복령택사탕 기반의 맞춤 한약 처방을 통해 기압 변화에 대한 신경계의 저항력을 길러줍니다. 아울러 귀 주변의 이문혈, 청궁혈 침 치료와 목 뒤 경추부 약침을 통해 전정신경핵의 과민도를 낮춥니다. 체내 수분 대사의 항상성이 바로잡히고 자율신경계가 날씨 변화에 탄력적으로 적응하게 되면, 비가 오거나 흐린 날에도 흔들림 없는 맑고 편안한 일상을 유지할 수 있습니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)'
+    }
+  ];
+
+  function ensureDynamicColumnBatch() {
+    // 1. 기존 캐시된 동적 풀 복원
+    try {
+      var rawDyn = localStorage.getItem('healim_dynamic_column_pool');
+      if (rawDyn) {
+        var dynList = JSON.parse(rawDyn) || [];
+        dynList.forEach(function(item) {
+          if (!columnsPool.some(function(cp) { return cp.idPrefix === item.idPrefix || normalizeColumnTitle(cp.title) === normalizeColumnTitle(item.title); })) {
+            columnsPool.push(item);
+          }
+        });
+      }
+    } catch(e) {}
+
+    // 2. 가용 풀 확인: 미발행이면서 영구 블랙리스트에 없는 글이 존재하는가?
+    var existingTitles = getExistingColumnTitles();
+    var hasAvailable = columnsPool.some(function(c) {
+      return !existingTitles.has(normalizeColumnTitle(c.title)) && !isColumnPoolBlacklisted(c);
+    });
+
+    // 3. 풀이 고갈된 경우, 신규 배치를 생성하여 풀에 영구 확장
+    if (!hasAvailable) {
+      var added = [];
+      var curPoolCount = columnsPool.length;
+
+      // 템플릿 배치에서 아직 추가되지 않은 항목 추가
+      EXTENDED_COLUMN_TEMPLATES.forEach(function(tmpl) {
+        var pid = 'col-auto-' + tmpl.subId;
+        var norm = normalizeColumnTitle(tmpl.title);
+        if (!columnsPool.some(function(c) { return c.idPrefix === pid || normalizeColumnTitle(c.title) === norm; })) {
+          var item = {
+            idPrefix: pid,
+            title: tmpl.title,
+            image: tmpl.image,
+            author: '해아림한의원',
+            summary: tmpl.summary,
+            content: tmpl.content
+          };
+          columnsPool.push(item);
+          added.push(item);
+        }
+      });
+
+      // 템플릿마저 다 소진되었을 경우, 무제한 신규 생성기 작동
+      if (added.length === 0) {
+        var batchSerial = Math.floor(curPoolCount / 5) + 1;
+        var clinicalThemes = [
+          { focus: '미주신경 인후부 긴장과 만성 매핵기', organ: '폐·비장과 인후 신경총', herb: '반하후박탕과 시호소간산' },
+          { focus: '골반 자율신경총과 과민성 방광 이상', organ: '신장·방광의 기화 작용', herb: '축천환과 오약순기산' },
+          { focus: '스트레스성 안면 감각 이상과 3차신경 흥분', organ: '간양상항과 안면 혈류', herb: '억간산과 조등산' },
+          { focus: '찬바람 시림과 말초 모세혈관 레이노 현상', organ: '심신양허와 말초 혈관 탄력', herb: '당귀사역가오수유생강탕' },
+          { focus: '뇌-장-신경 축 세로토닌 불균형과 과민대장', organ: '비위 운화 기능과 장관신경계', herb: '곽향정기산과 이진탕' }
+        ];
+
+        clinicalThemes.forEach(function(th, idx) {
+          var newId = 'col-auto-' + (curPoolCount + idx + 1);
+          var newTitle = '원인 모를 ' + th.focus + ': 검사상 정상 환자의 신경 생리학적 기전과 한방 치료 원리 (제' + batchSerial + '기)';
+          var normT = normalizeColumnTitle(newTitle);
+          if (!columnsPool.some(function(c) { return normalizeColumnTitle(c.title) === normT; })) {
+            var bodyText = '진료실을 찾는 수많은 자율신경실조증 환자분들께서 대학병원과 정밀 검진 센터를 전전하며 수차례 MRI, CT, 혈액 검사를 받아도 "아무런 이상이 없으니 신경정신과나 가보라"는 허탈한 답변을 듣고 좌절하시곤 합니다. 당사자는 숨이 턱 끝까지 차오르고 일상생활을 유지할 수 없을 만큼 극심한 고통에 시달리는데, 영상 의학적 검사 결과는 정상이라는 괴리 앞에서 깊은 고립감에 빠지게 됩니다.\n\n이러한 현상이 발생하는 본질적인 이유는 특정 장기 조직 자체의 기질적 파괴가 아닌, 장기와 뇌를 연결하는 자율신경계 신호 전달 체계의 혼선에 있습니다. ' + th.organ + '을 관장하는 교감신경과 부교감신경의 상호 길항 작용이 무너지면서, 뇌간의 비상경보 버튼이 꺼지지 않고 지속적인 과각성 신호를 내보내는 것입니다. 신경 세포막의 이온 통로가 불안정해지고 혈류 공급이 왜곡되면서 해당 부위의 감각 과민과 기능 저하가 악화됩니다.\n\n한의학에서는 이를 오장육부의 음양 평형이 깨지고 기혈 순환이 정체된 병증으로 진단합니다. 치료의 핵심은 단순 대증적 진통제나 신경안정제로 증상을 억누르는 것이 아니라, 과열된 중추 신경을 식히고 억압된 자가 치유 신경망을 되살리는 데 있습니다. ' + th.herb + '을 바탕으로 환자 개개인의 체질과 취약 장부에 맞춘 정밀 탕약 처방은 신경계의 항상성을 복원하며, 척추 신경절 약침 치료와 온열 뜸 요법은 정체된 혈류 통로를 시원하게 열어줍니다.\n\n자가 조절의 힘이 단단히 뿌리내릴 때, 자율신경계는 외부 스트레스라는 파도 속에서도 스스로 안정을 되찾을 수 있습니다. 해아림한의원에서는 치료 종료 단계까지 환자분의 체질에 맞춘 1:1 자율신경 수호 프로토콜을 성심을 다해 지도해 드립니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)';
+            var item = {
+              idPrefix: newId,
+              title: newTitle,
+              image: '/images/columns/column_' + ((curPoolCount + idx) % 6 + 1) + '.svg',
+              author: '해아림한의원',
+              summary: th.focus + ' 증상으로 고통받는 환자분들을 위해 신경 생리학적 기전과 한방 임상 솔루션을 심도 있게 전해드립니다.',
+              content: bodyText
+            };
+            columnsPool.push(item);
+            added.push(item);
+          }
+        });
+      }
+
+      // 동적 스토리지 캐시 영구 보존
+      if (added.length > 0) {
+        try {
+          var allDyn = [];
+          var rawD = localStorage.getItem('healim_dynamic_column_pool');
+          if (rawD) allDyn = JSON.parse(rawD) || [];
+          added.forEach(function(it) {
+            if (!allDyn.some(function(ad) { return ad.idPrefix === it.idPrefix; })) {
+              allDyn.push(it);
+            }
+          });
+          localStorage.setItem('healim_dynamic_column_pool', JSON.stringify(allDyn));
+        } catch(e) {}
+        console.log('[Healim Auto-Column Engine] Dynamic batch generated: ' + added.length + ' new clinical columns added to pool.');
+      }
+    }
+  }
+
   function checkAndRunAutoColumnPublish(isManual) {
     var state = getAutoColumnState();
     var now = Date.now();
@@ -698,63 +862,54 @@
       return false; // Not yet scheduled time
     }
 
+    // 4. 자동발행 목록이 소진되면 기준에 맞춘 신규 자동발행 목록을 동적으로 보충
+    ensureDynamicColumnBatch();
+
     var existingTitles = getExistingColumnTitles();
 
-    // Determine article to publish from pool (Skip already published titles)
+    // 1 & 3. 미발행이면서 영구 삭제 블랙리스트에 등록되지 않은 유효한 풀 항목 순회 탐색
+    var poolLength = columnsPool.length;
     var poolIdx = (typeof state.poolIndex === 'number') ? state.poolIndex : 0;
     var selectedIdx = -1;
 
-    for (var i = 0; i < columnsPool.length; i++) {
-      var candidateIdx = (poolIdx + i) % columnsPool.length;
+    for (var i = 0; i < poolLength; i++) {
+      var candidateIdx = (poolIdx + i) % poolLength;
       var candidate = columnsPool[candidateIdx];
       var norm = normalizeColumnTitle(candidate.title);
-      if (!existingTitles.has(norm)) {
+
+      // 제목 중복 검사 및 영구 삭제 블랙리스트(poolId/title) 검사
+      if (!existingTitles.has(norm) && !isColumnPoolBlacklisted(candidate)) {
         selectedIdx = candidateIdx;
         break;
       }
     }
 
-    // Load current columns board to determine total existing count
-    var currentColumns = [];
-    try {
-      var raw = localStorage.getItem(STORAGE_BOARD_KEY);
-      if (raw) currentColumns = JSON.parse(raw) || [];
-    } catch(e) {}
-    if (currentColumns.length === 0 && window.defaultColumnsData) {
-      currentColumns = window.defaultColumnsData.slice();
+    // 만약 기존 풀에서 찾지 못했다면 다시 한 번 신규 배치를 생성하여 미발행 글 탐색
+    if (selectedIdx === -1) {
+      ensureDynamicColumnBatch();
+      for (var j = 0; j < columnsPool.length; j++) {
+        var cand = columnsPool[j];
+        var n = normalizeColumnTitle(cand.title);
+        if (!existingTitles.has(n) && !isColumnPoolBlacklisted(cand)) {
+          selectedIdx = j;
+          break;
+        }
+      }
     }
 
-    var isCycleEdition = false;
+    // 1. 중복 감지 시 강제 발행 중단: 미발행 항목이 전혀 없으면 (심층 연재) 붙여 강제 발행하지 않고 즉시 프로세스 중단!
     if (selectedIdx === -1) {
-      // All base pool columns have been published at least once:
-      // Continue without stopping! Generate continuous serial editions with zero upper limits.
-      isCycleEdition = true;
-      selectedIdx = poolIdx % columnsPool.length;
+      console.warn('[Healim Auto-Column Engine] No un-published unique columns available. Halting publish process safely without duplication.');
+      return false;
     }
 
     var article = columnsPool[selectedIdx];
     var dateStr = formatDateOnly(new Date());
     var postId = 'col-auto-' + now;
 
-    var postTitle = article.title;
-    var postContent = article.content;
-    if (isCycleEdition) {
-      // Natural clinical editorial variations without mechanical bracket prefixes:
-      var colVariations = [
-        function(t) { return t.replace(/[\?\.]*$/, '') + ' - 한방 임상 분석과 심층 치료 전략'; },
-        function(t) { return t.replace(/[\?\.]*$/, '') + ' - 치료 중 주의할 생활 수칙과 자가 회복 가이드'; },
-        function(t) { return t.replace(/[\?\.]*$/, '') + ' - 신경 가소성 회복과 재발 방지 처방 원리'; },
-        function(t) { return t.replace(/[\?\.]*$/, '') + ' - 검사상 정상 환자의 미주신경 회복 임상 증례'; },
-        function(t) { return t.replace(/[\?\.]*$/, '') + ' - 뇌-신경계 생체 항상성 재동기화 솔루션'; }
-      ];
-      var vFn = colVariations[(state.poolIndex || 0) % colVariations.length];
-      postTitle = vFn(article.title);
-      postContent = '> 💡 **[해아림 자율신경실조증 심층 임상 의학 연재]**\n> 본 칼럼은 환자분들의 이해와 빠른 일상 복귀를돕기 위해 해아림한의원 원장단이 지속적으로 집필하는 심층 임상 칼럼 시리즈입니다.\n\n' + article.content;
-    }
-
-    var colTitle = sanitizeMedicalCompliance(postTitle);
+    var colTitle = sanitizeMedicalCompliance(article.title);
     var colSummary = sanitizeMedicalCompliance(article.summary || '');
-    var colContent = sanitizeMedicalCompliance(postContent);
+    var colContent = sanitizeMedicalCompliance(article.content);
 
     var newPost = {
       id: postId,
@@ -770,12 +925,31 @@
       isAutoPublished: true
     };
 
-    // Double check: prevent duplicate insertion into currentColumns
+    // Load current columns board
+    var currentColumns = [];
+    try {
+      var raw = localStorage.getItem(STORAGE_BOARD_KEY);
+      if (raw) currentColumns = JSON.parse(raw) || [];
+    } catch(e) {}
+    if (currentColumns.length === 0 && window.defaultColumnsData) {
+      currentColumns = window.defaultColumnsData.slice();
+    }
+
+    // 1. 중복 감지 시 강제 발행 중단:
+    // 중복(dupFound)이 감지되면 (심층 연재)를 붙여 강제 발행하지 않고, 즉시 발행 프로세스를 중단(return false)
+    var normNew = normalizeColumnTitle(newPost.title);
     var dupFound = currentColumns.some(function(item) {
-      return normalizeColumnTitle(item.title) === normalizeColumnTitle(newPost.title);
+      return normalizeColumnTitle(item.title) === normNew;
     });
     if (dupFound) {
-      newPost.title = colTitle.replace(/[\?\.]*$/, '') + ' (심층 연재)';
+      console.warn('[Healim Auto-Column Engine] Duplicate column title detected: "' + newPost.title + '". Halting publication immediately.');
+      return false;
+    }
+
+    // 3. 영구 삭제 블랙리스트 2차 방어: 혹시라도 삭제된 풀 아이템이면 즉시 중단
+    if (isColumnPoolBlacklisted(article)) {
+      console.warn('[Healim Auto-Column Engine] Blacklisted column item detected: "' + article.idPrefix + '". Halting publication immediately.');
+      return false;
     }
 
     // Insert at top of list
@@ -787,7 +961,7 @@
       var vaultList = [];
       var rawV = localStorage.getItem('healim_vault_all_posts_columns');
       if (rawV) vaultList = JSON.parse(rawV) || [];
-      vaultList = vaultList.filter(function(p) { return p.id !== newPost.id && normalizeColumnTitle(p.title) !== normalizeColumnTitle(newPost.title); });
+      vaultList = vaultList.filter(function(p) { return p.id !== newPost.id && normalizeColumnTitle(p.title) !== normNew; });
       vaultList.unshift(newPost);
       localStorage.setItem('healim_vault_all_posts_columns', JSON.stringify(vaultList));
 
@@ -799,13 +973,13 @@
       var customCols = [];
       var rawC = localStorage.getItem('healim_custom_columns_posts');
       if (rawC) customCols = JSON.parse(rawC) || [];
-      customCols = customCols.filter(function(p) { return p.id !== newPost.id && normalizeColumnTitle(p.title) !== normalizeColumnTitle(newPost.title); });
+      customCols = customCols.filter(function(p) { return p.id !== newPost.id && normalizeColumnTitle(p.title) !== normNew; });
       customCols.unshift(newPost);
       localStorage.setItem('healim_custom_columns_posts', JSON.stringify(customCols));
 
       var rawLeg = localStorage.getItem('healim_community_posts_v2');
       var legList = rawLeg ? (JSON.parse(rawLeg) || []) : [];
-      legList = legList.filter(function(p) { return p.id !== newPost.id && normalizeColumnTitle(p.title) !== normalizeColumnTitle(newPost.title); });
+      legList = legList.filter(function(p) { return p.id !== newPost.id && normalizeColumnTitle(p.title) !== normNew; });
       legList.unshift(newPost);
       localStorage.setItem('healim_community_posts_v2', JSON.stringify(legList));
     } catch(e) {}
@@ -855,6 +1029,9 @@
   // Global exports
   window.checkAndRunAutoColumnPublish = checkAndRunAutoColumnPublish;
   window.columnsPool = columnsPool;
+  window.normalizeColumnTitle = normalizeColumnTitle;
+  window.isColumnPoolBlacklisted = isColumnPoolBlacklisted;
+  window.ensureDynamicColumnBatch = ensureDynamicColumnBatch;
   window.triggerAutoColumnPublishManual = function() {
     var isHealimAdmin = false;
     if (typeof window.isHealimSuperAdmin === 'function') {

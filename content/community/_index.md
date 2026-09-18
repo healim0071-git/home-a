@@ -2411,6 +2411,75 @@ sections:
         }
         window.getDeletedPostIds = getDeletedPostIds;
 
+        function extractCanonicalKeyForBlacklist(t) {
+          if (!t) return '';
+          return String(t)
+            .replace(/^(칼럼|faq|q)[\.:\s\-]+/i, '')
+            .replace(/\s*[\(\[\{][^\)\]\}]*(?:심층|연재|안내|에디션|특별|증례|회복|가이드|속편|2편|3편|분석|전략|솔루션)[^\)\]\}]*[\)\]\}]/gi, '')
+            .replace(/\s*\([^\)]*\)\s*$/g, '')
+            .replace(/\s*[-–—:]\s*(?:한방|임상|치료|신경|검사상|뇌[\s\-]신경계|원인|병원|재발|한약|미주신경|생체|자가|체질|환자|문답|질의).*$/gi, '')
+            .replace(/\s*[-–—]\s*[^:]{4,}\s*$/g, '')
+            .replace(/[\s\*\*_~`#\?\uFF1F\.,\(\)\[\]:;\-–—!/\\'"“”‘’]/g, '')
+            .trim()
+            .toLowerCase();
+        }
+        window.extractCanonicalKeyForBlacklist = extractCanonicalKeyForBlacklist;
+
+        function addDeletedPoolItem(boardType, poolId, rawTitle) {
+          if (!boardType) return;
+          var bKey = String(boardType).trim();
+          if (poolId) {
+            var pid = String(poolId).trim();
+            try {
+              var pKey = 'healim_deleted_pool_ids_' + bKey;
+              var pList = JSON.parse(localStorage.getItem(pKey) || '[]');
+              if (pList.indexOf(pid) === -1) {
+                pList.push(pid);
+                localStorage.setItem(pKey, JSON.stringify(pList));
+              }
+            } catch(e) {}
+          }
+          if (rawTitle) {
+            var cKey = extractCanonicalKeyForBlacklist(rawTitle);
+            if (cKey) {
+              try {
+                var tKey = 'healim_deleted_title_keys_' + bKey;
+                var tList = JSON.parse(localStorage.getItem(tKey) || '[]');
+                if (tList.indexOf(cKey) === -1) {
+                  tList.push(cKey);
+                  localStorage.setItem(tKey, JSON.stringify(tList));
+                }
+              } catch(e) {}
+            }
+          }
+        }
+        window.addDeletedPoolItem = addDeletedPoolItem;
+
+        function isDeletedPoolItem(boardType, poolId, rawTitle) {
+          if (!boardType) return false;
+          var bKey = String(boardType).trim();
+          if (poolId) {
+            var pid = String(poolId).trim();
+            try {
+              var pKey = 'healim_deleted_pool_ids_' + bKey;
+              var pList = JSON.parse(localStorage.getItem(pKey) || '[]');
+              if (pList.indexOf(pid) !== -1) return true;
+            } catch(e) {}
+          }
+          if (rawTitle) {
+            var cKey = extractCanonicalKeyForBlacklist(rawTitle);
+            if (cKey) {
+              try {
+                var tKey = 'healim_deleted_title_keys_' + bKey;
+                var tList = JSON.parse(localStorage.getItem(tKey) || '[]');
+                if (tList.indexOf(cKey) !== -1) return true;
+              } catch(e) {}
+            }
+          }
+          return false;
+        }
+        window.isDeletedPoolItem = isDeletedPoolItem;
+
         function addDeletedPostId(key, id) {
           if (!id) return;
           var strId = String(id).trim();
@@ -4913,6 +4982,24 @@ sections:
             saveCustomYoutubePosts(customYt);
             var syncedYt = getSyncedYoutubePosts().filter(function(it) { return String(it.id) !== strId; });
             saveSyncedYoutubePosts(syncedYt);
+          }
+
+          // Find target item for pool ID and title blacklist registration
+          var targetFallback = (boardType === 'faq' ? defaultFaqData : (boardType === 'reviews' ? defaultReviewsData : (boardType === 'youtube' ? defaultYoutubeData : defaultColumnsData)));
+          var allBoardList = getBoardData(boardType, targetFallback);
+          var delTargetItem = allBoardList.find(function(it) { return String(it.id) === strId; });
+          if (!delTargetItem) {
+            try {
+              var vList = JSON.parse(localStorage.getItem('healim_vault_all_posts_' + boardType) || '[]');
+              delTargetItem = vList.find(function(it) { return String(it.id) === strId; });
+            } catch(e) {}
+          }
+          if (delTargetItem) {
+            var delPoolId = delTargetItem.poolId || delTargetItem.idPrefix || null;
+            var delTitle = delTargetItem.title || null;
+            if (typeof addDeletedPoolItem === 'function') {
+              addDeletedPoolItem(boardType, delPoolId, delTitle);
+            }
           }
 
           // 2. Permanent Blacklist & Remote Sync Hub Delete

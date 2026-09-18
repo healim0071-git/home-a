@@ -32,12 +32,15 @@ vm.runInContext(engineCode, sandbox);
 
 const autoFaqContentPool = sandbox.window.autoFaqContentPool || [];
 
-// Title normalization helper
 function normalizeQuestionTitle(t) {
   if (!t) return '';
   return String(t)
     .replace(/^Q[\.:\s\-]+/i, '')
-    .replace(/[\s\*_~`#\?\uFF1F\.,\(\)\[\]]/g, '')
+    .replace(/\s*[\(\[\{][^\)\]\}]*(?:심층|연재|안내|에디션|특별|증례|회복|가이드|속편|2편|3편|분석|전략|솔루션|관리법|문답|질의)[^\)\]\}]*[\)\]\}]/gi, '')
+    .replace(/\s*\([^\)]*\)\s*$/g, '')
+    .replace(/\s*[-–—:]\s*(?:한방|임상|치료|신경|검사상|뇌[\s\-]신경계|원인|병원|재발|한약|미주신경|생체|자가|체질|환자|문답|질의).*$/gi, '')
+    .replace(/\s*[-–—]\s*[^:]{4,}\s*$/g, '')
+    .replace(/[\s\*\*_~`#\?\uFF1F\.,\(\)\[\]:;\-–—!/\\'"“”‘’]/g, '')
     .trim()
     .toLowerCase();
 }
