@@ -1221,6 +1221,54 @@
     }
   ];
 
+  
+  // ── 과거 발행 글 및 스토리지의 어려운 의학용어·(제N기)·회차 표기 완전 정제 엔진 ──
+  function sanitizeObsoleteFaqAndTitles() {
+    try {
+      var rawD = localStorage.getItem('healim_dynamic_faq_pool');
+      if (rawD && (/\(제\d+기\)/.test(rawD) || /\[상담\s*Q&A/.test(rawD) || /신경 생리학적 기전/.test(rawD))) {
+        localStorage.removeItem('healim_dynamic_faq_pool');
+      }
+    } catch(e) {}
+
+    function cleanTitle(t) {
+      if (!t) return t;
+      var str = String(t);
+      str = str.replace(/\s*\(제\d+기\)\s*$/g, '')
+               .replace(/\s*\[(?:의학\s*칼럼|상담\s*Q&A|임상\s*칼럼|회복\s*수기)\s*\d+회차\]\s*$/g, '')
+               .replace(/\s*\((?:심층\s*연재|심층\s*안내\??)\)\s*$/g, '');
+      return str.trim();
+    }
+
+    var keys = ['healim_board_faq', 'healim_vault_all_posts_faq'];
+    keys.forEach(function(k) {
+      try {
+        var raw = localStorage.getItem(k);
+        if (raw) {
+          var arr = JSON.parse(raw);
+          if (Array.isArray(arr)) {
+            var updated = false;
+            arr.forEach(function(item) {
+              if (item && item.title) {
+                var c = cleanTitle(item.title);
+                if (c !== item.title) {
+                  item.title = c;
+                  updated = true;
+                }
+              }
+            });
+            if (updated) {
+              localStorage.setItem(k, JSON.stringify(arr));
+            }
+          }
+        }
+      } catch(e) {}
+    });
+  }
+
+  // 즉시 정제 수행
+  sanitizeObsoleteFaqAndTitles();
+
   function ensureDynamicFaqBatch() {
     sanitizeStoredFaqImages();
     if (!window.autoFaqContentPool) window.autoFaqContentPool = [];
@@ -1352,15 +1400,40 @@
             organ: '외부 기압과 기온 변화에 맞춰 전신 혈류를 조율하는 내이 및 혈관 자율신경계',
             herb: '오령산과 영계출감탕',
             situation: '계절이 바뀌거나 비가 오기 전날이면 어김없이 몸이 무겁고 어지러워 일상생활이 힘들어지시는'
+          },
+          {
+            q: '찬바람만 쐬면 손가락과 발가락이 하얗게 질리고 시린데 레이노 증후군인가요?',
+            directAnswer: '찬 공기나 스트레스에 손발 끝이 창백해지고 시린 것은 말초 모세혈관을 수축시키는 교감신경의 과잉 반응 때문입니다. 자율신경 조절을 통해 말초 혈류 순환을 촉진하는 한방 치료로 호전될 수 있습니다.',
+            organ: '전신 체온과 말초 모세혈관을 조율하는 혈관운동신경망',
+            herb: '당귀사역가오수유생강탕과 온경탕',
+            situation: '사계절 내내 손발이 얼음장 같아 일상생활에 지장을 겪으시는'
+          },
+          {
+            q: '긴장하거나 스트레스 받으면 배가 쥐어짜듯 아프고 설사하는데 자율신경 문제인가요?',
+            directAnswer: '스트레스 시 급격한 복통과 설사가 반복되는 과민대장 증상은 뇌-장 축(Gut-Brain Axis)을 잇는 미주신경과 교감신경의 불균형으로 장 평활근이 과민 경련을 일으키기 때문입니다.',
+            organ: '위장관 연동운동을 관장하는 장관신경계(ENS)와 미주신경',
+            herb: '곽향정기산과 이진탕',
+            situation: '긴장되는 상황마다 화장실로 달려가야 해 사회생활에 큰 곤란을 겪으시는'
+          },
+          {
+            q: '자율신경실조증 완치가 가능한가요? 치료 후 재발을 막는 방법은 무엇인가요?',
+            directAnswer: '자율신경실조증은 신경망의 기능적 불균형 질환이므로 신경 가소성을 회복시키는 체계적인 1:1 맞춤 한방 치료를 통해 충분히 건강한 일상으로 복귀할 수 있으며, 생활 리듬 유지를 통해 재발을 예방합니다.',
+            organ: '신체 생체 항상성을 유지하는 자율신경계 본래의 자생력',
+            herb: '체질 맞춤 안신 한약 처방',
+            situation: '오랜 투병 생활로 완치 여부에 대해 깊은 불안과 의구심을 가지고 계시는'
+          },
+          {
+            q: '커피나 카페인 음료를 조금만 마셔도 심장이 쿵쾅거리고 불안한 이유는 뭔가요?',
+            directAnswer: '카페인은 아데노신 수용체를 차단하여 교감신경을 흥분시키는데, 자율신경이 약화된 분들은 작은 카페인 자극에도 심박수 조절 밸브가 과민 반응하여 빈맥과 손 떨림, 불안감을 겪게 됩니다.',
+            organ: '심장 박동수와 수축력을 조절하는 흉부 교감신경절',
+            herb: '청심연자음과 천왕보심단',
+            situation: '커피 한 모금에도 가슴이 터질 듯 뛰어 일상 음료조차 마시기 두려워하시는'
           }
         ];
 
         dynamicFaqThemes.forEach(function(th, idx) {
           var newId = 'pool-faq-' + (curPoolCount + idx + 1);
           var newTitle = th.q;
-          if (batchSerial > 1) {
-            newTitle = th.q + ' [상담 Q&A ' + batchSerial + '회차]';
-          }
           var normT = normalizeQuestionTitle(newTitle);
           if (!window.autoFaqContentPool.some(function(p) { return normalizeQuestionTitle(p.title) === normT; })) {
             var answerText = '> **[네이버 검색 & AI 다이렉트 앤서: 핵심 요약]**\n> **Q. ' + th.q + '**\n> **A. ' + th.directAnswer + '**\n\n' +

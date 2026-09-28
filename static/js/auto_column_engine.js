@@ -60,7 +60,7 @@
   },
   {
     "idPrefix": "col-auto-5",
-    "title": "신경안정제나 우울증약을 먹어도 몸의 통증과 두근거림이 그대로예요: 약물 내성과 자율신경 치료법'신경'이 아닌 '신경계 밭'을 다스려야 한다",
+    "title": "신경안정제나 우울증약을 먹어도 몸의 통증과 두근거림이 그대로예요: 약물 내성과 자율신경 치료법",
     "image": "/images/columns/column_5_neuroplasticity.svg",
     "author": "해아림한의원",
     "summary": "신경안정제나 항불안제 복용에도 지속되는 가슴 답답함과 신체 통증, 단순 증상 억제가 아닌 자율신경계 본래의 조절력을 회복하는 한방 치법입니다.",
@@ -108,7 +108,7 @@
   },
   {
     "idPrefix": "col-auto-11",
-    "title": "눈이 뻑뻑하고 침침하며 빛 번짐이 너무 심해요: 인공눈물로 해결 안 되는 눈 피로와 자율신경 시각 과민'자율신경성 안구 증상', 모양체 신경절 피로의 실체",
+    "title": "눈이 뻑뻑하고 침침하며 빛 번짐이 너무 심해요: 인공눈물로 해결 안 되는 눈 피로와 자율신경 시각 과민",
     "image": "/images/columns/column_11_ocular_fatigue.svg",
     "author": "해아림한의원",
     "summary": "안과 검사상 단순 안구건조증이라는데 시야가 뿌옇고 빛 번짐과 눈 피로가 극심한 증상, 동공 조절 자율신경계의 과민 반응을 풀어주는 치료법입니다.",
@@ -172,7 +172,7 @@
   },
   {
     "idPrefix": "col-auto-19",
-    "title": "아침에 일어나면 온몸이 천근만근 무겁고 무기력해요: 만성 피로 영양제로 안 풀리는 신경계 방전 치료'동결(Freeze)' 반응",
+    "title": "아침에 일어나면 온몸이 천근만근 무겁고 무기력해요: 만성 피로 영양제로 안 풀리는 신경계 방전 치료",
     "image": "/images/columns/column_19_burnout_vagus.svg",
     "author": "해아림한의원",
     "summary": "충분히 자도 물에 젖은 솜처럼 가라앉고 손가락 하나 움직이기 힘든 극단적 무기력, 자율신경 셧다운(신경계 방전) 상태를 깨우는 회복 원리입니다.",
@@ -877,6 +877,69 @@
     }
   ];
 
+  
+  // ── 과거 발행 글 및 스토리지의 어려운 의학용어·(제N기) 표기 완전 정제 엔진 ──
+  function sanitizeObsoleteColumnsAndTitles() {
+    try {
+      var rawD = localStorage.getItem('healim_dynamic_column_pool');
+      if (rawD && (/\(제\d+기\)/.test(rawD) || /신경 생리학적 기전과 한방 치료 원리/.test(rawD) || /회차\]/.test(rawD))) {
+        localStorage.removeItem('healim_dynamic_column_pool');
+      }
+    } catch(e) {}
+
+    function cleanTitle(t) {
+      if (!t) return t;
+      var str = String(t);
+      if (str.indexOf('세로토닌 불균형') !== -1 || str.indexOf('과민대장: 검사상 정상') !== -1) {
+        return '긴장하거나 스트레스 받으면 배가 부글거리고 화장실로 달려가요: 과민대장증후군과 자율신경 치료법';
+      }
+      if (str.indexOf('말초 모세혈관 레이노 현상') !== -1 || str.indexOf('찬바람 시림') !== -1) {
+        return '찬바람만 쐬면 손발이 얼음장처럼 시리고 하얘져요: 레이노 증상과 자율신경 말초 혈관 치료법';
+      }
+      if (str.indexOf('3차신경 흥분') !== -1 || str.indexOf('안면 감각 이상') !== -1) {
+        return '얼굴 감각이 찌릿하고 둔한데 검사는 정상이래요: 안면 신경 과민과 자율신경 치료법';
+      }
+      if (str.indexOf('과민성 방광') !== -1 && str.indexOf('골반 자율신경총') !== -1) {
+        return '외출할 때마다 화장실부터 찾아요: 비뇨기과 정상인 신경성 빈뇨 극복법';
+      }
+      if (str.indexOf('만성 매핵기') !== -1 && str.indexOf('원인 모를') !== -1) {
+        return '목에 뭔가 걸린 듯 답답하고 헛기침이 계속돼요: 이비인후과 정상인 만성 매핵기 치료';
+      }
+      str = str.replace(/\s*\(제\d+기\)\s*$/g, '')
+               .replace(/\s*\[(?:의학\s*칼럼|상담\s*Q&A|임상\s*칼럼|회복\s*수기)\s*\d+회차\]\s*$/g, '')
+               .replace(/\s*\((?:심층\s*연재|심층\s*안내\??)\)\s*$/g, '');
+      return str.trim();
+    }
+
+    var keys = ['healim_board_columns', 'healim_vault_all_posts_columns', 'healim_custom_columns_posts', 'healim_community_posts_v2'];
+    keys.forEach(function(k) {
+      try {
+        var raw = localStorage.getItem(k);
+        if (raw) {
+          var arr = JSON.parse(raw);
+          if (Array.isArray(arr)) {
+            var updated = false;
+            arr.forEach(function(item) {
+              if (item && item.title) {
+                var c = cleanTitle(item.title);
+                if (c !== item.title) {
+                  item.title = c;
+                  updated = true;
+                }
+              }
+            });
+            if (updated) {
+              localStorage.setItem(k, JSON.stringify(arr));
+            }
+          }
+        }
+      } catch(e) {}
+    });
+  }
+
+  // 즉시 정제 수행
+  sanitizeObsoleteColumnsAndTitles();
+
   function ensureDynamicColumnBatch() {
     sanitizeStoredColumnImages();
     // 1. 기존 캐시된 동적 풀 복원
@@ -885,6 +948,10 @@
       if (rawDyn) {
         var dynList = JSON.parse(rawDyn) || [];
         dynList.forEach(function(item) {
+          var t = item.title || '';
+          if (/\(제\d+기\)/.test(t) || /\[(?:의학\s*칼럼|상담\s*Q&A)\s*\d+회차\]/.test(t) || /신경 생리학적 기전과 한방 치료 원리/.test(t)) {
+            return;
+          }
           if (!columnsPool.some(function(cp) { return cp.idPrefix === item.idPrefix || normalizeColumnTitle(cp.title) === normalizeColumnTitle(item.title); })) {
             columnsPool.push(item);
           }
@@ -1008,15 +1075,54 @@
             organ: '방광 감각과 배뇨 기능을 관장하는 골반 자율신경총',
             herb: '축천환과 팔미지황탕',
             situation: '외출할 때마다 화장실 위치부터 확인해야 할 만큼 불안해하시던'
+          },
+          {
+            title: '찬바람만 쐬면 손발이 얼음장처럼 시리고 하얘져요: 레이노 증상과 자율신경 말초 혈관 치료법',
+            directAnswer: '찬바람이나 작은 스트레스에도 손가락, 발가락 끝 모세혈관이 급격히 연축되어 창백해지고 시린 증상은 자율신경계의 혈관 운동 반사가 과민해져 발생합니다. 온리거한 한방 처방으로 말초 혈류망을 회복할 수 있습니다.',
+            organ: '전신 말초 모세혈관의 수축과 확장을 통제하는 혈관운동 교감신경절',
+            herb: '당귀사역가오수유생강탕과 온경탕',
+            situation: '여름철 에어컨 바람에도 손발이 시리고 하얗게 질려 고통받으시던'
+          },
+          {
+            title: '긴장하거나 스트레스 받으면 배가 부글거리고 화장실로 달려가요: 과민대장증후군과 자율신경 치료법',
+            directAnswer: '긴장되는 상황마다 복통과 설사, 복부 팽만감이 발생하는 것은 뇌-장 축(Gut-Brain Axis)의 신경 신호 전달 체계가 과민해져 장관 평활근이 비정상적으로 경련하기 때문입니다. 신경 안정과 위장 조율 한약으로 안정시킵니다.',
+            organ: '장관 연동운동과 소화액 분비를 총괄하는 장관신경계(ENS) 및 미주신경',
+            herb: '곽향정기산과 이진탕 가감방',
+            situation: '중요한 시험이나 미팅 전마다 배가 끓어오르고 급하게 화장실을 찾으시던'
+          },
+          {
+            title: '얼굴 감각이 찌릿하고 둔한데 뇌 검사는 정상이래요: 안면 신경 과민과 자율신경 치료법',
+            directAnswer: '뇌 MRI상 뇌졸중이나 기질적 이상이 없음에도 안면 부위의 저림, 둔감, 마비감이 나타나는 것은 스트레스로 삼차신경과 안면 자율신경 가지가 과각성되었기 때문입니다. 억간산 등 신경 안정 치법으로 다스립니다.',
+            organ: '안면 감각 신호와 미세 혈류를 담당하는 삼차신경 및 뇌간 신경핵',
+            herb: '억간산과 조등산',
+            situation: '얼굴 한쪽이 얼얼하게 마비되는 느낌에 큰 병인 줄 알고 불안해하시던'
+          },
+          {
+            title: '커피 한 잔만 마셔도 심장이 쿵쾅거리고 손이 덜덜 떨려요: 카페인 과민과 자율신경 회복법',
+            directAnswer: '카페인 섭취 시 남들보다 심한 가슴 두근거림과 손 떨림, 불안감이 유발되는 것은 아데노신 수용체 차단에 따른 교감신경 자극을 신경계가 스스로 완충하지 못하기 때문입니다. 신경계 회복 탄력성을 높이는 치료가 필요합니다.',
+            organ: '심박수와 전신 각성도를 통제하는 심장 교감신경절',
+            herb: '천왕보심단과 청심연자음',
+            situation: '커피나 녹차를 조금만 마셔도 밤새 심장이 뛰어 불안해하시던'
+          },
+          {
+            title: '외출하거나 버스·지하철 타면 숨이 차고 어지러워요: 대중교통 불안과 자율신경 안정',
+            directAnswer: '폐쇄된 공간이나 사람이 많은 대중교통 안에서 호흡곤란과 어지럼증이 심해지는 것은 밀폐 환경에 대한 뇌의 불안 경보 스위치가 조기 작동하여 뇌혈류가 일시 왜곡되기 때문입니다. 뇌간 안정 한방 치료로 극복할 수 있습니다.',
+            organ: '위기 감지 센서인 편도체와 호흡 조절 뇌간 신경망',
+            herb: '온담탕과 귀비탕 가감방',
+            situation: '지하철이나 버스 타기가 겁나 일상 외출조차 꺼려지시던'
+          },
+          {
+            title: '자율신경실조증 완치가 가능한가요? 재발을 막고 건강한 일상을 지키는 생활 수칙',
+            directAnswer: '자율신경실조증은 불치의 질환이 아니며 고장 난 신경망 신호 전달 체계를 바로잡고 신경 가소성을 재건하면 건강한 본래 상태로 회복됩니다. 규칙적인 수면과 1:1 맞춤 한방 치료로 재발 위험을 낮출 수 있습니다.',
+            organ: '전신 항상성을 자율적으로 조율하는 중추 및 말초 자율신경계',
+            herb: '체질 보약과 보기안신 탕약',
+            situation: '수년간 낫지 않을까 봐 깊은 절망감에 짓눌려 계시던'
           }
         ];
 
         clinicalThemes.forEach(function(th, idx) {
           var newId = 'col-auto-' + (curPoolCount + idx + 1);
           var newTitle = th.title;
-          if (batchSerial > 1) {
-            newTitle = th.title + ' [의학 칼럼 ' + batchSerial + '회차]';
-          }
           var normT = normalizeColumnTitle(newTitle);
           if (!columnsPool.some(function(c) { return normalizeColumnTitle(c.title) === normT; })) {
             var bodyText = '> **[네이버 검색 & AI 다이렉트 앤서: 핵심 요약]**\n> **Q. ' + th.title.split(':')[0] + '**\n> **A. ' + th.directAnswer + '**\n\n' +
@@ -1061,6 +1167,7 @@
   }
 
   function checkAndRunAutoColumnPublish(isManual) {
+    sanitizeObsoleteColumnsAndTitles();
     sanitizeStoredColumnImages();
     var state = getAutoColumnState();
     var now = Date.now();

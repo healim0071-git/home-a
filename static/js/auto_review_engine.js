@@ -444,6 +444,37 @@
     }
   ];
 
+  
+  function sanitizeObsoleteReviewsAndTitles() {
+    function cleanTitle(t) {
+      if (!t) return t;
+      return String(t)
+        .replace(/\s*\(회복\s*수기\s*제\d+기\)\s*$/g, '')
+        .replace(/\s*\(제\d+기\)\s*$/g, '')
+        .replace(/\s*\[(?:의학\s*칼럼|상담\s*Q&A|임상\s*칼럼|회복\s*수기)\s*\d+회차\]\s*$/g, '')
+        .trim();
+    }
+    ['healim_board_reviews', 'healim_vault_all_posts_reviews'].forEach(function(k) {
+      try {
+        var raw = localStorage.getItem(k);
+        if (raw) {
+          var arr = JSON.parse(raw);
+          if (Array.isArray(arr)) {
+            var updated = false;
+            arr.forEach(function(item) {
+              if (item && item.title) {
+                var c = cleanTitle(item.title);
+                if (c !== item.title) { item.title = c; updated = true; }
+              }
+            });
+            if (updated) localStorage.setItem(k, JSON.stringify(arr));
+          }
+        }
+      } catch(e) {}
+    });
+  }
+  sanitizeObsoleteReviewsAndTitles();
+
   function ensureDynamicReviewBatch() {
     if (!window.autoReviewContentPool) window.autoReviewContentPool = [];
 
@@ -502,7 +533,7 @@
 
         dynamicReviewThemes.forEach(function(th, idx) {
           var newId = 'pool-rev-' + (curPoolCount + idx + 1);
-          var newTitle = th.title + ' (회복 수기 제' + batchSerial + '기)';
+          var newTitle = th.title;
           var normT = normalizeReviewTitle(newTitle);
           if (!window.autoReviewContentPool.some(function(p) { return normalizeReviewTitle(p.title) === normT; })) {
             var item = {
