@@ -2389,9 +2389,22 @@
         var blurNotice = document.getElementById('commonBottomModalBlurNotice');
         var displayImg = item.image || item.thumb || '';
         if (boardType === 'youtube') displayImg = '';
+        if (boardType === 'faq' && (!displayImg || (typeof window.FAQ_CANONICAL_IMAGES !== 'undefined' && window.FAQ_CANONICAL_IMAGES.indexOf(displayImg) === -1))) {
+          if (typeof window.getSafeFaqImage === 'function') {
+            displayImg = window.getSafeFaqImage(displayImg || item.id || item.title);
+          }
+        } else if (boardType === 'columns' && (!displayImg || (typeof window.COLUMN_CANONICAL_IMAGES !== 'undefined' && window.COLUMN_CANONICAL_IMAGES.indexOf(displayImg) === -1))) {
+          if (typeof window.getSafeColumnImage === 'function') {
+            displayImg = window.getSafeColumnImage(displayImg || item.id || item.idPrefix || item.title);
+          }
+        }
 
         if (displayImg) {
           if (imgArea && imgEl) {
+            imgEl.onerror = function() {
+              this.onerror = null;
+              if (imgArea) imgArea.style.display = 'none';
+            };
             imgEl.src = displayImg;
             imgArea.style.display = 'block';
           }

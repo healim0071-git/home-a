@@ -1067,44 +1067,161 @@
   // 기준(1,000자 내외 답변, 썸네일, 6대 의료광고 원칙, 3대 링크)에 맞춰
   // 새로운 질의응답을 지속적으로 만들어 낼 수 있도록 신규 배치를 자동 공급합니다.
   // ──────────────────────────────────────────────────────────
+    // 100% Guaranteed Canonical SVG Images for FAQ (30 items)
+  var FAQ_CANONICAL_IMAGES = [
+    '/images/faq/faq_1_exam.svg',
+    '/images/faq/faq_2_panic.svg',
+    '/images/faq/faq_3_thermal.svg',
+    '/images/faq/faq_4_vagus.svg',
+    '/images/faq/faq_5_sleep.svg',
+    '/images/faq/faq_6_pots.svg',
+    '/images/faq/faq_7_brainfog.svg',
+    '/images/faq/faq_8_tapering.svg',
+    '/images/faq/faq_9_cst.svg',
+    '/images/faq/faq_10_sweat.svg',
+    '/images/faq/faq_11_period.svg',
+    '/images/faq/faq_12_lifestyle.svg',
+    '/images/faq/faq_13_vision.svg',
+    '/images/faq/faq_14_weather.svg',
+    '/images/faq/faq_15_alcohol.svg',
+    '/images/faq/faq_16_hormone.svg',
+    '/images/faq/faq_17_weight.svg',
+    '/images/faq/faq_18_recovery.svg',
+    '/images/faq/faq_19_globus.svg',
+    '/images/faq/faq_20_morning.svg',
+    '/images/faq/faq_21_drymouth.svg',
+    '/images/faq/faq_22_orthostatic.svg',
+    '/images/faq/faq_23_sensory.svg',
+    '/images/faq/faq_24_bladder.svg',
+    '/images/faq/faq_25_safety.svg',
+    '/images/faq/faq_26_gustatory.svg',
+    '/images/faq/faq_27_chestpain.svg',
+    '/images/faq/faq_28_fasciculation.svg',
+    '/images/faq/faq_29_raynaud.svg',
+    '/images/faq/faq_30_pulsatile.svg'
+  ];
+  if (typeof window !== 'undefined') {
+    window.FAQ_CANONICAL_IMAGES = FAQ_CANONICAL_IMAGES;
+  }
+
+  function getSafeFaqImage(seed) {
+    if (typeof seed === 'number') {
+      return FAQ_CANONICAL_IMAGES[Math.abs(seed) % FAQ_CANONICAL_IMAGES.length];
+    }
+    if (typeof seed === 'string' && seed) {
+      if (FAQ_CANONICAL_IMAGES.indexOf(seed) !== -1) {
+        return seed;
+      }
+      var numMatch = seed.match(/faq_(d+)/i);
+      if (numMatch) {
+        var n = parseInt(numMatch[1], 10);
+        if (!isNaN(n) && n >= 1) {
+          return FAQ_CANONICAL_IMAGES[(n - 1) % FAQ_CANONICAL_IMAGES.length];
+        }
+      }
+      var hash = 0;
+      for (var i = 0; i < seed.length; i++) {
+        hash = (hash * 31 + seed.charCodeAt(i)) & 0x7FFFFFFF;
+      }
+      return FAQ_CANONICAL_IMAGES[hash % FAQ_CANONICAL_IMAGES.length];
+    }
+    return FAQ_CANONICAL_IMAGES[0];
+  }
+  if (typeof window !== 'undefined') {
+    window.getSafeFaqImage = getSafeFaqImage;
+  }
+
+  function sanitizeStoredFaqImages() {
+    try {
+      var storageKeys = [
+        'healim_board_faq',
+        'healim_vault_all_posts_faq',
+        'healim_custom_faq_posts',
+        'healim_dynamic_faq_pool'
+      ];
+      storageKeys.forEach(function(sKey) {
+        var raw = localStorage.getItem(sKey);
+        if (raw) {
+          var list = JSON.parse(raw);
+          if (Array.isArray(list)) {
+            var changed = false;
+            list.forEach(function(it) {
+              if (it && (!it.image || FAQ_CANONICAL_IMAGES.indexOf(it.image) === -1)) {
+                it.image = getSafeFaqImage(it.image || it.id || it.title);
+                changed = true;
+              }
+            });
+            if (changed) {
+              localStorage.setItem(sKey, JSON.stringify(list));
+            }
+          }
+        }
+      });
+
+      // Also sanitize unified community storage if it has faq posts
+      var rawComm = localStorage.getItem('healim_community_posts_v2');
+      if (rawComm) {
+        var commList = JSON.parse(rawComm);
+        if (Array.isArray(commList)) {
+          var cChanged = false;
+          commList.forEach(function(it) {
+            if (it && it.boardType === 'faq') {
+              if (!it.image || FAQ_CANONICAL_IMAGES.indexOf(it.image) === -1) {
+                it.image = getSafeFaqImage(it.image || it.id || it.title);
+                cChanged = true;
+              }
+            }
+          });
+          if (cChanged) {
+            localStorage.setItem('healim_community_posts_v2', JSON.stringify(commList));
+          }
+        }
+      }
+    } catch(e) {}
+  }
+  if (typeof window !== 'undefined') {
+    window.sanitizeStoredFaqImages = sanitizeStoredFaqImages;
+  }
+
   var EXTENDED_FAQ_TEMPLATES = [
     {
       subId: '31',
       category: '자율신경FAQ',
       title: '체온이 35도대로 떨어지며 뼛속까지 시린데 갑상선은 정상입니다. 자율신경실조증 검사로 알 수 있나요?',
-      image: '/images/faq/faq_31.jpg',
+      image: getSafeFaqImage(2),
       content: '기초체온이 35도대에 머물며 계절과 무관하게 극심한 오한과 수족냉증을 겪는데도 갑상선 호르몬 검사에서 정상 판정을 받는 분들이 많습니다. 이는 호르몬을 생성하는 갑상선 자체의 문제가 아니라, 뇌간 상부 시상하부(Hypothalamus)의 체온 조절 중추가 자율신경 실조로 인해 전신 열 생산과 말초 혈관 개폐 신호를 제대로 통제하지 못하기 때문입니다.\n\n시상하부는 교감신경을 통해 갈색지방 조직의 대사를 촉진하고 말초 혈관을 조절하여 항상 36.5도의 중심 체온을 유지하도록 지시합니다. 그러나 만성 스트레스와 신경계 피로로 이 중추가 지치면 세포 단위의 열 생산 스위치가 꺼져버립니다. 실제로 자율신경 균형 검사(HRV)를 시행해 보면 체온 대사를 조절하는 교감·부교감신경의 전체 조절 활성도가 극도로 바닥나 있는 양상을 명확하게 확인할 수 있습니다. 심박변이도 파형이 억제되고 자율신경 총 에너지가 고갈되어 신체 대사율이 최저치로 떨어진 상태입니다.\n\n한의학에서는 이를 하초의 원양(元陽)이 고갈된 양허오한(陽虛惡寒) 병증으로 정밀하게 진단합니다. 단순한 수족냉증 수준을 넘어 뼛속까지 찬 기운이 스며드는 것은 심장과 신장의 양기가 쇠약해져 온몸으로 온기를 뿜어내지 못하기 때문입니다. 해아림한의원에서는 부자, 육계, 건강 등 온리산한(溫裏散寒) 한약 처방으로 내부의 양기를 북돋우고, 척추 신경절 온열 약침 요법을 통해 정체된 말초 혈류망을 열어줍니다. 이와 함께 복부 단전 뜸 요법을 병행하여 저하된 중심 체온을 차근차근 끌어올립니다. 신경계의 대사 스위치가 켜지면 35도대 저체온이 안정적인 36.5도로 회복되면서 뼛속 시림이 사라지고 온몸에 따뜻한 활력이 돌아옵니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)'
     },
     {
       subId: '32',
       category: '자율신경FAQ',
       title: '잠자리에 누워 스마트폰을 조금만 봐도 심장이 쿵쾅거리고 새벽까지 잠이 안 옵니다. 블루라이트와 자율신경의 관계는?',
-      image: '/images/faq/faq_32.jpg',
+      image: getSafeFaqImage(4),
       content: '피곤해서 누웠음에도 스마트폰을 20~30분 응시하다 보면 눈이 말똥말똥해지고 가슴이 두근거리며 잠이 달아나는 현상은 현대인에게 흔히 관찰되는 자율신경 교란 반응입니다. 스마트폰 화면의 단파장 블루라이트는 망막 신경절세포를 통해 뇌의 생체시계 중추인 시교차상핵(SCN)을 강하게 자극합니다. 이로 인해 밤이 되면 분비되어야 할 천연 수면 유도 호르몬인 멜라토닌 합성이 즉시 차단되고, 뇌는 낮 12시의 비상상황으로 착각하여 교감신경을 급격히 항진시킵니다.\n\n교감신경이 흥분하면 스트레스 호르몬인 코르티솔이 분비되어 심박수가 증가하고 뇌파가 각성 상태인 고주파 베타파로 치솟게 됩니다. 몸은 침대에 누워 있지만 뇌는 전쟁터 한가운데에 서 있는 것과 같은 긴장 상태를 유지하는 것입니다. 이 과정에서 안구 피로와 함께 관자놀이 통증, 식은땀, 호흡 답답함이 연쇄적으로 발생합니다. 밤새 뇌가 휴식을 취하지 못하고 공회전하므로 아침 기상 시에도 극심한 피로가 남게 됩니다.\n\n한의학에서는 이를 눈의 과도한 자극이 간양(肝陽)을 들뜨게 하고 심화(心火)를 일으켜 신(神)이 제자리로 깃들지 못하는 심신불교(心腎不交) 불면 병증으로 봅니다. 해아림한의원에서는 산조인, 백자인, 용골 등 안신(安神) 한약으로 흥분된 뇌신경막을 진정시키고, 시신경과 뇌혈류를 편안하게 이완시키는 정명혈·풍지혈 침구 치료를 진행합니다. 아울러 경추부 근막 긴장을 푸는 추나요법을 통해 뇌척수액 순환을 정상화합니다. 취침 1시간 전 디지털 기기 차단과 함께 자율신경 리듬을 바로잡으면 약물에 의존하지 않고도 편안한 숙면에 드실 수 있습니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)'
     },
     {
       subId: '33',
       title: '식사만 하고 나면 기절하듯 졸리고 머리가 멍해집니다. 당뇨는 정상인데 미주신경 문제일까요?',
-      image: '/images/faq/faq_33.jpg',
+      image: getSafeFaqImage(3),
       content: '식사 후 눈꺼풀이 무겁게 내려앉고 머리에 안개가 낀 듯 멍해지며 참을 수 없는 졸음이 쏟아지는 증상으로 당뇨 검사를 받지만 혈당은 지극히 정상인 경우가 대단히 많습니다. 이는 인슐린의 문제가 아니라, 식후 혈류를 조절하는 부교감신경(미주신경)의 협응 불능에서 비롯됩니다.\n\n정상인은 음식 섭취 시 위장관으로 혈류가 집중되더라도 뇌혈관 자동조절 기전이 작동하여 대뇌로 가는 산소와 당 공급을 일정하게 유지합니다. 그러나 자율신경 조절력이 저하된 분들은 식후 장간막 혈관으로 혈액이 급격히 쏠리면서 뇌간과 전두엽으로 향하는 혈류가 급감하여 일시적인 대뇌 허혈 상태가 유발됩니다. 뇌세포에 산소가 부족해지면서 마치 기절하듯 수면 속으로 빠져들게 되는 것입니다. 심한 경우 식후 1~2시간 동안 업무나 일상 대화가 불가능할 정도의 무기력증이 나타납니다.\n\n한의학에서는 이를 소화기계의 운화 기능이 극도로 탈진되어 밥 한 끼를 소화하는 데 전신의 기운을 모두 소모하는 비기허약(脾氣虛弱) 및 식후혼곤(食後昏困)으로 진단합니다. 위장에 정체된 습담(濕痰)이 맑은 양기(陽氣)의 상승을 가로막아 머리가 무겁고 어지러운 증상이 동반됩니다. 해아림한의원에서는 위장관의 미주신경 톤을 회복시키고 비위 기운을 끌어올리는 향사육군자탕 기반 맞춤 탕약과 복부 중완혈 온침 요법을 통해 식후 혈류 불균형을 바로잡습니다. 위장과 뇌를 잇는 장-뇌 축이 안정화되면 식후에 찾아오던 무기력한 졸음이 사라지고 식사 후에도 맑은 집중력을 유지할 수 있습니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)'
     },
     {
       subId: '34',
       category: '자율신경FAQ',
       title: '가슴을 쥐어짜듯 뻐근한데 심장혈관 조영술은 깨끗합니다. 미세혈관 연축이나 흉부 신경 긴장인가요?',
-      image: '/images/faq/faq_34.jpg',
+      image: getSafeFaqImage(26),
       content: '가슴 중앙이 뻐근하게 조여오고 숨이 턱 막히는 통증으로 응급실 관상동맥 조영술을 받아도 "혈관이 깨끗하다"는 판정을 받는 환자분들이 계십니다. 이는 굵은 주 혈관이 아닌, 눈에 보이지 않는 심장 표면의 미세 모세혈관들이 자율신경 불균형으로 인해 순간적으로 오그라드는 미세혈관 연축(Microvascular Spasm) 때문입니다.\n\n특히 흉추 1~4번 흉부 교감신경절이 과도하게 긴장하면 심장 미세혈류가 차단되면서 허혈성 흉통이 유발되며, 일반 조영술에서는 이를 감지하기 어렵습니다. 환자는 실제로 협심증에 준하는 젖산 축적과 심근 산소 결핍을 겪고 있으므로 주관적인 통증 강도가 대단히 극심합니다. 여기에 공포와 예기불안이 겹치면서 공황발작 형태로 진행되기도 합니다. 심장 근육 주변의 늑간신경과 근막 연축이 더해지면서 숨을 들이쉴 때마다 찌르는 듯한 통증이 동반되기도 합니다.\n\n한의학에서는 이를 심기(心氣)가 맺혀 혈액 순환이 막힌 흉비(胸痺)이자 기체어혈(氣滯瘀血) 병증으로 진단합니다. 해아림한의원에서는 흉부 교감신경의 긴장을 완화하는 단삼, 천궁 등 활혈행기 한약 처방과 함께, 흉추 변위를 교정하는 추나요법을 병행하여 심장 신경 전도로의 압박을 해소합니다. 가슴 중앙 전중혈과 등 뒤 심수혈 약침 치료는 굳어 있던 흉부 근막을 부드럽게 이완시킵니다. 미세혈관을 옥죄던 신경성 경련이 풀리면 가슴을 짓누르던 답답한 흉통이 편안하게 호전되고 깊고 시원한 호흡을 되찾을 수 있습니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)'
     },
     {
       subId: '35',
       category: '자율신경FAQ',
       title: '비가 오거나 날씨가 흐리면 어지럼증과 두통, 관절통이 심해집니다. 기상병과 내이 자율신경의 관계는?',
-      image: '/images/faq/faq_35.jpg',
+      image: getSafeFaqImage(13),
       content: '비가 오기 전날이나 흐린 날만 되면 머리가 무겁고 어지러우며 온몸이 쑤시는 증상을 기상병(氣象病)이라 부릅니다. 이는 귀 안쪽 내이(Inner Ear)에 위치한 미세 기압 감지 센서가 저기압 변화를 감지할 때, 자율신경계가 과민하게 반응하여 교감신경을 과항진시키기 때문입니다.\n\n기압 저하로 내이 림프액 압력이 팽창하면서 전정신경을 자극하고, 뇌혈관의 급격한 수축과 이완을 유발하여 편두통과 흔들림이 동반됩니다. 자율신경계가 유연한 사람은 기압 변동에 맞춰 혈관을 탄력적으로 조절하지만, 자율신경 기능이 저하된 환자는 교감신경이 과민 발화하여 전신 통증과 메스꺼움, 무기력증에 시달리게 됩니다. 저기압 시기에는 부교감신경 또한 제어력을 잃어 몸 전체가 물에 젖은 솜처럼 무거워집니다.\n\n한의학에서는 체내 불필요한 수분 노폐물인 수독(水毒)과 습담(痰飮)이 외부 기후의 습기와 결합하여 신경을 압박하는 풍습비통(風濕痺痛)으로 해석합니다. 비장과 신장의 수분 대사 능력이 저하되어 림프 정체가 일어나고 신경막 주변이 미세하게 부어오르는 병리입니다. 해아림한의원에서는 내이 림프 순환을 돕고 수분 정체를 해소하는 오령산 기반 맞춤 한약과 귀 주변 혈자리 침구 치료를 통해 기압 변동에 대한 신경계의 탄력적 적응력을 길러드립니다. 상부 경추 추나요법을 통해 후두하근 긴장을 풀면 전정신경핵의 과각성이 빠르게 진정됩니다. 자율신경이 날씨 변화를 유연하게 수용할 수 있게 되면 궂은 날에도 흔들림 없는 일상을 누리실 수 있습니다.\n\n[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n[전국 지점 안내](https://www.healim.com)'
     }
   ];
 
   function ensureDynamicFaqBatch() {
+    sanitizeStoredFaqImages();
     if (!window.autoFaqContentPool) window.autoFaqContentPool = [];
 
     // 1. 기존 캐시된 동적 풀 복원
@@ -1168,7 +1285,7 @@
               id: newId,
               category: '자율신경FAQ',
               title: newTitle,
-              image: '/images/faq/faq_' + ((curPoolCount + idx) % 6 + 1) + '.jpg',
+              image: getSafeFaqImage(curPoolCount + idx),
               content: answerText
             };
             window.autoFaqContentPool.push(item);
@@ -1395,7 +1512,8 @@
   // 페이지 로드 시 즉시 스케줄 도래 여부 검사
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
-      checkAndRunAutoFaqPublish(false);
+      sanitizeStoredFaqImages();
+        checkAndRunAutoFaqPublish(false);
     });
   } else {
     checkAndRunAutoFaqPublish(false);

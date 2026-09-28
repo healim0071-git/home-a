@@ -4865,6 +4865,14 @@ sections:
         var modalDialog = document.querySelector('#detailModalBackdrop .healim-modal-dialog');
         if (boardType === 'reviews' && !item.image) {
           item.image = extractFirstImageFromContent(item.content) || getReviewFallbackImage(item.id || item.title);
+        } else if (boardType === 'faq' && (!item.image || (typeof window.FAQ_CANONICAL_IMAGES !== 'undefined' && window.FAQ_CANONICAL_IMAGES.indexOf(item.image) === -1))) {
+          if (typeof window.getSafeFaqImage === 'function') {
+            item.image = window.getSafeFaqImage(item.image || item.id || item.title);
+          }
+        } else if (boardType === 'columns' && (!item.image || (typeof window.COLUMN_CANONICAL_IMAGES !== 'undefined' && window.COLUMN_CANONICAL_IMAGES.indexOf(item.image) === -1))) {
+          if (typeof window.getSafeColumnImage === 'function') {
+            item.image = window.getSafeColumnImage(item.image || item.id || item.title);
+          }
         }
 
         if (modalDialog) {
@@ -4873,6 +4881,10 @@ sections:
 
         if (item.image) {
           if (imgArea && imgEl) {
+            imgEl.onerror = function() {
+              this.onerror = null;
+              if (imgArea) imgArea.style.display = 'none';
+            };
             imgEl.src = item.image;
             imgEl.className = 'w-full max-h-[420px] object-contain rounded-xl border border-[#badfe3] bg-[#f8fafb]';
             imgEl.style.filter = 'none';
