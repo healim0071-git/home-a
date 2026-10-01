@@ -2387,7 +2387,30 @@ sections:
           } catch(e) {}
         }
         purgeObsoleteMockPosts();
-        window.purgeObsoleteMockFaqPosts = purgeObsoleteMockPosts;
+        window.purgeObsoleteMockFaqPosts = function() {
+          purgeObsoleteMockPosts();
+          try {
+            var stripFn = window.stripFaqSeoHeader || function(t) {
+              return String(t || '').replace(/^>\s*\*\*\[네이버\s*(?:SEO\s*\/\s*AI\s*요약\s*답변|검색\s*&\s*AI\s*다이렉트\s*앤서:\s*핵심\s*요약)\]\*\*[\s\S]*?(?:(?:\r?\n){2}|(?:\\n){2}|$)/, '').trim();
+            };
+            ['healim_board_faq', 'healim_vault_all_posts_faq', 'healim_custom_posts_faq'].forEach(function(k) {
+              var raw = localStorage.getItem(k);
+              if (raw) {
+                var arr = JSON.parse(raw);
+                if (Array.isArray(arr)) {
+                  var chg = false;
+                  arr.forEach(function(p) {
+                    if (p && p.content) {
+                      var cl = stripFn(p.content);
+                      if (cl !== p.content) { p.content = cl; chg = true; }
+                    }
+                  });
+                  if (chg) localStorage.setItem(k, JSON.stringify(arr));
+                }
+              }
+            });
+          } catch(e) {}
+        };
         window.purgeObsoleteMockPosts = purgeObsoleteMockPosts;
 
         // ─────────────────────────────────────────────────────────────
@@ -3578,7 +3601,8 @@ sections:
             var cleanTitle = (item.title || '').replace(/^Q[\.:\s\-]+/i, '').replace(/\*\*(.*?)\*\*/g, '$1').replace(/__(.*?)__/g, '$1').trim();
             var hasAnyImage = item.image || (item.content && (item.content.indexOf('![') !== -1 || item.content.indexOf('<img') !== -1));
             var photoBadge = hasAnyImage ? '<span class="text-xs font-bold px-1.5 py-0.5 rounded bg-[#f0f7f8] text-[#1c6e78] border border-[#badfe3] ml-1 shrink-0">📷 사진</span>' : '';
-            var richContent = renderRichContent(item.content);
+            var cleanFaqContent = (typeof stripFaqSeoHeader === 'function') ? stripFaqSeoHeader(item.content) : String(item.content || '').replace(/^>\s*\*\*\[네이버\s*(?:SEO\s*\/\s*AI\s*요약\s*답변|검색\s*&\s*AI\s*다이렉트\s*앤서:\s*핵심\s*요약)\]\*\*[\s\S]*?(?:(?:\r?\n){2}|(?:\\n){2}|$)/, '').trim();
+            var richContent = renderRichContent(cleanFaqContent);
             var imageHtml = (item.image && richContent.indexOf(item.image) === -1) ? '<div class="my-3 rounded-lg overflow-hidden border border-[#badfe3] bg-[#f8fafb] max-w-md"><img src="' + item.image + '" alt="' + cleanTitle + '" class="max-h-80 w-auto object-contain rounded-lg" loading="lazy" onerror="this.onerror=null; this.parentElement.style.display=\'none\';" /></div>' : '';
 
             var adminButtonsHtml = isSuperAdmin ? (
