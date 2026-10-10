@@ -9,10 +9,10 @@ main:
   - name: 자율신경계이상 증상 특징
     url: /autonomic-symptoms/
     weight: 30
-  - name: 자율신경 원인 검사/진단
+  - name: 자율신경실조증 원인 검사/진단
     url: /autonomic-diagnosis/
     weight: 40
-  - name: 자율신경 치료 방법/생활 관리
+  - name: 자율신경실조증 치료방법/생활관리
     url: /autonomic-treatment/
     weight: 50
   - name: 커뮤니티

@@ -60,8 +60,8 @@ d:\autonerve\
 │   ├── autonomic-clinic/           # 1. 해아림 자율신경 치료 클리닉 소개
 │   ├── autonomic-dysfunction/      # 2. 자율신경실조증이란?
 │   ├── autonomic-symptoms/         # 3. 자율신경계이상 증상 특징
-│   ├── autonomic-diagnosis/        # 4. 자율신경 원인 검사/진단 (6대 심층 검사)
-│   ├── autonomic-treatment/        # 5. 자율신경 치료 방법/생활 관리 (7대 접근, 8대 수칙)
+│   ├── autonomic-diagnosis/        # 4. 자율신경실조증 원인 검사/진단 (6대 심층 검사)
+│   ├── autonomic-treatment/        # 5. 자율신경실조증 치료방법/생활관리 (7대 접근, 8대 수칙)
 │   ├── community/                  # 6. 커뮤니티 (FAQ, 치료후기, 유튜브, 의료 칼럼)
 │   ├── login/                      # 회원 로그인 페이지
 │   ├── register/                   # 회원가입 페이지
@@ -137,7 +137,7 @@ d:\autonerve\
   3. 전국 15개 네트워크 인프라
   4. 객관적 검사 시스템을 통한 과잉진료 방지
 
-### 5.2 자율신경 원인 검사/진단 (`content/autonomic-diagnosis/_index.md`)
+### 5.2 자율신경실조증 원인 검사/진단 (`content/autonomic-diagnosis/_index.md`)
 - **자율신경 6대 심층 검사 체계**:
   1. HRV 자율신경 균형 검사 (교감/부교감 활성도 정밀 분석)
   2. 뇌기능 및 뇌파(EEG) 검사
@@ -147,7 +147,7 @@ d:\autonerve\
   6. 동반 심리·수면 상태 심층 평가
 - **투명한 검사 시스템 안내**: 과잉진료를 방지하기 위해 필요한 검사만 선별 진행
 
-### 5.3 자율신경 치료 방법/생활 관리 (`content/autonomic-treatment/_index.md`)
+### 5.3 자율신경실조증 치료방법/생활관리 (`content/autonomic-treatment/_index.md`)
 - **7대 통합 치료 접근 체계**:
   1. 증상 발생 과정 입체 추적
   2. 자율신경과 뇌기능 동시 조절
