@@ -29,7 +29,7 @@ sections:
         </li>
         <li>
         <button type="button" class="community-tab-btn" data-tab="reviews" onclick="switchCommunityTab('reviews')">
-        치료후기 <span class="lock-tag">🔒 회원전용</span>
+        자율신경실조증 치료후기 <span class="lock-tag">🔒 회원전용</span>
         </button>
         </li>
         <li>
