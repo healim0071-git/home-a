@@ -1,6 +1,7 @@
 ---
-title: "자율신경실조증의 다발성 증상 특징 | 4대 계통별 증상 및 연관 질환"
-description: "뇌신경계, 순환·호흡기계, 소화기계, 정신·수면계로 동시다발적으로 나타나는 자율신경실조증의 4대 핵심 증상군과 공황장애, 불면증, 불안장애, 어지럼증, 미주신경성실신과의 연관성을 규명합니다."
+title: "자율신경계이상 자율신경실조증 증상 특징 | 4대 계통별 증상 및 연관 질환"
+description: "뇌신경계, 순환·호흡기계, 소화기계, 정신·수면계로 동시다발적으로 나타나는 자율신경계이상 및 자율신경실조증 증상 특징과 4대 핵심 증상군, 공황장애·불면증·불안장애·어지럼증·미주신경성실신의 연관성을 규명합니다."
+keywords: ["자율신경계이상 자율신경실조증 증상 특징", "자율신경계이상 증상", "자율신경실조증 증상", "자율신경 증상 특징", "자율신경실조증 다발성 증상", "해아림한의원"]
 type: landing
 sections:
   - block: markdown
@@ -10,7 +11,7 @@ sections:
         <div class="mb-10 text-center md:text-left">
           <span class="inline-block px-3 py-1 bg-[#eaf3f4] text-[#1c6e78] font-bold text-xs rounded-full uppercase tracking-wider mb-2">Multiple Symptoms</span>
           <h1 class="text-3xl md:text-4xl font-extrabold text-[#0d3a42] leading-tight mb-4">
-            자율신경실조증의 다발성 증상 특징
+            자율신경계이상 자율신경실조증 증상 특징
           </h1>
           <p class="text-[#555555] text-base md:text-lg leading-relaxed max-w-3xl">
             자율신경계는 인체의 모든 장기와 혈관, 감각계를 관할하므로 한 곳의 국소 질환이 아닌 <strong>전신 4대 계통에 걸쳐 복합적인 다발성 증상</strong>으로 나타납니다.
