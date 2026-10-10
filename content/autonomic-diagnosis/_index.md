@@ -1,6 +1,7 @@
 ---
-title: "자율신경실조증의 원인과 정밀 진단 체계 | 해아림 3단계 검사"
-description: "만성 스트레스와 뇌기능 과부하로 무너진 자율신경계를 과학적으로 측정하는 HRV 자율신경계 검사, 뇌기능 뇌파검사, 한의학적 종합 진단체계를 상세히 소개합니다."
+title: "자율신경계이상 자율신경실조증 원인검사와 진단 | 해아림 3단계 검사"
+description: "만성 스트레스와 뇌기능 과부하로 무너진 자율신경계이상 및 자율신경실조증 원인검사와 진단 체계. 과학적으로 측정하는 HRV 자율신경계 검사, 뇌기능 뇌파검사, 한의학적 종합 진단체계를 상세히 소개합니다."
+keywords: ["자율신경계이상 자율신경실조증 원인검사와 진단", "자율신경 원인 검사", "자율신경실조증 진단", "자율신경계이상 검사", "HRV 검사", "해아림한의원"]
 type: landing
 sections:
   - block: markdown
@@ -13,7 +14,7 @@ sections:
         <div class="mb-10 text-center md:text-left">
         <span class="inline-block px-3 py-1 bg-[#eaf3f4] text-[#1c6e78] font-bold text-xs rounded-full uppercase tracking-wider mb-2">Precision Diagnosis</span>
         <h1 class="text-3xl md:text-4xl font-extrabold text-[#0d3a42] leading-tight mb-4">
-        자율신경실조증의 원인과 정밀 진단 체계
+        자율신경계이상 자율신경실조증 원인검사와 진단
         </h1>
         <p class="text-[#555555] text-base md:text-lg leading-relaxed max-w-3xl">
         보이지 않는 신경계의 불균형을 수치와 그래프로 객관화합니다. 해아림한의원은 원인에 대한 다각적인 분석과 과학적 생체 신호 검사, 한의학적 변증 진단을 결합하여 치료의 시작점을 정밀하게 설정합니다.
