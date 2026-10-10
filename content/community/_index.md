@@ -2411,7 +2411,43 @@ sections:
             });
           } catch(e) {}
         };
-        window.purgeObsoleteMockPosts = purgeObsoleteMockPosts;
+        window.purgeObsoleteMockColumnPosts = function() {
+          purgeObsoleteMockPosts();
+          try {
+            var stripFn = window.stripColumnSeoHeader || function(t) {
+              return String(t || '')
+                .replace(/^>\s*\*\*\[네이버\s*(?:SEO\s*\/\s*AI\s*요약\s*답변|검색\s*&\s*AI\s*다이렉트\s*앤서:\s*핵심\s*요약)\]\*\*[\s\S]*?(?:(?:\r?\n){2}|(?:\\n){2}|$)/, '')
+                .replace(/^\[네이버\s*(?:SEO\s*\/\s*AI\s*요약\s*답변|검색\s*&\s*AI\s*다이렉트\s*앤서:\s*핵심\s*요약)\][\s\S]*?(?:(?:\r?\n){2}|(?:\\n){2}|$)/, '')
+                .trim();
+            };
+            ['healim_board_columns', 'healim_vault_all_posts_columns', 'healim_custom_columns_posts', 'healim_dynamic_column_pool'].forEach(function(k) {
+              var raw = localStorage.getItem(k);
+              if (raw) {
+                var arr = JSON.parse(raw);
+                if (Array.isArray(arr)) {
+                  var chg = false;
+                  arr.forEach(function(p) {
+                    if (p && p.content) {
+                      var cl = stripFn(p.content);
+                      if (cl !== p.content) { p.content = cl; chg = true; }
+                    }
+                  });
+                  if (chg) {
+                    localStorage.setItem(k, JSON.stringify(arr));
+                    if (k === 'healim_vault_all_posts_columns' && typeof window.HealimPermanentDB !== 'undefined' && window.HealimPermanentDB.saveVault) {
+                      window.HealimPermanentDB.saveVault('columns', arr);
+                    }
+                  }
+                }
+              }
+            });
+          } catch(e) {}
+        };
+        window.purgeObsoleteMockPosts = function() {
+          purgeObsoleteMockPosts();
+          if (typeof window.purgeObsoleteMockFaqPosts === 'function') window.purgeObsoleteMockFaqPosts();
+          if (typeof window.purgeObsoleteMockColumnPosts === 'function') window.purgeObsoleteMockColumnPosts();
+        };
 
         // ─────────────────────────────────────────────────────────────
         // Permanent Persistence & Multi-Tier Deletion Tracker
@@ -3909,6 +3945,8 @@ sections:
         function renderColumnsList() {
           try {
             if (typeof purgeObsoleteMockPosts === 'function') purgeObsoleteMockPosts();
+            if (typeof window.purgeObsoleteMockColumnPosts === 'function') window.purgeObsoleteMockColumnPosts();
+            if (typeof window.sanitizeStoredColumnPosts === 'function') window.sanitizeStoredColumnPosts();
           } catch(e) {
             console.warn('[Community] purgeObsoleteMockPosts error:', e);
           }
@@ -4944,6 +4982,25 @@ sections:
           if (imgEl) imgEl.src = '';
           var blurNotice = document.getElementById('detailModalBlurNotice');
           if (blurNotice) blurNotice.style.display = 'none';
+        }
+
+        // Strip SEO summary blockquotes from Columns and FAQ
+        if (boardType === 'columns') {
+          var stripColFn = (typeof window.stripColumnSeoHeader === 'function') ? window.stripColumnSeoHeader : function(t) {
+            return String(t || '')
+              .replace(/^>\s*\*\*\[네이버\s*(?:SEO\s*\/\s*AI\s*요약\s*답변|검색\s*&\s*AI\s*다이렉트\s*앤서:\s*핵심\s*요약)\]\*\*[\s\S]*?(?:(?:\r?\n){2}|(?:\\n){2}|$)/, '')
+              .replace(/^\[네이버\s*(?:SEO\s*\/\s*AI\s*요약\s*답변|검색\s*&\s*AI\s*다이렉트\s*앤서:\s*핵심\s*요약)\][\s\S]*?(?:(?:\r?\n){2}|(?:\\n){2}|$)/, '')
+              .trim();
+          };
+          displayContent = stripColFn(displayContent);
+        } else if (boardType === 'faq') {
+          var stripFaqFn = (typeof window.stripFaqSeoHeader === 'function') ? window.stripFaqSeoHeader : function(t) {
+            return String(t || '')
+              .replace(/^>\s*\*\*\[네이버\s*(?:SEO\s*\/\s*AI\s*요약\s*답변|검색\s*&\s*AI\s*다이렉트\s*앤서:\s*핵심\s*요약)\]\*\*[\s\S]*?(?:(?:\r?\n){2}|(?:\\n){2}|$)/, '')
+              .replace(/^\[네이버\s*(?:SEO\s*\/\s*AI\s*요약\s*답변|검색\s*&\s*AI\s*다이렉트\s*앤서:\s*핵심\s*요약)\][\s\S]*?(?:(?:\r?\n){2}|(?:\\n){2}|$)/, '')
+              .trim();
+          };
+          displayContent = stripFaqFn(displayContent);
         }
 
         var contentEl = document.getElementById('detailModalContent');
