@@ -1431,6 +1431,12 @@ section#section-markdown:first-of-type {
   display: flex;
 }
 
+@media (max-width: 767px) {
+  .community-tabs-list li:last-child:nth-child(odd) {
+    grid-column: span 2;
+  }
+}
+
 @media (min-width: 768px) {
   .community-tabs-list li {
     flex: 1 1 auto;

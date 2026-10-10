@@ -41,6 +41,11 @@ sections:
         자율신경실조증 치료 칼럼
         </button>
         </li>
+        <li>
+        <a href="https://www.healim.com/5-6" class="community-tab-btn" style="text-decoration: none;">
+        한약과 비용고시
+        </a>
+        </li>
         </ul>
         </div>
 
@@ -3309,6 +3314,7 @@ sections:
 
         // Tab Switching Logic
         window.switchCommunityTab = function(tabName) {
+        if (tabName === 'herb-cost' || tabName === 'cost') { window.location.href = 'https://www.healim.com/5-6'; return; }
         activeTab = tabName;
 
         // Update Tab Button Styles
