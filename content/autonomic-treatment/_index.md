@@ -1,6 +1,7 @@
 ---
-title: "자율신경실조증 통합 치료 및 생활관리 | 해아림 맞춤 처방"
-description: "과항진된 교감신경을 안정시키는 체질 맞춤 한약, 뇌 자가 조절력을 높이는 뇌수용체 훈련, 침구 치료 및 재발 방지 의학적 생활관리 가이드를 안내합니다."
+title: "자율신경계이상 자율신경실조증 치료 방법과 생활관리 | 해아림 맞춤 처방"
+description: "과항진된 교감신경을 안정시키는 체질 맞춤 한약, 뇌 자가 조절력을 높이는 뇌수용체 훈련, 침구 치료 및 재발 방지 의학적 생활관리 가이드. 자율신경계이상 및 자율신경실조증 치료 방법과 생활관리를 체계적으로 안내합니다."
+keywords: ["자율신경계이상 자율신경실조증 치료 방법과 생활관리", "자율신경실조증 치료방법", "자율신경 생활관리", "자율신경계 치료", "해아림한의원"]
 type: landing
 sections:
   - block: markdown
@@ -8,12 +9,12 @@ sections:
       title: ""
       text: |
         <!-- ══════════════════════════════════════════════════════════════════
-        헤더 섹션: 자율신경실조증 통합 치료 및 생활관리
+        헤더 섹션: 자율신경계이상 자율신경실조증 치료 방법과 생활관리
         ══════════════════════════════════════════════════════════════════ -->
         <div class="mb-10 text-center md:text-left">
         <span class="inline-block px-3 py-1 bg-[#eaf3f4] text-[#1c6e78] font-bold text-xs rounded-full uppercase tracking-wider mb-2">Integrative Treatment</span>
         <h1 class="text-3xl md:text-4xl font-extrabold text-[#0d3a42] leading-tight mb-4">
-        자율신경실조증 통합 치료 및 생활관리
+        자율신경계이상 자율신경실조증 치료 방법과 생활관리
         </h1>
         <div class="text-[#555555] text-sm md:text-base leading-relaxed max-w-3xl space-y-2.5">
         <p>
