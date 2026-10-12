@@ -1,38 +1,61 @@
-﻿/**
+/**
  * scripts/sync_seo_geo_pipeline.js
- * AI 검색(GEO) & 답변(AEO), 네이버 및 구글 검색 통합 최적화 파이프라인
- *
- * 수행 단계:
- * 1. AEO/GEO Direct Answer & E-E-A-T 검수 태그 동기화
- * 2. 시맨틱 SSR 정적 마크다운/HTML 사전 렌더링 주입
- * 3. Hugo 프로덕션 정적 사이트 빌드
- * 4. 네이버/구글 전용 RSS 피드 (51개 전체 항목) 동기화
+ * 해아림한의원 자율신경실조증 클리닉 차세대 SEO / GEO / AEO 통합 피드 및 데이터 동기화 파이프라인
  */
 
-const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 const rootDir = path.join(__dirname, '..');
+const dataHubFile = path.join(rootDir, 'data', 'healim_community_hub.json');
+const staticHubFile = path.join(rootDir, 'static', 'data', 'healim_community_hub.json');
 
-console.log('🚀 [Step 1/4] Optimizing Content Pool for GEO/AEO Direct Answers...');
-execSync(`node "${path.join(__dirname, 'optimize_geo_aeo_content.js')}"`, { stdio: 'inherit' });
+console.log('════════════════════════════════════════════════════════════════');
+console.log('  해아림한의원 자율신경 SEO / GEO / AEO 통합 동기화 파이프라인');
+console.log('════════════════════════════════════════════════════════════════\n');
 
-console.log('\n📄 [Step 2/4] Generating Semantic SSR Static Markdown/HTML for Crawlers...');
-execSync(`node "${path.join(__dirname, 'build_community_static.js')}"`, { stdio: 'inherit' });
-
-console.log('\n🏗️ [Step 3/4] Building Hugo Site with Dynamic JSON-LD Schema & Sitemaps...');
-execSync(`hugo -s "${rootDir}" --minify`, { stdio: 'inherit' });
-
-console.log('\n📡 [Step 4/4] Ensuring Naver Search Advisor & Google RSS Feeds...');
-const publicDir = path.join(rootDir, 'public');
-const indexXml = path.join(publicDir, 'index.xml');
-const rssXml = path.join(publicDir, 'rss.xml');
-
-if (fs.existsSync(indexXml)) {
-  const content = fs.readFileSync(indexXml, 'utf8');
-  fs.writeFileSync(rssXml, content, 'utf8');
-  console.log('✅ Synchronized 51 RSS items to both public/index.xml and public/rss.xml!');
+// 1. 데이터 허브 파일 동기화
+if (fs.existsSync(dataHubFile)) {
+  const dataContent = fs.readFileSync(dataHubFile, 'utf8');
+  fs.writeFileSync(staticHubFile, dataContent, 'utf8');
+  console.log('✅ 1. 데이터 허브 동기화 완료: data/ -> static/data/ (100% 일치)');
+} else if (fs.existsSync(staticHubFile)) {
+  const staticContent = fs.readFileSync(staticHubFile, 'utf8');
+  fs.writeFileSync(dataHubFile, staticContent, 'utf8');
+  console.log('✅ 1. 데이터 허브 복원 완료: static/data/ -> data/ (100% 일치)');
 }
 
-console.log('\n🎉 [COMPLETE] Total GEO, AEO, Google & Naver Search Optimization Pipeline Finished Successfully!');
+const hubData = JSON.parse(fs.readFileSync(dataHubFile, 'utf8'));
+const faqs = hubData.faq || [];
+const columns = hubData.columns || [];
+
+console.log(`   - 등록된 FAQ: ${faqs.length}편`);
+console.log(`   - 등록된 치료칼럼: ${columns.length}편`);
+console.log(`   - 등록된 치료후기: ${(hubData.reviews || []).length}편`);
+console.log(`   - 등록된 유튜브 영상: ${(hubData.youtube || []).length}편\n`);
+
+// 2. Hugo 정적 빌드 실행
+console.log('🚀 2. Hugo 정적 빌드 실행 중 (hugo --gc --minify)...');
+try {
+  const hugoOut = execSync('hugo --gc --minify', { cwd: rootDir, encoding: 'utf8' });
+  console.log(hugoOut.trim());
+  console.log('✅ Hugo 빌드 성공 완료!\n');
+} catch (err) {
+  console.error('❌ Hugo 빌드 실패:', err.message);
+  process.exit(1);
+}
+
+// 3. RSS 피드 동기화 (public/index.xml -> public/rss.xml & static/rss.xml)
+const publicIndexXml = path.join(rootDir, 'public', 'index.xml');
+const publicRssXml = path.join(rootDir, 'public', 'rss.xml');
+const staticRssXml = path.join(rootDir, 'static', 'rss.xml');
+
+if (fs.existsSync(publicIndexXml)) {
+  const xmlContent = fs.readFileSync(publicIndexXml, 'utf8');
+  fs.writeFileSync(publicRssXml, xmlContent, 'utf8');
+  fs.writeFileSync(staticRssXml, xmlContent, 'utf8');
+  console.log('✅ 3. RSS 피드 동기화 완료: public/index.xml -> public/rss.xml & static/rss.xml');
+}
+
+console.log('\n✨ [최종 결과] SEO, GEO, AEO 및 웹사이트 빌드가 성공적으로 완료되었습니다.');
