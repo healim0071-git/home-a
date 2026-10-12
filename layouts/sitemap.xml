@@ -1,0 +1,14 @@
+{{- printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?>" | safeHTML }}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  {{- range site.Pages -}}
+    {{- if and (ne .Params.private true) (ne .Params.robots "noindex, nofollow") (not (in .RelPermalink "/admin/")) (not (in .RelPermalink "/login/")) (not (in .RelPermalink "/register/")) (not (in .RelPermalink "/site_join_type_choice/")) (not (in .RelPermalink "/tags/")) (not (in .RelPermalink "/categories/")) (not (in .RelPermalink "/authors/")) -}}
+  <url>
+    <loc>{{ if .Params.canonical }}{{ .Params.canonical }}{{ else }}{{ .Permalink }}{{ end }}</loc>
+    <lastmod>{{ if not .Lastmod.IsZero }}{{ .Lastmod.Format "2006-01-02T15:04:05-07:00" }}{{ else }}{{ now.Format "2006-01-02T15:04:05-07:00" }}{{ end }}</lastmod>
+    <changefreq>{{ if .IsHome }}daily{{ else }}weekly{{ end }}</changefreq>
+    <priority>{{ if .IsHome }}1.0{{ else }}0.8{{ end }}</priority>
+  </url>
+    {{- end -}}
+  {{- end -}}
+</urlset>

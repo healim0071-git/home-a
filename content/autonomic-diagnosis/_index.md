@@ -2,6 +2,7 @@
 title: "자율신경계이상 자율신경실조증 원인검사와 진단 | 해아림 3단계 검사"
 description: "만성 스트레스와 뇌기능 과부하로 무너진 자율신경계이상 및 자율신경실조증 원인검사와 진단 체계. 과학적으로 측정하는 HRV 자율신경계 검사, 뇌기능 뇌파검사, 한의학적 종합 진단체계를 상세히 소개합니다."
 keywords: ["자율신경계이상 자율신경실조증 원인검사와 진단", "자율신경 원인 검사", "자율신경실조증 진단", "자율신경계이상 검사", "HRV 검사", "해아림한의원"]
+canonical: "https://healim-autonomic.com/autonomic-diagnosis/"
 type: landing
 sections:
   - block: markdown

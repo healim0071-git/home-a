@@ -2,6 +2,7 @@
 title: "자율신경계이상 자율신경실조증 치료 방법과 생활관리 | 해아림 맞춤 처방"
 description: "과항진된 교감신경을 안정시키는 체질 맞춤 한약, 뇌 자가 조절력을 높이는 뇌수용체 훈련, 침구 치료 및 재발 방지 의학적 생활관리 가이드. 자율신경계이상 및 자율신경실조증 치료 방법과 생활관리를 체계적으로 안내합니다."
 keywords: ["자율신경계이상 자율신경실조증 치료 방법과 생활관리", "자율신경실조증 치료방법", "자율신경 생활관리", "자율신경계 치료", "해아림한의원"]
+canonical: "https://healim-autonomic.com/autonomic-treatment/"
 type: landing
 sections:
   - block: markdown

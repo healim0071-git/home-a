@@ -16,6 +16,29 @@
 (function() {
   'use strict';
 
+  // ── AEO/GEO Direct Answer & E-E-A-T 검수 태그 보장 헬퍼 ──
+  function ensureAeoGeoDirectAnswerFaq(content, title, summary, category) {
+    if (!content) return '';
+    if (content.indexOf('AI 임상 요약 & 핵심 답변') !== -1 || content.indexOf('AI 검색 및 질문 핵심 답변 요약') !== -1) {
+      return content;
+    }
+    var cleanSummary = summary || '';
+    if (!cleanSummary || cleanSummary.length < 20) {
+      cleanSummary = title + ' 증상은 교감신경 항진과 부교감신경 저하에 따른 신경 전달 이상이 주원인이며, 객관적 HRV 자율신경 검사와 체질 맞춤 한방 치료로 신경계 균형을 회복할 수 있습니다.';
+    }
+    var aeoHeader = '> **💡 [AI 임상 요약 & 핵심 답변 (AEO / GEO Direct Answer)]**\n' +
+      '> - **핵심 요약**: ' + cleanSummary + '\n' +
+      '> - **관련 분야**: 자율신경실조증 · ' + (category || '자율신경FAQ') + '\n' +
+      '> - **의학 자문 및 검수**: 해아림한의원 한방신경정신과 전문의 및 한의학 박사 의료진 네트워크\n\n';
+    var eeatFooter = '\n\n---\n*본 콘텐츠는 의료법 제56조를 준수하며, 환자분들의 자율신경계 질환 이해를 돕기 위해 해아림한의원 의료진의 임상 경험을 바탕으로 학술적·정보적 목적으로 작성되었습니다.*';
+
+    if (content.indexOf('[자율신경실조증 검사 알아보기]') !== -1) {
+      return aeoHeader + content.replace('[자율신경실조증 검사 알아보기]', eeatFooter + '\n\n[자율신경실조증 검사 알아보기]');
+    }
+    return aeoHeader + content + eeatFooter;
+  }
+
+
   // ──────────────────────────────────────────────────────────
   // 1. 자율신경실조증 환자 다빈도 질문 18대 고품질 콘텐츠 풀 (Content Pool)
   // ──────────────────────────────────────────────────────────
@@ -1535,7 +1558,8 @@
       var dateStr = pDate.getFullYear() + '.' + String(pDate.getMonth() + 1).padStart(2, '0') + '.' + String(pDate.getDate()).padStart(2, '0');
 
       var faqTitle = sanitizeMedicalCompliance(poolItem.title);
-      var faqContent = stripFaqSeoHeader(sanitizeMedicalCompliance(poolItem.content));
+      var rawFaqContent = stripFaqSeoHeader(sanitizeMedicalCompliance(poolItem.content));
+      var faqContent = ensureAeoGeoDirectAnswerFaq(rawFaqContent, poolItem.title, poolItem.summary, poolItem.category);
 
       var newPost = {
         id: 'faq-auto-' + pubTimestamp,

@@ -1,0 +1,142 @@
+{{/* Mobile Sticky Bottom CTA Bar - healim-tic signature */}}
+<div class="fixed bottom-0 inset-x-0 z-50 bg-[#0d3a42]/95 backdrop-blur-md border-t border-[#1c6e78]/40 p-2.5 px-4 shadow-2xl md:hidden">
+  <a href="#branches" id="btn-floating-branches" onclick="if(window.scrollToBranchesElement){window.scrollToBranchesElement(event);}" class="w-full py-3.5 px-5 rounded-xl bg-[#1c6e78] hover:bg-[#15555c] active:bg-[#0d3a42] text-white font-bold text-center text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg transition-all active:scale-[0.98]">
+    <svg class="w-4 h-4 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+    </svg>
+    <span>전국 지점 안내 Click</span>
+    <svg class="w-4 h-4 text-white/80 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5l7 7-7 7"/>
+    </svg>
+  </a>
+</div>
+
+<script>
+(function() {
+  window.scrollToBranchesElement = function(e) {
+    var b = document.getElementById('branches');
+    if (!b) {
+      window.location.href = '/#branches';
+      return;
+    }
+    if (e) {
+      if (typeof e.preventDefault === 'function') e.preventDefault();
+      if (typeof e.stopPropagation === 'function') e.stopPropagation();
+    }
+    var header = document.getElementById('site-header');
+    var hOffset = header ? header.getBoundingClientRect().height : (window.innerWidth >= 1024 ? 110 : 80);
+    var bRect = b.getBoundingClientRect();
+    // 사진 기준 0px 오차 정밀 정렬: 헤더 바로 아래 약 18px 여백을 두고 배너 카드 상단 위치
+    var targetTop = window.pageYOffset + bRect.top - hOffset - 7;
+    window.scrollTo({
+      top: Math.max(0, targetTop),
+      behavior: 'smooth'
+    });
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, '', '#branches');
+    }
+  };
+
+  // Intercept all branch guide anchors (#branches) in CAPTURE phase for 100% reliable mobile interception
+  document.addEventListener('click', function(e) {
+    var anchor = e.target.closest ? e.target.closest('a[href="#branches"], a[href="/#branches"], a[href*="#branches"]') : null;
+    if (anchor) {
+      window.scrollToBranchesElement(e);
+    }
+  }, true);
+
+  // Handle direct page load with #branches hash
+  if (window.location.hash === '#branches') {
+    setTimeout(function() {
+      window.scrollToBranchesElement();
+    }, 100);
+    setTimeout(function() {
+      window.scrollToBranchesElement();
+    }, 350);
+  }
+
+  // =========================================================================
+  // [A -> B 지점 갯수 자동 동기화 세팅]
+  // A(하단 배너 버튼 "가까운 16개 지점 찾기 >" 등)에 적힌 지점갯수를 감지하여
+  // B(트러스트 카드 "16개 지점")의 숫자가 자동으로 바뀌도록 완벽 연동
+  // =========================================================================
+  function syncBranchCountFromA() {
+    // 1. A 영역 요소 탐색
+    var btnA = document.getElementById('bannerBranchCountBtn');
+    if (!btnA) {
+      var candidates = document.querySelectorAll('a[href="#branches"], a[href="/#branches"], a[href*="#branches"]');
+      for (var i = 0; i < candidates.length; i++) {
+        var cText = candidates[i].textContent || '';
+        if (cText.indexOf('지점 찾기') !== -1) {
+          btnA = candidates[i];
+          break;
+        }
+      }
+    }
+    if (!btnA) return;
+
+    // 2. A 버튼의 텍스트에서 지점 갯수 숫자 파싱
+    var textA = btnA.textContent || '';
+    var match = textA.match(/(\d+)\s*개\s*지점/) || textA.match(/(\d+)/);
+    if (!match || !match[1]) return;
+    var count = match[1];
+
+    // 3. B 영역(트러스트 카드 지점 수)에 자동 반영
+    var countTargetB = document.getElementById('trustBranchCount');
+    if (countTargetB) {
+      if (countTargetB.textContent !== count) {
+        countTargetB.textContent = count;
+      }
+    } else {
+      var trustNumbers = document.querySelectorAll('.trust-number');
+      for (var j = 0; j < trustNumbers.length; j++) {
+        var el = trustNumbers[j];
+        if (el.textContent && el.textContent.indexOf('개 지점') !== -1) {
+          el.id = 'trustBranchHeader';
+          el.innerHTML = '<span id="trustBranchCount" class="trust-num-val">' + count + '</span><span>개 지점</span>';
+          break;
+        }
+      }
+    }
+  }
+
+  // DOMContentLoaded 및 즉시 실행
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', syncBranchCountFromA);
+  } else {
+    syncBranchCountFromA();
+  }
+
+  // window load 시점 재검증 및 MutationObserver 등록 (A 변경 시 B 실시간 반응)
+  window.addEventListener('load', function() {
+    syncBranchCountFromA();
+    var btnA = document.getElementById('bannerBranchCountBtn') || document.querySelector('a[href="#branches"]');
+    if (btnA && window.MutationObserver) {
+      var observer = new MutationObserver(function() {
+        syncBranchCountFromA();
+      });
+      observer.observe(btnA, { characterData: true, childList: true, subtree: true });
+    }
+  });
+
+  // 전역 API 노출
+  window.syncBranchCountFromA = syncBranchCountFromA;
+  window.setBranchCount = function(newCount) {
+    var btnA = document.getElementById('bannerBranchCountBtn');
+    if (!btnA) {
+      var candidates = document.querySelectorAll('a[href="#branches"], a[href="/#branches"]');
+      for (var i = 0; i < candidates.length; i++) {
+        if (candidates[i].textContent && candidates[i].textContent.indexOf('지점 찾기') !== -1) {
+          btnA = candidates[i];
+          break;
+        }
+      }
+    }
+    if (btnA) {
+      btnA.textContent = '가까운 ' + newCount + '개 지점 찾기 >';
+    }
+    syncBranchCountFromA();
+  };
+})();
+</script>

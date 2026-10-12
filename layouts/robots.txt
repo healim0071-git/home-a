@@ -1,10 +1,60 @@
+﻿# -----------------------------------------------------------------------------
+# Healim Autonomic Clinic Robots.txt
+# Optimized for Google, Naver, and Generative AI Search Engines (GEO & AEO)
+# -----------------------------------------------------------------------------
+
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /login/
+Disallow: /register/
+Disallow: /site_join_type_choice/
 
+# Naver Search Advisor (Yeti)
 User-agent: Yeti
 Allow: /
 
+# Google Search (Googlebot)
 User-agent: Googlebot
 Allow: /
 
-Sitemap: {{ "sitemap.xml" | absURL }}
+# OpenAI / ChatGPT Search (GEO/AEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Perplexity AI (GEO/AEO)
+User-agent: PerplexityBot
+Allow: /
+
+# Anthropic Claude (GEO/AEO)
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Google Gemini / Bard AI (GEO/AEO)
+User-agent: Google-Extended
+Allow: /
+
+# Apple Intelligence
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Amazon AI
+User-agent: Amazonbot
+Allow: /
+
+# CoHere AI
+User-agent: cohere-ai
+Allow: /
+
+# Sitemaps & RSS Feeds
+Sitemap: https://healim-autonomic.com/sitemap.xml
+Sitemap: https://healim-autonomic.com/rss.xml

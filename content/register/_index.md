@@ -2,6 +2,8 @@
 title: "회원가입"
 description: "해아림한의원 회원가입 페이지입니다."
 type: landing
+private: true
+robots: "noindex, nofollow"
 sections:
   - block: markdown
     content:

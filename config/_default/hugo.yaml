@@ -106,6 +106,7 @@ enableRobotsTXT: true
 footnotereturnlinkcontents: <sup>^</sup>
 ignoreFiles: [".ipynb_checkpoints$", "\\.Rmd$", "\\.Rmarkdown$", "_cache$"]
 disableAliases: true
+disableKinds: ['taxonomy', 'term']
 imaging:
   resampleFilter: lanczos
   quality: 90

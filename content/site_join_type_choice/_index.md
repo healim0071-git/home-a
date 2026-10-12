@@ -2,6 +2,8 @@
 title: "회원가입 종류 선택"
 description: "해아림한의원 통합 회원가입 페이지입니다. 간편가입 및 일반 회원가입을 통해 1:1 맞춤 진료 상담 및 치료후기를 열람하실 수 있습니다."
 type: landing
+private: true
+robots: "noindex, nofollow"
 sections:
   - block: markdown
     content:

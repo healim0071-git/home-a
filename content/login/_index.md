@@ -2,6 +2,8 @@
 title: "로그인"
 description: "해아림한의원 통합 로그인 페이지입니다. 회원 로그인 후 치료후기 및 1:1 맞춤 상담 서비스를 이용하실 수 있습니다."
 type: landing
+private: true
+robots: "noindex, nofollow"
 sections:
   - block: markdown
     content:

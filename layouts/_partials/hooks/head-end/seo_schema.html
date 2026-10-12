@@ -1,24 +1,47 @@
-{{/* Canonical URL & SEO / AEO Meta Tags */}}
+{{/* Canonical URL & SEO / AEO / GEO Meta Tags */}}
 <link rel="canonical" href="{{ with .Params.canonical }}{{ . }}{{ else }}https://healim-autonomic.com{{ .RelPermalink }}{{ end }}" />
 <meta name="naver-site-verification" content="836208818085e544698873f0c1ffb747afffafc1" />
 <meta name="google-site-verification" content="_N0B2WUEnqrfLepyAViYz0LWNDXNfyDgWENcUl__ZfY" />
 <meta name="google-site-verification" content="Gws95OtuZVLv56ltYTNSLCxav3NX5G8CtDedQ1D61CQ" />
+
+{{/* Primary Meta Tags for Google, Naver, and Generative AI (GEO/AEO) */}}
 <meta name="keywords" content="{{ with .Params.keywords }}{{ if reflect.IsSlice . }}{{ delimit . ", " }}{{ else }}{{ . }}{{ end }}{{ else }}자율신경실조증, 자율신경실조증한의원, 교감신경항진, 검사상 이상없는 두근거림, 내과 심장검사 정상 어지럼증, 응급실 정상판정 과호흡, 기립성어지럼증, 교감신경항진 불면증, 신경성 신체화증상, 담적병, 자율신경실조증 공황장애 차이점, 자율신경계 기능 검사 한의원, 자율신경실조증 치료 병원, 해아림한의원{{ end }}" />
-<meta name="author" content="해아림한의원" />
+<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}원인 모를 가슴 두근거림, 어지럼증, 불면증, 만성 소화장애, 과호흡 등 검사상 이상 없는 자율신경실조증을 16년 임상 노하우와 객관적 HRV 정밀 검사, 1:1 맞춤 한방 치료로 다스립니다. 전국 16개 지점 해아림한의원.{{ end }}" />
+<meta name="author" content="해아림한의원 의료진 (한방신경정신과 전문의·한의학 박사)" />
+{{- if or .Params.private (eq .Params.robots "noindex, nofollow") (in .RelPermalink "/admin/") (in .RelPermalink "/login/") (in .RelPermalink "/register/") (in .RelPermalink "/site_join_type_choice/") -}}
+<meta name="robots" content="noindex, nofollow" />
+{{- else -}}
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+{{- end -}}
+
+{{/* Open Graph / Facebook / Naver / Kakao */}}
 <meta property="og:locale" content="ko_KR" />
-<meta property="og:type" content="website" />
-<meta property="og:site_name" content="해아림한의원" />
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
+<meta property="og:site_name" content="해아림한의원 자율신경클리닉" />
+<meta property="og:title" content="{{ with .Title }}{{ . }} | 해아림한의원 자율신경클리닉{{ else }}자율신경실조증 치료 | 해아림한의원{{ end }}" />
+<meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}검사상 이상 없는 두근거림, 어지럼증, 불면증, 만성 소화불량. 16년 임상 노하우의 해아림한의원 자율신경클리닉에서 HRV 검사와 1:1 맞춤 한방 치료로 신경계 균형을 되찾으세요.{{ end }}" />
+<meta property="og:url" content="{{ with .Params.canonical }}{{ . }}{{ else }}https://healim-autonomic.com{{ .RelPermalink }}{{ end }}" />
+<meta property="og:image" content="https://healim-autonomic.com/media/sharing.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="해아림한의원 자율신경실조증 치료 클리닉" />
 
-{{/* Google Fonts (Pretendard & Outfit) */}}
+{{/* Twitter Card */}}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{ with .Title }}{{ . }} | 해아림한의원 자율신경클리닉{{ else }}자율신경실조증 치료 | 해아림한의원{{ end }}" />
+<meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}검사상 이상 없는 두근거림, 어지럼증, 불면증, 만성 소화불량. 16년 임상 노하우 해아림한의원 자율신경클리닉.{{ end }}" />
+<meta name="twitter:image" content="https://healim-autonomic.com/media/sharing.jpg" />
+
+{{/* Google Fonts & Favicon */}}
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-
-{{/* Favicon & Touch Icons */}}
 <link rel="shortcut icon" href="/favicon.ico" />
 <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
 
-{{/* JSON-LD Structured Data: MedicalClinic, MedicalCondition, FAQPage, Physician */}}
+{{/* ═══════════════════════════════════════════════════════════════════════
+   JSON-LD Structured Data (Comprehensive GEO, AEO, and Google/Naver SEO)
+   ═══════════════════════════════════════════════════════════════════════ */}}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -26,29 +49,30 @@
     {
       "@type": "MedicalClinic",
       "@id": "https://healim-autonomic.com/#clinic",
-      "name": "해아림한의원",
+      "name": "해아림한의원 자율신경클리닉",
       "url": "https://healim-autonomic.com/",
       "logo": "https://healim-autonomic.com/media/logo.png",
-      "description": "자율신경실조증 치료 16여년 임상 노하우의 전국 16개 네트워크 한의원",
+      "image": "https://healim-autonomic.com/media/sharing.jpg",
+      "description": "자율신경실조증, 교감신경항진, 신체화장애 치료 16여년 임상 노하우의 전국 16개 네트워크 한방신경정신과 클리닉",
       "medicalSpecialty": "Psychiatric",
       "telephone": "053-751-0071",
       "areaServed": "KR",
       "availableService": [
         {
           "@type": "MedicalTherapy",
-          "name": "자율신경실조증 1:1 맞춤 한방 치료"
+          "name": "자율신경실조증 1:1 맞춤 한방 치료 (교감신경 안정화 및 체질 한약)"
         },
         {
           "@type": "MedicalTest",
-          "name": "HRV(Heart Rate Variability) 자율신경계 정밀 검사"
+          "name": "HRV(Heart Rate Variability) 자율신경계 균형 정밀 검사"
         },
         {
           "@type": "MedicalTest",
-          "name": "뇌기능 뇌파검사 및 스트레스 저항도 검사"
+          "name": "정량적 뇌파 및 뇌기능 스트레스 저항도 검사"
         },
         {
           "@type": "MedicalTherapy",
-          "name": "뇌기능 활성화 및 뇌수용체 훈련"
+          "name": "뇌수용체 훈련 및 두개천골요법(CST)"
         }
       ]
     },
@@ -56,67 +80,86 @@
       "@type": "MedicalCondition",
       "@id": "https://healim-autonomic.com/autonomic-dysfunction/#condition",
       "name": "자율신경실조증 (Dysautonomia)",
-      "alternateName": ["자율신경 불균형", "자율신경 기능이상"],
+      "alternateName": ["자율신경 불균형", "자율신경 기능이상", "교감신경 항진증"],
       "possibleTreatment": [
         {
           "@type": "MedicalTherapy",
-          "name": "체질 맞춤 한약 처방 (교감신경 안정화 및 자율신경 조절력 회복)"
+          "name": "체질 맞춤 한약 처방 (교감신경 안정 및 부교감신경 활성화)"
         },
         {
           "@type": "MedicalTherapy",
-          "name": "뇌기능 활성화 & 뇌수용체 훈련"
+          "name": "뇌기능 활성화 & 신경계 가소성 재건 훈련"
         },
         {
           "@type": "MedicalTherapy",
-          "name": "침구 및 경락 치료"
+          "name": "경추 및 자율신경절 추나요법"
         }
       ],
       "signOrSymptom": [
-        {"@type": "MedicalSymptom", "name": "가슴 두근거림 (심계항진)"},
-        {"@type": "MedicalSymptom", "name": "원인 모를 어지럼증 및 머리 멍함"},
-        {"@type": "MedicalSymptom", "name": "만성 신경성 소화불량 및 복부 팽만감"},
+        {"@type": "MedicalSymptom", "name": "가슴 두근거림 (심계항진) 및 답답함"},
+        {"@type": "MedicalSymptom", "name": "원인 모를 어지럼증 및 모닝 브레인 포그"},
+        {"@type": "MedicalSymptom", "name": "만성 신경성 소화불량 및 복부 팽만"},
         {"@type": "MedicalSymptom", "name": "수면장애 (입면장애, 빈번한 각성)"},
-        {"@type": "MedicalSymptom", "name": "이유 없는 불안감 및 호흡 답답함"},
-        {"@type": "MedicalSymptom", "name": "상충열 및 체온 조절 장애"},
-        {"@type": "MedicalSymptom", "name": "미주신경성실신 및 기립 시 아찔함"}
-      ]
-    },
-    {
-      "@type": "FAQPage",
-      "@id": "https://healim-autonomic.com/community/#faq",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "병원에서 온갖 검사를 다 받아도 정상이라는데, 왜 어지럽고 가슴이 답답할까요? 자율신경실조증 검사로 알 수 있나요?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "일반 병원 검사는 장기의 기질적 손상을 확인하는 검사로, 신경 조절 기능 저하인 자율신경실조증은 정상으로 나타날 수 있습니다. 해아림한의원은 HRV 심박변이도 및 정밀 뇌기능 검사를 통해 교감·부교감신경의 불균형을 객관적으로 측정하고 1:1 맞춤 한약과 뇌기능 조절 훈련으로 근본 균형을 회복시킵니다."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "자율신경실조증과 공황장애의 차이점은 무엇인가요? 가슴 두근거림과 과호흡이 오면 공황인 줄 알았어요.",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "공황장애는 급격한 발작과 죽을 것 같은 공포감이 주를 이루며 10~30분간 지속되는 반면, 자율신경실조증은 24시간 일상 전반에 걸쳐 잔잔하고 불쾌한 복합 신체 증상(두근거림, 어지럼, 소화불량, 상열하한 등)이 지속됩니다."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "손발이 얼음장처럼 차가운데 얼굴로는 열이 훅 올라옵니다. 상열하한도 자율신경계 이상증상인가요?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "네, 전형적인 자율신경 혈관 운동 조절 장애인 상열하한(上熱下寒) 증상입니다. 과항진된 교감신경으로 인해 말초 혈관이 수축하여 손발은 차가워지고 열기가 상체로 치솟는 현상으로, 수승화강 정상화 한약 처방과 척추 자율신경 조절을 통해 균형을 되찾습니다."
-          }
-        }
+        {"@type": "MedicalSymptom", "name": "이유 없는 불안감 및 과호흡 증상"},
+        {"@type": "MedicalSymptom", "name": "상충열 및 수족냉증 (상열하한)"},
+        {"@type": "MedicalSymptom", "name": "기립성 어지럼증 및 미주신경성 실신 전조"}
       ]
     },
     {
       "@type": "Physician",
       "@id": "https://healim-autonomic.com/#physician",
-      "name": "해아림한의원 전문 의료진",
+      "name": "해아림한의원 전문 의료진 네트워크",
       "medicalSpecialty": "Psychiatric",
-      "description": "한방신경정신과 전문의, 한의학 박사 및 석사로 구성된 16여 년 임상 노하우의 의료진 네트워크"
+      "description": "한방신경정신과 전문의, 한의학 박사 및 석사로 구성된 16여 년 임상 노하우의 자율신경 전담 의료진"
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://healim-autonomic.com/community/#faq",
+      "mainEntity": [
+        {{- $faqs := site.Data.healim_community_hub.faq -}}
+        {{- range $i, $item := $faqs -}}
+        {{- if $i }},{{ end }}
+        {
+          "@type": "Question",
+          "name": {{ $item.title | jsonify }},
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": {{ $item.summary | default $item.title | jsonify }}
+          }
+        }
+        {{- end }}
+      ]
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://healim-autonomic.com/community/#columns",
+      "name": "해아림한의원 자율신경실조증 임상 치료 칼럼",
+      "description": "한방신경정신과 전문의가 집필한 자율신경실조증 및 신경계 질환 심층 분석 칼럼",
+      "numberOfItems": {{ len site.Data.healim_community_hub.columns }},
+      "itemListElement": [
+        {{- $cols := site.Data.healim_community_hub.columns -}}
+        {{- range $j, $col := $cols -}}
+        {{- if $j }},{{ end }}
+        {
+          "@type": "ListItem",
+          "position": {{ add $j 1 }},
+          "item": {
+            "@type": "MedicalWebPage",
+            "headline": {{ $col.title | jsonify }},
+            "description": {{ $col.summary | jsonify }},
+            "author": {
+              "@type": "Organization",
+              "name": "해아림한의원"
+            },
+            "publisher": {
+              "@type": "MedicalClinic",
+              "name": "해아림한의원 자율신경클리닉"
+            },
+            "datePublished": {{ $col.date | replaceRE "\\." "-" | jsonify }}
+          }
+        }
+        {{- end }}
+      ]
     }
   ]
 }

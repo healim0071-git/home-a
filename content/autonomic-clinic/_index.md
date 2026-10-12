@@ -1,6 +1,7 @@
 ---
 title: "16여 년의 축적된 노하우, 해아림 자율신경실조증 클리닉"
 description: "단순한 증상 완화를 넘어 뇌기능과 자율신경계의 본질적인 조절 능력을 복원하는 해아림한의원의 16여 년 임상 노하우와 3대 신뢰 기준을 소개합니다."
+canonical: "https://healim-autonomic.com/autonomic-clinic/"
 type: landing
 sections:
   - block: markdown
