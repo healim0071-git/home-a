@@ -8,6 +8,10 @@
 <meta name="keywords" content="{{ with .Params.keywords }}{{ if reflect.IsSlice . }}{{ delimit . ", " }}{{ else }}{{ . }}{{ end }}{{ else }}자율신경실조증, 자율신경실조증한의원, 교감신경항진, 검사상 이상없는 두근거림, 내과 심장검사 정상 어지럼증, 응급실 정상판정 과호흡, 기립성어지럼증, 교감신경항진 불면증, 신경성 신체화증상, 담적병, 자율신경실조증 공황장애 차이점, 자율신경계 기능 검사 한의원, 자율신경실조증 치료 병원, 해아림한의원{{ end }}" />
 <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}원인 모를 가슴 두근거림, 어지럼증, 불면증, 만성 소화장애, 과호흡 등 검사상 이상 없는 자율신경실조증을 16년 임상 노하우와 객관적 HRV 정밀 검사, 1:1 맞춤 한방 치료로 다스립니다. 전국 16개 지점 해아림한의원.{{ end }}" />
 <meta name="author" content="해아림한의원 의료진 (한방신경정신과 전문의·한의학 박사)" />
+<meta name="subject" content="자율신경실조증 한방 치료 및 정밀 진단" />
+<meta name="coverage" content="전국" />
+<meta name="distribution" content="Global" />
+<meta name="rating" content="General" />
 {{- if or .Params.private (eq .Params.robots "noindex, nofollow") (in .RelPermalink "/admin/") (in .RelPermalink "/login/") (in .RelPermalink "/register/") (in .RelPermalink "/site_join_type_choice/") -}}
 <meta name="robots" content="noindex, nofollow" />
 {{- else -}}
@@ -29,7 +33,7 @@
 {{/* Twitter Card */}}
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="{{ with .Title }}{{ . }} | 해아림한의원 자율신경클리닉{{ else }}자율신경실조증 치료 | 해아림한의원{{ end }}" />
-<meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}검사상 이상 없는 두근거림, 어지럼증, 불면증, 만성 소화불량. 16년 임상 노하우 해아림한의원 자율신경클리닉.{{ end }}" />
+<meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}검사상 이상 없는 두근거림, 어지럼증, 불면증, 만성 소화불량. 16년 임상 노하우의 해아림한의원 자율신경클리닉.{{ end }}" />
 <meta name="twitter:image" content="https://healim-autonomic.com/media/sharing.jpg" />
 
 {{/* Google Fonts & Favicon */}}
@@ -41,38 +45,258 @@
 
 {{/* ═══════════════════════════════════════════════════════════════════════
    JSON-LD Structured Data (Comprehensive GEO, AEO, and Google/Naver SEO)
+   Fully Connected Schema.org Knowledge Graph
    ═══════════════════════════════════════════════════════════════════════ */}}
+{{- $currentUrl := printf "https://healim-autonomic.com%s" .RelPermalink -}}
+{{- with .Params.canonical -}}
+  {{- $currentUrl = . -}}
+{{- end -}}
+
+{{- $pageTitle := "자율신경실조증 치료 | 해아림한의원" -}}
+{{- with .Title -}}
+  {{- $pageTitle = printf "%s | 해아림한의원 자율신경클리닉" . -}}
+{{- end -}}
+
+{{- $pageDesc := "원인 모를 가슴 두근거림, 어지럼증, 불면증, 만성 소화장애, 과호흡 등 검사상 이상 없는 자율신경실조증을 16년 임상 노하우와 객관적 HRV 정밀 검사, 1:1 맞춤 한방 치료로 다스립니다. 전국 16개 지점 해아림한의원." -}}
+{{- with .Description -}}
+  {{- $pageDesc = . -}}
+{{- end -}}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "MedicalClinic",
+      "@type": "WebSite",
+      "@id": "https://healim-autonomic.com/#website",
+      "url": "https://healim-autonomic.com/",
+      "name": "해아림한의원 자율신경클리닉",
+      "alternateName": [
+        "해아림한의원",
+        "해아림",
+        "해아림 자율신경연구소",
+        "Healim Autonomic Clinic"
+      ],
+      "description": "원인 모를 가슴 두근거림, 어지럼증, 불면증, 만성 소화장애, 과호흡 등 검사상 이상 없는 자율신경실조증을 16년 임상 노하우와 객관적 HRV 정밀 검사, 1:1 맞춤 한방 치료로 다스립니다. 전국 16개 지점 해아림한의원.",
+      "inLanguage": "ko-KR",
+      "publisher": {
+        "@id": "https://healim-autonomic.com/#clinic"
+      },
+      "about": {
+        "@id": "https://healim-autonomic.com/autonomic-dysfunction/#condition"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://healim-autonomic.com/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": ["WebPage", "MedicalWebPage"],
+      "@id": "{{ $currentUrl }}#webpage",
+      "url": {{ $currentUrl | jsonify | safeJS }},
+      "name": {{ $pageTitle | jsonify | safeJS }},
+      "description": {{ $pageDesc | jsonify | safeJS }},
+      "inLanguage": "ko-KR",
+      "isPartOf": {
+        "@id": "https://healim-autonomic.com/#website"
+      },
+      "breadcrumb": {
+        "@id": "{{ $currentUrl }}#breadcrumb"
+      },
+      "about": [
+        {
+          "@id": "https://healim-autonomic.com/autonomic-dysfunction/#condition"
+        }
+      ],
+      "mainEntity": {
+        "@id": "https://healim-autonomic.com/#clinic"
+      },
+      "publisher": {
+        "@id": "https://healim-autonomic.com/#clinic"
+      },
+      "datePublished": "2024-01-01T09:00:00+09:00",
+      "dateModified": {{ now.Format "2006-01-02T15:04:05-07:00" | jsonify | safeJS }}
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "{{ $currentUrl }}#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "홈",
+          "item": "https://healim-autonomic.com/"
+        }
+        {{- if not .IsHome }}
+        ,
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": {{ with .Title }}{{ . | jsonify | safeJS }}{{ else }}"클리닉 안내"{{ end }},
+          "item": {{ $currentUrl | jsonify | safeJS }}
+        }
+        {{- end }}
+      ]
+    },
+    {
+      "@type": ["MedicalClinic", "MedicalBusiness", "Organization"],
       "@id": "https://healim-autonomic.com/#clinic",
       "name": "해아림한의원 자율신경클리닉",
+      "alternateName": [
+        "해아림한의원",
+        "해아림 자율신경클리닉",
+        "Healim Autonomic Clinic"
+      ],
       "url": "https://healim-autonomic.com/",
-      "logo": "https://healim-autonomic.com/media/logo.png",
-      "image": "https://healim-autonomic.com/media/sharing.jpg",
-      "description": "자율신경실조증, 교감신경항진, 신체화장애 치료 16여년 임상 노하우의 전국 16개 네트워크 한방신경정신과 클리닉",
-      "medicalSpecialty": "Psychiatric",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://healim-autonomic.com/#logo",
+        "url": "https://healim-autonomic.com/media/logo.png",
+        "contentUrl": "https://healim-autonomic.com/media/logo.png",
+        "caption": "해아림한의원 자율신경클리닉 공식 로고"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "@id": "https://healim-autonomic.com/#mainImage",
+        "url": "https://healim-autonomic.com/media/sharing.jpg",
+        "contentUrl": "https://healim-autonomic.com/media/sharing.jpg",
+        "caption": "해아림한의원 자율신경실조증 치료 클리닉"
+      },
+      "description": "자율신경실조증, 교감신경항진, 신체화장애 치료 16여년 임상 노하우의 전국 16개 네트워크 한방신경정신과 전문의 및 한의학 박사 의료진 클리닉",
+      "medicalSpecialty": [
+        "Psychiatric",
+        "CommunityMedicine"
+      ],
       "telephone": "053-751-0071",
-      "areaServed": "KR",
+      "priceRange": "$$",
+      "currenciesAccepted": "KRW",
+      "paymentAccepted": "Cash, Credit Card, ZeroPay",
+      "areaServed": [
+        { "@type": "Country", "name": "대한민국" },
+        { "@type": "AdministrativeArea", "name": "서울" },
+        { "@type": "AdministrativeArea", "name": "경기" },
+        { "@type": "AdministrativeArea", "name": "인천" },
+        { "@type": "AdministrativeArea", "name": "대구" },
+        { "@type": "AdministrativeArea", "name": "대전" },
+        { "@type": "AdministrativeArea", "name": "부산" },
+        { "@type": "AdministrativeArea", "name": "제주" }
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "KR",
+        "addressRegion": "대구광역시",
+        "addressLocality": "수성구",
+        "streetAddress": "달구벌대로 2570 수성센트럴타워 4층 (해아림한의원 본원)",
+        "postalCode": "42019"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 35.8584,
+        "longitude": 128.6288
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Friday"],
+          "opens": "09:30",
+          "closes": "19:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:30",
+          "closes": "16:00"
+        }
+      ],
+      "sameAs": [
+        "https://healim.com",
+        "https://blog.naver.com/healim_official",
+        "https://www.youtube.com/@healim",
+        "https://m.place.naver.com/hospital/13550882/home"
+      ],
+      "parentOrganization": {
+        "@type": "MedicalOrganization",
+        "@id": "https://healim.com/#network",
+        "name": "해아림한의원 전국 16개 네트워크",
+        "url": "https://healim.com",
+        "sameAs": [
+          "https://healim.com",
+          "https://blog.naver.com/healim_official",
+          "https://www.youtube.com/@healim"
+        ]
+      },
+      "employee": [
+        {
+          "@id": "https://healim-autonomic.com/#physician"
+        }
+      ],
+      "medicalDirector": {
+        "@id": "https://healim-autonomic.com/#physician"
+      },
+      "knowsAbout": [
+        {
+          "@id": "https://healim-autonomic.com/autonomic-dysfunction/#condition"
+        }
+      ],
+      "treats": [
+        {
+          "@id": "https://healim-autonomic.com/autonomic-dysfunction/#condition"
+        }
+      ],
       "availableService": [
         {
           "@type": "MedicalTherapy",
-          "name": "자율신경실조증 1:1 맞춤 한방 치료 (교감신경 안정화 및 체질 한약)"
+          "name": "자율신경실조증 1:1 맞춤 한방 치료 (교감신경 안정 한약 및 체질 처방)",
+          "description": "교감신경 항진 완화 및 부교감신경 활성화를 유도하는 1:1 개인별 맞춤 청정 한약 처방"
         },
         {
           "@type": "MedicalTest",
-          "name": "HRV(Heart Rate Variability) 자율신경계 균형 정밀 검사"
+          "name": "HRV(Heart Rate Variability) 자율신경계 균형 정밀 검사",
+          "description": "심박변이도 측정을 통해 교감신경과 부교감신경의 활성도 및 자율신경 불균형 지수를 정량 평가"
         },
         {
           "@type": "MedicalTest",
-          "name": "정량적 뇌파 및 뇌기능 스트레스 저항도 검사"
+          "name": "정량적 뇌파 및 뇌기능 스트레스 저항도 검사",
+          "description": "뇌 신경계의 과각성 상태와 좌우 뇌파 밸런스, 신체 스트레스 누적도를 정밀 진단"
         },
         {
           "@type": "MedicalTherapy",
-          "name": "뇌수용체 훈련 및 두개천골요법(CST)"
+          "name": "두개천골요법(CST) 및 경추 자율신경 추나요법",
+          "description": "상부 경추 자율신경절 압박을 이완하고 뇌척수액 순환을 정상화하는 수기 치료"
+        },
+        {
+          "@type": "MedicalTherapy",
+          "name": "뇌수용체 훈련 및 자율신경 자기조절 훈련 (Neurofeedback)",
+          "description": "스스로 신경계 이완을 유도하는 감각 통합 훈련 및 신경 가소성 회복 훈련"
+        }
+      ]
+    },
+    {
+      "@type": ["Physician", "Person"],
+      "@id": "https://healim-autonomic.com/#physician",
+      "name": "해아림한의원 전문 의료진 네트워크",
+      "jobTitle": "한방신경정신과 전문의 / 한의학 박사 / 한의사",
+      "worksFor": {
+        "@id": "https://healim-autonomic.com/#clinic"
+      },
+      "hospitalAffiliation": {
+        "@id": "https://healim-autonomic.com/#clinic"
+      },
+      "medicalSpecialty": [
+        "Psychiatric",
+        "CommunityMedicine"
+      ],
+      "description": "대학병원 수련 한방신경정신과 전문의 및 한의학 박사·석사로 구성된 전국 16개 지점 16년 임상 노하우의 자율신경실조증 전문 의료진",
+      "sameAs": [
+        "https://healim.com",
+        "https://blog.naver.com/healim_official"
+      ],
+      "knowsAbout": [
+        {
+          "@id": "https://healim-autonomic.com/autonomic-dysfunction/#condition"
         }
       ]
     },
@@ -80,7 +304,36 @@
       "@type": "MedicalCondition",
       "@id": "https://healim-autonomic.com/autonomic-dysfunction/#condition",
       "name": "자율신경실조증 (Dysautonomia)",
-      "alternateName": ["자율신경 불균형", "자율신경 기능이상", "교감신경 항진증"],
+      "alternateName": [
+        "자율신경 불균형",
+        "자율신경 기능이상",
+        "교감신경 항진증",
+        "신경성 신체화장애",
+        "Dysautonomia"
+      ],
+      "code": [
+        {
+          "@type": "MedicalCode",
+          "code": "G90.9",
+          "codingSystem": "ICD-10",
+          "name": "Disorders of autonomic nervous system, unspecified"
+        },
+        {
+          "@type": "MedicalCode",
+          "code": "G90",
+          "codingSystem": "KCD-8",
+          "name": "자율신경계통의 장애"
+        }
+      ],
+      "sameAs": [
+        "https://ko.wikipedia.org/wiki/%EC%9E%90%EC%9C%A8%EC%8B%A0%EA%B2%BD%EC%8B%A4%EC%87%A0%EC%A6%9D",
+        "https://en.wikipedia.org/wiki/Dysautonomia",
+        "https://www.wikidata.org/wiki/Q1056586"
+      ],
+      "associatedAnatomy": {
+        "@type": "AnatomicalStructure",
+        "name": "자율신경계 (Autonomic Nervous System, 교감신경 및 부교감신경)"
+      },
       "possibleTreatment": [
         {
           "@type": "MedicalTherapy",
@@ -88,43 +341,54 @@
         },
         {
           "@type": "MedicalTherapy",
+          "name": "두개천골요법(CST) 및 경추 자율신경 추나요법"
+        },
+        {
+          "@type": "MedicalTherapy",
           "name": "뇌기능 활성화 & 신경계 가소성 재건 훈련"
         },
         {
           "@type": "MedicalTherapy",
-          "name": "경추 및 자율신경절 추나요법"
+          "name": "자율신경 약침 및 전침 요법"
         }
       ],
       "signOrSymptom": [
-        {"@type": "MedicalSymptom", "name": "가슴 두근거림 (심계항진) 및 답답함"},
-        {"@type": "MedicalSymptom", "name": "원인 모를 어지럼증 및 모닝 브레인 포그"},
-        {"@type": "MedicalSymptom", "name": "만성 신경성 소화불량 및 복부 팽만"},
-        {"@type": "MedicalSymptom", "name": "수면장애 (입면장애, 빈번한 각성)"},
-        {"@type": "MedicalSymptom", "name": "이유 없는 불안감 및 과호흡 증상"},
-        {"@type": "MedicalSymptom", "name": "상충열 및 수족냉증 (상열하한)"},
-        {"@type": "MedicalSymptom", "name": "기립성 어지럼증 및 미주신경성 실신 전조"}
-      ]
-    },
-    {
-      "@type": "Physician",
-      "@id": "https://healim-autonomic.com/#physician",
-      "name": "해아림한의원 전문 의료진 네트워크",
-      "medicalSpecialty": "Psychiatric",
-      "description": "한방신경정신과 전문의, 한의학 박사 및 석사로 구성된 16여 년 임상 노하우의 자율신경 전담 의료진"
+        { "@type": "MedicalSymptom", "name": "가슴 두근거림 (심계항진) 및 가슴 답답함" },
+        { "@type": "MedicalSymptom", "name": "원인 모를 어지럼증 및 브레인포그 (머리 멍함)" },
+        { "@type": "MedicalSymptom", "name": "만성 신경성 소화불량 및 복부 팽만감" },
+        { "@type": "MedicalSymptom", "name": "불면증 및 수면장애 (입면장애, 조기각성)" },
+        { "@type": "MedicalSymptom", "name": "이유 없는 불안감, 공황 유사 증상 및 과호흡" },
+        { "@type": "MedicalSymptom", "name": "상열감 및 수족냉증 (상열하한, 식은땀)" },
+        { "@type": "MedicalSymptom", "name": "기립성 어지럼증 및 미주신경성 실신 전조증상" },
+        { "@type": "MedicalSymptom", "name": "만성 목·어깨 결림 및 신경성 긴장성 두통" },
+        { "@type": "MedicalSymptom", "name": "귀 먹먹함 (이충만감) 및 신경성 이명" }
+      ],
+      "subjectOf": {
+        "@id": "{{ $currentUrl }}#webpage"
+      }
     },
     {
       "@type": "FAQPage",
       "@id": "https://healim-autonomic.com/community/#faq",
+      "isPartOf": {
+        "@id": "https://healim-autonomic.com/#website"
+      },
+      "about": {
+        "@id": "https://healim-autonomic.com/autonomic-dysfunction/#condition"
+      },
+      "publisher": {
+        "@id": "https://healim-autonomic.com/#clinic"
+      },
       "mainEntity": [
         {{- $faqs := site.Data.healim_community_hub.faq -}}
         {{- range $i, $item := $faqs -}}
         {{- if $i }},{{ end }}
         {
           "@type": "Question",
-          "name": {{ $item.title | jsonify }},
+          "name": {{ $item.title | jsonify | safeJS }},
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": {{ $item.summary | default $item.title | jsonify }}
+            "text": {{ $item.summary | default $item.title | jsonify | safeJS }}
           }
         }
         {{- end }}
@@ -135,6 +399,12 @@
       "@id": "https://healim-autonomic.com/community/#columns",
       "name": "해아림한의원 자율신경실조증 임상 치료 칼럼",
       "description": "한방신경정신과 전문의가 집필한 자율신경실조증 및 신경계 질환 심층 분석 칼럼",
+      "isPartOf": {
+        "@id": "https://healim-autonomic.com/#website"
+      },
+      "about": {
+        "@id": "https://healim-autonomic.com/autonomic-dysfunction/#condition"
+      },
       "numberOfItems": {{ len site.Data.healim_community_hub.columns }},
       "itemListElement": [
         {{- $cols := site.Data.healim_community_hub.columns -}}
@@ -145,17 +415,15 @@
           "position": {{ add $j 1 }},
           "item": {
             "@type": "MedicalWebPage",
-            "headline": {{ $col.title | jsonify }},
-            "description": {{ $col.summary | jsonify }},
+            "headline": {{ $col.title | jsonify | safeJS }},
+            "description": {{ $col.summary | jsonify | safeJS }},
             "author": {
-              "@type": "Organization",
-              "name": "해아림한의원"
+              "@id": "https://healim-autonomic.com/#physician"
             },
             "publisher": {
-              "@type": "MedicalClinic",
-              "name": "해아림한의원 자율신경클리닉"
+              "@id": "https://healim-autonomic.com/#clinic"
             },
-            "datePublished": {{ $col.date | replaceRE "\\." "-" | jsonify }}
+            "datePublished": {{ $col.date | replaceRE "\\." "-" | jsonify | safeJS }}
           }
         }
         {{- end }}
