@@ -1144,6 +1144,24 @@
   }
 
   function checkAndRunAutoColumnPublish(isManual) {
+    // Only superadmin or manual trigger can publish new articles
+    // Prevents regular visitors from generating fragmented local posts
+    var isAdminUser = false;
+    try {
+      if (typeof window !== 'undefined' && typeof window.isHealimSuperAdmin === 'function') {
+        isAdminUser = window.isHealimSuperAdmin();
+      } else {
+        var rawUser = localStorage.getItem('healim_auth_user');
+        if (rawUser) {
+          var u = JSON.parse(rawUser);
+          isAdminUser = u && (u.id === 'healim0071' || u.role === 'superadmin');
+        }
+      }
+    } catch(e) {}
+    if (!isAdminUser && !isManual) {
+      return false;
+    }
+
     sanitizeObsoleteColumnsAndTitles();
     sanitizeStoredColumnImages();
     sanitizeStoredPosts();

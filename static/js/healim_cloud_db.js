@@ -304,19 +304,26 @@
     var editedMap = {};
     try { editedMap = JSON.parse(localStorage.getItem('healim_edited_posts_' + bKey) || '{}'); } catch(e) {}
 
+    // 1. Preserve only genuine user-written custom posts or edits from local
+    var customLocalPosts = localList.filter(function(p) {
+      if (!p) return false;
+      var strId = String(p.id || '');
+      return p.isCustom === true || (!p.isAutoPublished && !strId.startsWith('col-auto-') && !strId.startsWith('col-p51-') && !strId.startsWith('faq-auto-'));
+    });
+
     var seenIds = {};
     var merged = [];
 
-    // Local user posts and edited posts have absolute priority
-    localList.forEach(function(p) {
-      if (p && p.id) {
-        var strId = String(p.id);
-        var finalP = editedMap[strId] ? editedMap[strId] : p;
-        seenIds[strId] = true;
-        merged.push(finalP);
-      }
+    // User-created posts take top priority
+    customLocalPosts.forEach(function(p) {
+      var strId = String(p.id);
+      var finalP = editedMap[strId] ? editedMap[strId] : p;
+      seenIds[strId] = true;
+      merged.push(finalP);
     });
 
+    // 2. Central Static Web Hub (remoteList) is the Single Source of Truth (SSOT)
+    // Ensures PC, Mobile, and all visitors share 100% identical post IDs, counts, and titles
     remoteList.forEach(function(p) {
       if (p && p.id && !seenIds[String(p.id)]) {
         var strId = String(p.id);
@@ -325,6 +332,11 @@
         merged.push(finalP);
       }
     });
+
+    // 3. Keep sorted by date/time
+    if (typeof window.sortCommunityItemsByTime === 'function') {
+      merged = window.sortCommunityItemsByTime(merged);
+    }
 
     localStorage.setItem(vKey, JSON.stringify(merged));
     localStorage.setItem('healim_board_' + bKey, JSON.stringify(merged));
@@ -539,6 +551,7 @@
     });
     try {
       window.dispatchEvent(new CustomEvent('healim-cloud-db-updated', { detail: { reason: reason, payload: payload } }));
+      window.dispatchEvent(new CustomEvent('healim-community-updated', { detail: { reason: reason, payload: payload } }));
     } catch(e) {}
   }
 

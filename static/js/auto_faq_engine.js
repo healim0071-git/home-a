@@ -1506,6 +1506,21 @@
   }
 
   function checkAndRunAutoFaqPublish(forceImmediate) {
+    var isAdminUser = false;
+    try {
+      if (typeof window !== 'undefined' && typeof window.isHealimSuperAdmin === 'function') {
+        isAdminUser = window.isHealimSuperAdmin();
+      } else {
+        var rawUser = localStorage.getItem('healim_auth_user');
+        if (rawUser) {
+          var u = JSON.parse(rawUser);
+          isAdminUser = u && (u.id === 'healim0071' || u.role === 'superadmin');
+        }
+      }
+    } catch(e) {}
+    if (!isAdminUser && !forceImmediate) {
+      return null;
+    }
     if (!window.autoFaqContentPool || window.autoFaqContentPool.length === 0) return null;
     var state = getAutoFaqState();
     var now = Date.now();
