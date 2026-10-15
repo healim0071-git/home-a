@@ -3670,22 +3670,28 @@ sections:
         // 1. Authoritative User Edited Posts (Absolute Top Precedence on F5 / Reload)
         Object.keys(editedMap).forEach(function(eid) { addPostItem(editedMap[eid]); });
 
-        // 2. User uploaded / custom posts (written by healim0071 admin)
-        customList.forEach(addPostItem);
+        // 2. Genuine User-written custom posts (ONLY genuine custom posts by admin)
+        customList.forEach(function(p) {
+          if (p && p.isCustom === true) addPostItem(p);
+        });
 
-        // 3. Permanent Vault Posts
-        vaultList.forEach(addPostItem);
-
-        // 4. Previously stored / auto-published posts in active localStorage
-        storedList.forEach(addPostItem);
-
-        // 5. Legacy posts from v2 storage
-        legacyList.forEach(addPostItem);
-
-        // 6. Complete permanent clinical library & seed data (fallback)
+        // 3. Single Source of Truth (SSOT) - Official 51 Columns / 27 FAQs / 65 Reviews (Absolute Core)
+        // CRITICAL: Fallback official items MUST take precedence over stale local auto-published caches
+        // so that Mobile and PC match 100% identically!
         if (Array.isArray(fallback)) {
           fallback.forEach(addPostItem);
         }
+
+        // 4. Any remaining genuine user-created custom posts from local vault/legacy
+        vaultList.forEach(function(p) {
+          if (p && p.isCustom === true) addPostItem(p);
+        });
+        storedList.forEach(function(p) {
+          if (p && p.isCustom === true) addPostItem(p);
+        });
+        legacyList.forEach(function(p) {
+          if (p && p.isCustom === true) addPostItem(p);
+        });
 
         if (key === 'faq') {
           merged = merged.filter(function(it) { return !isObsoleteMockFaq(it); });
