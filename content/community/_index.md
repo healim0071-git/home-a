@@ -183,6 +183,7 @@ sections:
           <span class="text-[#888888] mx-1">|</span>
           <span id="autoColumnNextScheduleText" class="text-[#1c6e78] font-semibold">다음 예정: 확인 중...</span>
           <button type="button" id="btnTriggerColumnPublish" onclick="triggerAutoColumnPublishManual()" class="ml-1 text-xs px-2.5 py-1 bg-white border border-[#badfe3] rounded hover:bg-[#eaf3f4] text-[#1c6e78] font-bold transition-colors shadow-2xs" title="스케줄 대기 없이 지금 즉시 1편 자동 발행">⚡ 즉시 1편 발행</button>
+            <button type="button" onclick="forceSyncAllCommunity()" class="ml-1 text-xs px-2.5 py-1 bg-[#1c6e78] text-white rounded hover:bg-[#0d3a42] font-bold transition-colors shadow-2xs" title="기기간 데이터 불일치 해결 및 최신 51편 즉시 동기화">🔄 최신 동기화</button>
         </div>
         <div class="board-actions" style="margin-left: auto;">
         <button type="button" class="btn-write-post" id="btnWriteColumn" onclick="openWriteModal('columns')" style="display: none;">
@@ -445,10 +446,42 @@ sections:
         <!-- ══════════════════════════════════════════════════════════════
         COMMUNITY JAVASCRIPT LOGIC
         ══════════════════════════════════════════════════════════════ -->
-        <script src="/js/auto_faq_engine.js"></script>
-        <script src="/js/auto_column_engine.js?v=20260916_colfix"></script>
-        <script src="/js/auto_review_engine.js"></script>
-        <script src="/js/healim_cloud_db.js"></script>
+        <!-- Mobile & PC Cache Busting / One-Time SSOT Cache Reset -->
+        <script>
+        (function() {
+          var CACHE_RESET_KEY = 'healim_force_reset_v51_sync_20261015';
+          if (!localStorage.getItem(CACHE_RESET_KEY)) {
+            try {
+              localStorage.removeItem('healim_board_columns');
+              localStorage.removeItem('healim_vault_all_posts_columns');
+              localStorage.removeItem('healim_board_faq');
+              localStorage.removeItem('healim_vault_all_posts_faq');
+              localStorage.setItem(CACHE_RESET_KEY, 'true');
+            } catch(e) {}
+          }
+          window.forceSyncAllCommunity = function() {
+            try {
+              localStorage.removeItem('healim_board_columns');
+              localStorage.removeItem('healim_vault_all_posts_columns');
+              localStorage.removeItem('healim_board_faq');
+              localStorage.removeItem('healim_vault_all_posts_faq');
+              localStorage.removeItem('healim_ssot_sync_20261015_columns');
+              localStorage.removeItem('healim_ssot_sync_20261015_faq');
+            } catch(e) {}
+            if (window.HealimCloudDB && window.HealimCloudDB.pull) {
+              window.HealimCloudDB.pull(function() {
+                location.reload();
+              });
+            } else {
+              location.reload();
+            }
+          };
+        })();
+        </script>
+        <script src="/js/auto_faq_engine.js?v=20261015_51sync"></script>
+        <script src="/js/auto_column_engine.js?v=20261015_51sync"></script>
+        <script src="/js/auto_review_engine.js?v=20261015_51sync"></script>
+        <script src="/js/healim_cloud_db.js?v=20261015_51sync"></script>
         <script>
         (function() {
         // --- Seed Data ---
