@@ -2781,9 +2781,9 @@ sections:
 
         function isObsoleteMockColumn(item) {
           if (!item) return false;
-          if (item.isCustom) return false;
+          if (item.isCustom || item.isAutoPublished) return false;
           var strId = String(item.id || '');
-          if (/^col(umns)?-\d{8,}/.test(strId)) return false;
+          if (/^col(umns)?-(?:auto-|\d{8,})/.test(strId)) return false;
           if (item.id === 'col-auto-latest') return true;
           if (!item.title) return false;
           var norm = String(item.title)
@@ -2808,9 +2808,9 @@ sections:
 
         function isObsoleteMockReview(item) {
           if (!item) return false;
-          if (item.isCustom) return false;
+          if (item.isCustom || item.isAutoPublished) return false;
           var strId = String(item.id || '');
-          if (/^rev(iews)?-\d{8,}/.test(strId)) return false;
+          if (/^rev(iews)?-(?:auto-|\d{8,})/.test(strId)) return false;
           if (item.id === 'rev-test') return false; // Never delete test reviews
           if (!item.title) return false;
           var norm = String(item.title)
@@ -3591,7 +3591,7 @@ sections:
         if (Array.isArray(fallback) && fallback.length > 0) {
           if (!localStorage.getItem(ssotVersionKey) || curStoredCount < fallback.length) {
             try {
-              var keptVault = vaultList.filter(function(p) { return p && p.isCustom === true; });
+              var keptVault = vaultList.filter(function(p) { return p && (p.isCustom === true || p.isAutoPublished === true); });
               localStorage.setItem('healim_vault_all_posts_' + key, JSON.stringify(keptVault));
               vaultList = keptVault;
               localStorage.setItem('healim_board_' + key, JSON.stringify(fallback));
@@ -3672,7 +3672,7 @@ sections:
 
         // 2. Genuine User-written custom posts (ONLY genuine custom posts by admin)
         customList.forEach(function(p) {
-          if (p && p.isCustom === true) addPostItem(p);
+          if (p && (p.isCustom === true || p.isAutoPublished === true)) addPostItem(p);
         });
 
         // 3. Single Source of Truth (SSOT) - Official 51 Columns / 27 FAQs / 65 Reviews (Absolute Core)
@@ -3684,13 +3684,13 @@ sections:
 
         // 4. Any remaining genuine user-created custom posts from local vault/legacy
         vaultList.forEach(function(p) {
-          if (p && p.isCustom === true) addPostItem(p);
+          if (p && (p.isCustom === true || p.isAutoPublished === true)) addPostItem(p);
         });
         storedList.forEach(function(p) {
-          if (p && p.isCustom === true) addPostItem(p);
+          if (p && (p.isCustom === true || p.isAutoPublished === true)) addPostItem(p);
         });
         legacyList.forEach(function(p) {
-          if (p && p.isCustom === true) addPostItem(p);
+          if (p && (p.isCustom === true || p.isAutoPublished === true)) addPostItem(p);
         });
 
         if (key === 'faq') {

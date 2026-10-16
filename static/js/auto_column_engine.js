@@ -1234,7 +1234,10 @@
       title: colTitle,
       summary: colSummary,
       content: colContent,
-      isAutoPublished: true
+      isCustom: true,
+      isAutoPublished: true,
+      createdAt: now,
+      updatedAt: now
     };
 
     // Load current columns board
@@ -1319,13 +1322,23 @@
 
     console.log('[Healim Auto-Column Engine] Published column: "' + newPost.title + '" | Next schedule: ' + formatDateTime(state.nextScheduledTime));
 
+        // 1. Pre-render UI immediately so newly published column is displayed in table before alert
+    if (typeof window.renderColumnsList === 'function') {
+      try { window.renderColumnsList(); } catch(e) {}
+    }
+    if (typeof window.syncBottomCommunity === 'function') {
+      try { window.syncBottomCommunity(); } catch(e) {}
+    }
+
     if (isManual && typeof window.alert === 'function') {
-      alert('⚡ [자율신경 치료칼럼 신규 글 자동 발행 완료]\n\n' +
-            '제목: ' + newPost.title + '\n' +
-            '작성자: ' + newPost.author + ' (' + dateStr + ')\n' +
-            '분량: 1,600자 내외 임상 칼럼\n' +
-            '상태: 기존 작성글과 중복되지 않는 새로운 칼럼으로 목록 최상단에 발행되었습니다.\n\n' +
-            '다음 자동 발행 예정: ' + formatDateTime(state.nextScheduledTime) + ' (오전 8시~11시 사이)');
+      setTimeout(function() {
+        alert('⚡ [자율신경 치료칼럼 신규 글 자동 발행 완료]\n\n' +
+              '제목: ' + newPost.title + '\n' +
+              '작성자: ' + newPost.author + ' (' + dateStr + ')\n' +
+              '분량: 1,600자 내외 임상 칼럼\n' +
+              '상태: 기존 작성글과 중복되지 않는 새로운 칼럼으로 목록 최상단에 발행되었습니다.\n\n' +
+              '다음 자동 발행 예정: ' + formatDateTime(state.nextScheduledTime) + ' (오전 8시~11시 랜덤)');
+      }, 50);
     }
 
     return newPost;
@@ -1368,8 +1381,13 @@
     }
 
     var published = checkAndRunAutoColumnPublish(true);
-    if (published && typeof renderColumnsList === 'function') {
-      renderColumnsList();
+    if (published) {
+      if (typeof window.renderColumnsList === 'function') {
+        try { window.renderColumnsList(); } catch(e) {}
+      }
+      if (typeof window.syncBottomCommunity === 'function') {
+        try { window.syncBottomCommunity(); } catch(e) {}
+      }
     }
   };
 

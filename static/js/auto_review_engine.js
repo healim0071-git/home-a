@@ -755,13 +755,19 @@
 
     var published = checkAndRunAutoReviewPublish(true);
     if (published) {
-      alert('⚡ [자율신경 치료후기 신규 글 자동 발행 완료]\n\n' +
-            '제목: ' + published.title + '\n' +
-            '작성자: ' + published.author + '\n' +
-            '발행일자: ' + published.date + '\n\n' +
-            '목록 최상단에 성공적으로 발행되었습니다.');
-      if (typeof renderReviewsList === 'function') renderReviewsList();
-      if (typeof syncBottomCommunity === 'function') syncBottomCommunity();
+      if (typeof renderReviewsList === 'function') {
+        try { renderReviewsList(); } catch(e) {}
+      }
+      if (typeof syncBottomCommunity === 'function') {
+        try { syncBottomCommunity(); } catch(e) {}
+      }
+      setTimeout(function() {
+        alert('⚡ [자율신경 치료후기 신규 글 자동 발행 완료]\n\n' +
+              '제목: ' + published.title + '\n' +
+              '작성자: ' + published.author + '\n' +
+              '일자: ' + published.date + '\n\n' +
+              '목록 최상단에 즉시 발행되었습니다.');
+      }, 50);
     }
   };
 

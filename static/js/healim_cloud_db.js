@@ -308,7 +308,7 @@
     var customLocalPosts = localList.filter(function(p) {
       if (!p) return false;
       var strId = String(p.id || '');
-      return p.isCustom === true || (!p.isAutoPublished && !strId.startsWith('col-auto-') && !strId.startsWith('col-p51-') && !strId.startsWith('faq-auto-'));
+      return p.isCustom === true || p.isAutoPublished === true || (!strId.startsWith('col-p51-'));
     });
 
     var seenIds = {};

@@ -1585,8 +1585,11 @@
         title: faqTitle,
         image: poolItem.image,
         content: faqContent,
+        isCustom: true,
         isAutoPublished: true,
-        poolId: poolItem.id
+        poolId: poolItem.id,
+        createdAt: pubTimestamp,
+        updatedAt: pubTimestamp
       };
 
       // Load current FAQ board
@@ -1710,12 +1713,18 @@
 
     var published = checkAndRunAutoFaqPublish(true);
     if (published) {
-      alert('⚡ [자율신경 FAQ 신규 글 자동 발행 완료]\n\n' +
-            '제목: ' + published.title + '\n' +
-            '발행일자: ' + published.date + '\n\n' +
-            '기존 작성 글과 중복되지 않는 새로운 고유 질문으로 목록 최상단에 발행되었습니다.');
-      if (typeof renderFaqList === 'function') renderFaqList();
-      if (typeof syncBottomCommunity === 'function') syncBottomCommunity();
+      if (typeof renderFaqList === 'function') {
+        try { renderFaqList(); } catch(e) {}
+      }
+      if (typeof syncBottomCommunity === 'function') {
+        try { syncBottomCommunity(); } catch(e) {}
+      }
+      setTimeout(function() {
+        alert('⚡ [자율신경 FAQ 신규 글 자동 발행 완료]\n\n' +
+              '제목: ' + published.title + '\n' +
+              '일자: ' + published.date + '\n\n' +
+              '기존 작성 질문과 중복되지 않는 새로운 질문이 목록 최상단에 발행되었습니다.');
+      }, 50);
     }
   };
 
