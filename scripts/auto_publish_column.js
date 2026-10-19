@@ -49,6 +49,7 @@ console.log('====================================================');
 const seenTitles = new Set();
 let duplicatesFound = 0;
 let caseStudyCount = 0;
+let qaCount = 0;
 
 columnsPool.forEach((item, idx) => {
   const cleanBody = item.content
@@ -64,10 +65,15 @@ columnsPool.forEach((item, idx) => {
   }
   seenTitles.add(norm);
 
-  const isCase = item.title.includes('사례') || item.title.includes('치료사례');
-  if (isCase) caseStudyCount++;
-
-  console.log(`Column #${idx + 1}: [${isCase ? '치료사례' : '일반칼럼'}] ${item.title.substring(0, 38)}...`);
+  let isCase = item.title.includes('사례') || item.title.includes('치료사례') || item.title.includes('치료');
+  let isQA = item.title.includes('?') || item.title.includes('왜') || item.title.includes('인가요') || item.title.includes('이유가');
+  if (isCase) {
+    caseStudyCount++;
+  } else if (isQA) {
+    qaCount++;
+  }
+  const tag = isCase ? '치료사례(30%)' : (isQA ? '호소증상Q&A(70%)' : '일반칼럼');
+  console.log(`Column #${idx + 1}: [${tag}] ${item.title.substring(0, 38)}...`);
   console.log(`   - Raw Length: ${item.content.length} chars | Clean Body: ${cleanBody.length} chars | Unique: OK`);
 });
 
@@ -79,18 +85,50 @@ if (duplicatesFound === 0) {
 }
 
 const caseRatio = (caseStudyCount / columnsPool.length) * 100;
-console.log(`\n📊 [치료사례 및 사례 키워드 비율 검증]`);
+const qaRatio = (qaCount / columnsPool.length) * 100;
+console.log(`\n📊 [콘텐츠 유형 비율 검증 (목표: 치료사례 30% : 호소증상 Q&A 70%)]`);
 console.log(`   - 총 칼럼 수: ${columnsPool.length}편`);
-console.log(`   - 사례/치료사례 포함 칼럼 수: ${caseStudyCount}편`);
-console.log(`   - 사례 비율: ${caseRatio.toFixed(1)}% (기준: 60% 이상)`);
+console.log(`   - 치료사례형 칼럼 수: ${caseStudyCount}편 (${caseRatio.toFixed(1)}% / 목표: 30.0%)`);
+console.log(`   - 호소증상 Q&A 칼럼 수: ${qaCount}편 (${qaRatio.toFixed(1)}% / 목표: 70.0%)`);
 
-if (caseRatio >= 60) {
-  console.log(`✅ [PASS] 치료사례 및 사례 키워드 비율이 60% 이상을 만족합니다! (${caseRatio.toFixed(1)}% >= 60%)\n`);
+if (Math.abs(caseRatio - 30.0) < 1.0 && Math.abs(qaRatio - 70.0) < 1.0) {
+  console.log(`✅ [PASS] 치료사례형 30% : Q&A 문답형 70% 비율 조건을 완벽히 충족합니다!\n`);
 } else {
-  console.error(`❌ [FAIL] 치료사례 및 사례 키워드 비율이 60% 미만입니다! (${caseRatio.toFixed(1)}% < 60%)\n`);
+  console.error(`❌ [FAIL] 유형 비율이 30:70 규격과 일치하지 않습니다!\n`);
   process.exitCode = 1;
 }
 
+console.log('====================================================');
+console.log('  1-2. 정부 통계치(숫자/%) 및 사례 예시 안내 멘트 검증');
+console.log('====================================================');
+let statPass = 0;
+let noticePass = 0;
+
+columnsPool.forEach((item, idx) => {
+  const hasStat = /(건강보험|보건복지부|심평원|심사평가원|질병관리청|대한신경과학회)/.test(item.content) && /\d+(\.\d+)?%|\d+만\s*명|\d+,\d+명|\d+명/.test(item.content);
+  if (hasStat) {
+    statPass++;
+  } else {
+    console.error(`❌ [STAT MISSING] Column #${idx + 1} (${item.title}) has no government/academic statistics with numbers!`);
+  }
+
+  const hasNotice = item.content.includes('재구성한');
+  if (hasNotice) {
+    noticePass++;
+  } else {
+    console.error(`❌ [NOTICE MISSING] Column #${idx + 1} (${item.title}) has no clinical example disclaimer notice!`);
+  }
+});
+
+console.log(`   - 정부/학술 통계 수치(숫자, %) 포함: ${statPass}/${columnsPool.length} (${(statPass / columnsPool.length * 100).toFixed(1)}%)`);
+console.log(`   - 환자 사례 예시 안내 멘트 포함: ${noticePass}/${columnsPool.length} (${(noticePass / columnsPool.length * 100).toFixed(1)}%)`);
+
+if (statPass === columnsPool.length && noticePass === columnsPool.length) {
+  console.log(`✅ [PASS] 모든 칼럼에 정부 통계치 및 임상 예시 안내 멘트가 100% 완비되었습니다!\n`);
+} else {
+  console.error(`❌ [FAIL] 통계 수치 또는 안내 멘트가 누락된 칼럼이 존재합니다!\n`);
+  process.exitCode = 1;
+}
 function calculateNextColumnSchedule(baseTime = new Date()) {
   const base = (baseTime instanceof Date) ? baseTime : new Date();
   const dayOffset = Math.random() < 0.5 ? 1 : 2;
