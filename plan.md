@@ -1799,3 +1799,38 @@ AI 엔진(Gemini, Perplexity) 및 검색 로봇이 신뢰도 높은 의학 정�
      * 임상 예시 안내 멘트 포함: 30/30 (100% PASS)
      * 의료광고법 6대 원칙 위반: 0건 (100% PASS)
      * 16:9 메디컬 벡터 일러스트 이미지: 30종 전수 정상 (100% PASS)
+
+
+## 🚀 [2026-10-26] 마일스톤 9.71: 최고관리자 '제목설정발행' 기능 탑재 및 맞춤형 즉시발행 파이프라인 구축 (충돌·캐시 고착 완전 방지)
+
+1. **사용자 요구사항**:
+   - 최고관리자 로그인 상태에서 치료칼럼 자동발행 배지 옆에 '제목설정발행' 버튼 신설.
+   - 버튼 클릭 시 제목 입력 모달 팝업 오픈.
+   - 제목 입력 후 바로 아래 [제목작성 즉시발행] 버튼 클릭 시, 입력된 제목에 최적화된 고품질 맞춤형 임상 본문 자동 생성 (수정 가능한 폼 상태로 로드).
+   - 하단의 [확인 (즉시 포스팅)] 버튼 클릭 시 치료칼럼 게시판 최상단에 즉시 포스팅 등록.
+   - 기존 자동발행 세팅 기준(정부 통계치, 1:1 환자 맞춤 한약 처방, 자율신경 기전, 임상 예시 필수 문구, 16:9 의료 벡터 이미지 매칭, 하단 3대 링크, 의료법 준수) 100% 준수.
+   - 과거 타 프로젝트에서 겪었던 Hugo 정적 파일 우선순위 충돌, 문법 오류 먹통 현상, 고정 쿼리스트링 캐시 고착 문제가 일절 발생하지 않도록 사전 점검 및 예방 조치 적용.
+
+2. **수정 및 구현 내역**:
+   - **제목설정 맞춤 치료칼럼 생성 및 발행 엔진 탑재 (`static/js/auto_column_engine.js`)**:
+     * `generateCustomColumnContentByTitle(title)`: 입력된 제목의 핵심 증상(어지럼증/기립성, 심계항진/두근거림/공황, 소화불량/명치, 불면증/새벽각성, 상열하한/체온이상, 두통/브레인포그, 틱장애, 목이물감/매핵기 등)과 대상 연령대를 분석하여 최적화된 본문(1,600자 내외) 자동 생성.
+     * 심평원·건보공단·질병청 통계 수치 및 `*(※ 본 사례는 환자분의 이해를 돕기 위해 실제 진료 경험을 바탕으로 재구성한 임상 예시입니다.)*` 필수 탑재.
+     * 하단 공식 3대 링크 및 16:9 벡터 일러스트 이미지(`/images/columns/...`) 자동 매칭.
+     * `publishCustomColumnPost(customData)`: LocalStorage(`healim_board_columns`), 마스터 볼트(`healim_vault_all_posts_columns`), IndexedDB(`HealimPermanentDB`), CloudDB(`HealimCloudDB`) 즉시 영구 저장 및 UI 실시간 리렌더링.
+     * `openCustomTitleColumnModal()`, `closeCustomTitleColumnModal()` 모달 제어 함수 완비.
+   - **커뮤니티 UI 모달 및 발행 버튼 탑재 (`content/community/_index.md`)**:
+     * 관리자 전용 `autoColumnStatusBadge` 내 `⚡ 즉시 1편 발행` 옆에 `✍️ 제목설정발행` 버튼(`btnOpenCustomTitleColumnModal`) 추가.
+     * 제목 입력 input, 바로 아래 `⚡ 제목작성 즉시발행` 버튼, 본문 수정 textarea(글자수 실시간 카운트), 요약 인풋, 하단 확인 버튼이 포함된 다이얼로그 모달(`customColumnModalBackdrop`) 마크업 완비.
+   - **정적 파일 동기화, 구문 무결성 및 자동 캐시 버스팅 적용**:
+     * `static/js/auto_column_engine.js` -> `public/js/auto_column_engine.js` 완벽 동기화.
+     * `node -c` 구문 검사 오류 0개 통과.
+     * `layouts/partials/components/common_bottom_sections.html` 및 `layouts/_partials/...`: `<script src="/js/auto_column_engine.js?v={{ now.Unix }}"></script>` 자동 캐시 버스팅 적용.
+     * `content/community/_index.md`: `?v=20261026_custom_col` 최신 쿼리스트링 갱신.
+     * `scripts/auto_publish_column.js` 30편 풀 검증 100% PASS 확인.
+     * Hugo 정적 빌드(26 Pages, 0 errors) 및 SEO/GEO/AEO 파이프라인 동기화 완료.
+
+3. **검증 결과**:
+   - `node -c static/js/auto_column_engine.js`: 구문 오류 0건 통과 (Syntax Valid)
+   - `node scripts/auto_publish_column.js`: 30편 전수 중복 0건, 30:70 비율 충족, 정부 통계치 100%, 임상 예시 멘트 100%, 의료광고법 100% PASS
+   - 커스텀 제목 생성기 테스트: 분량(1,698~1,718자), 필수 멘트 포함, 3대 링크 포함, 증상별 벡터 일러스트 정상 매칭 100% 통과
+   - Hugo 정적 빌드: 26 Pages 정상 컴파일 완료 (Total in 1.2s)

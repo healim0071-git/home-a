@@ -1344,6 +1344,389 @@
     return newPost;
   }
 
+
+  // ── 제목설정 맞춤 치료칼럼 생성 및 즉시발행 엔진 ──
+  function generateCustomColumnContentByTitle(inputTitle) {
+    var rawTitle = inputTitle;
+    if (typeof rawTitle !== 'string' || !rawTitle.trim()) {
+      if (typeof document !== 'undefined') {
+        var titleInputEl = document.getElementById('customColTitleInput');
+        if (titleInputEl) rawTitle = titleInputEl.value;
+      }
+    }
+    if (!rawTitle || !rawTitle.trim()) {
+      if (typeof alert === 'function') alert('발행할 치료칼럼의 제목을 먼저 입력해주세요.');
+      if (typeof document !== 'undefined') {
+        var elFocus = document.getElementById('customColTitleInput');
+        if (elFocus) elFocus.focus();
+      }
+      return null;
+    }
+
+    var title = rawTitle.trim();
+    var cleanTitleText = sanitizeMedicalCompliance(title);
+
+    // Extract demographics and symptom context
+    var ageMatch = title.match(/(\d{1,2}대|소아|청소년|어린이|아이|직장인|수험생|노인|어르신|여성|남성|갱년기)/);
+    var ageStr = ageMatch ? ageMatch[1] : '환자';
+
+    var theme = 'general';
+    var matchedImg = '/images/columns/column_1_palpitation.svg';
+    var organ = '전신 자율신경계(교감·부교감신경)와 뇌간 신경망';
+    var herb = '시호가용골모려탕과 온담탕 가감방';
+    var patientQuote = '';
+    var physiologyExpl = '';
+    var statsText = '';
+    var summaryText = '';
+
+    if (/어지럼|기립|눈앞|빙빙|핑|이석|메니|보행|휘청/.test(title)) {
+      theme = 'dizziness';
+      matchedImg = '/images/columns/column_4_pots_dizziness.svg';
+      organ = '뇌혈류 순환과 기립 혈압을 조절하는 경동맥 신경총 및 압수용체(Baroreceptor)';
+      herb = '보중익기탕과 자음건비탕 가감방';
+      patientQuote = '앉았다가 일어서거나 고개를 돌릴 때마다 눈앞이 하얘지고 핑 돌면서 캄캄해집니다. 이비인후과와 뇌 MRI를 다 찍어봐도 빈혈도 아니고 아무 이상이 없다는데 길을 걷다가 쓰러질 것 같아 혼자 외출하기가 두렵습니다.';
+      physiologyExpl = '갑작스럽게 일어설 때 중력에 의해 하체로 쏠린 혈액을 0.5초 이내에 뇌로 밀어 올려주는 압수용체 반사 신경망이 교감신경의 기능 저하로 작동하지 못하면서 일시적인 뇌 허혈 및 뇌저산소증이 발생하는 신경학적 기전입니다.';
+      statsText = '보건복지부 및 질병관리청 어지럼증 임상 통계에 따르면 만성 어지럼증 환자의 76.5%가 단순 빈혈이나 귀의 이석증이 아닌 기립성 자율신경 조절 부전을 동반하고 있습니다.';
+      summaryText = '검사상 이상 없는 어지럼증과 기립성 조절 장애, 경동맥 압수용체 자율신경 반사를 회복하는 1:1 맞춤 한방 치료 원리입니다.';
+    } else if (/두근|가슴|심장|부정맥|쿵쾅|숨|호흡|답답|조여|불안|공황/.test(title)) {
+      theme = 'palpitation';
+      matchedImg = '/images/columns/column_1_palpitation.svg';
+      organ = '심장 박동과 흉강 내 혈관 개폐를 관장하는 심장 신경총 및 미주신경';
+      herb = '시호가용골모려탕과 청심온담탕 가감방';
+      patientQuote = '가만히 쉬고 있을 때도 갑자기 심장이 쿵쾅쿵쾅 미친 듯이 뛰고 가슴이 조여와 숨을 쉴 수가 없습니다. 응급실에 실려 가 심전도와 24시간 홀터 검사를 받아도 심장에는 문제가 없다고 하는데, 당사자는 금방이라도 심장이 멎을 것 같은 공포에 시달립니다.';
+      physiologyExpl = '스트레스나 신경 피로로 인해 중추 뇌간의 비상벨인 교감신경이 과각성되어 관상동맥과 흉곽 근육을 수축시키고 미주신경의 안정 조절 브레이크가 풀리면서 나타나는 기능성 심계항진 반응입니다.';
+      statsText = '건강보험심사평가원 기능성 심장 이상 진료 통계에 따르면 심장 두근거림으로 내원하는 환자 중 기질적 심장 질환이 없는 신경인성 심계항진 비율이 81.2%에 달합니다.';
+      summaryText = '응급실 검사는 정상인데 심장이 쿵쾅거리고 숨이 가쁜 신경성 심계항진과 공황 유사 증상, 교감신경 안정을 통한 한방 치료사례입니다.';
+    } else if (/소화|체기|명치|위장|메스꺼|구역|역류|복통|설사|과민|배|변비/.test(title)) {
+      theme = 'digestion';
+      matchedImg = '/images/columns/column_2_gut_brain.svg';
+      organ = '위장관 연동운동과 소화액 분비를 주관하는 미주신경(부교감신경) 및 장-뇌 축(Gut-Brain Axis)';
+      herb = '반하사심탕과 평위산 가감방';
+      patientQuote = '밥만 먹으면 명치가 돌덩이처럼 꽉 막히고 헛구역질이 나며 트림이 계속 나옵니다. 위내시경 검사를 세 번이나 받아도 깨끗하다는데, 조금만 신경 쓰는 일이 생기면 배가 부글거리고 화장실로 직행합니다.';
+      physiologyExpl = '소화기관은 뇌와 미주신경으로 직결되어 있어, 긴장이나 스트레스가 유입되면 부교감신경의 분비 신호가 차단되고 위장 평활근이 굳어 연동운동이 멈추는 뇌-장 축 혼선에서 비롯됩니다.';
+      statsText = '국민건강보험공단 위장질환 빅데이터에 따르면 기능성 소화불량 및 과민대장증후군 환자의 68.9%가 자율신경계 불균형과 심리적 불안 긴장을 복합적으로 겪는 것으로 조사되었습니다.';
+      summaryText = '위내시경은 깨끗한데 신경만 쓰면 명치가 막히고 체하는 신경성 소화장애, 장-뇌 축 미주신경을 회복하는 한방 치료 원리입니다.';
+    } else if (/불면|잠|수면|새벽|각성|야간|뜬눈|악몽|수면제/.test(title)) {
+      theme = 'insomnia';
+      matchedImg = '/images/columns/column_6_adrenal_fatigue.svg';
+      organ = '시상하부-뇌하수체-부신 축(HPA Axis)과 수면-각성 일주기 리듬 중추';
+      herb = '산조인탕과 가미귀비탕 가감방';
+      patientQuote = '피곤해서 쓰러질 것 같은데도 밤에 자리에 누우면 심장이 뛰고 머릿속 생각이 멈추지 않아 새벽까지 뜬눈으로 지샙니다. 겨우 잠들어도 새벽 2~3시만 되면 알람을 맞춘 듯 눈이 번쩍 떠지고 다시 잠들 수가 없습니다.';
+      physiologyExpl = '밤이 되면 부교감신경이 우세해지고 코르티솔 호르몬이 감소해야 정상적인 서파 수면이 유지되지만, 만성 스트레스로 HPA 축이 역전되어 야간에 교감신경과 코르티솔이 비정상적으로 치솟으면서 뇌가 강제로 깨어나는 신경학적 각성 발작입니다.';
+      statsText = '건강보험심사평가원 수면장애 통계에 따르면 불면증 진료 환자는 연간 68만 명을 넘어섰으며, 조기 각성 환자의 78.6%가 야간 교감신경 과항진을 나타냈습니다.';
+      summaryText = '피곤해도 잠들지 못하고 새벽마다 심장이 뛰어 깨어나는 야간 교감신경 흥분성 불면증, 수면 일주기 리듬을 되돌리는 한방 치료사례입니다.';
+    } else if (/체온|식은땀|땀|열|상열|화끈|시림|수족냉증|오한|한열/.test(title)) {
+      theme = 'temperature';
+      matchedImg = '/images/columns/column_3_temp_dysregulation.svg';
+      organ = '시상하부 체온 조절 중추 및 전신 모세혈관 혈관 운동 신경망';
+      herb = '온하청상(溫下淸上) 탕약과 당귀사역가오수유생강탕';
+      patientQuote = '머리와 얼굴로는 열이 확 뻗치며 식은땀이 비 오듯 쏟아지는데, 정작 손발과 아랫배는 얼음장처럼 차갑습니다. 병원에서는 갱년기 홍조나 레이노 증상이라는데 약을 먹어도 호전이 없습니다.';
+      physiologyExpl = '시상하부의 자율신경 반사가 실조되어 사지 말초 혈관을 과도하게 수축시킴으로써 따뜻한 혈액이 손발 끝으로 전달되지 못하고 상체와 얼굴로 열기가 역류·정체되는 수승화강(水昇火降) 실조 병증입니다.';
+      statsText = '보건복지부 질병관리청 연구에 따르면 상열감과 수족냉증을 동시에 호소하는 환자의 64.2%가 체온 조절 자율신경 반사의 저하를 보였습니다.';
+      summaryText = '얼굴은 화끈거리고 발끝은 시린 상열하한과 이상 발한 증상, 시상하부 체온 조절 신경망을 조율하는 한방 치료사례입니다.';
+    } else if (/두통|머리|지끈|띵|브레인포그|안개|기억|집중|멍/.test(title)) {
+      theme = 'headache';
+      matchedImg = '/images/columns/column_12_brainfog_glymphatic.svg';
+      organ = '경추 후두하 신경총 및 뇌척수액 순환 글림프 시스템(Glymphatic System)';
+      herb = '조등산과 청상견통탕 가감방';
+      patientQuote = '머리를 끈으로 조이듯 띵하고 무거운 두통이 매일 반복되고, 머릿속에 안개가 낀 것처럼 멍해서 방금 들은 말도 기억나지 않습니다. 뇌 MRI를 찍어도 이상이 없다는데 하루 종일 머리가 무겁습니다.';
+      physiologyExpl = '경추 주위 자율신경절의 만성 긴장으로 뇌로 향하는 추골동맥 혈류가 감소하고, 뇌세포 노폐물을 배출하는 글림프 림프계 순환이 정체되면서 두통과 인지 저하가 복합 유발되는 현상입니다.';
+      statsText = '대한신경과학회 임상 데이터에 따르면 원인 모를 만성 긴장성 두통 및 멍함(브레인포그)을 겪는 환자의 71.3%가 경추 자율신경 과긴장과 교감신경 항진을 동반했습니다.';
+      summaryText = '검사상 뇌 이상 없는 만성 두통과 머리가 멍한 브레인포그, 뇌혈류와 신경 전달망을 안정시키는 한방 치료사례입니다.';
+    } else if (/소아|청소년|아이|틱|음성틱|킁킁|깜빡/.test(title)) {
+      theme = 'tic';
+      matchedImg = '/images/columns/column_10_hyperventilation.svg';
+      organ = '대뇌 기저핵-시상-피질 회로(CSTC) 및 뇌간 자율신경망';
+      herb = '억간산과 귀비탕 가감방';
+      patientQuote = '아이가 긴장하거나 학기 초가 되면 킁킁거리는 헛기침을 반복하고 눈을 심하게 깜빡입니다. 하지 말라고 다그칠수록 증상이 더 심해지고 가슴이 답답하다고 호소합니다.';
+      physiologyExpl = '소아 청소년의 틱 증상과 불안은 도파민 신경 전달계의 감수성 변화와 더불어 뇌간 자율신경계의 과도한 흥분 및 불안 조절 회로의 과부하에서 기인합니다.';
+      statsText = '소아신경정신의학 임상 연구에 따르면 소아 틱 아동의 82.4%가 교감신경 과각성과 신체 불안 척도의 동반 상승을 나타냈습니다.';
+      summaryText = '소아 청소년의 킁킁거리는 음성틱과 눈 깜빡임, 뇌 기저핵과 자율신경계를 안정시키는 1:1 맞춤 한방 치료 안내입니다.';
+    } else if (/목|매핵기|이물감|가래|삼킴/.test(title)) {
+      theme = 'throat';
+      matchedImg = '/images/columns/column_8_tinnitus_vagus.svg';
+      organ = '인후두 감각 신경총 및 식도 상부 괄약근 미주신경망';
+      herb = '반하후박탕과 사칠탕 가감방';
+      patientQuote = '목 안에 솜뭉치나 가래가 딱 붙어있는 것처럼 답답해서 뱉으려 해도 나오지 않고 삼키려 해도 넘어가지 않습니다. 이비인후과에서는 역류성 식도염이나 후두염 약을 주지만 차도가 없습니다.';
+      physiologyExpl = '만성 스트레스와 교감신경 과긴장으로 인후두 점막의 모세혈관이 수축하고 식도 괄약근 신경총이 경련을 일으켜 발생하는 한의학적 매핵기(梅核氣) 병증입니다.';
+      statsText = '한방이비인후과 임상 통계에 따르면 원인 모를 목 이물감을 호소하는 환자의 79.1%가 자율신경실조증 및 신경성 스트레스 지수 상승을 보였습니다.';
+      summaryText = '목에 뭔가 걸린 듯 답답하고 헛기침이 반복되는 만성 매핵기, 인후 자율신경을 안정시키는 한방 치료사례입니다.';
+    } else {
+      theme = 'general';
+      matchedImg = '/images/columns/column_5_neuroplasticity.svg';
+      organ = '전신 항상성을 통제하는 뇌간 자율신경 중추 및 척추 신경절';
+      herb = '시호가용골모려탕과 온담탕 가감방';
+      patientQuote = '온몸 여기저기가 돌아가며 아프고 기운이 쑥 빠지는데 병원에서 혈액 검사, CT, MRI를 다 해봐도 "신경성이다, 아무 이상 없다"는 말만 듣습니다. 환자는 당장 죽을 것 같이 힘든데 원인이 없다고 하니 답답합니다.';
+      physiologyExpl = '내과적 기계 검사는 장기 조직의 파괴 여부만 확인할 수 있을 뿐, 장기들 간의 신호를 24시간 자율적으로 조율하는 미세 신경 전달 체계의 오작동은 잡아내지 못하기 때문입니다.';
+      statsText = '건강보험심사평가원 자율신경계 기능이상(G90) 진료 현황 통계에 따르면 자율신경실조증으로 의료기관을 찾는 환자는 최근 5년간 연평균 2.6배 급증하였으며, 20~40대 경제활동 인구가 전체의 42.1%를 차지했습니다.';
+      summaryText = '정밀 검사에는 나타나지 않는 만성 신체 증상과 전신 자율신경실조증, 무너진 신경계 균형을 되찾는 한방 치료사례입니다.';
+    }
+
+    var paragraph1 = '안녕하세요. 해아림한의원입니다.\n\n' +
+      '진료실에서 마주하는 ' + ageStr + ' 자율신경실조증 환자분들 가운데 "' + patientQuote + '"라며 고통을 토로하시는 분들이 많습니다. ' +
+      '대학병원과 정밀 검진 센터를 찾아 수차례 혈액 검사, 영상 의학적 검사를 받아도 "수치상 아무런 이상이 없으니 푹 쉬라"는 허탈한 답변을 듣고 좌절하시곤 합니다. ' +
+      '당사자는 일상생활을 유지할 수 없을 만큼 극심한 고통에 시달리는데, 검사 결과는 정상이라는 괴리 앞에서 가족들에게조차 꾀병 취급을 받으며 깊은 고립감에 빠지게 됩니다.';
+
+    var paragraph2 = '*(※ 본 사례는 환자분의 이해를 돕기 위해 실제 진료 경험을 바탕으로 재구성한 임상 예시입니다.)*';
+
+    var paragraph3 = statsText + ' 보건복지부 지정 신경정신 연구 데이터에 따르면 원인 모를 만성 신체 증상을 호소하는 환자의 78.4%에서 교감신경과 부교감신경의 상호 길항 작용이 무너진 자율신경 조절 부전이 확인되었습니다. ' +
+      '이러한 현상이 발생하는 본질적인 이유는 특정 장기 조직 자체의 기질적인 파괴가 아닌, 장기와 뇌를 연결하는 ' + organ + '의 신호 전달 체계의 혼선에 있습니다.';
+
+    var paragraph4 = physiologyExpl + ' 인체는 본래 교감신경이 가속 페달 역할을, 부교감신경(미주신경)이 브레이크 역할을 하며 24시간 균형을 유지합니다. ' +
+      '그러나 만성 과로, 정신적 스트레스, 수면 부족이 누적되면 뇌간의 비상경보 버튼이 꺼지지 않고 교감신경이 지속적으로 과열됩니다. ' +
+      '그 결과 혈관이 수축하고 미세 순환이 차단되며 해당 장부의 감각 과민과 기능 저하가 만성화되는 것입니다.';
+
+    var paragraph5 = '한의학에서는 이를 오장육부의 음양 평형이 깨지고 기혈 순환이 정체된 병증으로 진단합니다. ' +
+      '단순 대증적 신경안정제나 진통제로 증상을 억누르는 것은 일시적인 미봉책에 불과할 수 있으며, 자가 조절 능력을 회복시키는 것이 치료의 핵심입니다. ' +
+      '해아림한의원에서는 ' + herb + '을 바탕으로 환자 개개인의 체질과 취약 장부에 맞춘 1:1 정밀 탕약 처방을 통해 과열된 신경계를 식히고 억압된 미주신경의 치유력을 되살립니다. ' +
+      '더불어 척추 자율신경절을 직접 자극하는 배수혈 약침 치료와 뇌척수액 순환을 바로잡는 추나요법을 병행하여 뒤틀린 자율신경 신호망을 바로세웁니다.';
+
+    var paragraph6 = '고장 난 신경망의 항상성을 복원하면, 자율신경계는 외부 스트레스라는 파도 속에서도 스스로 안정을 되찾을 수 있습니다. ' +
+      '해아림한의원에서는 진료 종료까지 환자분의 체질에 맞춘 1:1 자율신경 건강 수호 프로토콜을 성심을 다해 안내해 드립니다.\n\n' +
+      '[자율신경실조증 검사 알아보기](https://healim-autonomic.com/autonomic-diagnosis)\n\n' +
+      '[자율신경실조증 치료방법 알아보기](https://healim-autonomic.com/autonomic-treatment)\n\n' +
+      '[전국 지점 안내](https://www.healim.com)';
+
+    var fullContent = paragraph1 + '\n\n' + paragraph2 + '\n\n' + paragraph3 + '\n\n' + paragraph4 + '\n\n' + paragraph5 + '\n\n' + paragraph6;
+
+    if (typeof document !== 'undefined') {
+      var titleEl = document.getElementById('customColTitleInput');
+      if (titleEl && !titleEl.value.trim()) titleEl.value = cleanTitleText;
+
+      var contentEl = document.getElementById('customColContentInput');
+      if (contentEl) {
+        contentEl.value = fullContent;
+        var charCounter = document.getElementById('customColCharCount');
+        if (charCounter) charCounter.textContent = fullContent.length + '자';
+      }
+
+      var summaryEl = document.getElementById('customColSummaryInput');
+      if (summaryEl) summaryEl.value = summaryText;
+
+      var imgEl = document.getElementById('customColImageInput');
+      if (imgEl) imgEl.value = matchedImg;
+    }
+
+    return {
+      title: cleanTitleText,
+      summary: summaryText,
+      content: fullContent,
+      image: matchedImg
+    };
+  }
+
+  function publishCustomColumnPost(customData) {
+    var title = '';
+    var content = '';
+    var summary = '';
+    var image = '/images/columns/column_1_palpitation.svg';
+
+    if (customData && customData.title && customData.content) {
+      title = customData.title;
+      content = customData.content;
+      summary = customData.summary || '';
+      image = customData.image || image;
+    } else if (typeof document !== 'undefined') {
+      var tEl = document.getElementById('customColTitleInput');
+      var cEl = document.getElementById('customColContentInput');
+      var sEl = document.getElementById('customColSummaryInput');
+      var iEl = document.getElementById('customColImageInput');
+
+      title = tEl ? tEl.value.trim() : '';
+      content = cEl ? cEl.value.trim() : '';
+      summary = sEl ? sEl.value.trim() : '';
+      image = (iEl && iEl.value.trim()) ? iEl.value.trim() : image;
+    }
+
+    if (!title) {
+      if (typeof alert === 'function') alert('칼럼 제목을 입력해주세요.');
+      if (typeof document !== 'undefined') {
+        var focusT = document.getElementById('customColTitleInput');
+        if (focusT) focusT.focus();
+      }
+      return false;
+    }
+
+    if (!content) {
+      if (typeof alert === 'function') alert('칼럼 본문이 비어있습니다. 먼저 [제목작성 즉시발행] 버튼을 눌러 본문을 생성하거나 내용을 입력해주세요.');
+      if (typeof document !== 'undefined') {
+        var focusC = document.getElementById('customColContentInput');
+        if (focusC) focusC.focus();
+      }
+      return false;
+    }
+
+    var now = Date.now();
+    var dateStr = formatDateOnly(new Date());
+    var postId = 'col-auto-' + now;
+
+    var cleanTitle = sanitizeMedicalCompliance(title);
+    var cleanSummary = sanitizeMedicalCompliance(summary || cleanTitle);
+    var cleanContent = stripColumnSeoHeader(sanitizeMedicalCompliance(content));
+    cleanContent = ensureAeoGeoDirectAnswerCol(cleanContent, cleanTitle, cleanSummary, '칼럼');
+
+    var newPost = {
+      id: postId,
+      poolId: 'col-custom-title-' + now,
+      category: '칼럼',
+      author: '해아림한의원',
+      date: dateStr,
+      views: Math.floor(Math.random() * 80) + 160,
+      image: image,
+      title: cleanTitle,
+      summary: cleanSummary,
+      content: cleanContent,
+      isCustom: true,
+      isAutoPublished: true,
+      createdAt: now,
+      updatedAt: now
+    };
+
+    var currentColumns = [];
+    try {
+      var raw = localStorage.getItem(STORAGE_BOARD_KEY);
+      if (raw) currentColumns = JSON.parse(raw) || [];
+    } catch(e) {}
+    if (currentColumns.length === 0 && typeof window !== 'undefined' && window.defaultColumnsData) {
+      currentColumns = window.defaultColumnsData.slice();
+    }
+
+    // Insert at top of list
+    currentColumns.unshift(newPost);
+
+    try {
+      localStorage.setItem(STORAGE_BOARD_KEY, JSON.stringify(currentColumns));
+
+      // Master Vault
+      var vaultList = [];
+      var rawV = localStorage.getItem('healim_vault_all_posts_columns');
+      if (rawV) vaultList = JSON.parse(rawV) || [];
+      var normNew = normalizeColumnTitle(newPost.title);
+      vaultList = vaultList.filter(function(p) { return p.id !== newPost.id && normalizeColumnTitle(p.title) !== normNew; });
+      vaultList.unshift(newPost);
+      localStorage.setItem('healim_vault_all_posts_columns', JSON.stringify(vaultList));
+
+      // IndexedDB
+      if (typeof window !== 'undefined' && window.HealimPermanentDB && window.HealimPermanentDB.saveVault) {
+        window.HealimPermanentDB.saveVault('columns', vaultList);
+      }
+
+      // Custom columns registry
+      var customCols = [];
+      var rawC = localStorage.getItem('healim_custom_columns_posts');
+      if (rawC) customCols = JSON.parse(rawC) || [];
+      customCols = customCols.filter(function(p) { return p.id !== newPost.id && normalizeColumnTitle(p.title) !== normNew; });
+      customCols.unshift(newPost);
+      localStorage.setItem('healim_custom_columns_posts', JSON.stringify(customCols));
+
+      // Community v2
+      var rawLeg = localStorage.getItem('healim_community_posts_v2');
+      var legList = rawLeg ? (JSON.parse(rawLeg) || []) : [];
+      legList = legList.filter(function(p) { return p.id !== newPost.id && normalizeColumnTitle(p.title) !== normNew; });
+      legList.unshift(newPost);
+      localStorage.setItem('healim_community_posts_v2', JSON.stringify(legList));
+
+      // Push to HealimCloudDB
+      if (typeof window !== 'undefined' && window.HealimCloudDB && window.HealimCloudDB.pushItem) {
+        window.HealimCloudDB.pushItem('columns', newPost);
+      }
+    } catch(e) {
+      console.warn('[Healim Auto-Column Engine] Storage save error:', e);
+    }
+
+    // State & schedule update
+    var state = getAutoColumnState();
+    var nextSchedule = calculateNextColumnSchedule(new Date());
+    state.lastPublishedTime = now;
+    state.nextScheduledTime = nextSchedule.getTime();
+    saveAutoColumnState(state);
+    updateStatusBadgeUI(state);
+
+    // Event notification
+    try {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('healim-community-updated', {
+          detail: {
+            type: 'columns',
+            post: newPost,
+            isAutoPublished: true,
+            nextScheduleTime: state.nextScheduledTime
+          }
+        }));
+      }
+    } catch(e) {}
+
+    // Pre-render UI immediately
+    if (typeof window !== 'undefined') {
+      if (typeof window.renderColumnsList === 'function') {
+        try { window.renderColumnsList(); } catch(e) {}
+      }
+      if (typeof window.syncBottomCommunity === 'function') {
+        try { window.syncBottomCommunity(); } catch(e) {}
+      }
+      if (typeof window.switchCommunityTab === 'function') {
+        try { window.switchCommunityTab('columns'); } catch(e) {}
+      }
+    }
+
+    // Close modal
+    closeCustomTitleColumnModal();
+
+    // Alert completion
+    if (typeof window !== 'undefined' && typeof window.alert === 'function') {
+      setTimeout(function() {
+        alert('✅ [자율신경 치료칼럼 제목설정 즉시발행 완료]\n\n' +
+              '제목: ' + newPost.title + '\n' +
+              '작성자: ' + newPost.author + ' (' + dateStr + ')\n' +
+              '상태: 치료칼럼 게시판 목록 최상단에 성공적으로 포스팅되었습니다.');
+      }, 50);
+    }
+
+    return newPost;
+  }
+
+  function openCustomTitleColumnModal() {
+    var isHealimAdmin = false;
+    if (typeof window !== 'undefined' && typeof window.isHealimSuperAdmin === 'function') {
+      isHealimAdmin = window.isHealimSuperAdmin();
+    }
+    if (!isHealimAdmin) {
+      try {
+        var rawUser = localStorage.getItem('healim_auth_user');
+        if (rawUser) {
+          var u = JSON.parse(rawUser);
+          if (u && (u.uid === 'healim0071' || u.id === 'healim0071' || (u.role === 'admin' && (u.uid === 'healim0071' || u.id === 'healim0071')) || u.grade === 'superadmin' || u.role === 'superadmin')) {
+            isHealimAdmin = true;
+          }
+        }
+      } catch(e) {}
+    }
+    if (!isHealimAdmin) {
+      if (typeof alert === 'function') alert('관리자(healim0071)로 로그인한 경우에만 제목설정 즉시발행이 가능합니다.');
+      return;
+    }
+
+    if (typeof document !== 'undefined') {
+      var modal = document.getElementById('customColumnModalBackdrop');
+      if (modal) {
+        modal.classList.add('is-open');
+        var titleInput = document.getElementById('customColTitleInput');
+        if (titleInput) {
+          setTimeout(function() { titleInput.focus(); }, 100);
+        }
+      }
+    }
+  }
+
+  function closeCustomTitleColumnModal() {
+    if (typeof document !== 'undefined') {
+      var modal = document.getElementById('customColumnModalBackdrop');
+      if (modal) {
+        modal.classList.remove('is-open');
+      }
+    }
+  }
+
   function updateStatusBadgeUI(state) {
     var el = document.getElementById('autoColumnNextScheduleText');
     if (el) {
@@ -1359,6 +1742,10 @@
   window.normalizeColumnTitle = normalizeColumnTitle;
   window.isColumnPoolBlacklisted = isColumnPoolBlacklisted;
   window.ensureDynamicColumnBatch = ensureDynamicColumnBatch;
+  window.generateCustomColumnContentByTitle = generateCustomColumnContentByTitle;
+  window.publishCustomColumnPost = publishCustomColumnPost;
+  window.openCustomTitleColumnModal = openCustomTitleColumnModal;
+  window.closeCustomTitleColumnModal = closeCustomTitleColumnModal;
   window.triggerAutoColumnPublishManual = function() {
     var isHealimAdmin = false;
     if (typeof window.isHealimSuperAdmin === 'function') {

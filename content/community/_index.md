@@ -183,6 +183,7 @@ sections:
           <span class="text-[#888888] mx-1">|</span>
           <span id="autoColumnNextScheduleText" class="text-[#1c6e78] font-semibold">다음 예정: 확인 중...</span>
           <button type="button" id="btnTriggerColumnPublish" onclick="triggerAutoColumnPublishManual()" class="ml-1 text-xs px-2.5 py-1 bg-white border border-[#badfe3] rounded hover:bg-[#eaf3f4] text-[#1c6e78] font-bold transition-colors shadow-2xs" title="스케줄 대기 없이 지금 즉시 1편 자동 발행">⚡ 즉시 1편 발행</button>
+          <button type="button" id="btnOpenCustomTitleColumnModal" onclick="openCustomTitleColumnModal()" class="ml-1 text-xs px-2.5 py-1 bg-[#1c6e78] text-white rounded hover:bg-[#0d3a42] font-bold transition-colors shadow-2xs" title="제목을 직접 입력하여 맞춤 임상 칼럼 생성 및 발행">✍️ 제목설정발행</button>
             <button type="button" onclick="forceSyncAllCommunity()" class="ml-1 text-xs px-2.5 py-1 bg-[#1c6e78] text-white rounded hover:bg-[#0d3a42] font-bold transition-colors shadow-2xs" title="기기간 데이터 불일치 해결 및 최신 51편 즉시 동기화">🔄 최신 동기화</button>
         </div>
         <div class="board-actions" style="margin-left: auto;">
@@ -405,6 +406,73 @@ sections:
         <!-- ══════════════════════════════════════════════════════════════
         UNIVERSAL DETAIL VIEW MODAL
         ══════════════════════════════════════════════════════════════ -->
+                <!-- ══════════════════════════════════════════════════════════════
+        CUSTOM TITLE COLUMN MODAL (제목설정 맞춤 치료칼럼 즉시발행 모달)
+        ══════════════════════════════════════════════════════════════ -->
+        <div class="healim-modal-backdrop" id="customColumnModalBackdrop" style="z-index: 100050;">
+        <div class="healim-modal-dialog" style="max-width: 740px; width: 95%; max-height: 92vh; display: flex; flex-direction: column;">
+        <!-- Header -->
+        <div class="healim-modal-header" style="padding-bottom: 0.85rem; border-bottom: 1px solid #e2e8ea; display: flex; align-items: center; justify-content: space-between;">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 text-xs font-bold bg-[#1c6e78] text-white rounded">치료칼럼</span>
+            <h3 class="text-base font-bold text-[#0d3a42] m-0">✍️ 제목설정 맞춤 치료칼럼 즉시발행</h3>
+          </div>
+          <button type="button" class="btn-modal-close text-xl text-gray-500 hover:text-gray-800 cursor-pointer p-1" onclick="closeCustomTitleColumnModal()">&times;</button>
+        </div>
+
+        <!-- Body (Scrollable) -->
+        <div style="overflow-y: auto; padding: 1rem 0; flex: 1;">
+          <div class="p-3 bg-[#f0f7f8] border border-[#badfe3] rounded-lg text-xs text-[#0d3a42] leading-relaxed mb-4">
+            💡 <strong>발행 안내</strong>: 발행하고자 하는 칼럼의 제목(환자 호소 증상, 연령, 질환 등)을 입력하고 바로 아래의 <strong>[제목작성 즉시발행]</strong> 버튼을 누르면, 세팅된 임상 기준(정부 통계치, 1:1 환자 맞춤 한약 처방, 자율신경 기전, 필수 3대 링크 등)에 맞춘 고품질 본문이 자동 생성됩니다. 생성된 본문은 직접 수정이 가능하며, 하단의 <strong>[확인 (포스팅)]</strong>을 누르면 치료칼럼에 즉시 발행됩니다.
+          </div>
+
+          <!-- 1. 제목 입력창 -->
+          <div class="mb-3">
+            <label for="customColTitleInput" class="block text-xs font-bold text-[#0d3a42] mb-1.5 flex items-center justify-between">
+              <span>칼럼 제목 <span class="text-rose-500">*</span></span>
+              <span class="text-[11px] text-gray-500 font-normal">예: 신경만 쓰면 명치가 꽉 막히는 40대 자율신경실조증 치료사례</span>
+            </label>
+            <input type="text" id="customColTitleInput" class="w-full px-3.5 py-2.5 text-sm border border-[#badfe3] rounded-lg focus:outline-none focus:border-[#1c6e78] focus:ring-1 focus:ring-[#1c6e78] bg-white font-semibold text-[#222222]" placeholder="발행할 칼럼의 제목을 구체적으로 입력하세요..." />
+          </div>
+
+          <!-- 2. 바로 아래 붙어있는 '제목작성 즉시발행' 버튼 -->
+          <div class="mb-4">
+            <button type="button" id="btnGenerateCustomColContent" onclick="generateCustomColumnContentByTitle()" class="w-full py-2.5 px-4 bg-gradient-to-r from-[#1c6e78] to-[#0d3a42] hover:from-[#0d3a42] hover:to-[#1c6e78] text-white text-sm font-bold rounded-lg shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer">
+              <span>⚡ 제목작성 즉시발행 (제목 맞춤형 본문 자동 생성)</span>
+            </button>
+          </div>
+
+          <!-- 3. 핵심 요약 (선택) -->
+          <div class="mb-3">
+            <label for="customColSummaryInput" class="block text-xs font-bold text-[#0d3a42] mb-1">핵심 요약 (목록 노출용)</label>
+            <input type="text" id="customColSummaryInput" class="w-full px-3 py-2 text-xs border border-[#badfe3] rounded-lg focus:outline-none focus:border-[#1c6e78] bg-white text-[#444444]" placeholder="본문 생성 시 자동 추출되며 필요시 직접 수정할 수 있습니다." />
+          </div>
+
+          <!-- 4. 본문 내용 에디터 (수정 가능한 상태) -->
+          <div class="mb-3">
+            <label for="customColContentInput" class="block text-xs font-bold text-[#0d3a42] mb-1 flex items-center justify-between">
+              <span>칼럼 본문 내용 (자유롭게 검토 및 수정 가능) <span class="text-rose-500">*</span></span>
+              <span id="customColCharCount" class="text-[11px] text-gray-500 font-normal">0자</span>
+            </label>
+            <textarea id="customColContentInput" rows="13" class="w-full px-3.5 py-2.5 text-xs border border-[#badfe3] rounded-lg focus:outline-none focus:border-[#1c6e78] bg-[#fbfdfd] leading-relaxed text-[#333333] font-sans" oninput="var cc = document.getElementById('customColCharCount'); if (cc) cc.textContent = this.value.length + '자';" placeholder="상단에 제목을 입력한 후 [제목작성 즉시발행] 버튼을 누르면 이곳에 맞춤 칼럼 본문이 자동 생성되어 수정 가능한 상태로 표시됩니다..."></textarea>
+          </div>
+
+          <input type="hidden" id="customColImageInput" value="/images/columns/column_1_palpitation.svg" />
+        </div>
+
+        <!-- Footer: 아래에 있는 확인 버튼 -->
+        <div class="modal-footer pt-3 border-t border-[#edf2f4] flex items-center justify-between">
+          <span class="text-xs text-gray-500">작성자: <strong>해아림한의원</strong> | 카테고리: <strong>칼럼</strong></span>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="closeCustomTitleColumnModal()" class="px-4 py-2 text-xs font-medium text-[#666666] bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer">취소</button>
+            <button type="button" id="btnConfirmPublishCustomColumn" onclick="publishCustomColumnPost()" class="px-5 py-2 text-xs font-bold text-white bg-[#0d3a42] hover:bg-[#1c6e78] rounded-lg shadow-sm transition-all flex items-center gap-1.5 cursor-pointer">
+              <span>✅ 확인 (치료칼럼에 즉시 포스팅)</span>
+            </button>
+          </div>
+        </div>
+        </div>
+        </div>
+
         <div class="healim-modal-backdrop" id="detailModalBackdrop">
         <div class="healim-modal-dialog">
         <div class="healim-modal-header">
@@ -479,7 +547,7 @@ sections:
         })();
         </script>
         <script src="/js/auto_faq_engine.js?v=20261015_51sync"></script>
-        <script src="/js/auto_column_engine.js?v=20261015_51sync"></script>
+        <script src="/js/auto_column_engine.js?v=20261026_custom_col"></script>
         <script src="/js/auto_review_engine.js?v=20261015_51sync"></script>
         <script src="/js/healim_cloud_db.js?v=20261015_51sync"></script>
         <script>
