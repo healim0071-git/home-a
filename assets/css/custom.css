@@ -3356,3 +3356,75 @@ section#section-markdown:first-of-type {
     letter-spacing: normal;
   }
 }
+
+/* ==========================================================================
+   Mobile Footer Network Branches (3-per-row compact view)
+   - 모바일: 1줄에 3개씩 배치, 주소 숨김, 공간 최소화 초슬림 카드
+   - PC: 주소 및 배지 정상 노출, 기존 레이아웃 100% 유지
+   ========================================================================== */
+@media (max-width: 767px) {
+  .branch-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    margin-bottom: 1.5rem !important;
+  }
+  .branch-card {
+    padding: 8px 4px !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    text-align: center !important;
+    min-height: 56px !important;
+    background-color: #09292e !important;
+    border: 1px solid rgba(28, 110, 120, 0.35) !important;
+  }
+  .branch-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-bottom: 2px !important;
+  }
+  .branch-header h3 {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    letter-spacing: -0.02em !important;
+    margin: 0 !important;
+    color: #ffffff !important;
+  }
+  .branch-dot,
+  .branch-badge,
+  .branch-address {
+    display: none !important;
+  }
+  .branch-tel-btn {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 3.5px 2px !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    border-radius: 5px !important;
+    letter-spacing: -0.03em !important;
+    white-space: nowrap !important;
+    margin-top: 3px !important;
+    gap: 2px !important;
+    color: #f4d07e !important;
+    background-color: #133e46 !important;
+    border: 1px solid rgba(28, 110, 120, 0.5) !important;
+  }
+  .branch-tel-btn svg {
+    width: 11px !important;
+    height: 11px !important;
+    flex-shrink: 0 !important;
+    margin-right: 1px !important;
+  }
+  .branch-tel-btn span {
+    font-size: 10px !important;
+    line-height: 1 !important;
+  }
+}
