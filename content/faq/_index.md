@@ -1,6 +1,6 @@
 ---
-title: "자율신경실조증 치료 FAQ 자주묻는질문 27문 27답 | 해아림한의원"
-description: "자율신경실조증 검사 방법, 치료 기간, 한약 복용법, 양약 병용 여부, 실비보험 적용 등 환자분들이 가장 자주 묻는 핵심 질문 27문 27답을 상세히 안내해 드립니다."
+title: "자율신경실조증 치료 FAQ 자주묻는질문 | 해아림한의원"
+description: "자율신경실조증 검사 방법, 치료 기간, 한약 복용법, 양약 병용 여부, 실비보험 적용 등 환자분들이 진료실에서 궁금해하시는 질문과 답을 안내합니다."
 keywords: ["자율신경실조증 FAQ", "자주묻는질문", "자율신경치료 FAQ", "자율신경 검사방법", "자율신경 한약", "해아림한의원"]
 canonical: "https://healim-autonomic.com/faq/"
 type: landing
@@ -16,7 +16,7 @@ sections:
         자율신경실조증 치료 FAQ (자주 묻는 질문)
         </h1>
         <p class="text-[#555555] text-base md:text-lg leading-relaxed max-w-none lg:whitespace-nowrap break-keep">
-        환자분들이 진료실에서 가장 궁금해하시는 검사, 치료 기간, 한약 복용, 양약 병용, 실비보험 등 27문 27답을 안내합니다.
+        환자분들이 진료실에서 궁금해하시는 질문과 답을 안내합니다.
         </p>
         </div>
 
