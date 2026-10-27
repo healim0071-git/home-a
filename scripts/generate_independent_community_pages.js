@@ -74,7 +74,7 @@ const scriptTags = `        <!-- ═══════════════�
         <script src="/js/auto_column_engine.js?v=1792983215156"></script>
         <script src="/js/auto_review_engine.js?v=20261015_51sync"></script>
         <script src="/js/healim_cloud_db.js?v=20261015_51sync"></script>
-        <script src="/js/healim_community_engine.js?v=20261027_indep"></script>`;
+        <script src="/js/healim_community_engine.js?v=20261027_fixnav"></script>`;
 
 function escapeHtml(str) {
   if (!str) return '';

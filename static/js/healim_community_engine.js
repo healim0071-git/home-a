@@ -3350,70 +3350,94 @@
         var activeYoutubeFilter = '전체';
         var activeColumnFilter = '전체';
 
-        // Tab Switching Logic (Independent URLs Aware)
-        window.switchCommunityTab = function(tabName) {
-        if (tabName === 'herb-cost' || tabName === 'cost') { window.location.href = 'https://www.healim.com/5-6'; return; }
-        var curPath = (window.location.pathname || '').replace(/\/+$/, '');
-        var targetMap = {
-          'faq': '/faq',
-          'reviews': '/reviews',
-          'columns': '/columns',
-          'youtube': '/youtube'
-        };
-        var targetUrl = targetMap[tabName] || ('/' + tabName);
-
-        // If on an independent page and clicking a different tab, navigate!
-        if (curPath !== targetUrl && curPath !== '/community' && curPath !== '') {
-          window.location.href = targetUrl;
-          return;
+        function getCurrentPageBoard() {
+          var curPath = (window.location.pathname || '').replace(/\/+$/, '');
+          if (curPath === '/faq') return 'faq';
+          if (curPath === '/reviews') return 'reviews';
+          if (curPath === '/youtube') return 'youtube';
+          if (curPath === '/columns') return 'columns';
+          return 'columns';
         }
 
-        activeTab = tabName;
+        function refreshCurrentBoard() {
+          var pb = getCurrentPageBoard();
+          if (pb === 'faq') renderFaqList();
+          else if (pb === 'reviews') renderReviewsList();
+          else if (pb === 'youtube') { renderYoutubeList(); syncHealimtvChannel(false); }
+          else if (pb === 'columns') renderColumnsList();
+        }
 
-        // Update Tab Button Styles
-        var tabBtns = document.querySelectorAll('.community-tab-btn');
-        tabBtns.forEach(function(btn) {
-          if (btn.getAttribute('data-tab') === tabName) {
-            btn.classList.add('active');
-          } else {
-            btn.classList.remove('active');
+        // Tab Switching Logic (Independent URLs Aware - Never forces unwanted redirects)
+        window.switchCommunityTab = function(tabName, shouldNavigate) {
+          if (tabName === 'herb-cost' || tabName === 'cost') {
+            window.location.href = 'https://www.healim.com/5-6';
+            return;
           }
-        });
+          var curPath = (window.location.pathname || '').replace(/\/+$/, '');
+          var targetMap = {
+            'faq': '/faq',
+            'reviews': '/reviews',
+            'columns': '/columns',
+            'youtube': '/youtube'
+          };
+          var targetUrl = targetMap[tabName] || ('/' + tabName);
 
-        // Update Tab Panes
-        var panes = ['faq', 'reviews', 'youtube', 'columns'];
-        panes.forEach(function(p) {
-          var el = document.getElementById('tab-pane-' + p);
-          if (el) {
-            if (p === tabName) {
-              el.classList.remove('hidden');
-            } else {
-              el.classList.add('hidden');
+          // Only navigate away if explicitly requested (e.g. user navigation)
+          if (shouldNavigate && curPath !== targetUrl && curPath !== '/community' && curPath !== '') {
+            window.location.href = targetUrl;
+            return;
+          }
+
+          var pb = getCurrentPageBoard();
+          if (pb === tabName || curPath === '/community' || curPath === '') {
+            activeTab = tabName;
+            currentCommunityTab = tabName;
+
+            // Update Tab Button Styles
+            var tabBtns = document.querySelectorAll('.community-tab-btn');
+            tabBtns.forEach(function(btn) {
+              if (btn.getAttribute('data-tab') === tabName) {
+                btn.classList.add('active');
+              } else {
+                btn.classList.remove('active');
+              }
+            });
+
+            // Update Tab Panes
+            var panes = ['faq', 'reviews', 'youtube', 'columns'];
+            panes.forEach(function(p) {
+              var el = document.getElementById('tab-pane-' + p);
+              if (el) {
+                if (p === tabName) {
+                  el.classList.remove('hidden');
+                } else {
+                  el.classList.add('hidden');
+                }
+              }
+            });
+
+            // Render content for active tab
+            if (tabName === 'faq') {
+              currentFaqPage = 1;
+              renderFaqList();
             }
+            if (tabName === 'reviews') {
+              currentReviewsPage = 1;
+              renderReviewsList();
+            }
+            if (tabName === 'youtube') {
+              currentYoutubePage = 1;
+              renderYoutubeList();
+              syncHealimtvChannel(false);
+            }
+            if (tabName === 'columns') {
+              currentColumnsPage = 1;
+              renderColumnsList();
+            }
+
+            // Refresh admin permissions and auto badges visibility
+            updateCommunityPermissionsUI();
           }
-        });
-
-        // Render content for active tab
-        if (tabName === 'faq') {
-          currentFaqPage = 1;
-          renderFaqList();
-        }
-        if (tabName === 'reviews') {
-          currentReviewsPage = 1;
-          renderReviewsList();
-        }
-        if (tabName === 'youtube') {
-          currentYoutubePage = 1;
-          renderYoutubeList();
-          syncHealimtvChannel(false);
-        }
-        if (tabName === 'columns') {
-          currentColumnsPage = 1;
-          renderColumnsList();
-        }
-
-        // Refresh admin permissions and auto badges visibility
-        updateCommunityPermissionsUI();
         };
 
         // --- Superadmin Permission & UI Engine (healim0071 Only) ---
@@ -5549,10 +5573,7 @@
                   }
                 });
                 if (didUpdate) {
-                  var curHash = window.location.hash.replace('#', '') || 'faq';
-                  if (curHash === 'faq' || curHash === 'reviews' || curHash === 'youtube' || curHash === 'columns') {
-                    switchCommunityTab(curHash);
-                  }
+                  refreshCurrentBoard();
                 }
               }
             })
@@ -5568,10 +5589,7 @@
 
         window.addEventListener('hashchange', initTabFromHash);
         window.addEventListener('healim-cloud-db-updated', function() {
-          var curHash = window.location.hash.replace('#', '') || 'faq';
-          if (curHash === 'faq' || curHash === 'reviews' || curHash === 'youtube' || curHash === 'columns') {
-            switchCommunityTab(curHash);
-          }
+          refreshCurrentBoard();
         });
 
         if (document.readyState === 'loading') {
