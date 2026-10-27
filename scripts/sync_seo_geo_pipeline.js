@@ -35,6 +35,11 @@ console.log(`   - 등록된 치료칼럼: ${columns.length}편`);
 console.log(`   - 등록된 치료후기: ${(hubData.reviews || []).length}편`);
 console.log(`   - 등록된 유튜브 영상: ${(hubData.youtube || []).length}편\n`);
 
+// 1.5. 독립 커뮤니티 페이지 정적 동기화 (/columns, /faq, /reviews, /youtube)
+console.log('📝 1.5. 독립 커뮤니티 페이지 동기화 중...');
+require('./generate_independent_community_pages.js');
+console.log('✅ 1.5. 독립 커뮤니티 페이지 동기화 완료!\n');
+
 // 2. Hugo 정적 빌드 실행
 console.log('🚀 2. Hugo 정적 빌드 실행 중 (hugo --gc --minify)...');
 try {

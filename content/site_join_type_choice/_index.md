@@ -254,7 +254,7 @@ sections:
           var savedBack = localStorage.getItem('healim_naver_back_url');
           if (savedBack) localStorage.removeItem('healim_naver_back_url');
           var back = savedBack || getBackUrl();
-          var targetUrl = (back && back !== '/' && !back.includes('/login') && !back.includes('/site_join_type_choice')) ? back : '/community/#reviews';
+          var targetUrl = (back && back !== '/' && !back.includes('/login') && !back.includes('/site_join_type_choice')) ? back : '/reviews';
           window.location.href = targetUrl;
         }
 
@@ -263,7 +263,7 @@ sections:
             const clientId = 'h2nuQi_Y9Z0DOB0j6kby';
 
             const targetBackUrl = getBackUrl();
-            localStorage.setItem('healim_naver_back_url', (targetBackUrl && targetBackUrl !== '/' && !targetBackUrl.includes('/login') && !targetBackUrl.includes('/site_join_type_choice')) ? targetBackUrl : '/community/#reviews');
+            localStorage.setItem('healim_naver_back_url', (targetBackUrl && targetBackUrl !== '/' && !targetBackUrl.includes('/login') && !targetBackUrl.includes('/site_join_type_choice')) ? targetBackUrl : '/reviews');
 
             const redirectUri = encodeURIComponent('https://healim-autonomic.com/login/');
             const state = Math.random().toString(36).substring(2, 11);

@@ -215,7 +215,7 @@ sections:
 
         <!-- 8. FAQ Full-width Button (healim-tic style) -->
         <div class="my-10">
-          <a href="/community/#faq" class="btn-healim-wide">
+          <a href="/faq" class="btn-healim-wide">
             FAQ 자율신경 자주 묻는 질문 [클릭] &gt;
           </a>
         </div>

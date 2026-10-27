@@ -55,7 +55,7 @@
           {{ range site.Menus.main }}
             {{ $menuURL := .URL | absLangURL }}
             {{ $pageURL:= $currentPage.Permalink | absLangURL }}
-            {{ $active := eq $menuURL $pageURL }}
+            {{ $active := or (eq $menuURL $pageURL) (and (eq .Name "커뮤니티") (in (slice "/community/" "/columns/" "/faq/" "/reviews/" "/youtube/") $currentPage.RelPermalink)) }}
             {{ $url := "" }}
             {{- if findRE `^#` .URL -}}
               {{- if not $.IsHome -}}
@@ -74,10 +74,10 @@
               {{ if eq .Name "커뮤니티" }}
               <!-- Desktop Dropdown Menu (healim-tic 1:1 rectangular box) -->
               <ul class="healim-sub-dropdown">
-                <li><a href="/community/#faq">FAQ 자율신경치료 정보</a></li>
-                <li><a href="/community/#reviews">자율신경실조증 치료후기</a></li>
-                <li><a href="/community/#youtube">자율신경실조증 유튜브</a></li>
-                <li><a href="/community/#columns">자율신경실조증 치료 칼럼</a></li>
+                <li><a href="/faq">FAQ 자율신경치료 정보</a></li>
+                <li><a href="/reviews">자율신경실조증 치료후기</a></li>
+                <li><a href="/youtube">자율신경실조증 유튜브</a></li>
+                <li><a href="/columns">자율신경실조증 치료 칼럼</a></li>
                 <li><a href="https://www.healim.com/5-6">한약과 비용고시</a></li>
               </ul>
               {{ end }}
@@ -192,7 +192,7 @@
           if (hideBtn) hideBtn.classList.remove('hidden');
 
           // Auto-reveal submenu in Area C if on community page
-          var isCommunityPage = (window.location.pathname.replace(/\/$/, '') === '/community');
+          var curP = window.location.pathname.replace(/\/$/, ''); var isCommunityPage = (curP === '/community' || curP === '/columns' || curP === '/faq' || curP === '/reviews' || curP === '/youtube');
           var commItem = document.querySelector('.has-community-dropdown');
           if (isCommunityPage && commItem) {
             commItem.classList.add('dropdown-active');
@@ -210,28 +210,7 @@
       var subLinks = document.querySelectorAll('.healim-sub-dropdown a');
       subLinks.forEach(function(link) {
         link.addEventListener('click', function(e) {
-          var href = link.getAttribute('href') || '';
-          var hashMatch = href.match(/#(faq|reviews|youtube|columns)/);
-          var isCommunityPage = (window.location.pathname.replace(/\/$/, '') === '/community');
-
-          if (isCommunityPage && hashMatch) {
-            e.preventDefault();
-            var tabName = hashMatch[1];
-            if (typeof window.switchCommunityTab === 'function') {
-              window.switchCommunityTab(tabName);
-            }
-            if (window.history && window.history.pushState) {
-              window.history.pushState(null, null, '#' + tabName);
-            } else {
-              window.location.hash = tabName;
-            }
-            var targetEl = document.getElementById(tabName) || document.getElementById('tab-pane-' + tabName) || document.querySelector('.community-tabs-container') || document.getElementById('communityTabList');
-            if (targetEl) {
-              targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-          }
-
-          // Immediately close drawer so A and B disappear
+          // Immediately close drawer so submenu disappears on mobile navigation
           closeMobileMenu();
         });
       });

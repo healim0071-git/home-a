@@ -297,7 +297,7 @@ sections:
           var savedBack = localStorage.getItem('healim_naver_back_url');
           if (savedBack) localStorage.removeItem('healim_naver_back_url');
           var back = savedBack || getBackUrl();
-          var targetUrl = (back && back !== '/' && !back.includes('/login')) ? back : '/community/#reviews';
+          var targetUrl = (back && back !== '/' && !back.includes('/login')) ? back : '/reviews';
 
           alert('네이버 계정(' + finalName + ')으로 정상 로그인이 완료되었습니다.\n치료후기 열람 권한이 활성화되었습니다.');
           window.location.href = targetUrl;
@@ -310,7 +310,7 @@ sections:
 
             // 원래 돌아가고자 했던 페이지를 로컬스토리지에 안전하게 보관 (URL 파라미터 오염 방지)
             const targetBackUrl = getBackUrl();
-            localStorage.setItem('healim_naver_back_url', (targetBackUrl && targetBackUrl !== '/' && !targetBackUrl.includes('/login')) ? targetBackUrl : '/community/#reviews');
+            localStorage.setItem('healim_naver_back_url', (targetBackUrl && targetBackUrl !== '/' && !targetBackUrl.includes('/login')) ? targetBackUrl : '/reviews');
 
             // 네이버 개발자센터에 등록된 완전한 고정 Callback 주소 사용
             const redirectUri = encodeURIComponent('https://healim-autonomic.com/login/');

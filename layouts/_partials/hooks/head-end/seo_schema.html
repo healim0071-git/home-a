@@ -369,7 +369,8 @@
     },
     {
       "@type": "FAQPage",
-      "@id": "https://healim-autonomic.com/community/#faq",
+      "@id": "https://healim-autonomic.com/faq#faqpage",
+      "url": "https://healim-autonomic.com/faq",
       "isPartOf": {
         "@id": "https://healim-autonomic.com/#website"
       },
@@ -396,7 +397,8 @@
     },
     {
       "@type": "ItemList",
-      "@id": "https://healim-autonomic.com/community/#columns",
+      "@id": "https://healim-autonomic.com/columns#columns",
+      "url": "https://healim-autonomic.com/columns",
       "name": "해아림한의원 자율신경실조증 임상 치료 칼럼",
       "description": "한방신경정신과 전문의가 집필한 자율신경실조증 및 신경계 질환 심층 분석 칼럼",
       "isPartOf": {
@@ -417,6 +419,7 @@
             "@type": "MedicalWebPage",
             "headline": {{ $col.title | jsonify | safeJS }},
             "description": {{ $col.summary | jsonify | safeJS }},
+            "url": {{ printf "https://healim-autonomic.com/columns/?id=%s" $col.id | jsonify | safeJS }},
             "author": {
               "@id": "https://healim-autonomic.com/#physician"
             },
@@ -428,6 +431,46 @@
         }
         {{- end }}
       ]
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://healim-autonomic.com/youtube#videos",
+      "url": "https://healim-autonomic.com/youtube",
+      "name": "해아림한의원 자율신경실조증 전문의 유튜브 영상 칼럼",
+      "description": "해아림한의원 원장단이 설명하는 자율신경실조증 자가진단 및 치유 영상",
+      "isPartOf": {
+        "@id": "https://healim-autonomic.com/#website"
+      },
+      "numberOfItems": {{ len site.Data.healim_community_hub.youtube }},
+      "itemListElement": [
+        {{- $yts := site.Data.healim_community_hub.youtube -}}
+        {{- range $k, $yt := $yts -}}
+        {{- if $k }},{{ end }}
+        {
+          "@type": "ListItem",
+          "position": {{ add $k 1 }},
+          "item": {
+            "@type": "VideoObject",
+            "name": {{ $yt.title | jsonify | safeJS }},
+            "description": {{ $yt.summary | default $yt.title | jsonify | safeJS }},
+            "thumbnailUrl": [{{ printf "https://img.youtube.com/vi/%s/hqdefault.jpg" $yt.youtube_id | jsonify | safeJS }}],
+            "uploadDate": {{ $yt.date | replaceRE "\\." "-" | jsonify | safeJS }},
+            "embedUrl": {{ printf "https://www.youtube.com/embed/%s" $yt.youtube_id | jsonify | safeJS }}
+          }
+        }
+        {{- end }}
+      ]
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://healim-autonomic.com/reviews#reviews",
+      "url": "https://healim-autonomic.com/reviews",
+      "name": "해아림한의원 자율신경실조증 환자 치료후기 및 호전사례 (의료법 제56조 준수)",
+      "description": "정회원 인증 후 열람 가능한 실제 자율신경실조증 환자 치료후기 및 호전사례",
+      "isPartOf": {
+        "@id": "https://healim-autonomic.com/#website"
+      },
+      "numberOfItems": {{ len site.Data.healim_community_hub.reviews }}
     }
   ]
 }
